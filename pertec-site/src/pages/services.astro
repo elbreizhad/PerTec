@@ -1,0 +1,298 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const inclus = [
+  { icon: '🌐', title: 'Nom de domaine', desc: 'Réservation et configuration (.fr, .com, .net)' },
+  { icon: '🔒', title: 'Certificat SSL', desc: 'Connexion sécurisée HTTPS' },
+  { icon: '🚀', title: 'Hébergement rapide', desc: 'Serveurs performants et fiables' },
+  { icon: '🎨', title: 'Design sur-mesure', desc: 'Maquette unique adaptée à votre activité' },
+  { icon: '📱', title: '100% Responsive', desc: 'Parfait sur mobile, tablette et desktop' },
+  { icon: '✍️', title: 'Rédaction SEO', desc: 'Textes optimisés rédigés pour vous' },
+  { icon: '📊', title: 'Google Analytics', desc: 'Suivi des statistiques de visite' },
+  { icon: '📍', title: 'Google Maps', desc: 'Intégration carte et localisation' },
+  { icon: '📝', title: 'Formulaire contact', desc: 'Réception des demandes par email' },
+  { icon: '🔧', title: 'Formation', desc: 'Je vous montre comment modifier votre site' },
+  { icon: '💾', title: 'Sauvegardes', desc: 'Backups automatiques réguliers' },
+  { icon: '🛡️', title: 'Maintenance', desc: 'Mises à jour de sécurité' },
+];
+
+const process = [
+  {
+    step: '01',
+    title: 'Premier contact',
+    desc: 'Échange téléphonique ou visio pour comprendre votre projet et vos besoins.',
+    icon: '📞'
+  },
+  {
+    step: '02',
+    title: 'Devis personnalisé',
+    desc: 'Proposition détaillée et transparente, sans engagement ni frais cachés.',
+    icon: '📋'
+  },
+  {
+    step: '03',
+    title: 'Création du design',
+    desc: 'Maquette sur-mesure pour validation avant développement.',
+    icon: '🎨'
+  },
+  {
+    step: '04',
+    title: 'Développement',
+    desc: 'Création du site avec toutes les fonctionnalités convenues.',
+    icon: '💻'
+  },
+  {
+    step: '05',
+    title: 'Rédaction & SEO',
+    desc: 'Rédaction des textes optimisés pour le référencement Google.',
+    icon: '✍️'
+  },
+  {
+    step: '06',
+    title: 'Mise en ligne',
+    desc: 'Publication du site et formation à son utilisation.',
+    icon: '🚀'
+  },
+];
+
+const faqs = [
+  {
+    question: 'Combien de temps pour créer mon site ?',
+    answer: 'En général, comptez 2 à 3 semaines entre notre premier échange et la mise en ligne. Ce délai peut varier selon la complexité du projet et votre réactivité pour les validations.'
+  },
+  {
+    question: 'Puis-je modifier mon site moi-même après ?',
+    answer: 'Oui ! Je vous forme à la gestion de votre site. Vous pourrez modifier textes, images et ajouter du contenu en toute autonomie.'
+  },
+  {
+    question: 'Que se passe-t-il après la première année ?',
+    answer: 'Le renouvellement du domaine et de l\'hébergement est à votre charge (environ 50-80€/an). Je reste disponible pour le support et les évolutions.'
+  },
+  {
+    question: 'Mon site sera-t-il bien référencé sur Google ?',
+    answer: 'Absolument. Tous mes sites sont optimisés pour le référencement local : structure technique SEO, textes optimisés, Google Business Profile, données structurées...'
+  },
+  {
+    question: 'Proposez-vous le paiement en plusieurs fois ?',
+    answer: 'Oui, le paiement peut être échelonné en 2 ou 3 fois sans frais. Nous en discutons ensemble selon votre situation.'
+  },
+  {
+    question: 'Que faire si j\'ai déjà un site ?',
+    answer: 'Je peux effectuer une refonte complète de votre site existant. Je m\'occupe aussi de la migration de votre ancien contenu si nécessaire.'
+  },
+];
+---
+
+<BaseLayout
+  title="Services & Formules | Création Site Internet Clé en Main | Pertec.fr"
+  description="Découvrez mes services de création de sites internet clé en main à Evreux. Domaine, hébergement, création et rédaction inclus. Formules adaptées à tous les budgets."
+>
+  <!-- Hero -->
+  <section class="pt-32 pb-16 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+          <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+          <span class="text-sm text-gray-300">Services & Formules</span>
+        </div>
+
+        <h1 class="section-title mb-6" data-animate>
+          Création de site internet<br /><span class="gradient-text">clé en main</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-animate>
+          Vous rêvez d'un site professionnel sans vous soucier de la technique ?
+          Je m'occupe de tout, vous n'avez qu'à valider.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qu'est-ce que le clé en main -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6" data-animate>
+            Le <span class="gradient-text">clé en main</span>, c'est quoi ?
+          </h2>
+
+          <p class="text-gray-400 text-lg mb-8" data-animate>
+            Contrairement aux solutions où vous devez tout gérer vous-même, je prends en charge
+            l'intégralité de votre projet web. Vous me parlez de votre activité,
+            je m'occupe du reste.
+          </p>
+
+          <div class="space-y-4">
+            <div class="flex items-start gap-4 p-4 glass rounded-xl" data-animate>
+              <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                <span class="text-red-400">✗</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">Ce que vous NE faites PAS</h4>
+                <p class="text-sm text-gray-400">Pas de configuration technique, pas de code, pas de galère avec l'hébergement ou le domaine.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 glass rounded-xl" data-animate>
+              <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                <span class="text-green-400">✓</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">Ce que VOUS faites</h4>
+                <p class="text-sm text-gray-400">Vous me décrivez votre activité, vos services, et vous validez les étapes. C'est tout !</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative" data-animate>
+          <div class="aspect-square rounded-3xl glass-strong p-8 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-8xl mb-6">🎯</div>
+              <p class="text-2xl font-bold text-white mb-2">Zéro stress</p>
+              <p class="text-gray-400">Vous vous concentrez sur votre métier</p>
+            </div>
+          </div>
+          <!-- Decorative elements -->
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-2xl opacity-20 blur-xl"></div>
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-accent to-secondary rounded-full opacity-20 blur-xl"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ce qui est inclus -->
+  <section class="py-24 relative bg-gradient-to-b from-primary/5 via-transparent to-transparent">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Tout est <span class="gradient-text">inclus</span>
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Pas de surprise, pas de frais cachés. Voici ce que comprend chaque projet.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
+        {inclus.map((item, index) => (
+          <div
+            class="flex items-start gap-4 p-4 glass rounded-xl hover:bg-white/10 transition-colors duration-300"
+            data-animate
+            style={`animation-delay: ${index * 50}ms`}
+          >
+            <span class="text-2xl">{item.icon}</span>
+            <div>
+              <h4 class="font-semibold text-white mb-1">{item.title}</h4>
+              <p class="text-sm text-gray-400">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Comment ça <span class="gradient-text">fonctionne</span> ?
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Un processus simple et transparent, de notre premier échange à la mise en ligne.
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-accent to-secondary hidden md:block"></div>
+
+          <div class="space-y-8">
+            {process.map((item, index) => (
+              <div
+                class="flex gap-6 items-start"
+                data-animate
+                style={`animation-delay: ${index * 100}ms`}
+              >
+                <!-- Step number -->
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 text-2xl z-10">
+                  {item.icon}
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 glass p-6 rounded-2xl">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="text-xs font-bold text-primary uppercase tracking-wider">Étape {item.step}</span>
+                  </div>
+                  <h3 class="text-xl font-bold text-white mb-2">{item.title}</h3>
+                  <p class="text-gray-400">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Questions <span class="gradient-text">fréquentes</span>
+        </h2>
+      </div>
+
+      <div class="max-w-3xl mx-auto space-y-4">
+        {faqs.map((faq, index) => (
+          <details
+            class="group glass rounded-2xl overflow-hidden"
+            data-animate
+            style={`animation-delay: ${index * 50}ms`}
+          >
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+              <h3 class="font-semibold text-white pr-4">{faq.question}</h3>
+              <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-open:rotate-45">
+                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </span>
+            </summary>
+            <div class="px-6 pb-6 text-gray-400">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="section-title mb-6" data-animate>
+          Prêt à <span class="gradient-text">démarrer</span> ?
+        </h2>
+        <p class="text-xl text-gray-400 mb-8" data-animate>
+          Discutons de votre projet. Devis gratuit et sans engagement.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center" data-animate>
+          <a href="/contact" class="btn-primary">
+            <span>Demander un devis</span>
+          </a>
+          <a href="/realisations" class="btn-secondary">
+            <span>Voir mes réalisations</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

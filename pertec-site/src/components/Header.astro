@@ -1,0 +1,139 @@
+---
+const navItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Réalisations', href: '/realisations' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'À propos', href: '/a-propos' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+  <div class="absolute inset-0 bg-dark/0 backdrop-blur-none transition-all duration-500" id="header-bg"></div>
+
+  <nav class="relative container mx-auto px-6 py-5">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="relative z-10 flex items-center gap-3 group">
+        <img
+          src="https://pertec.fr/wp-content/uploads/2017/09/Logo-Pertec-blanc.png"
+          alt="Pertec"
+          class="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
+        />
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden lg:flex items-center gap-8">
+        {navItems.map(item => (
+          <li>
+            <a
+              href={item.href}
+              class={`relative text-sm font-medium tracking-wide transition-colors duration-300
+                ${currentPath === item.href ? 'text-white' : 'text-gray-400 hover:text-white'}
+                group`}
+            >
+              {item.label}
+              <span class={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary to-accent
+                transition-all duration-300
+                ${currentPath === item.href ? 'w-full' : 'w-0 group-hover:w-full'}`}
+              ></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- CTA Button Desktop -->
+      <a
+        href="/contact"
+        class="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold
+               bg-gradient-to-r from-primary to-accent rounded-full
+               transition-all duration-300
+               hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-105"
+      >
+        <span>Devis gratuit</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden relative z-10 p-2 text-white"
+        aria-label="Menu"
+      >
+        <div class="w-6 h-5 flex flex-col justify-between" id="burger">
+          <span class="w-full h-0.5 bg-white transition-all duration-300 origin-left"></span>
+          <span class="w-full h-0.5 bg-white transition-all duration-300"></span>
+          <span class="w-full h-0.5 bg-white transition-all duration-300 origin-left"></span>
+        </div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 bg-dark/98 backdrop-blur-xl -translate-x-full transition-transform duration-500 lg:hidden"
+  >
+    <div class="flex flex-col items-center justify-center h-full gap-8">
+      {navItems.map((item, index) => (
+        <a
+          href={item.href}
+          class="text-3xl font-bold text-white hover:text-primary transition-colors duration-300"
+          style={`animation-delay: ${index * 100}ms`}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        href="/contact"
+        class="mt-8 px-8 py-4 text-lg font-semibold
+               bg-gradient-to-r from-primary to-accent rounded-full"
+      >
+        Devis gratuit
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const burger = document.getElementById('burger');
+  let isMenuOpen = false;
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    isMenuOpen = !isMenuOpen;
+    mobileMenu?.classList.toggle('-translate-x-full');
+
+    // Animate burger
+    const spans = burger?.querySelectorAll('span');
+    if (spans && isMenuOpen) {
+      spans[0].style.transform = 'rotate(45deg) translateY(6px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+    } else if (spans) {
+      spans[0].style.transform = 'none';
+      spans[1].style.opacity = '1';
+      spans[2].style.transform = 'none';
+    }
+  });
+
+  // Header scroll effect
+  const header = document.getElementById('header');
+  const headerBg = document.getElementById('header-bg');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      headerBg?.classList.remove('bg-dark/0', 'backdrop-blur-none');
+      headerBg?.classList.add('bg-dark/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+    } else {
+      headerBg?.classList.add('bg-dark/0', 'backdrop-blur-none');
+      headerBg?.classList.remove('bg-dark/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+    }
+  });
+</script>

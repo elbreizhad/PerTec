@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const articles = [
+  {
+    title: 'Pourquoi votre restaurant a besoin d\'un site internet en 2025',
+    excerpt: 'Découvrez pourquoi un site web est devenu indispensable pour les restaurants et comment il peut augmenter vos réservations.',
+    date: '15 Jan 2025',
+    category: 'Conseils',
+    readTime: '5 min',
+    slug: 'restaurant-site-internet-2025'
+  },
+  {
+    title: 'Combien coûte un site internet professionnel ?',
+    excerpt: 'Guide complet des tarifs de création de sites web. Ce qui influence le prix et comment choisir la bonne formule.',
+    date: '10 Jan 2025',
+    category: 'Tarifs',
+    readTime: '7 min',
+    slug: 'cout-site-internet-professionnel'
+  },
+  {
+    title: 'Artisan : 5 raisons d\'avoir votre propre site plutôt que Facebook',
+    excerpt: 'Pourquoi une page Facebook ne suffit pas et comment un site web propre peut transformer votre activité.',
+    date: '5 Jan 2025',
+    category: 'Conseils',
+    readTime: '4 min',
+    slug: 'artisan-site-vs-facebook'
+  },
+  {
+    title: 'Comment être trouvé sur Google quand on est une TPE locale',
+    excerpt: 'Les bases du référencement local pour les petites entreprises. Google Business, SEO et bonnes pratiques.',
+    date: '28 Dec 2024',
+    category: 'SEO',
+    readTime: '6 min',
+    slug: 'seo-local-tpe'
+  },
+  {
+    title: 'Site clé en main : qu\'est-ce que ça inclut vraiment ?',
+    excerpt: 'Tout ce que comprend une offre de création de site "clé en main" et pourquoi c\'est la meilleure option pour les entrepreneurs.',
+    date: '20 Dec 2024',
+    category: 'Services',
+    readTime: '5 min',
+    slug: 'site-cle-en-main-definition'
+  },
+  {
+    title: '10 signes qu\'il est temps de refaire votre site web',
+    excerpt: 'Votre site a quelques années ? Voici les indicateurs qui montrent qu\'une refonte est nécessaire.',
+    date: '15 Dec 2024',
+    category: 'Conseils',
+    readTime: '4 min',
+    slug: 'refonte-site-web-signes'
+  },
+];
+
+const categories = ['Tous', 'Conseils', 'SEO', 'Tarifs', 'Services'];
+---
+
+<BaseLayout
+  title="Blog | Conseils Création de Sites Internet | Pertec.fr"
+  description="Conseils et astuces pour votre site internet : SEO local, création de site, marketing digital. Le blog de Pertec, créateur de sites web à Evreux."
+>
+  <!-- Hero -->
+  <section class="pt-32 pb-16 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+          <span class="text-2xl">📝</span>
+          <span class="text-sm text-gray-300">Blog</span>
+        </div>
+
+        <h1 class="section-title mb-6" data-animate>
+          Conseils pour votre<br /><span class="gradient-text">présence en ligne</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-animate>
+          Astuces, guides et bonnes pratiques pour réussir votre site internet et votre visibilité sur Google.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="py-8">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap justify-center gap-3" data-animate>
+        {categories.map((cat, index) => (
+          <button
+            class={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300
+              ${index === 0
+                ? 'bg-gradient-to-r from-primary to-accent text-white'
+                : 'glass text-gray-400 hover:text-white hover:bg-white/10'
+              }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles Grid -->
+  <section class="py-16">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {articles.map((article, index) => (
+          <article
+            class="group glass rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-500 hover:-translate-y-2"
+            data-animate
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <!-- Image placeholder -->
+            <div class="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative">
+              <span class="text-5xl">📄</span>
+              <div class="absolute top-4 left-4 px-3 py-1 glass rounded-full text-xs font-medium">
+                {article.category}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+              <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                <span>{article.date}</span>
+                <span>·</span>
+                <span>{article.readTime} de lecture</span>
+              </div>
+
+              <h2 class="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                {article.title}
+              </h2>
+
+              <p class="text-gray-400 text-sm mb-4 line-clamp-2">
+                {article.excerpt}
+              </p>
+
+              <span class="inline-flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                Lire l'article
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-2xl mx-auto text-center glass-strong p-12 rounded-3xl" data-animate>
+        <h2 class="text-3xl font-bold mb-4">
+          Besoin d'un <span class="gradient-text">site internet</span> ?
+        </h2>
+        <p class="text-gray-400 mb-8">
+          Discutons de votre projet. Devis gratuit et sans engagement.
+        </p>
+
+        <a href="/contact" class="btn-primary">
+          <span>Demander un devis</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

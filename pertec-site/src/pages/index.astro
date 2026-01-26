@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import SecteurCard from '../components/SecteurCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const features = [
+  {
+    icon: '🌐',
+    title: 'Nom de domaine inclus',
+    description: 'Réservation et configuration de votre domaine .fr, .com ou .net. Votre identité en ligne sécurisée.'
+  },
+  {
+    icon: '🚀',
+    title: 'Hébergement performant',
+    description: 'Hébergement rapide et sécurisé avec certificat SSL, sauvegardes automatiques et maintenance incluse.'
+  },
+  {
+    icon: '🎨',
+    title: 'Design sur-mesure',
+    description: 'Création d\'un site moderne et responsive, parfaitement adapté à votre image et à vos besoins.'
+  },
+  {
+    icon: '✍️',
+    title: 'Rédaction SEO incluse',
+    description: 'Textes optimisés pour Google rédigés par mes soins. Vous ne vous occupez de rien.'
+  }
+];
+
+const secteurs = [
+  { icon: '🔧', title: 'Artisans', description: 'Plombiers, électriciens, maçons...', href: '/secteurs/artisan' },
+  { icon: '🍽️', title: 'Restaurants', description: 'Bistrots, brasseries, traiteurs...', href: '/secteurs/restaurant' },
+  { icon: '🏪', title: 'Commerces', description: 'Boutiques, fleuristes, magasins...', href: '/secteurs/commerce' },
+  { icon: '⚖️', title: 'Professions libérales', description: 'Avocats, comptables, kinés...', href: '/secteurs/profession-liberale' },
+  { icon: '✂️', title: 'Beauté & Bien-être', description: 'Coiffeurs, esthéticiennes, spas...', href: '/secteurs/coiffeur-estheticienne' },
+  { icon: '🏢', title: 'TPE / PME', description: 'Toutes entreprises locales', href: '/secteurs/tpe' },
+];
+
+const testimonials = [
+  {
+    name: 'Marc D.',
+    role: 'Plombier chauffagiste',
+    location: 'Louviers',
+    quote: 'Site livré en 10 jours, j\'ai reçu mes premiers appels la semaine suivante. Excellent travail !',
+    rating: 5
+  },
+  {
+    name: 'Sophie L.',
+    role: 'Salon de coiffure',
+    location: 'Evreux',
+    quote: 'Enfin un prestataire qui comprend les besoins des petits commerces. Simple, efficace, moderne.',
+    rating: 5
+  },
+  {
+    name: 'Pierre M.',
+    role: 'Restaurant Le Bistrot',
+    location: 'Vernon',
+    quote: 'Nos réservations en ligne ont doublé depuis le nouveau site. Rapport qualité/prix imbattable.',
+    rating: 5
+  }
+];
+
+const avantages = [
+  { icon: '📍', title: 'Local', text: 'Basé à Evreux, rendez-vous possibles' },
+  { icon: '⚡', title: 'Rapide', text: 'Votre site en ligne en 2-3 semaines' },
+  { icon: '💎', title: 'Transparent', text: 'Pas de frais cachés, tout est inclus' },
+  { icon: '🎯', title: 'Clé en main', text: 'Je gère tout de A à Z pour vous' },
+  { icon: '🛠️', title: 'Support', text: 'Accompagnement après la livraison' },
+];
+
+const villes = ['Evreux', 'Louviers', 'Vernon', 'Bernay', 'Pont-Audemer', 'Val-de-Reuil', 'Gisors', 'Les Andelys'];
+---
+
+<BaseLayout
+  title="Création Site Internet Evreux | Clé en Main | Pertec.fr"
+  description="Créateur de sites web à Evreux. Formule clé en main : domaine + hébergement + création + rédaction. Pour artisans, commerces, restaurants. Devis gratuit 24h."
+>
+  <!-- Hero Section -->
+  <Hero
+    title='Votre site internet<br /><span class="gradient-text">clé en main</span> à Evreux'
+    subtitle="Domaine, hébergement, création et rédaction inclus. Concentrez-vous sur votre métier, je m'occupe de tout le reste."
+    highlight="Création de sites internet professionnels"
+  />
+
+  <!-- Features Section -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Tout inclus dans <span class="gradient-text">votre site</span>
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Vous ne vous occupez de rien. Je gère l'intégralité de votre projet web.
+        </p>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {features.map((feature, index) => (
+          <FeatureCard {...feature} index={index} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Me Section -->
+  <section class="py-24 relative overflow-hidden">
+    <!-- Background -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Pourquoi <span class="gradient-text">me choisir</span> ?
+        </h2>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
+        {avantages.map((item, index) => (
+          <div
+            class="flex items-center gap-4 px-6 py-4 glass rounded-full"
+            data-animate
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <span class="text-2xl">{item.icon}</span>
+            <div>
+              <span class="font-semibold text-white">{item.title}</span>
+              <span class="text-gray-400 hidden sm:inline"> · {item.text}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Secteurs Section -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Pour <span class="gradient-text">toutes activités</span>
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Artisan, commerçant, restaurant ou profession libérale : une solution adaptée à votre métier.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+        {secteurs.map((secteur, index) => (
+          <SecteurCard {...secteur} index={index} />
+        ))}
+      </div>
+
+      <div class="text-center mt-12" data-animate>
+        <a href="/services" class="btn-secondary">
+          Voir tous les services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Ils me font <span class="gradient-text">confiance</span>
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Des entrepreneurs de l'Eure qui ont développé leur activité grâce à leur site web.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {testimonials.map((testimonial, index) => (
+          <TestimonialCard {...testimonial} index={index} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Zone d'intervention Section -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="glass-strong p-8 md:p-12 rounded-3xl">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="section-title mb-6" data-animate>
+              Zone <span class="gradient-text">d'intervention</span>
+            </h2>
+            <p class="text-gray-400 text-lg mb-8" data-animate>
+              Basé à Evreux, j'interviens dans tout le département de l'Eure et les départements limitrophes.
+              Rendez-vous possibles en présentiel ou en visioconférence.
+            </p>
+
+            <div class="flex flex-wrap gap-3 mb-8" data-animate>
+              {villes.map((ville) => (
+                <span class="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300">
+                  {ville}
+                </span>
+              ))}
+            </div>
+
+            <p class="text-sm text-gray-500" data-animate>
+              Et aussi : Yvelines (78), Eure-et-Loir (28), Seine-Maritime (76)...
+            </p>
+          </div>
+
+          <div class="relative" data-animate>
+            <!-- Map Placeholder -->
+            <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+              <div class="absolute inset-0 opacity-30">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rounded-full animate-ping"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full"></div>
+              </div>
+              <div class="text-center px-8">
+                <div class="text-6xl mb-4">📍</div>
+                <p class="text-xl font-bold text-white">Evreux</p>
+                <p class="text-gray-400">Eure (27) · Normandie</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 relative overflow-hidden">
+    <!-- Background Glow -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/20 rounded-full blur-[128px]"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="section-title mb-6" data-animate>
+            Prêt à <span class="gradient-text">lancer</span> votre site ?
+          </h2>
+          <p class="section-subtitle mx-auto" data-animate>
+            Demandez votre devis gratuit sans engagement. Je vous réponds sous 24h.
+          </p>
+        </div>
+
+        <div class="glass-strong p-8 md:p-12 rounded-3xl glow" data-animate>
+          <ContactForm compact />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

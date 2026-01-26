@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+
+const avantages = [
+  { icon: '📱', title: 'Menu en ligne', description: 'Vos plats, vos prix, accessibles sur smartphone. Fini le PDF illisible !' },
+  { icon: '📸', title: 'Galerie photos', description: 'Des photos appétissantes de vos plats pour donner envie aux clients.' },
+  { icon: '📅', title: 'Réservation', description: 'Module de réservation en ligne intégré ou lien vers votre système existant.' },
+  { icon: '⭐', title: 'Avis Google', description: 'Mise en avant de vos avis Google pour rassurer les nouveaux clients.' },
+  { icon: '📍', title: 'Localisation', description: 'Carte Google Maps, horaires et infos pratiques bien visibles.' },
+  { icon: '🔍', title: 'SEO local', description: 'Apparaissez quand on cherche "restaurant Evreux" sur Google.' },
+];
+
+const types = [
+  'Restaurant traditionnel', 'Brasserie', 'Bistrot', 'Pizzeria',
+  'Restaurant gastronomique', 'Crêperie', 'Traiteur', 'Food truck'
+];
+---
+
+<BaseLayout
+  title="Site Internet pour Restaurant à Evreux | Menu en Ligne & Réservation | Pertec.fr"
+  description="Création de site web pour restaurants dans l'Eure. Menu digital, galerie photos, réservation en ligne, SEO local. Attirez plus de clients !"
+>
+  <!-- Hero -->
+  <section class="pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute top-20 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+          <span class="text-2xl">🍽️</span>
+          <span class="text-sm text-gray-300">Sites pour restaurants</span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" data-animate>
+          Création de site internet<br />
+          <span class="gradient-text">pour restaurants</span> dans l'Eure
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-8 max-w-2xl" data-animate>
+          Menu en ligne, photos appétissantes, réservation... Un site qui donne faim
+          et remplit vos tables.
+        </p>
+
+        <div class="flex flex-wrap gap-4" data-animate>
+          <a href="/contact" class="btn-primary">
+            <span>Devis gratuit restaurant</span>
+          </a>
+          <a href="/realisations" class="btn-secondary">
+            <span>Voir des exemples</span>
+          </a>
+        </div>
+
+        <div class="mt-12 flex flex-wrap gap-3" data-animate>
+          {types.map((type) => (
+            <span class="px-4 py-2 glass rounded-full text-sm text-gray-300">
+              {type}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Avantages -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Pourquoi un site pour <span class="gradient-text">votre restaurant</span> ?
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {avantages.map((item, index) => (
+          <div
+            class="glass p-6 rounded-2xl hover:bg-white/10 transition-all duration-300"
+            data-animate
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <div class="text-3xl mb-4">{item.icon}</div>
+            <h3 class="text-lg font-bold text-white mb-2">{item.title}</h3>
+            <p class="text-gray-400 text-sm">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-secondary/10 via-transparent to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="section-title mb-6" data-animate>
+            Remplissez vos <span class="gradient-text">tables</span>
+          </h2>
+          <p class="section-subtitle mx-auto" data-animate>
+            Un site qui met en valeur votre cuisine et attire les clients.
+          </p>
+        </div>
+
+        <div class="glass-strong p-8 md:p-12 rounded-3xl glow" data-animate>
+          <ContactForm compact />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

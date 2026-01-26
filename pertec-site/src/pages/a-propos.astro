@@ -1,0 +1,237 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const skills = [
+  { name: 'Développement Web', level: 95 },
+  { name: 'Design UI/UX', level: 90 },
+  { name: 'SEO & Référencement', level: 85 },
+  { name: 'Rédaction Web', level: 80 },
+];
+
+const values = [
+  {
+    icon: '🎯',
+    title: 'Proximité',
+    description: 'Basé à Evreux, je suis disponible pour des rendez-vous en personne ou en visio. Un vrai interlocuteur local, réactif et à l\'écoute.'
+  },
+  {
+    icon: '💎',
+    title: 'Transparence',
+    description: 'Des tarifs clairs affichés, pas de frais cachés, pas de surprise. Vous savez exactement ce que vous payez et ce que vous obtenez.'
+  },
+  {
+    icon: '⚡',
+    title: 'Réactivité',
+    description: 'Réponse sous 24h garantie. Je m\'engage sur des délais de livraison précis et je les respecte.'
+  },
+  {
+    icon: '🏆',
+    title: 'Qualité',
+    description: 'Des sites modernes, rapides et optimisés. Je ne fais pas de compromis sur la qualité technique et visuelle.'
+  },
+];
+
+const techStack = [
+  'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Astro',
+  'Tailwind CSS', 'Node.js', 'Git', 'Figma', 'SEO', 'Google Analytics'
+];
+---
+
+<BaseLayout
+  title="À Propos | Créateur de Sites Internet à Evreux | Pertec.fr"
+  description="Découvrez qui je suis : développeur web passionné basé à Evreux, spécialisé dans la création de sites internet clé en main pour les TPE et artisans de l'Eure."
+>
+  <!-- Hero -->
+  <section class="pt-32 pb-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <!-- Content -->
+          <div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+              <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+              <span class="text-sm text-gray-300">À propos</span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" data-animate>
+              Votre partenaire web<br /><span class="gradient-text">à Evreux</span>
+            </h1>
+
+            <p class="text-xl text-gray-400 mb-8" data-animate>
+              Passionné par le web et le digital, j'accompagne les entrepreneurs locaux
+              dans leur transition numérique avec des sites internet professionnels et efficaces.
+            </p>
+
+            <div class="flex flex-wrap gap-4" data-animate>
+              <a href="/contact" class="btn-primary">
+                <span>Discutons de votre projet</span>
+              </a>
+              <a href="/realisations" class="btn-secondary">
+                <span>Voir mes réalisations</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Image/Visual -->
+          <div class="relative" data-animate>
+            <div class="aspect-square rounded-3xl glass-strong p-8 flex items-center justify-center overflow-hidden">
+              <!-- Avatar placeholder -->
+              <div class="relative">
+                <div class="w-48 h-48 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <span class="text-7xl">👨‍💻</span>
+                </div>
+                <!-- Decorative rings -->
+                <div class="absolute inset-0 w-48 h-48 border-2 border-primary/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+              </div>
+
+              <!-- Floating badges -->
+              <div class="absolute top-8 right-8 px-4 py-2 glass rounded-full text-sm">
+                📍 Evreux
+              </div>
+              <div class="absolute bottom-8 left-8 px-4 py-2 glass rounded-full text-sm">
+                💼 Auto-entrepreneur
+              </div>
+            </div>
+
+            <!-- Background decoration -->
+            <div class="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-full opacity-20 blur-2xl"></div>
+            <div class="absolute -bottom-4 -left-4 w-40 h-40 bg-gradient-to-br from-accent to-secondary rounded-full opacity-20 blur-2xl"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center" data-animate>
+          Pourquoi le <span class="gradient-text">clé en main</span> ?
+        </h2>
+
+        <div class="space-y-6 text-lg text-gray-400" data-animate>
+          <p>
+            Après avoir travaillé avec de nombreux artisans et petites entreprises,
+            j'ai constaté un problème récurrent : <strong class="text-white">ils n'ont ni le temps,
+            ni les compétences techniques pour gérer un site web</strong>.
+          </p>
+
+          <p>
+            Entre le choix du nom de domaine, l'hébergement, la création du design,
+            la rédaction des textes et l'optimisation pour Google... c'est un vrai casse-tête
+            quand ce n'est pas son métier.
+          </p>
+
+          <p>
+            J'ai donc créé <strong class="text-white">Pertec</strong> avec une mission simple :
+            permettre aux entrepreneurs locaux d'avoir un site professionnel
+            <strong class="text-white">sans se soucier de la technique</strong>.
+          </p>
+
+          <p>
+            Vous me parlez de votre activité, de vos clients, de vos valeurs.
+            Je transforme tout ça en un site qui vous ressemble et qui vous apporte des clients.
+            <strong class="text-white">C'est aussi simple que ça</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="py-24 relative bg-gradient-to-b from-primary/5 via-transparent to-transparent">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="section-title mb-6" data-animate>
+          Mes <span class="gradient-text">valeurs</span>
+        </h2>
+        <p class="section-subtitle mx-auto" data-animate>
+          Ce qui guide mon travail au quotidien.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        {values.map((value, index) => (
+          <div
+            class="glass p-6 rounded-2xl text-center hover:bg-white/10 transition-all duration-300 hover:-translate-y-2"
+            data-animate
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <div class="text-4xl mb-4">{value.icon}</div>
+            <h3 class="text-xl font-bold text-white mb-3">{value.title}</h3>
+            <p class="text-gray-400 text-sm">{value.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-24 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-animate>
+              Compétences <span class="gradient-text">techniques</span>
+            </h2>
+
+            <p class="text-gray-400 mb-8" data-animate>
+              Une maîtrise complète des technologies web modernes pour créer
+              des sites rapides, sécurisés et optimisés pour le référencement.
+            </p>
+
+            <div class="space-y-6">
+              {skills.map((skill, index) => (
+                <div data-animate style={`animation-delay: ${index * 100}ms`}>
+                  <div class="flex justify-between mb-2">
+                    <span class="text-white font-medium">{skill.name}</span>
+                    <span class="text-primary">{skill.level}%</span>
+                  </div>
+                  <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-1000"
+                      style={`width: ${skill.level}%`}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div data-animate>
+            <h3 class="text-xl font-bold text-white mb-6">Technologies utilisées</h3>
+            <div class="flex flex-wrap gap-3">
+              {techStack.map((tech) => (
+                <span class="px-4 py-2 glass rounded-full text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-3xl mx-auto text-center glass-strong p-12 rounded-3xl glow" data-animate>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Prêt à travailler <span class="gradient-text">ensemble</span> ?
+        </h2>
+        <p class="text-xl text-gray-400 mb-8">
+          Discutons de votre projet autour d'un café (virtuel ou réel) !
+        </p>
+
+        <a href="/contact" class="btn-primary">
+          <span>Prendre contact</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

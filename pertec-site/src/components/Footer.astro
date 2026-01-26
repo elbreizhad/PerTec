@@ -1,0 +1,172 @@
+---
+const currentYear = new Date().getFullYear();
+
+const services = [
+  { label: 'Site vitrine', href: '/services' },
+  { label: 'Site artisan', href: '/secteurs/artisan' },
+  { label: 'Site restaurant', href: '/secteurs/restaurant' },
+  { label: 'Site commerce', href: '/secteurs/commerce' },
+  { label: 'Site profession libérale', href: '/secteurs/profession-liberale' },
+];
+
+const company = [
+  { label: 'À propos', href: '/a-propos' },
+  { label: 'Réalisations', href: '/realisations' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Zone d\'intervention', href: '/zone-intervention' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const legal = [
+  { label: 'Mentions légales', href: '/mentions-legales' },
+  { label: 'Politique de confidentialité', href: '/politique-confidentialite' },
+];
+
+const socials = [
+  {
+    label: 'LinkedIn',
+    href: '#',
+    icon: '<path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>'
+  },
+  {
+    label: 'Facebook',
+    href: '#',
+    icon: '<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>'
+  },
+  {
+    label: 'Instagram',
+    href: '#',
+    icon: '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>'
+  },
+];
+---
+
+<footer class="relative mt-32 border-t border-white/5">
+  <!-- Gradient Line -->
+  <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+
+  <div class="container mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+      <!-- Brand Column -->
+      <div class="lg:col-span-1">
+        <a href="/" class="inline-block mb-6">
+          <img
+            src="https://pertec.fr/wp-content/uploads/2017/09/Logo-Pertec-blanc.png"
+            alt="Pertec"
+            class="h-10 w-auto"
+          />
+        </a>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+          Création de sites internet clé en main à Evreux et dans l'Eure.
+          Design moderne, SEO optimisé, accompagnement personnalisé.
+        </p>
+        <!-- Social Links -->
+        <div class="flex gap-4">
+          {socials.map(social => (
+            <a
+              href={social.href}
+              aria-label={social.label}
+              class="w-10 h-10 flex items-center justify-center rounded-full
+                     bg-white/5 border border-white/10
+                     transition-all duration-300
+                     hover:bg-primary hover:border-primary hover:scale-110"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <Fragment set:html={social.icon} />
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Services Column -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">Services</h4>
+        <ul class="space-y-3">
+          {services.map(item => (
+            <li>
+              <a
+                href={item.href}
+                class="text-gray-400 text-sm hover:text-white transition-colors duration-300"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Company Column -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">Entreprise</h4>
+        <ul class="space-y-3">
+          {company.map(item => (
+            <li>
+              <a
+                href={item.href}
+                class="text-gray-400 text-sm hover:text-white transition-colors duration-300"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contact Column -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">Contact</h4>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="text-gray-400 text-sm">Evreux, Eure (27)<br>Normandie, France</span>
+          </li>
+          <li>
+            <a href="mailto:contact@pertec.fr" class="flex items-center gap-3 text-gray-400 text-sm hover:text-white transition-colors">
+              <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              contact@pertec.fr
+            </a>
+          </li>
+          <li class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-gray-400 text-sm">Lun - Ven : 9h - 18h</span>
+          </li>
+        </ul>
+
+        <!-- CTA -->
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 mt-6 px-6 py-3 text-sm font-semibold
+                 bg-gradient-to-r from-primary to-accent rounded-full
+                 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+        >
+          Demander un devis
+        </a>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-gray-500 text-sm">
+        © {currentYear} Pertec.fr - Création de sites internet à Evreux. Tous droits réservés.
+      </p>
+      <div class="flex gap-6">
+        {legal.map(item => (
+          <a
+            href={item.href}
+            class="text-gray-500 text-sm hover:text-white transition-colors duration-300"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>

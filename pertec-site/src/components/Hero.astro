@@ -1,0 +1,102 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  highlight?: string;
+  showCta?: boolean;
+}
+
+const { title, subtitle, highlight, showCta = true } = Astro.props;
+---
+
+<section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 -z-10">
+    <!-- Floating Shapes -->
+    <div class="absolute top-1/4 left-10 w-72 h-72 border border-primary/20 rounded-full float opacity-30"></div>
+    <div class="absolute bottom-1/4 right-10 w-96 h-96 border border-accent/20 rounded-full float-delay opacity-20"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full"></div>
+
+    <!-- Gradient Lines -->
+    <div class="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-primary/20 to-transparent"></div>
+    <div class="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-accent/10 to-transparent"></div>
+  </div>
+
+  <div class="container mx-auto px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <!-- Badge -->
+      {highlight && (
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+          <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+          <span class="text-sm text-gray-300">{highlight}</span>
+        </div>
+      )}
+
+      <!-- Title -->
+      <h1
+        class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.1] mb-8"
+        data-animate
+      >
+        <Fragment set:html={title} />
+      </h1>
+
+      <!-- Subtitle -->
+      {subtitle && (
+        <p
+          class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed"
+          data-animate
+        >
+          {subtitle}
+        </p>
+      )}
+
+      <!-- CTA Buttons -->
+      {showCta && (
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-animate>
+          <a href="/contact" class="btn-primary">
+            <span>Demander un devis gratuit</span>
+          </a>
+          <a href="/services" class="btn-secondary">
+            <span>Découvrir les services</span>
+          </a>
+        </div>
+      )}
+
+      <!-- Trust Badges -->
+      <div class="flex flex-wrap items-center justify-center gap-8 mt-16 pt-16 border-t border-white/5" data-animate>
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-sm">Site en 2 semaines</span>
+        </div>
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-sm">Formule tout inclus</span>
+        </div>
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-sm">Support personnalisé</span>
+        </div>
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-sm">Basé à Evreux</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500">
+    <span class="text-xs uppercase tracking-widest">Scroll</span>
+    <div class="w-6 h-10 rounded-full border-2 border-gray-500 flex justify-center pt-2">
+      <div class="w-1 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+    </div>
+  </div>
+</section>

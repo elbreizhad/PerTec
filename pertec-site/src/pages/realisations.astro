@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    title: 'Plomberie Martin',
+    category: 'Artisan',
+    description: 'Site vitrine pour un plombier chauffagiste à Louviers. Formulaire de devis, zone d\'intervention, galerie photos.',
+    image: '🔧',
+    tags: ['Site vitrine', 'SEO local', 'Formulaire devis']
+  },
+  {
+    title: 'Le Bistrot Normand',
+    category: 'Restaurant',
+    description: 'Site moderne avec menu en ligne, galerie photos des plats et intégration réservation.',
+    image: '🍽️',
+    tags: ['Menu digital', 'Réservation', 'Galerie photos']
+  },
+  {
+    title: 'Cabinet Dupont',
+    category: 'Profession libérale',
+    description: 'Site professionnel pour un cabinet comptable. Présentation des services et prise de rendez-vous.',
+    image: '⚖️',
+    tags: ['Site pro', 'RDV en ligne', 'Blog']
+  },
+  {
+    title: 'Salon Élégance',
+    category: 'Beauté',
+    description: 'Site élégant pour un salon de coiffure. Galerie avant/après, tarifs et réservation.',
+    image: '✂️',
+    tags: ['Galerie', 'Tarifs', 'Réservation']
+  },
+  {
+    title: 'Électricité Normande',
+    category: 'Artisan',
+    description: 'Site vitrine pour une entreprise d\'électricité. Mise en avant des certifications et devis en ligne.',
+    image: '⚡',
+    tags: ['Certifications', 'Devis', 'SEO local']
+  },
+  {
+    title: 'Fleurs & Jardins',
+    category: 'Commerce',
+    description: 'Site vitrine pour un fleuriste avec catalogue produits et commande en ligne.',
+    image: '🌸',
+    tags: ['Catalogue', 'Commande', 'Click & Collect']
+  },
+];
+
+const categories = ['Tous', 'Artisan', 'Restaurant', 'Commerce', 'Profession libérale', 'Beauté'];
+---
+
+<BaseLayout
+  title="Réalisations | Portfolio Sites Internet | Pertec.fr"
+  description="Découvrez mes réalisations : sites internet créés pour des artisans, restaurants, commerces et professions libérales dans l'Eure et en Normandie."
+>
+  <!-- Hero -->
+  <section class="pt-32 pb-16 relative">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass" data-animate>
+          <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+          <span class="text-sm text-gray-300">Portfolio</span>
+        </div>
+
+        <h1 class="section-title mb-6" data-animate>
+          Mes <span class="gradient-text">réalisations</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-animate>
+          Découvrez les sites web que j'ai créés pour des entrepreneurs de l'Eure et de Normandie.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="py-8">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap justify-center gap-3" data-animate>
+        {categories.map((cat, index) => (
+          <button
+            class={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300
+              ${index === 0
+                ? 'bg-gradient-to-r from-primary to-accent text-white'
+                : 'glass text-gray-400 hover:text-white hover:bg-white/10'
+              }`}
+            data-filter={cat.toLowerCase()}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Grid -->
+  <section class="py-16">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {projects.map((project, index) => (
+          <div
+            class="group glass rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-500 hover:-translate-y-2"
+            data-animate
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <!-- Image Placeholder -->
+            <div class="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
+              <span class="text-6xl group-hover:scale-110 transition-transform duration-500">{project.image}</span>
+
+              <!-- Overlay on hover -->
+              <div class="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+              <!-- Category badge -->
+              <div class="absolute top-4 left-4 px-3 py-1 glass rounded-full text-xs font-medium">
+                {project.category}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">
+                {project.title}
+              </h3>
+              <p class="text-gray-400 text-sm mb-4">
+                {project.description}
+              </p>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-400">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="section-title mb-6" data-animate>
+          Votre projet <span class="gradient-text">ici</span> ?
+        </h2>
+        <p class="text-xl text-gray-400 mb-8" data-animate>
+          Rejoignez ces entrepreneurs qui ont fait confiance à Pertec pour leur présence en ligne.
+        </p>
+
+        <a href="/contact" class="btn-primary" data-animate>
+          <span>Demander un devis gratuit</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
