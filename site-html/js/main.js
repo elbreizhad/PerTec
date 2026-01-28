@@ -33,13 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Scroll animations
+  // Scroll animations - Enhanced 2026
   const animatedElements = document.querySelectorAll('[data-animate]');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        entry.target.classList.add('visible', 'animate');
       }
     });
   }, {
@@ -164,3 +164,15 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// Scroll progress indicator - Tendance 2026
+const scrollProgress = document.createElement('div');
+scrollProgress.className = 'scroll-progress';
+document.body.prepend(scrollProgress);
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  scrollProgress.style.width = scrollPercent + '%';
+});
