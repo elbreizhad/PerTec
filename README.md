@@ -21,9 +21,13 @@ génération de **quittances de loyer** et de **contrats de bail** (PDF via impr
 
 ## Prérequis
 
-- PHP **8.0+** avec l'extension `pdo_mysql`
+- PHP **7.1+** (testé sur 8.4) avec les extensions `pdo_mysql`, `dom`, `mbstring`, `gd`
 - MySQL **5.7+** ou MariaDB **10.2+**
 - Un serveur web (Apache avec `mod_rewrite`, ou Nginx)
+
+> La génération PDF (quittances, contrats) utilise **Dompdf**, déjà inclus dans
+> `vendor/` (aucun `composer install` requis sur le serveur). Les extensions
+> `dom`, `mbstring` et `gd` doivent être activées.
 
 ## Installation
 

@@ -336,7 +336,7 @@ App::post('/loyers/{id}/delete', function ($params) {
     redirect('/loyers');
 });
 
-// Quittance imprimable (PDF via impression navigateur)
+// Quittance imprimable (page HTML avec bouton d'impression)
 App::get('/quittance/{id}', function ($params) {
     Auth::requireLogin();
     $payment = Payment::find((int) $params['id']);
@@ -347,6 +347,25 @@ App::get('/quittance/{id}', function ($params) {
         'lease'    => $lease,
         'settings' => Setting::all(),
     ], 'layout_print');
+});
+
+// Quittance en PDF (téléchargement 1 clic via Dompdf)
+App::get('/quittance/{id}/pdf', function ($params) {
+    Auth::requireLogin();
+    $id = (int) $params['id'];
+    $payment = Payment::find($id);
+    if (!$payment) redirect('/loyers');
+    if (!Pdf::available()) {
+        flash('Librairie PDF indisponible sur le serveur.', 'error');
+        redirect('/quittance/' . $id);
+    }
+    $lease = Lease::find((int) $payment['lease_id']);
+    $filename = 'quittance-' . ($payment['receipt_number'] ?: $id) . '.pdf';
+    Pdf::streamDocument('documents/quittance', [
+        'payment'  => $payment,
+        'lease'    => $lease,
+        'settings' => Setting::all(),
+    ], $filename);
 });
 
 /* =========================================================================
@@ -365,6 +384,25 @@ App::get('/contrat/{id}', function ($params) {
         'lease'    => $lease,
         'settings' => Setting::all(),
     ], 'layout_print');
+});
+
+// Contrat de bail en PDF (téléchargement 1 clic via Dompdf)
+App::get('/contrat/{id}/pdf', function ($params) {
+    Auth::requireLogin();
+    $id = (int) $params['id'];
+    $lease = Lease::find($id);
+    if (!$lease) redirect('/baux');
+    if (!Pdf::available()) {
+        flash('Librairie PDF indisponible sur le serveur.', 'error');
+        redirect('/contrat/' . $id);
+    }
+    $meuble = $lease['lease_type'] === 'meuble';
+    $template = $meuble ? 'documents/contrat_meuble' : 'documents/contrat';
+    $filename = ($meuble ? 'bail-meuble-' : 'bail-') . $id . '.pdf';
+    Pdf::streamDocument($template, [
+        'lease'    => $lease,
+        'settings' => Setting::all(),
+    ], $filename);
 });
 
 /* =========================================================================

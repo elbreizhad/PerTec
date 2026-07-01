@@ -90,6 +90,15 @@ function flash(?string $msg = null, string $type = 'success')
     return $out;
 }
 
+/** Rend un gabarit et retourne le HTML (sans layout). */
+function render_template(string $template, array $data = []): string
+{
+    extract($data, EXTR_SKIP);
+    ob_start();
+    require __DIR__ . '/../templates/' . $template . '.php';
+    return (string) ob_get_clean();
+}
+
 /** Rendu d'une vue avec layout. */
 function view(string $template, array $data = [], ?string $layout = 'layout'): void
 {
