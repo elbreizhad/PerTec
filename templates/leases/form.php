@@ -39,13 +39,16 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
 
     <fieldset>
         <legend>Conditions du bail</legend>
+        <div class="field">
+            <label>Type de location</label>
+            <select name="lease_type">
+                <option value="vide" <?= ($l['lease_type']??'vide')==='vide'?'selected':'' ?>>Location vide (bail classique)</option>
+                <option value="meuble" <?= ($l['lease_type']??'')==='meuble'?'selected':'' ?>>Location meublée (LMNP)</option>
+            </select>
+            <p class="hint">👉 Choisissez <strong>« Location meublée (LMNP) »</strong> pour générer un bail meublé
+            (avec inventaire du mobilier) au lieu d'un bail de location vide.</p>
+        </div>
         <div class="form-grid">
-            <div class="field"><label>Type</label>
-                <select name="lease_type">
-                    <option value="vide" <?= ($l['lease_type']??'vide')==='vide'?'selected':'' ?>>Location vide</option>
-                    <option value="meuble" <?= ($l['lease_type']??'')==='meuble'?'selected':'' ?>>Location meublée</option>
-                </select>
-            </div>
             <div class="field"><label>Date de début *</label><input type="date" name="start_date" value="<?= $val('start_date', date('Y-m-d')) ?>" required></div>
             <div class="field"><label>Date de fin</label><input type="date" name="end_date" value="<?= $val('end_date') ?>"></div>
             <div class="field"><label>Loyer hors charges (€)</label><input name="rent_amount" value="<?= $val('rent_amount','0') ?>"></div>
