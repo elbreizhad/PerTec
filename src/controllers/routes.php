@@ -274,6 +274,18 @@ App::post('/baux/{id}/delete', function ($params) {
     redirect('/baux');
 });
 
+// Enregistrer la checklist de conformité d'un bail
+App::post('/baux/{id}/checklist', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    if (Lease::find($id)) {
+        Checklist::save($id, (array) post('items', []));
+        flash('Checklist enregistrée.');
+    }
+    redirect('/baux/' . $id);
+});
+
 // Générer une échéance manuelle pour un bail (mois/année choisis)
 App::post('/baux/{id}/echeance', function ($params) {
     Auth::requireLogin();

@@ -104,3 +104,13 @@ table.mini td{padding:.4rem .3rem;border-bottom:1px solid var(--line);font-size:
 table.mini tr.total td{border-top:2px solid var(--dark);border-bottom:none}
 tfoot th{background:#f9fafb;color:var(--dark);font-size:.9rem;text-transform:none}
 .expense-form .form-grid{align-items:end}
+
+/* Checklist de conformité */
+.checklist-head{display:flex;align-items:center;gap:.8rem;margin-bottom:.6rem}
+.progress-bar{flex:1;height:10px;background:var(--line);border-radius:999px;overflow:hidden;max-width:300px}
+.progress-bar span{display:block;height:100%;background:var(--green);transition:width .3s}
+.checklist{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.4rem .9rem;margin-bottom:.6rem}
+.check-item{display:flex;align-items:flex-start;gap:.5rem;font-weight:400;font-size:.92rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer}
+.check-item:hover{background:var(--light)}
+.check-item input{width:auto;margin-top:.15rem;flex-shrink:0}
+.check-item span{line-height:1.35}

@@ -61,6 +61,43 @@ $l = $lease; ?>
 </table></div>
 <?php endif; ?>
 
+<?php
+$applicable = Checklist::applicableItems($l['lease_type']);
+$checked    = Checklist::checkedKeys((int) $l['id']);
+[$done, $total] = Checklist::progress((int) $l['id'], $l['lease_type']);
+$pct = $total > 0 ? round($done / $total * 100) : 0;
+?>
+<h2>Checklist de conformité</h2>
+<p class="muted small">Vérifiez que tout est en règle côté bailleur et que le locataire a bien fourni toutes les pièces.</p>
+
+<form method="post" action="<?= url('/baux/'.$l['id'].'/checklist') ?>" class="card">
+    <?= csrf_field() ?>
+    <div class="checklist-head">
+        <div class="progress-bar" title="<?= $done ?>/<?= $total ?>">
+            <span style="width:<?= $pct ?>%"></span>
+        </div>
+        <strong><?= $done ?>/<?= $total ?></strong>
+        <?php if ($total > 0 && $done === $total): ?><span class="badge badge-paid">Complet ✓</span><?php endif; ?>
+    </div>
+
+    <?php foreach (Checklist::GROUPS as $gkey => $glabel):
+        $items = array_filter($applicable, fn($i) => $i['group'] === $gkey);
+        if (!$items) continue; ?>
+        <h3><?= e($glabel) ?></h3>
+        <div class="checklist">
+            <?php foreach ($items as $item): ?>
+                <label class="check-item">
+                    <input type="checkbox" name="items[]" value="<?= e($item['key']) ?>"
+                        <?= in_array($item['key'], $checked, true) ? 'checked' : '' ?>>
+                    <span><?= e($item['label']) ?></span>
+                </label>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+
+    <div class="mt"><button class="btn btn-primary">Enregistrer la checklist</button></div>
+</form>
+
 <form method="post" action="<?= url('/baux/'.$l['id'].'/delete') ?>" onsubmit="return confirm('Supprimer ce bail et tout son historique ?')" class="mt">
     <?= csrf_field() ?><button class="btn btn-danger btn-sm">Supprimer le bail</button>
 </form>
