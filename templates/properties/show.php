@@ -21,7 +21,7 @@ $expensesTotal = Expense::totalForProperty((int) $p['id']); ?>
     <div class="stat"><div class="label">Cash-flow / mois</div><div class="value <?= $ind['cashflow_monthly']>=0?'pos':'neg' ?>"><?= euros($ind['cashflow_monthly']) ?></div></div>
 </div>
 
-<div class="grid grid-2">
+<div class="grid grid-2col">
     <div class="card">
         <h3>Caractéristiques</h3>
         <dl class="kv">
