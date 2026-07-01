@@ -37,8 +37,8 @@ h3{font-size:1rem;margin:1em 0 .4em}
 .grid-2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-.grid-2col{grid-template-columns:repeat(2,1fr)}
-@media(max-width:720px){.grid-2col{grid-template-columns:1fr}}
+.grid-2col{grid-template-columns:1fr 1fr}
+@media(max-width:420px){.grid-2col{grid-template-columns:1fr}}
 
 /* Stat tiles */
 .stat{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.1rem}
