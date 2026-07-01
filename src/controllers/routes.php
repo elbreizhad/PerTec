@@ -357,7 +357,11 @@ App::get('/contrat/{id}', function ($params) {
     Auth::requireLogin();
     $lease = Lease::find((int) $params['id']);
     if (!$lease) redirect('/baux');
-    view('documents/contrat', [
+    // Bail meublé (LMNP) : modèle dédié ; sinon bail de location vide.
+    $template = $lease['lease_type'] === 'meuble'
+        ? 'documents/contrat_meuble'
+        : 'documents/contrat';
+    view($template, [
         'lease'    => $lease,
         'settings' => Setting::all(),
     ], 'layout_print');

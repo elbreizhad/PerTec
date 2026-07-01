@@ -7,7 +7,7 @@ $l = $lease; ?>
             · <span class="badge badge-<?= e($l['status']) ?>"><?= $l['status']==='active'?'Actif':'Terminé' ?></span></p>
     </div>
     <div class="actions">
-        <a href="<?= url('/contrat/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">📄 Contrat de bail</a>
+        <a href="<?= url('/contrat/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">📄 <?= $l['lease_type']==='meuble' ? 'Contrat de bail meublé (LMNP)' : 'Contrat de bail' ?></a>
         <a href="<?= url('/baux/'.$l['id'].'/edit') ?>" class="btn">Modifier</a>
     </div>
 </div>
