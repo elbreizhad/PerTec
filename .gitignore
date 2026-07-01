@@ -1,0 +1,6 @@
+# Configuration locale contenant les identifiants
+/config/config.php
+
+# Divers
+.DS_Store
+*.log

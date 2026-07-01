@@ -1,0 +1,19 @@
+# Routage : tout ce qui n'est pas un fichier réel passe par index.php
+RewriteEngine On
+
+# Protéger les dossiers sensibles
+RewriteRule ^(config|src|database|templates)/ - [F,L]
+
+# Ne pas réécrire les fichiers/dossiers existants (assets, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Front controller
+RewriteRule ^ index.php [L]
+
+# Sécurité basique
+Options -Indexes
+<Files "config.php">
+    Require all denied
+</Files>
