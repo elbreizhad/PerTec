@@ -43,5 +43,7 @@ jobs:
             **/.git*/**
             .github/**
             scripts/**
+            *.md
             **/*.md
+            cahier_des_charges_pertec.md
             config/config.php
