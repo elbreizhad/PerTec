@@ -1,0 +1,47 @@
+name: Déploiement PlanetHoster (N0C)
+
+# Pont GitHub -> serveur de prod : à chaque push sur la branche de déploiement,
+# les fichiers sont envoyés par FTP(S) sur l'hébergement PlanetHoster N0C.
+#
+# Prérequis : définir 4 secrets dans le dépôt GitHub
+#   (Settings > Secrets and variables > Actions > New repository secret) :
+#     FTP_SERVER      ex: node123-eu.n0c.com   (hôte FTP fourni par N0C)
+#     FTP_USERNAME    votre identifiant FTP N0C
+#     FTP_PASSWORD    votre mot de passe FTP N0C
+#     FTP_SERVER_DIR  dossier cible, ex: /maloc.pertec.fr/  (doit finir par /)
+#
+# Aucun identifiant n'est stocké dans le code : tout passe par les secrets.
+
+on:
+  push:
+    branches:
+      - main
+      - claude/intelligent-turing-x84chm
+  workflow_dispatch: {}   # permet aussi un déclenchement manuel
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-prod
+      cancel-in-progress: true
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Déployer par FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # On NE synchronise PAS ces éléments (jamais écrasés/supprimés sur le serveur) :
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            scripts/**
+            **/*.md
+            config/config.php
