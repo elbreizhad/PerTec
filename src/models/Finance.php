@@ -6,11 +6,13 @@ declare(strict_types=1);
  */
 class Finance
 {
-    /** Coût total d'acquisition. */
+    /** Coût total d'acquisition (champs de base + dépenses détaillées). */
     public static function totalCost(array $p): float
     {
-        return (float)$p['purchase_price'] + (float)$p['notary_fees']
+        $base = (float)$p['purchase_price'] + (float)$p['notary_fees']
             + (float)$p['agency_fees'] + (float)$p['works_cost'] + (float)$p['other_costs'];
+        $expenses = isset($p['id']) ? Expense::totalForProperty((int) $p['id']) : 0.0;
+        return $base + $expenses;
     }
 
     /** Loyer mensuel hors charges actuellement en cours pour ce bien (bail actif). */

@@ -11,10 +11,13 @@ ini_set('display_errors', '0'); // passez à '1' pour déboguer
 
 require __DIR__ . '/src/App.php';
 require __DIR__ . '/src/Database.php';
+require __DIR__ . '/src/Migrator.php';
 require __DIR__ . '/src/helpers.php';
 require __DIR__ . '/src/Auth.php';
 require __DIR__ . '/src/models/Setting.php';
+require __DIR__ . '/src/models/Expense.php';
 require __DIR__ . '/src/models/Finance.php';
+require __DIR__ . '/src/models/Lmnp.php';
 require __DIR__ . '/src/models/Property.php';
 require __DIR__ . '/src/models/Tenant.php';
 require __DIR__ . '/src/models/Lease.php';
@@ -30,6 +33,9 @@ if (!App::isInstalled()) {
     App::dispatch();
     return;
 }
+
+// Applique les migrations en attente (évolutions de schéma).
+Migrator::run();
 
 require __DIR__ . '/src/controllers/routes.php';
 App::dispatch();

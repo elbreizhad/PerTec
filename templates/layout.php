@@ -12,7 +12,7 @@
     <a class="brand" href="<?= url('/') ?>">🏠 PerTec</a>
     <nav class="mainnav">
         <?php $cur = App::currentPath();
-        $links = ['/' => 'Tableau de bord', '/biens' => 'Biens', '/locataires' => 'Locataires', '/baux' => 'Baux', '/loyers' => 'Loyers'];
+        $links = ['/' => 'Tableau de bord', '/biens' => 'Biens', '/locataires' => 'Locataires', '/baux' => 'Baux', '/loyers' => 'Loyers', '/fiscalite' => 'Fiscalité'];
         foreach ($links as $href => $label):
             $active = ($href === '/' ? $cur === '/' : str_starts_with($cur, $href)) ? ' class="active"' : ''; ?>
             <a href="<?= url($href) ?>"<?= $active ?>><?= $label ?></a>

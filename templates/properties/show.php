@@ -1,11 +1,14 @@
 <?php /** @var array $property */ /** @var array $ind */ /** @var array $leases */
-$p = $property; ?>
+$p = $property;
+$expenses = Expense::forProperty((int) $p['id']);
+$expensesTotal = Expense::totalForProperty((int) $p['id']); ?>
 <div class="page-head">
     <div>
         <h1><?= e($p['label']) ?></h1>
         <p class="muted"><?= e(trim(($p['address'] ?: '').' '.($p['postal_code'] ?: '').' '.($p['city'] ?: ''))) ?: e(ucfirst($p['type'])) ?></p>
     </div>
     <div class="actions">
+        <a href="<?= url('/biens/'.$p['id'].'/fiscalite') ?>" class="btn btn-secondary">📊 Fiscalité LMNP</a>
         <a href="<?= url('/biens/'.$p['id'].'/edit') ?>" class="btn">Modifier</a>
         <a href="<?= url('/baux/new') ?>" class="btn btn-primary">+ Nouveau bail</a>
     </div>
@@ -60,6 +63,52 @@ $p = $property; ?>
         <?php if ($p['notes']): ?><p class="small muted mt"><?= nl2br(e($p['notes'])) ?></p><?php endif; ?>
     </div>
 </div>
+
+<h2>Dépenses &amp; travaux</h2>
+<p class="muted small">Achat, travaux, aménagement, mobilier… Ces montants s'ajoutent au coût total d'acquisition
+et alimentent les amortissements LMNP.</p>
+
+<div class="card">
+    <form method="post" action="<?= url('/biens/'.$p['id'].'/depenses') ?>" class="expense-form">
+        <?= csrf_field() ?>
+        <div class="form-grid">
+            <div class="field">
+                <label>Catégorie</label>
+                <select name="category">
+                    <?php foreach (Expense::CATEGORIES as $val => $lbl): ?>
+                        <option value="<?= e($val) ?>"><?= e($lbl) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="field"><label>Libellé</label><input name="label" placeholder="Ex : Réfection salle de bain" required></div>
+            <div class="field"><label>Montant (€)</label><input name="amount" required></div>
+            <div class="field"><label>Date</label><input type="date" name="expense_date"></div>
+        </div>
+        <button class="btn btn-primary">+ Ajouter la dépense</button>
+    </form>
+</div>
+
+<?php if ($expenses): ?>
+<div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Catégorie</th><th>Libellé</th><th class="num">Montant</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach ($expenses as $ex): ?>
+        <tr>
+            <td><?= fdate($ex['expense_date']) ?></td>
+            <td><?= e(Expense::CATEGORIES[$ex['category']] ?? $ex['category']) ?></td>
+            <td><?= e($ex['label']) ?></td>
+            <td class="num"><?= euros($ex['amount']) ?></td>
+            <td class="right">
+                <form class="inline-form" method="post" action="<?= url('/depenses/'.$ex['id'].'/delete') ?>" onsubmit="return confirm('Supprimer cette dépense ?')"><?= csrf_field() ?><button class="btn btn-sm btn-danger">×</button></form>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+    <tfoot><tr><th colspan="3">Total des dépenses</th><th class="num"><?= euros($expensesTotal) ?></th><th></th></tr></tfoot>
+</table></div>
+<?php else: ?>
+    <div class="card empty">Aucune dépense enregistrée pour ce bien.</div>
+<?php endif; ?>
 
 <h2>Baux liés à ce bien</h2>
 <?php if (!$leases): ?>

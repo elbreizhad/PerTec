@@ -68,6 +68,25 @@ $action = $isEdit ? url('/biens/' . $p['id']) : url('/biens');
     </fieldset>
 
     <fieldset>
+        <legend>Paramètres fiscaux LMNP</legend>
+        <p class="hint">Utilisés pour le calcul des amortissements et du résultat en location meublée.</p>
+        <div class="form-grid">
+            <div class="field">
+                <label>Régime fiscal</label>
+                <select name="tax_regime">
+                    <option value="reel" <?= ($p['tax_regime'] ?? 'reel')==='reel'?'selected':'' ?>>Réel</option>
+                    <option value="micro" <?= ($p['tax_regime'] ?? '')==='micro'?'selected':'' ?>>Micro-BIC</option>
+                </select>
+            </div>
+            <div class="field"><label>Part du terrain (%)</label><input name="land_share_pct" value="<?= $val('land_share_pct','15') ?>"><p class="hint">Non amortissable (souvent 10–20 %).</p></div>
+            <div class="field"><label>Amort. bâti (ans)</label><input name="amort_years_building" value="<?= $val('amort_years_building','30') ?>"></div>
+            <div class="field"><label>Amort. mobilier (ans)</label><input name="amort_years_furniture" value="<?= $val('amort_years_furniture','7') ?>"></div>
+            <div class="field"><label>Amort. travaux (ans)</label><input name="amort_years_works" value="<?= $val('amort_years_works','10') ?>"></div>
+            <div class="field"><label>Frais de comptable (€/an)</label><input name="accountant_fees" value="<?= $val('accountant_fees','0') ?>"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
         <legend>Notes</legend>
         <div class="field"><textarea name="notes"><?= $val('notes') ?></textarea></div>
     </fieldset>

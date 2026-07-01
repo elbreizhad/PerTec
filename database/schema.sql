@@ -44,9 +44,32 @@ CREATE TABLE IF NOT EXISTS properties (
     insurance_year DECIMAL(12,2) NOT NULL DEFAULT 0, -- assurance PNO annuelle
     charges_year   DECIMAL(12,2) NOT NULL DEFAULT 0, -- charges de copro non récupérables (annuel)
     mgmt_fees_pct  DECIMAL(6,3)  NOT NULL DEFAULT 0, -- frais de gestion en % du loyer
+    -- Paramètres fiscaux LMNP
+    land_share_pct        DECIMAL(5,2)  NOT NULL DEFAULT 15.00, -- part du terrain (non amortissable)
+    amort_years_building  SMALLINT UNSIGNED NOT NULL DEFAULT 30, -- durée amort. bâti
+    amort_years_furniture SMALLINT UNSIGNED NOT NULL DEFAULT 7,  -- durée amort. mobilier
+    amort_years_works     SMALLINT UNSIGNED NOT NULL DEFAULT 10, -- durée amort. travaux
+    accountant_fees       DECIMAL(10,2) NOT NULL DEFAULT 0,      -- frais de comptable annuels
+    tax_regime            VARCHAR(20)   NOT NULL DEFAULT 'reel', -- reel / micro
     notes          TEXT         NULL,
     created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Dépenses détaillées par bien (travaux, achat, aménagement, mobilier…)
+CREATE TABLE IF NOT EXISTS property_expenses (
+    id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    property_id  INT UNSIGNED NOT NULL,
+    category     VARCHAR(40)  NOT NULL DEFAULT 'travaux',
+    label        VARCHAR(200) NOT NULL,
+    amount       DECIMAL(12,2) NOT NULL DEFAULT 0,
+    expense_date DATE         NULL,
+    notes        VARCHAR(255) NULL,
+    created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_expenses_property (property_id),
+    CONSTRAINT fk_expenses_property FOREIGN KEY (property_id)
+        REFERENCES properties(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Locataires

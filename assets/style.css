@@ -97,3 +97,10 @@ body.bare{display:flex;align-items:center;justify-content:center;min-height:100v
 dl.kv{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;margin:0}
 dl.kv dt{color:var(--muted)} dl.kv dd{margin:0;font-weight:600}
 .empty{text-align:center;padding:2.5rem;color:var(--muted)}
+
+/* Tableaux compacts (fiscalité) */
+table.mini{box-shadow:none}
+table.mini td{padding:.4rem .3rem;border-bottom:1px solid var(--line);font-size:.92rem}
+table.mini tr.total td{border-top:2px solid var(--dark);border-bottom:none}
+tfoot th{background:#f9fafb;color:var(--dark);font-size:.9rem;text-transform:none}
+.expense-form .form-grid{align-items:end}

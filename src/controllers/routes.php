@@ -116,6 +116,56 @@ App::post('/biens/{id}/delete', function ($params) {
 });
 
 /* =========================================================================
+ * DÉPENSES DÉTAILLÉES D'UN BIEN
+ * ========================================================================= */
+
+App::post('/biens/{id}/depenses', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $pid = (int) $params['id'];
+    if (Property::find($pid)) {
+        Expense::create(Expense::fromRequest($pid));
+        flash('Dépense ajoutée.');
+    }
+    redirect('/biens/' . $pid);
+});
+
+App::post('/depenses/{id}/delete', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $exp = Expense::find((int) $params['id']);
+    Expense::delete((int) $params['id']);
+    flash('Dépense supprimée.');
+    redirect('/biens/' . (int) ($exp['property_id'] ?? 0));
+});
+
+/* =========================================================================
+ * FISCALITÉ LMNP
+ * ========================================================================= */
+
+App::get('/fiscalite', function () {
+    Auth::requireLogin();
+    $year = (int) ($_GET['year'] ?? date('Y'));
+    $rows = [];
+    foreach (Property::all() as $p) {
+        $rows[] = ['p' => $p, 'lmnp' => Lmnp::compute($p, $year)];
+    }
+    view('lmnp/index', ['rows' => $rows, 'year' => $year]);
+});
+
+App::get('/biens/{id}/fiscalite', function ($params) {
+    Auth::requireLogin();
+    $property = Property::find((int) $params['id']);
+    if (!$property) redirect('/biens');
+    $year = (int) ($_GET['year'] ?? date('Y'));
+    view('lmnp/show', [
+        'property' => $property,
+        'lmnp'     => Lmnp::compute($property, $year),
+        'year'     => $year,
+    ]);
+});
+
+/* =========================================================================
  * LOCATAIRES
  * ========================================================================= */
 
