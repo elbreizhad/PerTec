@@ -10,35 +10,40 @@ plus manuelle. **Choisis-en une seule** (la A est recommandée).
 
 ---
 
-## Méthode A — GitHub Actions par FTP (recommandée) ✅
+## Méthode A — GitHub Actions par SSH / rsync (recommandée) ✅
 
-À **chaque push**, GitHub envoie automatiquement les fichiers sur ton serveur.
-C'est le vrai « pont » : tu ne fais plus rien après la configuration initiale.
+À **chaque push**, GitHub synchronise les fichiers sur ton serveur via SSH
+(port **5022** chez PlanetHoster N0C). Plus fiable que le FTP (qui est souvent
+bloqué par le pare-feu anti-brute-force après plusieurs connexions).
 
-### 1. Récupérer tes accès FTP dans N0C
-Dans le panneau **N0C** de PlanetHoster : section **FTP** → note l'hôte
-(ex. `nodeXXX-eu.n0c.com`), ton identifiant et ton mot de passe FTP.
-Repère aussi le **dossier racine du site** `maloc.pertec.fr` (souvent quelque
-chose comme `/maloc.pertec.fr/` ou `/public_html/...`).
+### 1. Préparer la clé SSH
+Dans N0C : **Fichiers → Clés SSH** (port indiqué : **5022**).
+- Génère une paire de clés dédiée au déploiement (sur ton PC) :
+  `ssh-keygen -t ed25519 -f deploy_key -C "github-deploy"` (laisse la passphrase vide).
+- Ajoute le contenu de `deploy_key.pub` via le bouton **Ajouter** de N0C.
+- Garde `deploy_key` (clé privée) pour l'étape suivante.
 
 ### 2. Ajouter les secrets dans GitHub
-Dépôt GitHub → **Settings → Secrets and variables → Actions → New repository secret**.
-Crée ces 4 secrets :
+Dépôt GitHub → **Settings → Secrets and variables → Actions → New repository secret** :
 
 | Secret | Exemple | Description |
 |--------|---------|-------------|
-| `FTP_SERVER` | `nodeXXX-eu.n0c.com` | hôte FTP fourni par N0C |
-| `FTP_USERNAME` | `monuser` | identifiant FTP |
-| `FTP_PASSWORD` | `••••••••` | mot de passe FTP |
-| `FTP_SERVER_DIR` | `/maloc.pertec.fr/` | dossier cible (termine par `/`) |
+| `SSH_HOST` | `nodeXXX-eu.n0c.com` | hôte SSH N0C |
+| `SSH_USER` | `monuser` | identifiant SSH/N0C |
+| `SSH_PORT` | `5022` | port SSH PlanetHoster |
+| `SSH_PRIVATE_KEY` | *(contenu de `deploy_key`)* | clé privée (tout le fichier) |
+| `SSH_TARGET` | `/home/USER/maloc.pertec.fr/` | dossier cible (finir par `/`) |
 
 ### 3. C'est prêt
 Le workflow [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml)
 se déclenche à chaque push sur `main` (et sur la branche de travail), ou
-manuellement via l'onglet **Actions → Déploiement PlanetHoster → Run workflow**.
+manuellement via **Actions → Déploiement PlanetHoster → Run workflow**.
 
 Les migrations de base de données s'appliquent **automatiquement** au premier
 chargement du site après le déploiement.
+
+> Si le serveur ne dispose pas de `rsync`, on peut basculer sur un déploiement
+> SFTP pur — demande-le.
 
 ---
 

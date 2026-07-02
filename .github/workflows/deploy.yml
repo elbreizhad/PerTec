@@ -1,14 +1,16 @@
 name: Déploiement PlanetHoster (N0C)
 
-# Pont GitHub -> serveur de prod : à chaque push sur la branche de déploiement,
-# les fichiers sont envoyés par FTP(S) sur l'hébergement PlanetHoster N0C.
+# Pont GitHub -> serveur de prod via SSH (rsync).
+# À chaque push sur la branche de déploiement, les fichiers modifiés sont
+# synchronisés sur l'hébergement PlanetHoster N0C par SSH (port 5022).
 #
-# Prérequis : définir 4 secrets dans le dépôt GitHub
+# Prérequis : définir ces secrets dans le dépôt GitHub
 #   (Settings > Secrets and variables > Actions > New repository secret) :
-#     FTP_SERVER      ex: node123-eu.n0c.com   (hôte FTP fourni par N0C)
-#     FTP_USERNAME    votre identifiant FTP N0C
-#     FTP_PASSWORD    votre mot de passe FTP N0C
-#     FTP_SERVER_DIR  dossier cible, ex: /maloc.pertec.fr/  (doit finir par /)
+#     SSH_HOST         hôte SSH N0C (ex: nodeXXX-eu.n0c.com)
+#     SSH_USER         votre identifiant SSH/N0C
+#     SSH_PORT         5022  (port SSH PlanetHoster N0C)
+#     SSH_PRIVATE_KEY  clé privée dont la clé publique est enregistrée dans N0C
+#     SSH_TARGET       dossier cible, ex: /home/USER/maloc.pertec.fr/ (finir par /)
 #
 # Aucun identifiant n'est stocké dans le code : tout passe par les secrets.
 
@@ -17,7 +19,7 @@ on:
     branches:
       - main
       - claude/intelligent-turing-x84chm
-  workflow_dispatch: {}   # permet aussi un déclenchement manuel
+  workflow_dispatch: {}
 
 jobs:
   deploy:
@@ -29,23 +31,16 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v4
 
-      - name: Déployer par FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Déployer via SSH (rsync)
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          # Timeout de connexion augmenté (60 s) pour résister aux lenteurs FTP de PlanetHoster.
-          timeout: 60000
-          # On NE synchronise PAS ces éléments (jamais écrasés/supprimés sur le serveur) :
-          exclude: |
-            **/.git*
-            **/.git*/**
-            .github/**
-            scripts/**
-            *.md
-            **/*.md
-            cahier_des_charges_pertec.md
-            config/config.php
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          TARGET: ${{ secrets.SSH_TARGET }}
+          # -r récursif, -l liens, -t dates, -z compression, -v verbeux, -O sans dates de dossiers
+          # --delete : supprime sur le serveur les fichiers absents du dépôt (hors exclusions)
+          ARGS: "-rltzvO --delete"
+          # Jamais synchronisés / supprimés sur le serveur :
+          EXCLUDE: ".git/, .github/, scripts/, *.md, cahier_des_charges_pertec.md, config/config.php"
