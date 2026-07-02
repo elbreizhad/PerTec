@@ -10,11 +10,10 @@ name: Déploiement PlanetHoster (N0C)
 #     FTP_PASSWORD    mot de passe FTP
 #     FTP_SERVER_DIR  dossier cible (ex: / si le compte FTP pointe déjà sur le site)
 
+# Déclenchement MANUEL uniquement (le déploiement se fait via git pull depuis
+# le Terminal N0C). On garde ce workflow FTP disponible « au cas où », mais il
+# ne se lance plus automatiquement à chaque push (plus d'échecs FTP en boucle).
 on:
-  push:
-    branches:
-      - main
-      - claude/intelligent-turing-x84chm
   workflow_dispatch: {}
 
 jobs:
