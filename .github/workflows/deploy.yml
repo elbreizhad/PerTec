@@ -1,18 +1,16 @@
 name: Déploiement PlanetHoster (N0C)
 
-# Pont GitHub -> serveur de prod via SSH (rsync).
-# À chaque push sur la branche de déploiement, les fichiers modifiés sont
-# synchronisés sur l'hébergement PlanetHoster N0C par SSH (port 5022).
+# Pont GitHub -> serveur de prod via SSH (rsync + mot de passe).
+# À chaque push, les fichiers modifiés sont synchronisés sur PlanetHoster N0C
+# par SSH (port 5022). Authentification par mot de passe (pas de clé à gérer).
 #
-# Prérequis : définir ces secrets dans le dépôt GitHub
+# Secrets à définir dans GitHub
 #   (Settings > Secrets and variables > Actions > New repository secret) :
-#     SSH_HOST         hôte SSH N0C (ex: nodeXXX-eu.n0c.com)
-#     SSH_USER         votre identifiant SSH/N0C
-#     SSH_PORT         5022  (port SSH PlanetHoster N0C)
-#     SSH_PRIVATE_KEY  clé privée dont la clé publique est enregistrée dans N0C
-#     SSH_TARGET       dossier cible, ex: /home/USER/maloc.pertec.fr/ (finir par /)
-#
-# Aucun identifiant n'est stocké dans le code : tout passe par les secrets.
+#     SSH_HOST      hôte SSH N0C (ex: nodeXXX-eu.n0c.com)
+#     SSH_USER      identifiant SSH/N0C
+#     SSH_PORT      5022
+#     SSH_PASSWORD  mot de passe SSH/N0C
+#     SSH_TARGET    dossier cible, ex: /home/USER/maloc.pertec.fr/ (finir par /)
 
 on:
   push:
@@ -31,16 +29,23 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v4
 
+      - name: Installer rsync + sshpass
+        run: sudo apt-get update -qq && sudo apt-get install -y rsync sshpass
+
       - name: Déployer via SSH (rsync)
-        uses: easingthemes/ssh-deploy@v5.1.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_PORT: ${{ secrets.SSH_PORT }}
-          TARGET: ${{ secrets.SSH_TARGET }}
-          # -r récursif, -l liens, -t dates, -z compression, -v verbeux, -O sans dates de dossiers
-          # --delete : supprime sur le serveur les fichiers absents du dépôt (hors exclusions)
-          ARGS: "-rltzvO --delete"
-          # Jamais synchronisés / supprimés sur le serveur :
-          EXCLUDE: ".git/, .github/, scripts/, *.md, cahier_des_charges_pertec.md, config/config.php"
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_TARGET: ${{ secrets.SSH_TARGET }}
+        run: |
+          sshpass -e rsync -rltzvO --delete \
+            -e "ssh -p ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='scripts/' \
+            --exclude='*.md' \
+            --exclude='cahier_des_charges_pertec.md' \
+            --exclude='config/config.php' \
+            ./ "${SSH_USER}@${SSH_HOST}:${SSH_TARGET}"
