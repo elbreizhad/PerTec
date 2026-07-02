@@ -1,16 +1,14 @@
 name: Déploiement PlanetHoster (N0C)
 
-# Pont GitHub -> serveur de prod via SSH (rsync + clé).
-# À chaque push, les fichiers modifiés sont synchronisés sur PlanetHoster N0C
-# par SSH (port 5022), authentification par clé.
+# Pont GitHub -> serveur de prod par FTP(S).
+# À chaque push, les fichiers modifiés sont envoyés sur PlanetHoster N0C.
 #
 # Secrets à définir dans GitHub
 #   (Settings > Secrets and variables > Actions > New repository secret) :
-#     SSH_HOST         hôte SSH N0C (ex: nodeXXX-eu.n0c.com)
-#     SSH_USER         identifiant SSH/N0C
-#     SSH_PORT         5022
-#     SSH_PRIVATE_KEY  clé privée (dont la clé publique est enregistrée dans N0C)
-#     SSH_TARGET       dossier cible, ex: /home/USER/maloc.pertec.fr/ (finir par /)
+#     FTP_SERVER      hôte FTP (ex: node128-eu.n0c.com)
+#     FTP_USERNAME    login FTP (ex: maloc@pertec.fr)
+#     FTP_PASSWORD    mot de passe FTP
+#     FTP_SERVER_DIR  dossier cible (ex: / si le compte FTP pointe déjà sur le site)
 
 on:
   push:
@@ -29,13 +27,21 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v4
 
-      - name: Déployer via SSH (rsync)
-        uses: easingthemes/ssh-deploy@v5.1.0
+      - name: Déployer par FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_PORT: ${{ secrets.SSH_PORT }}
-          TARGET: ${{ secrets.SSH_TARGET }}
-          ARGS: "-rltzvO --delete"
-          EXCLUDE: ".git/, .github/, scripts/, *.md, cahier_des_charges_pertec.md, config/config.php"
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            scripts/**
+            *.md
+            **/*.md
+            cahier_des_charges_pertec.md
+            config/config.php
