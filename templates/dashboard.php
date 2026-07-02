@@ -7,10 +7,10 @@
 </div>
 
 <div class="grid grid-4 mb">
+    <div class="stat stat-featured"><div class="label">Loyers / mois</div><div class="value"><?= euros($totals['rent_month']) ?></div></div>
     <div class="stat"><div class="label">Biens</div><div class="value"><?= count($rows) ?></div></div>
     <div class="stat"><div class="label">Baux actifs</div><div class="value"><?= (int) $nbLeases ?></div></div>
     <div class="stat"><div class="label">Investi (coût total)</div><div class="value"><?= euros($totals['cost']) ?></div></div>
-    <div class="stat"><div class="label">Loyers / mois</div><div class="value"><?= euros($totals['rent_month']) ?></div></div>
 </div>
 
 <div class="grid grid-3 mb">
@@ -26,6 +26,22 @@
     <div class="stat">
         <div class="label">Loyers réglés <?= $year ?></div>
         <div class="value"><?= (int)$stats['nb_paid'] ?>/<?= (int)$stats['nb_total'] ?></div>
+    </div>
+</div>
+
+<?php $maxM = max(1, max($monthly)); ?>
+<div class="chart-card">
+    <div class="page-head" style="margin-bottom:.2rem">
+        <h3 style="margin:0">Loyers encaissés — <?= $year ?></h3>
+        <span class="muted small">Total : <?= euros(array_sum($monthly)) ?></span>
+    </div>
+    <div class="chart">
+        <?php foreach ($monthly as $m => $val): ?>
+            <div class="col" title="<?= e(ucfirst(moisFr((int)$m))) ?> : <?= euros($val) ?>">
+                <div class="bar" style="height:<?= $val > 0 ? max(3, round($val / $maxM * 100)) : 0 ?>%"></div>
+                <span class="m"><?= mb_substr(moisFr((int)$m), 0, 3) ?></span>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
 

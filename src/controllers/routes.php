@@ -49,6 +49,7 @@ App::get('/', function () {
         'totals'  => $totals,
         'stats'   => $stats,
         'year'    => $year,
+        'monthly' => Payment::monthlyPaid($year),
         'nbTenants' => count(Tenant::all()),
         'nbLeases'  => count(array_filter(Lease::all(), fn($l) => $l['status'] === 'active')),
     ]);

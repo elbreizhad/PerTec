@@ -134,6 +134,24 @@ class Payment
         Database::query('DELETE FROM rent_payments WHERE id = ?', [$id]);
     }
 
+    /** Montant encaissé par mois (1..12) sur une année, base de caisse. */
+    public static function monthlyPaid(int $year): array
+    {
+        $rows = Database::all(
+            "SELECT amount_paid, paid_date, period_year, period_month
+             FROM rent_payments WHERE status = 'paid'"
+        );
+        $out = array_fill(1, 12, 0.0);
+        foreach ($rows as $r) {
+            $y = $r['paid_date'] ? (int) substr($r['paid_date'], 0, 4) : (int) $r['period_year'];
+            $m = $r['paid_date'] ? (int) substr($r['paid_date'], 5, 2) : (int) $r['period_month'];
+            if ($y === $year && $m >= 1 && $m <= 12) {
+                $out[$m] += (float) $r['amount_paid'];
+            }
+        }
+        return $out;
+    }
+
     /** Total encaissé + total dû sur une année. */
     public static function yearStats(int $year): array
     {
