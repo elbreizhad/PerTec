@@ -37,6 +37,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Timeout de connexion augmenté (60 s) pour résister aux lenteurs FTP de PlanetHoster.
+          timeout: 60000
           # On NE synchronise PAS ces éléments (jamais écrasés/supprimés sur le serveur) :
           exclude: |
             **/.git*
