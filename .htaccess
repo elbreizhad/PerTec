@@ -4,6 +4,9 @@ RewriteEngine On
 # Protéger les dossiers sensibles
 RewriteRule ^(config|src|database|templates)/ - [F,L]
 
+# Bloquer l'accès au dossier .git (déploiement par git pull)
+RedirectMatch 404 /\.git
+
 # Ne pas réécrire les fichiers/dossiers existants (assets, etc.)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
