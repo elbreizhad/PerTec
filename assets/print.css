@@ -1,0 +1,26 @@
+body.print-body{font-family:'Times New Roman',Georgia,serif;color:#111;background:#e5e7eb;margin:0;line-height:1.55}
+.print-toolbar{position:sticky;top:0;display:flex;gap:.6rem;justify-content:center;padding:.8rem;background:#1f2937}
+.print-toolbar .btn{padding:.5rem 1rem;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#111;font-weight:600;cursor:pointer;text-decoration:none;font-family:sans-serif}
+.print-toolbar .btn-primary{background:#2563EB;color:#fff;border-color:#2563EB}
+.sheet{background:#fff;max-width:780px;margin:1.5rem auto;padding:3rem 3.2rem;box-shadow:0 2px 10px rgba(0,0,0,.15);min-height:1000px}
+.sheet h1{font-size:1.5rem;text-align:center;margin:0 0 .3rem}
+.sheet h2{font-size:1.1rem;margin:1.4rem 0 .5rem;border-bottom:1px solid #999;padding-bottom:.2rem}
+.doc-sub{text-align:center;color:#444;margin-bottom:2rem}
+.doc-parties{display:flex;justify-content:space-between;gap:2rem;margin-bottom:1.5rem}
+.doc-parties .party{width:48%}
+.doc-parties h3{margin:0 0 .3rem;font-size:1rem}
+.doc-amounts{width:100%;border-collapse:collapse;margin:1rem 0}
+.doc-amounts td{padding:.45rem .6rem;border-bottom:1px solid #ddd}
+.doc-amounts td.num{text-align:right}
+.doc-amounts tr.total td{font-weight:700;border-top:2px solid #333;border-bottom:none}
+.doc-sign{margin-top:3rem;display:flex;justify-content:space-between}
+.doc-sign .sign-box{width:45%}
+.doc-sign .line{margin-top:3rem;border-top:1px solid #333;padding-top:.3rem}
+.mention{font-size:.85rem;color:#333;margin-top:2rem}
+p.article{margin:.6rem 0}
+@media print{
+  .no-print{display:none!important}
+  body.print-body{background:#fff}
+  .sheet{box-shadow:none;margin:0;max-width:none;padding:1.5cm 2cm;min-height:auto}
+  @page{size:A4;margin:0}
+}

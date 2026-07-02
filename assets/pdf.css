@@ -1,0 +1,34 @@
+/* Feuille de style dédiée à la génération PDF (Dompdf).
+   Dompdf gère mal le flexbox : on utilise display:table pour les colonnes. */
+@page { margin: 1.6cm 2cm; }
+* { box-sizing: border-box; }
+body { font-family: "DejaVu Serif", serif; color: #111; font-size: 12px; line-height: 1.5; }
+.sheet { }
+
+h1 { font-size: 20px; text-align: center; margin: 0 0 4px; }
+h2 { font-size: 15px; margin: 18px 0 6px; border-bottom: 1px solid #999; padding-bottom: 2px; }
+h3 { font-size: 13px; margin: 0 0 4px; }
+.doc-sub { text-align: center; color: #444; margin-bottom: 22px; }
+.small { font-size: 10px; }
+.center { text-align: center; }
+.num { text-align: right; }
+p.article { margin: 7px 0; text-align: justify; }
+.mention { font-size: 10px; color: #333; margin-top: 18px; text-align: justify; }
+
+/* Parties (bailleur / locataire) en deux colonnes via table */
+.doc-parties { display: table; width: 100%; margin-bottom: 16px; }
+.doc-parties .party { display: table-cell; width: 50%; vertical-align: top; padding-right: 12px; }
+
+/* Tableaux de montants / désignation */
+.doc-amounts { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.doc-amounts td, .doc-amounts th { padding: 5px 7px; border-bottom: 1px solid #ddd; }
+.doc-amounts th { background: #f2f2f2; text-align: left; }
+.doc-amounts td.num, .doc-amounts th.num { text-align: right; }
+.doc-amounts tr.total td { font-weight: bold; border-top: 2px solid #333; border-bottom: none; }
+
+/* Zone signatures en deux colonnes */
+.doc-sign { display: table; width: 100%; margin-top: 34px; }
+.doc-sign .sign-box { display: table-cell; width: 50%; vertical-align: top; padding-right: 12px; }
+.doc-sign .line { margin-top: 40px; border-top: 1px solid #333; padding-top: 3px; }
+
+.mt { margin-top: 12px; }

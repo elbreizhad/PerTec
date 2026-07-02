@@ -1,0 +1,9 @@
+# Configuration locale contenant les identifiants
+/config/config.php
+
+# Identifiants de déploiement (FTP, etc.)
+/scripts/.env
+
+# Divers
+.DS_Store
+*.log

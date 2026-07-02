@@ -1,0 +1,46 @@
+name: Déploiement PlanetHoster (N0C)
+
+# Pont GitHub -> serveur de prod par FTP(S).
+# À chaque push, les fichiers modifiés sont envoyés sur PlanetHoster N0C.
+#
+# Secrets à définir dans GitHub
+#   (Settings > Secrets and variables > Actions > New repository secret) :
+#     FTP_SERVER      hôte FTP (ex: node128-eu.n0c.com)
+#     FTP_USERNAME    login FTP (ex: maloc@pertec.fr)
+#     FTP_PASSWORD    mot de passe FTP
+#     FTP_SERVER_DIR  dossier cible (ex: / si le compte FTP pointe déjà sur le site)
+
+# Déclenchement MANUEL uniquement (le déploiement se fait via git pull depuis
+# le Terminal N0C). On garde ce workflow FTP disponible « au cas où », mais il
+# ne se lance plus automatiquement à chaque push (plus d'échecs FTP en boucle).
+on:
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-prod
+      cancel-in-progress: true
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Déployer par FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            scripts/**
+            *.md
+            **/*.md
+            cahier_des_charges_pertec.md
+            config/config.php
