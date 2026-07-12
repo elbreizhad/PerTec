@@ -4,6 +4,9 @@
 # Identifiants de déploiement (FTP, etc.)
 /scripts/.env
 
+# Jeton secret du script de déploiement web (deploy.php)
+/config/deploy_token.txt
+
 # Divers
 .DS_Store
 *.log
