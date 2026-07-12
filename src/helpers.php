@@ -43,6 +43,32 @@ function moisFr(int $m): string
     return $noms[$m] ?? (string) $m;
 }
 
+/**
+ * Libellé de la durée d'un bail déduit des dates de début/fin (fin incluse).
+ * Renvoie « 3 ans », « 1 an », « 9 mois »… ou null si la durée n'est pas
+ * un nombre rond d'années ou de mois (on évite alors d'afficher un chiffre
+ * trompeur). Une tolérance de quelques jours absorbe les fins de mois/années.
+ */
+function dureeBail(?string $start, ?string $end): ?string
+{
+    if (!$start || !$end) return null;
+    $s = new DateTime($start);
+    $e = new DateTime($end);
+    if ($e <= $s) return null;
+
+    $days = (int) $s->diff($e)->days + 1; // occupation, fin incluse
+
+    $years = (int) round($days / 365.25);
+    if ($years >= 1 && abs($days - $years * 365.25) <= 5) {
+        return $years . ($years > 1 ? ' ans' : ' an');
+    }
+    $months = (int) round($days / 30.44);
+    if ($months >= 1 && abs($days - $months * 30.44) <= 3) {
+        return $months . ' mois';
+    }
+    return null;
+}
+
 /** Valeur d'un champ POST. */
 function post(string $key, $default = null)
 {

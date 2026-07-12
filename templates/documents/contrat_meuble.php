@@ -64,17 +64,22 @@ loué avec l'ensemble des équipements et du mobilier figurant à l'inventaire a
 Toute activité professionnelle ou commerciale y est interdite, sauf accord écrit préalable du bailleur.</p>
 
 <?php
-// Bail meublé : durée légale d'un an. On calcule la date de fin à partir de
-// la date de début (début + 1 an − 1 jour) pour garantir la cohérence
-// durée / date de début / date de fin, quelle que soit la valeur stockée.
-$finBail = $l['start_date'] ? date('Y-m-d', strtotime($l['start_date'] . ' +1 year -1 day')) : ($l['end_date'] ?? null);
+// La date de fin saisie fait foi ; la durée en est déduite (« 3 ans », « 1 an »…)
+// pour garantir la cohérence durée / début / fin. À défaut de date de fin, on
+// retombe sur la durée légale minimale du meublé (un an).
+$finBail = $l['end_date'] ?: ($l['start_date'] ? date('Y-m-d', strtotime($l['start_date'] . ' +1 year -1 day')) : null);
+$dureeBail = dureeBail($l['start_date'], $finBail);
 ?>
 <h2>Article 3 — Durée du contrat et prise d'effet</h2>
-<p class="article">Le présent bail est conclu pour une durée d'<strong>un (1) an</strong> à compter du
-<strong><?= fdate($l['start_date']) ?></strong>
-<?php if ($finBail): ?>, soit jusqu'au <strong><?= fdate($finBail) ?></strong> inclus<?php endif; ?>.
-Il est reconductible tacitement par périodes d'un an, sauf congé donné dans les conditions de l'article 9.
-<br><span class="small">(Lorsque le locataire est étudiant, la durée peut être réduite à neuf (9) mois, sans tacite reconduction.)</span></p>
+<p class="article">
+<?php if ($dureeBail): ?>
+Le présent bail est conclu pour une durée de <strong><?= e($dureeBail) ?></strong> à compter du
+<strong><?= fdate($l['start_date']) ?></strong><?php if ($finBail): ?>, soit jusqu'au <strong><?= fdate($finBail) ?></strong> inclus<?php endif; ?>.
+<?php else: ?>
+Le présent bail prend effet le <strong><?= fdate($l['start_date']) ?></strong><?php if ($finBail): ?> et s'achève le <strong><?= fdate($finBail) ?></strong> inclus<?php endif; ?>.
+<?php endif; ?>
+Il est reconductible tacitement, sauf congé donné dans les conditions de l'article 9.
+<br><span class="small">(La durée minimale d'un bail meublé de résidence principale est d'un an, ou de neuf mois pour un étudiant, sans tacite reconduction.)</span></p>
 
 <h2>Article 4 — Loyer et charges</h2>
 <table class="doc-amounts">
