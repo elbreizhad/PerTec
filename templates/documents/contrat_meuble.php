@@ -63,10 +63,16 @@ loué avec l'ensemble des équipements et du mobilier figurant à l'inventaire a
 <p class="article">Le logement est loué à usage exclusif d'<strong>habitation principale</strong> du locataire.
 Toute activité professionnelle ou commerciale y est interdite, sauf accord écrit préalable du bailleur.</p>
 
+<?php
+// Bail meublé : durée légale d'un an. On calcule la date de fin à partir de
+// la date de début (début + 1 an − 1 jour) pour garantir la cohérence
+// durée / date de début / date de fin, quelle que soit la valeur stockée.
+$finBail = $l['start_date'] ? date('Y-m-d', strtotime($l['start_date'] . ' +1 year -1 day')) : ($l['end_date'] ?? null);
+?>
 <h2>Article 3 — Durée du contrat et prise d'effet</h2>
 <p class="article">Le présent bail est conclu pour une durée d'<strong>un (1) an</strong> à compter du
 <strong><?= fdate($l['start_date']) ?></strong>
-<?php if ($l['end_date']): ?>, soit jusqu'au <strong><?= fdate($l['end_date']) ?></strong><?php endif; ?>.
+<?php if ($finBail): ?>, soit jusqu'au <strong><?= fdate($finBail) ?></strong> inclus<?php endif; ?>.
 Il est reconductible tacitement par périodes d'un an, sauf congé donné dans les conditions de l'article 9.
 <br><span class="small">(Lorsque le locataire est étudiant, la durée peut être réduite à neuf (9) mois, sans tacite reconduction.)</span></p>
 

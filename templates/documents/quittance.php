@@ -43,6 +43,9 @@ $ville = $s['signature_city'] ?? ($s['landlord_city'] ?? '');
     <tr><td>Provision pour charges</td><td class="num"><?= euros($payment['amount_charges']) ?></td></tr>
     <tr class="total"><td>Total réglé</td><td class="num"><?= euros($total) ?></td></tr>
 </table>
+<?php if (!empty($payment['notes'])): ?>
+    <p class="small"><em><?= e($payment['notes']) ?> — loyer calculé au prorata des jours d'occupation.</em></p>
+<?php endif; ?>
 
 <p class="article">Date du paiement : <strong><?= fdate($payment['paid_date']) ?></strong>
     <?php if ($payment['payment_method']): ?> — Mode de règlement : <?= e($payment['payment_method']) ?><?php endif; ?></p>

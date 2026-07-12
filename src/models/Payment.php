@@ -58,16 +58,62 @@ class Payment
         }
         $day = min(28, max(1, (int)$lease['payment_day']));
         $due = sprintf('%04d-%02d-%02d', $year, $month, $day);
+        $pro = self::prorata($lease, $year, $month);
         return Database::insert('rent_payments', [
             'lease_id'       => (int) $lease['id'],
             'period_year'    => $year,
             'period_month'   => $month,
             'due_date'       => $due,
-            'amount_rent'    => (float) $lease['rent_amount'],
-            'amount_charges' => (float) $lease['charges_amount'],
+            'amount_rent'    => $pro['rent'],
+            'amount_charges' => $pro['charges'],
             'amount_paid'    => 0,
             'status'         => 'pending',
+            'notes'          => $pro['note'],
         ]);
+    }
+
+    /**
+     * Calcule le loyer/charges d'un mois en tenant compte d'une entrée (ou
+     * d'une sortie) en cours de mois : prorata au nombre de jours d'occupation.
+     * Renvoie ['rent' => float, 'charges' => float, 'note' => ?string].
+     */
+    public static function prorata(array $lease, int $year, int $month): array
+    {
+        $rent    = (float) $lease['rent_amount'];
+        $charges = (float) $lease['charges_amount'];
+        $daysInMonth = (int) date('t', mktime(0, 0, 0, $month, 1, $year));
+        $firstDay = 1;
+        $lastDay  = $daysInMonth;
+
+        // Entrée en cours de mois (mois de la date de début).
+        if (!empty($lease['start_date'])) {
+            $start = new DateTime($lease['start_date']);
+            if ((int) $start->format('Y') === $year && (int) $start->format('n') === $month) {
+                $firstDay = (int) $start->format('j');
+            }
+        }
+        // Sortie en cours de mois (mois de la date de fin, si renseignée).
+        if (!empty($lease['end_date'])) {
+            $end = new DateTime($lease['end_date']);
+            if ((int) $end->format('Y') === $year && (int) $end->format('n') === $month) {
+                $lastDay = (int) $end->format('j');
+            }
+        }
+
+        $occupied = $lastDay - $firstDay + 1;
+        if ($occupied >= $daysInMonth || $occupied <= 0) {
+            return ['rent' => $rent, 'charges' => $charges, 'note' => null];
+        }
+
+        $factor = $occupied / $daysInMonth;
+        return [
+            'rent'    => round($rent * $factor, 2),
+            'charges' => round($charges * $factor, 2),
+            'note'    => sprintf(
+                'Prorata : %d/%d jours (du %d au %d)',
+                $occupied, $daysInMonth, $firstDay, $lastDay
+            ),
+        ];
     }
 
     /** Génère les échéances manquantes pour tous les baux actifs jusqu'au mois courant. */
