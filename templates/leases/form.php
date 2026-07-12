@@ -63,7 +63,41 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
             </div>
         </div>
         <div class="field"><label>Notes</label><textarea name="notes"><?= $val('notes') ?></textarea></div>
+        <div class="field">
+            <label>Équipements complémentaires (meublé — un par ligne)</label>
+            <textarea name="furniture_extra" placeholder="Ex. Téléviseur&#10;Lave-linge&#10;Meuble TV&#10;Cabine de douche"><?= $val('furniture_extra') ?></textarea>
+            <p class="hint">Ajoutés en annexe 1 (inventaire du mobilier) en plus des éléments obligatoires.</p>
+        </div>
     </fieldset>
 
     <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Enregistrer' : 'Créer le bail' ?></button>
 </form>
+
+<script>
+(function () {
+    var startInput = document.querySelector('input[name="start_date"]');
+    var endInput = document.querySelector('input[name="end_date"]');
+    var typeSelect = document.querySelector('select[name="lease_type"]');
+    var rentInput = document.querySelector('input[name="rent_amount"]');
+    var depositInput = document.querySelector('input[name="deposit_amount"]');
+
+    // Date de fin = date de début + 1 an - 1 jour (ne touche pas une date déjà saisie).
+    startInput.addEventListener('change', function () {
+        if (endInput.value || !startInput.value) return;
+        var d = new Date(startInput.value + 'T00:00:00');
+        d.setFullYear(d.getFullYear() + 1);
+        d.setDate(d.getDate() - 1);
+        endInput.value = d.toISOString().slice(0, 10);
+    });
+
+    // Dépôt de garantie suggéré : 2 mois hors charges en meublé, 1 mois en location vide.
+    function suggestDeposit() {
+        var rent = parseFloat(rentInput.value);
+        if (!rent || (depositInput.value && parseFloat(depositInput.value) !== 0)) return;
+        var months = typeSelect.value === 'meuble' ? 2 : 1;
+        depositInput.value = (rent * months).toFixed(2);
+    }
+    rentInput.addEventListener('change', suggestDeposit);
+    typeSelect.addEventListener('change', suggestDeposit);
+})();
+</script>

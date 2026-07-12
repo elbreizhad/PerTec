@@ -20,6 +20,20 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
             <div class="field"><label>Téléphone</label><input name="landlord_phone" value="<?= $v('landlord_phone') ?>"></div>
         </div>
     </fieldset>
+    <fieldset>
+        <legend>Indice de référence des loyers (IRL)</legend>
+        <p class="hint">Indice retenu pour la clause de révision des baux (voir la dernière valeur publiée sur insee.fr).</p>
+        <div class="form-grid">
+            <div class="field"><label>Trimestre</label>
+                <select name="irl_quarter">
+                    <?php foreach ([1, 2, 3, 4] as $q): ?>
+                        <option value="<?= $q ?>" <?= ($s['irl_quarter'] ?? '') == $q ? 'selected' : '' ?>><?= $q ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="field"><label>Année</label><input name="irl_year" value="<?= $v('irl_year') ?>" placeholder="<?= date('Y') ?>"></div>
+        </div>
+    </fieldset>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
 </form>
 

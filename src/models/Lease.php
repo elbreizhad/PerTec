@@ -54,6 +54,7 @@ class Lease
             'payment_day'    => max(1, min(28, (int) post('payment_day', 1))),
             'status'         => post('status') === 'terminated' ? 'terminated' : 'active',
             'notes'          => post('notes') ?: null,
+            'furniture_extra' => post('furniture_extra') ?: null,
         ];
     }
 

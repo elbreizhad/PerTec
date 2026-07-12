@@ -3,6 +3,7 @@ $s = $settings; $l = $lease;
 $bienAdresse = trim(($l['address'] ?: '') . ', ' . ($l['postal_code'] ?: '') . ' ' . ($l['city'] ?: ''), ', ');
 $loyerCC = (float)$l['rent_amount'] + (float)$l['charges_amount'];
 $ville = $s['signature_city'] ?? ($s['landlord_city'] ?? '');
+$furnitureExtra = array_filter(array_map('trim', explode("\n", (string) ($l['furniture_extra'] ?? ''))));
 // Inventaire du mobilier obligatoire (décret n° 2015-981 du 31 juillet 2015)
 $mobilierObligatoire = [
     'Literie comprenant couette ou couverture',
@@ -81,7 +82,11 @@ Les charges sont réglées soit par provisions avec régularisation annuelle, so
 <h2>Article 5 — Révision du loyer</h2>
 <p class="article">Le loyer peut être révisé chaque année à la date anniversaire du contrat, en fonction de la variation de
 l'<strong>Indice de Référence des Loyers (IRL)</strong> publié par l'INSEE. Indice de référence retenu :
-trimestre ____ de l'année ______.</p>
+<?php if (!empty($s['irl_quarter']) && !empty($s['irl_year'])): ?>
+trimestre <?= e($s['irl_quarter']) ?> de l'année <?= e($s['irl_year']) ?>.
+<?php else: ?>
+trimestre ____ de l'année ______.
+<?php endif; ?></p>
 
 <h2>Article 6 — Dépôt de garantie</h2>
 <p class="article">À la signature du bail, le locataire verse au bailleur un dépôt de garantie de
@@ -133,6 +138,13 @@ de la remise et de la restitution des clés, et annexés au présent contrat.</p
     <thead><tr><th style="text-align:left">Élément</th><th>Présent</th><th>État / observations</th></tr></thead>
     <tbody>
     <?php foreach ($mobilierObligatoire as $item): ?>
+        <tr>
+            <td><?= e($item) ?></td>
+            <td class="center">☐ Oui ☐ Non</td>
+            <td>______________________</td>
+        </tr>
+    <?php endforeach; ?>
+    <?php foreach ($furnitureExtra as $item): ?>
         <tr>
             <td><?= e($item) ?></td>
             <td class="center">☐ Oui ☐ Non</td>

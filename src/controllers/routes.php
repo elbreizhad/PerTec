@@ -438,6 +438,8 @@ App::post('/parametres', function () {
         'landlord_phone'   => post('landlord_phone'),
         'landlord_siret'   => post('landlord_siret'),
         'signature_city'   => post('signature_city'),
+        'irl_quarter'      => post('irl_quarter'),
+        'irl_year'         => post('irl_year'),
     ]);
     flash('Paramètres enregistrés.');
     redirect('/parametres');
