@@ -55,6 +55,15 @@ class Lease
             'status'         => post('status') === 'terminated' ? 'terminated' : 'active',
             'notes'          => post('notes') ?: null,
             'furniture_extra' => post('furniture_extra') ?: null,
+            'guarantor_name'        => post('guarantor_name') ?: null,
+            'guarantor_address'     => post('guarantor_address') ?: null,
+            'guarantor_birth_date'  => post('guarantor_birth_date') ?: null,
+            'guarantor_birth_place' => post('guarantor_birth_place') ?: null,
+            'guarantor_email'       => post('guarantor_email') ?: null,
+            'guarantor_phone'       => post('guarantor_phone') ?: null,
+            'guarantor_max_amount'  => post('guarantor_max_amount') !== null && post('guarantor_max_amount') !== ''
+                ? num(post('guarantor_max_amount')) : null,
+            'guarantor_duration'    => post('guarantor_duration') === 'determinee' ? 'determinee' : 'indeterminee',
         ];
     }
 

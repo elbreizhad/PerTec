@@ -419,6 +419,45 @@ App::get('/contrat/{id}/pdf', function ($params) {
 });
 
 /* =========================================================================
+ * ACTE DE CAUTIONNEMENT SOLIDAIRE (garant)
+ * ========================================================================= */
+
+// Acte de cautionnement imprimable (page HTML avec bouton d'impression)
+App::get('/caution/{id}', function ($params) {
+    Auth::requireLogin();
+    $lease = Lease::find((int) $params['id']);
+    if (!$lease) redirect('/baux');
+    if (empty($lease['guarantor_name'])) {
+        flash('Renseignez d\'abord un garant sur ce bail.', 'error');
+        redirect('/baux/' . (int) $params['id']);
+    }
+    view('documents/cautionnement', [
+        'lease'    => $lease,
+        'settings' => Setting::all(),
+    ], 'layout_print');
+});
+
+// Acte de cautionnement en PDF (téléchargement 1 clic via Dompdf)
+App::get('/caution/{id}/pdf', function ($params) {
+    Auth::requireLogin();
+    $id = (int) $params['id'];
+    $lease = Lease::find($id);
+    if (!$lease) redirect('/baux');
+    if (empty($lease['guarantor_name'])) {
+        flash('Renseignez d\'abord un garant sur ce bail.', 'error');
+        redirect('/baux/' . $id);
+    }
+    if (!Pdf::available()) {
+        flash('Librairie PDF indisponible sur le serveur.', 'error');
+        redirect('/caution/' . $id);
+    }
+    Pdf::streamDocument('documents/cautionnement', [
+        'lease'    => $lease,
+        'settings' => Setting::all(),
+    ], 'acte-cautionnement-' . $id . '.pdf');
+});
+
+/* =========================================================================
  * PARAMÈTRES (bailleur + mot de passe)
  * ========================================================================= */
 

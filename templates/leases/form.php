@@ -70,6 +70,29 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         </div>
     </fieldset>
 
+    <fieldset>
+        <legend>Garant (caution solidaire)</legend>
+        <p class="hint">Facultatif. Renseigné, un <strong>acte de cautionnement solidaire</strong> imprimable / PDF
+            devient disponible sur la fiche du bail.</p>
+        <div class="form-grid">
+            <div class="field"><label>Nom et prénom du garant</label><input name="guarantor_name" value="<?= $val('guarantor_name') ?>"></div>
+            <div class="field"><label>Montant maximal garanti (€, optionnel)</label><input name="guarantor_max_amount" value="<?= $val('guarantor_max_amount') ?>" placeholder="ex. 3 ans de loyer"></div>
+        </div>
+        <div class="field"><label>Adresse du garant</label><textarea name="guarantor_address" rows="2"><?= $val('guarantor_address') ?></textarea></div>
+        <div class="form-grid">
+            <div class="field"><label>Date de naissance</label><input type="date" name="guarantor_birth_date" value="<?= $val('guarantor_birth_date') ?>"></div>
+            <div class="field"><label>Lieu de naissance</label><input name="guarantor_birth_place" value="<?= $val('guarantor_birth_place') ?>"></div>
+            <div class="field"><label>Email</label><input type="email" name="guarantor_email" value="<?= $val('guarantor_email') ?>"></div>
+            <div class="field"><label>Téléphone</label><input name="guarantor_phone" value="<?= $val('guarantor_phone') ?>"></div>
+        </div>
+        <div class="field"><label>Durée de l'engagement</label>
+            <select name="guarantor_duration">
+                <option value="indeterminee" <?= ($l['guarantor_duration'] ?? 'indeterminee')==='indeterminee'?'selected':'' ?>>Durée indéterminée (résiliable par le garant)</option>
+                <option value="determinee" <?= ($l['guarantor_duration'] ?? '')==='determinee'?'selected':'' ?>>Durée déterminée (durée du bail initial + renouvellements)</option>
+            </select>
+        </div>
+    </fieldset>
+
     <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Enregistrer' : 'Créer le bail' ?></button>
 </form>
 

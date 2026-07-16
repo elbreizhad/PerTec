@@ -8,6 +8,9 @@ $l = $lease; ?>
     </div>
     <div class="actions">
         <a href="<?= url('/contrat/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">📄 <?= $l['lease_type']==='meuble' ? 'Contrat de bail meublé (LMNP)' : 'Contrat de bail' ?></a>
+        <?php if (!empty($l['guarantor_name'])): ?>
+            <a href="<?= url('/caution/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">🖋️ Acte de cautionnement</a>
+        <?php endif; ?>
         <a href="<?= url('/baux/'.$l['id'].'/edit') ?>" class="btn">Modifier</a>
     </div>
 </div>

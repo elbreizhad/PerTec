@@ -69,6 +69,61 @@ function dureeBail(?string $start, ?string $end): ?string
     return null;
 }
 
+/** Entier écrit en toutes lettres (français), pour 0 à 999 999 999. */
+function nombreEnLettres(int $n): string
+{
+    if ($n < 0) return 'moins ' . nombreEnLettres(-$n);
+    if ($n === 0) return 'zéro';
+
+    $u = ['', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+        'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf'];
+
+    $below100 = function (int $n) use ($u): string {
+        if ($n < 20) return $u[$n];
+        $d = intdiv($n, 10);
+        $r = $n % 10;
+        $map = [2 => 'vingt', 3 => 'trente', 4 => 'quarante', 5 => 'cinquante', 6 => 'soixante'];
+        if ($d <= 6) {
+            if ($r === 0) return $map[$d];
+            if ($r === 1) return $map[$d] . '-et-un';
+            return $map[$d] . '-' . $u[$r];
+        }
+        if ($d === 7) return $r === 1 ? 'soixante-et-onze' : 'soixante-' . $u[10 + $r];
+        if ($d === 8) return $r === 0 ? 'quatre-vingts' : 'quatre-vingt-' . $u[$r];
+        return 'quatre-vingt-' . $u[10 + $r]; // 90-99
+    };
+
+    $below1000 = function (int $n) use ($u, $below100): string {
+        if ($n < 100) return $below100($n);
+        $c = intdiv($n, 100);
+        $r = $n % 100;
+        if ($r === 0) return $c === 1 ? 'cent' : $u[$c] . ' cents';
+        return ($c === 1 ? 'cent' : $u[$c] . ' cent') . ' ' . $below100($r);
+    };
+
+    $parts = [];
+    $millions = intdiv($n, 1000000);
+    $milliers = intdiv($n % 1000000, 1000);
+    $reste    = $n % 1000;
+    if ($millions > 0) $parts[] = $millions === 1 ? 'un million' : $below1000($millions) . ' millions';
+    if ($milliers > 0) $parts[] = $milliers === 1 ? 'mille' : $below1000($milliers) . ' mille';
+    if ($reste > 0)    $parts[] = $below1000($reste);
+    return implode(' ', $parts);
+}
+
+/** Montant en euros écrit en toutes lettres (ex. « quatre cent soixante-cinq euros »). */
+function eurosLettres($amount): string
+{
+    $amount = (float) $amount;
+    $euros  = (int) floor($amount);
+    $cents  = (int) round(($amount - $euros) * 100);
+    $txt = nombreEnLettres($euros) . ' euro' . ($euros > 1 ? 's' : '');
+    if ($cents > 0) {
+        $txt .= ' et ' . nombreEnLettres($cents) . ' centime' . ($cents > 1 ? 's' : '');
+    }
+    return $txt;
+}
+
 /** Valeur d'un champ POST. */
 function post(string $key, $default = null)
 {
