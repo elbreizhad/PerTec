@@ -69,6 +69,26 @@ function dureeBail(?string $start, ?string $end): ?string
     return null;
 }
 
+/**
+ * Trimestre IRL de référence en vigueur à une date de signature donnée.
+ * L'INSEE publie l'IRL d'un trimestre au cours du trimestre suivant : l'indice
+ * connu à la signature est donc celui du trimestre PRÉCÉDENT.
+ * Réf. art. 17-1 de la loi n° 89-462 du 6 juillet 1989 (révision annuelle du loyer).
+ *
+ * @return array{quarter:int,year:int}
+ */
+function irlReference(?string $signatureDate): array
+{
+    $ts = $signatureDate ? strtotime($signatureDate) : time();
+    if ($ts === false) $ts = time();
+    $month = (int) date('n', $ts);
+    $year  = (int) date('Y', $ts);
+    $quarter = (int) ceil($month / 3);   // trimestre de la signature (1..4)
+    $quarter--;                          // trimestre précédent (dernier publié)
+    if ($quarter < 1) { $quarter = 4; $year--; }
+    return ['quarter' => $quarter, 'year' => $year];
+}
+
 /** Entier écrit en toutes lettres (français), pour 0 à 999 999 999. */
 function nombreEnLettres(int $n): string
 {

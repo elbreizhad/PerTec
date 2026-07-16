@@ -1,5 +1,8 @@
-<?php /** @var array $lease */ /** @var array $payments */
-$l = $lease; ?>
+<?php /** @var array $lease */ /** @var array $payments */ /** @var array $settings */
+$l = $lease;
+$guarants = Lease::guarantors($l);
+$issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ?? []) : ['blocking' => [], 'warnings' => []];
+?>
 <div class="page-head">
     <div>
         <h1>Bail — <?= e($l['first_name'].' '.$l['last_name']) ?></h1>
@@ -8,12 +11,32 @@ $l = $lease; ?>
     </div>
     <div class="actions">
         <a href="<?= url('/contrat/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">📄 <?= $l['lease_type']==='meuble' ? 'Contrat de bail meublé (LMNP)' : 'Contrat de bail' ?></a>
-        <?php if (!empty($l['guarantor_name'])): ?>
-            <a href="<?= url('/caution/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">🖋️ Acte de cautionnement</a>
-        <?php endif; ?>
+        <?php foreach ($guarants as $i => $g): ?>
+            <a href="<?= url('/caution/'.$l['id'].($i===1?'?g=2':'')) ?>" class="btn btn-secondary" target="_blank">🖋️ Acte de cautionnement<?= count($guarants) > 1 ? ' — '.e($g['name']) : '' ?></a>
+        <?php endforeach; ?>
         <a href="<?= url('/baux/'.$l['id'].'/edit') ?>" class="btn">Modifier</a>
     </div>
 </div>
+
+<?php if ($l['lease_type'] === 'meuble' && ($issues['blocking'] || $issues['warnings'])): ?>
+<div class="card">
+    <h3>Contrôle avant génération du bail</h3>
+    <?php if ($issues['blocking']): ?>
+        <p class="small" style="color:#b91c1c;font-weight:600">⛔ À corriger — la génération du bail est bloquée tant que ces points ne sont pas réglés :</p>
+        <ul class="small">
+            <?php foreach ($issues['blocking'] as $b): ?><li style="color:#b91c1c"><?= e($b) ?></li><?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p class="small" style="color:#15803d;font-weight:600">✓ Toutes les données obligatoires sont présentes.</p>
+    <?php endif; ?>
+    <?php if ($issues['warnings']): ?>
+        <p class="small" style="font-weight:600">⚠️ À vérifier :</p>
+        <ul class="small muted">
+            <?php foreach ($issues['warnings'] as $w): ?><li><?= e($w) ?></li><?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
 
 <div class="grid grid-4 mb">
     <div class="stat"><div class="label">Loyer HC</div><div class="value"><?= euros($l['rent_amount']) ?></div></div>

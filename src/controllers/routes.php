@@ -244,6 +244,7 @@ App::get('/baux/{id}', function ($params) {
     view('leases/show', [
         'lease'    => $lease,
         'payments' => Payment::forLease((int) $lease['id']),
+        'settings' => Setting::all(),
     ]);
 });
 
@@ -389,14 +390,17 @@ App::get('/contrat/{id}', function ($params) {
     Auth::requireLogin();
     $lease = Lease::find((int) $params['id']);
     if (!$lease) redirect('/baux');
-    // Bail meublé (LMNP) : modèle dédié ; sinon bail de location vide.
-    $template = $lease['lease_type'] === 'meuble'
-        ? 'documents/contrat_meuble'
-        : 'documents/contrat';
-    view($template, [
-        'lease'    => $lease,
-        'settings' => Setting::all(),
-    ], 'layout_print');
+    $settings = Setting::all();
+    // Bail meublé (LMNP) : modèle dédié + garde-fou anti-génération partielle.
+    if ($lease['lease_type'] === 'meuble') {
+        $issues = Lease::contractIssues($lease, $settings);
+        if ($issues['blocking']) {
+            flash('Bail incomplet — corrigez avant génération : ' . implode(' · ', $issues['blocking']), 'error');
+            redirect('/baux/' . (int) $params['id']);
+        }
+    }
+    $template = $lease['lease_type'] === 'meuble' ? 'documents/contrat_meuble' : 'documents/contrat';
+    view($template, ['lease' => $lease, 'settings' => $settings], 'layout_print');
 });
 
 // Contrat de bail en PDF (téléchargement 1 clic via Dompdf)
@@ -410,11 +414,20 @@ App::get('/contrat/{id}/pdf', function ($params) {
         redirect('/contrat/' . $id);
     }
     $meuble = $lease['lease_type'] === 'meuble';
+    $settings = Setting::all();
+    // Garde-fou : pas de PDF de bail meublé avec des champs obligatoires vides.
+    if ($meuble) {
+        $issues = Lease::contractIssues($lease, $settings);
+        if ($issues['blocking']) {
+            flash('Bail incomplet — corrigez avant génération : ' . implode(' · ', $issues['blocking']), 'error');
+            redirect('/baux/' . $id);
+        }
+    }
     $template = $meuble ? 'documents/contrat_meuble' : 'documents/contrat';
     $filename = ($meuble ? 'bail-meuble-' : 'bail-') . $id . '.pdf';
     Pdf::streamDocument($template, [
         'lease'    => $lease,
-        'settings' => Setting::all(),
+        'settings' => $settings,
     ], $filename);
 });
 
@@ -422,28 +435,44 @@ App::get('/contrat/{id}/pdf', function ($params) {
  * ACTE DE CAUTIONNEMENT SOLIDAIRE (garant)
  * ========================================================================= */
 
+// Prépare les données d'un acte pour le garant n° {1|2} sans modifier le
+// gabarit de l'acte : on recopie le garant sélectionné dans les clés guarantor_*.
+$cautionLease = function (array $lease, int $g): ?array {
+    $guarants = Lease::guarantors($lease);
+    $idx = $g === 2 ? 1 : 0;
+    if (!isset($guarants[$idx])) return null;
+    foreach ($guarants[$idx] as $k => $v) {
+        $lease['guarantor_' . $k] = $v;
+    }
+    return $lease;
+};
+
 // Acte de cautionnement imprimable (page HTML avec bouton d'impression)
-App::get('/caution/{id}', function ($params) {
+App::get('/caution/{id}', function ($params) use ($cautionLease) {
     Auth::requireLogin();
     $lease = Lease::find((int) $params['id']);
     if (!$lease) redirect('/baux');
-    if (empty($lease['guarantor_name'])) {
+    $g = (int) ($_GET['g'] ?? 1);
+    $data = $cautionLease($lease, $g);
+    if (!$data) {
         flash('Renseignez d\'abord un garant sur ce bail.', 'error');
         redirect('/baux/' . (int) $params['id']);
     }
     view('documents/cautionnement', [
-        'lease'    => $lease,
+        'lease'    => $data,
         'settings' => Setting::all(),
     ], 'layout_print');
 });
 
 // Acte de cautionnement en PDF (téléchargement 1 clic via Dompdf)
-App::get('/caution/{id}/pdf', function ($params) {
+App::get('/caution/{id}/pdf', function ($params) use ($cautionLease) {
     Auth::requireLogin();
     $id = (int) $params['id'];
     $lease = Lease::find($id);
     if (!$lease) redirect('/baux');
-    if (empty($lease['guarantor_name'])) {
+    $g = (int) ($_GET['g'] ?? 1);
+    $data = $cautionLease($lease, $g);
+    if (!$data) {
         flash('Renseignez d\'abord un garant sur ce bail.', 'error');
         redirect('/baux/' . $id);
     }
@@ -452,9 +481,9 @@ App::get('/caution/{id}/pdf', function ($params) {
         redirect('/caution/' . $id);
     }
     Pdf::streamDocument('documents/cautionnement', [
-        'lease'    => $lease,
+        'lease'    => $data,
         'settings' => Setting::all(),
-    ], 'acte-cautionnement-' . $id . '.pdf');
+    ], 'acte-cautionnement-' . $id . ($g === 2 ? '-2' : '') . '.pdf');
 });
 
 /* =========================================================================

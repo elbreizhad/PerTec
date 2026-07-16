@@ -55,6 +55,13 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
             <div class="field"><label>Provision charges (€)</label><input name="charges_amount" value="<?= $val('charges_amount','0') ?>"></div>
             <div class="field"><label>Dépôt de garantie (€)</label><input name="deposit_amount" value="<?= $val('deposit_amount','0') ?>"></div>
             <div class="field"><label>Jour d'échéance</label><input type="number" min="1" max="28" name="payment_day" value="<?= $val('payment_day','1') ?>"></div>
+            <div class="field"><label>Mode de charges</label>
+                <select name="charge_type">
+                    <option value="provisions" <?= ($l['charge_type'] ?? 'provisions')==='provisions'?'selected':'' ?>>Provisions + régularisation annuelle</option>
+                    <option value="forfait" <?= ($l['charge_type'] ?? '')==='forfait'?'selected':'' ?>>Forfait de charges (sans régularisation)</option>
+                </select>
+            </div>
+            <div class="field"><label>Date de signature</label><input type="date" name="signature_date" value="<?= $val('signature_date') ?>"><p class="hint">Sert à la mention « Fait à … le » et au calcul de l'indice IRL de référence.</p></div>
             <div class="field"><label>Statut</label>
                 <select name="status">
                     <option value="active" <?= ($l['status']??'active')==='active'?'selected':'' ?>>Actif</option>
@@ -62,6 +69,7 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
                 </select>
             </div>
         </div>
+        <div class="field"><label>Adresse actuelle du locataire (optionnel)</label><textarea name="tenant_current_address" rows="2"><?= $val('tenant_current_address') ?></textarea></div>
         <div class="field"><label>Notes</label><textarea name="notes"><?= $val('notes') ?></textarea></div>
         <div class="field">
             <label>Équipements complémentaires (meublé — un par ligne)</label>
@@ -71,9 +79,9 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
     </fieldset>
 
     <fieldset>
-        <legend>Garant (caution solidaire)</legend>
+        <legend>Garant n° 1 (caution solidaire)</legend>
         <p class="hint">Facultatif. Renseigné, un <strong>acte de cautionnement solidaire</strong> imprimable / PDF
-            devient disponible sur la fiche du bail.</p>
+            devient disponible sur la fiche du bail, et le bail y fait référence.</p>
         <div class="form-grid">
             <div class="field"><label>Nom et prénom du garant</label><input name="guarantor_name" value="<?= $val('guarantor_name') ?>"></div>
             <div class="field"><label>Montant maximal garanti (€, optionnel)</label><input name="guarantor_max_amount" value="<?= $val('guarantor_max_amount') ?>" placeholder="ex. 3 ans de loyer"></div>
@@ -89,6 +97,28 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
             <select name="guarantor_duration">
                 <option value="indeterminee" <?= ($l['guarantor_duration'] ?? 'indeterminee')==='indeterminee'?'selected':'' ?>>Durée indéterminée (résiliable par le garant)</option>
                 <option value="determinee" <?= ($l['guarantor_duration'] ?? '')==='determinee'?'selected':'' ?>>Durée déterminée (durée du bail initial + renouvellements)</option>
+            </select>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Garant n° 2 (facultatif)</legend>
+        <p class="hint">Pour un second garant (ex. les deux parents). Laissez vide s'il n'y en a qu'un.</p>
+        <div class="form-grid">
+            <div class="field"><label>Nom et prénom du garant</label><input name="guarantor2_name" value="<?= $val('guarantor2_name') ?>"></div>
+            <div class="field"><label>Montant maximal garanti (€, optionnel)</label><input name="guarantor2_max_amount" value="<?= $val('guarantor2_max_amount') ?>"></div>
+        </div>
+        <div class="field"><label>Adresse du garant</label><textarea name="guarantor2_address" rows="2"><?= $val('guarantor2_address') ?></textarea></div>
+        <div class="form-grid">
+            <div class="field"><label>Date de naissance</label><input type="date" name="guarantor2_birth_date" value="<?= $val('guarantor2_birth_date') ?>"></div>
+            <div class="field"><label>Lieu de naissance</label><input name="guarantor2_birth_place" value="<?= $val('guarantor2_birth_place') ?>"></div>
+            <div class="field"><label>Email</label><input type="email" name="guarantor2_email" value="<?= $val('guarantor2_email') ?>"></div>
+            <div class="field"><label>Téléphone</label><input name="guarantor2_phone" value="<?= $val('guarantor2_phone') ?>"></div>
+        </div>
+        <div class="field"><label>Durée de l'engagement</label>
+            <select name="guarantor2_duration">
+                <option value="indeterminee" <?= ($l['guarantor2_duration'] ?? 'indeterminee')==='indeterminee'?'selected':'' ?>>Durée indéterminée (résiliable par le garant)</option>
+                <option value="determinee" <?= ($l['guarantor2_duration'] ?? '')==='determinee'?'selected':'' ?>>Durée déterminée (durée du bail initial + renouvellements)</option>
             </select>
         </div>
     </fieldset>
