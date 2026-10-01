@@ -342,6 +342,30 @@ App::post('/loyers/{id}/annuler', function ($params) {
     redirect('/loyers');
 });
 
+// Modifier le montant d'une échéance (prorata de fin/début de bail, ajustement)
+App::get('/loyers/{id}/modifier', function ($params) {
+    Auth::requireLogin();
+    $payment = Payment::find((int) $params['id']);
+    if (!$payment) redirect('/loyers');
+    $lease = Lease::find((int) $payment['lease_id']);
+    view('payments/edit', [
+        'payment' => $payment,
+        'lease'   => $lease,
+        'prorata' => Payment::prorata($lease, (int) $payment['period_year'], (int) $payment['period_month']),
+    ]);
+});
+
+App::post('/loyers/{id}/modifier', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    $payment = Payment::find($id);
+    if (!$payment) redirect('/loyers');
+    Payment::updateAmounts($id, num(post('amount_rent')), num(post('amount_charges')), post('notes'));
+    flash('Échéance mise à jour.');
+    redirect('/baux/' . (int) $payment['lease_id']);
+});
+
 App::post('/loyers/{id}/delete', function ($params) {
     Auth::requireLogin();
     csrf_check();

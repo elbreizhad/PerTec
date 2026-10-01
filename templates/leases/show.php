@@ -80,6 +80,7 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
                 <?php else: ?>
                     <form class="inline-form" method="post" action="<?= url('/loyers/'.$pay['id'].'/paye') ?>"><?= csrf_field() ?><button class="btn btn-sm btn-primary">Marquer payé</button></form>
                 <?php endif; ?>
+                <a href="<?= url('/loyers/'.$pay['id'].'/modifier') ?>" class="btn btn-sm">✏️ Modifier</a>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -43,6 +43,7 @@
                 <?php else: ?>
                     <form class="inline-form" method="post" action="<?= url('/loyers/'.$p['id'].'/paye') ?>"><?= csrf_field() ?><button class="btn btn-sm btn-primary">Payé</button></form>
                 <?php endif; ?>
+                <a href="<?= url('/loyers/'.$p['id'].'/modifier') ?>" class="btn btn-sm" title="Modifier le montant">✏️</a>
                 <form class="inline-form" method="post" action="<?= url('/loyers/'.$p['id'].'/delete') ?>" onsubmit="return confirm('Supprimer cette échéance ?')"><?= csrf_field() ?><button class="btn btn-sm btn-danger">×</button></form>
             </td>
         </tr>

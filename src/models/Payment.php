@@ -116,6 +116,26 @@ class Payment
         ];
     }
 
+    /**
+     * Modifie manuellement les montants d'une échéance (ex. fin de bail au
+     * prorata des jours d'occupation). Si l'échéance est déjà payée, le
+     * montant encaissé suit le nouveau total.
+     */
+    public static function updateAmounts(int $id, float $rent, float $charges, ?string $notes): void
+    {
+        $p = self::find($id);
+        if (!$p) return;
+        $data = [
+            'amount_rent'    => round(max(0, $rent), 2),
+            'amount_charges' => round(max(0, $charges), 2),
+            'notes'          => $notes !== null && trim($notes) !== '' ? trim($notes) : null,
+        ];
+        if ($p['status'] === 'paid') {
+            $data['amount_paid'] = $data['amount_rent'] + $data['amount_charges'];
+        }
+        Database::update('rent_payments', $data, 'id = :id', ['id' => $id]);
+    }
+
     /** Génère les échéances manquantes pour tous les baux actifs jusqu'au mois courant. */
     public static function generateDue(): int
     {
