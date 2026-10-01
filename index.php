@@ -19,6 +19,7 @@ require __DIR__ . '/src/Database.php';
 require __DIR__ . '/src/Migrator.php';
 require __DIR__ . '/src/helpers.php';
 require __DIR__ . '/src/Pdf.php';
+require __DIR__ . '/src/Mailer.php';
 require __DIR__ . '/src/Auth.php';
 require __DIR__ . '/src/models/Setting.php';
 require __DIR__ . '/src/models/Expense.php';

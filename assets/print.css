@@ -5,6 +5,7 @@ body.print-body{font-family:'Times New Roman',Georgia,serif;color:#111;backgroun
 .signature-pad .btn{padding:.45rem .9rem;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#111;font-weight:600;cursor:pointer;font-family:sans-serif}
 .signature-pad .btn-primary{background:#2563EB;color:#fff;border-color:#2563EB}
 .signature-pad .btn-danger{color:#b91c1c;border-color:#fca5a5}
+.quittance-email .btn{padding:.45rem .9rem;border-radius:8px;border:1px solid #2563EB;background:#2563EB;color:#fff;font-weight:600;cursor:pointer;font-family:sans-serif}
 .sheet{background:#fff;max-width:780px;margin:1.5rem auto;padding:3rem 3.2rem;box-shadow:0 2px 10px rgba(0,0,0,.15);min-height:1000px}
 .sheet h1{font-size:1.5rem;text-align:center;margin:0 0 .3rem}
 .sheet h2{font-size:1.1rem;margin:1.4rem 0 .5rem;border-bottom:1px solid #999;padding-bottom:.2rem}

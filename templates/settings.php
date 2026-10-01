@@ -44,6 +44,33 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
 <?php endif; ?>
 <?= render_template('partials/signature_pad', ['signature' => $s['landlord_signature'] ?? null, 'back' => '/parametres']) ?>
 
+<form method="post" action="<?= url('/parametres/email') ?>" class="mt">
+    <?= csrf_field() ?>
+    <fieldset>
+        <legend>Envoi des emails (quittances)</legend>
+        <p class="hint">Réglages enregistrés en base de données : ils ne sont jamais écrasés par un déploiement.
+            Chez PlanetHoster : serveur SMTP de votre hébergement (ex. <code>mail.votre-domaine.fr</code>), port 465 en SSL,
+            identifiant = adresse email complète. Sans serveur SMTP, la fonction mail() du serveur est utilisée.</p>
+        <div class="form-grid">
+            <div class="field"><label>Adresse d'expédition</label><input type="email" name="mail_from" value="<?= $v('mail_from') ?>" placeholder="<?= $v('landlord_email') ?: 'contact@votre-domaine.fr' ?>"></div>
+            <div class="field"><label>Nom affiché</label><input name="mail_from_name" value="<?= $v('mail_from_name') ?>" placeholder="<?= $v('landlord_name') ?>"></div>
+            <div class="field"><label>Serveur SMTP</label><input name="smtp_host" value="<?= $v('smtp_host') ?>" placeholder="mail.votre-domaine.fr"></div>
+            <div class="field"><label>Sécurité</label>
+                <select name="smtp_secure">
+                    <?php foreach (['ssl' => 'SSL (port 465)', 'tls' => 'STARTTLS (port 587)', 'none' => 'Aucune (port 25)'] as $k => $lbl): ?>
+                        <option value="<?= $k ?>" <?= ($s['smtp_secure'] ?? 'ssl') === $k ? 'selected' : '' ?>><?= $lbl ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="field"><label>Port</label><input name="smtp_port" value="<?= $v('smtp_port') ?>" placeholder="465"></div>
+            <div class="field"><label>Identifiant SMTP</label><input name="smtp_user" value="<?= $v('smtp_user') ?>" autocomplete="off"></div>
+            <div class="field"><label>Mot de passe SMTP</label><input type="password" name="smtp_pass" autocomplete="new-password" placeholder="<?= !empty($s['smtp_pass']) ? '•••••• (inchangé si vide)' : '' ?>"></div>
+        </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary" name="action" value="save">Enregistrer</button>
+    <button type="submit" class="btn" name="action" value="test">Enregistrer et envoyer un email de test</button>
+</form>
+
 <form method="post" action="<?= url('/parametres/motdepasse') ?>" class="mt">
     <?= csrf_field() ?>
     <fieldset>

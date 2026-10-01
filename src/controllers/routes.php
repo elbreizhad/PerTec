@@ -538,6 +538,76 @@ App::post('/parametres', function () {
     redirect('/parametres');
 });
 
+// Envoi de la quittance (PDF en pièce jointe) par email au locataire
+App::post('/quittance/{id}/email', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    $payment = Payment::find($id);
+    if (!$payment) redirect('/loyers');
+    if ($payment['status'] !== 'paid') {
+        flash("Marquez d'abord ce loyer comme payé avant d'envoyer la quittance.", 'error');
+        redirect('/quittance/' . $id);
+    }
+    if (!Pdf::available()) {
+        flash('Librairie PDF indisponible sur le serveur.', 'error');
+        redirect('/quittance/' . $id);
+    }
+    $lease = Lease::find((int) $payment['lease_id']);
+    $settings = Setting::all();
+    $to = trim((string) post('to'));
+    $pdf = Pdf::renderDocument('documents/quittance', [
+        'payment'  => $payment,
+        'lease'    => $lease,
+        'settings' => $settings,
+        'forPdf'   => true,
+    ]);
+    try {
+        Mailer::send($to, (string) post('subject'), (string) post('message'), [[
+            'name' => 'quittance-' . ($payment['receipt_number'] ?: $id) . '.pdf',
+            'type' => 'application/pdf',
+            'data' => $pdf,
+        ]]);
+        Database::update('rent_payments', ['emailed_at' => date('Y-m-d H:i:s'), 'emailed_to' => $to], 'id = :id', ['id' => $id]);
+        flash("Quittance envoyée à $to.");
+    } catch (Throwable $e) {
+        flash("Échec de l'envoi : " . $e->getMessage(), 'error');
+    }
+    redirect('/quittance/' . $id);
+});
+
+// Réglages d'envoi des emails (stockés en base : non écrasés par les déploiements)
+App::post('/parametres/email', function () {
+    Auth::requireLogin();
+    csrf_check();
+    $secure = post('smtp_secure');
+    Setting::saveMany([
+        'smtp_host'      => trim((string) post('smtp_host')),
+        'smtp_port'      => trim((string) post('smtp_port')),
+        'smtp_secure'    => in_array($secure, ['ssl', 'tls', 'none'], true) ? $secure : 'ssl',
+        'smtp_user'      => trim((string) post('smtp_user')),
+        'mail_from'      => trim((string) post('mail_from')),
+        'mail_from_name' => trim((string) post('mail_from_name')),
+    ]);
+    // Mot de passe : champ vide = on garde l'actuel.
+    if ((string) post('smtp_pass') !== '') {
+        Setting::set('smtp_pass', (string) post('smtp_pass'));
+    }
+    if (post('action') === 'test') {
+        $s = Setting::all();
+        $to = trim((string) ($s['landlord_email'] ?? '')) ?: trim((string) ($s['mail_from'] ?? ''));
+        try {
+            Mailer::send($to, 'PerTec — email de test', "Bonjour,\n\nCet email confirme que l'envoi depuis PerTec fonctionne.\n");
+            flash("Réglages enregistrés. Email de test envoyé à $to.");
+        } catch (Throwable $e) {
+            flash("Réglages enregistrés, mais le test a échoué : " . $e->getMessage(), 'error');
+        }
+    } else {
+        flash("Réglages d'envoi enregistrés.");
+    }
+    redirect('/parametres');
+});
+
 // Signature manuscrite du bailleur (dessinée à la souris), ajoutée automatiquement aux quittances
 App::post('/signature', function () {
     Auth::requireLogin();

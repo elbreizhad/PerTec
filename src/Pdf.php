@@ -23,6 +23,18 @@ class Pdf
      */
     public static function streamDocument(string $template, array $data, string $filename, bool $download = true): void
     {
+        self::build($template, $data)->stream($filename, ['Attachment' => $download]);
+        exit;
+    }
+
+    /** Rend un gabarit de document et renvoie le contenu binaire du PDF (pièce jointe email…). */
+    public static function renderDocument(string $template, array $data): string
+    {
+        return (string) self::build($template, $data)->output();
+    }
+
+    private static function build(string $template, array $data): \Dompdf\Dompdf
+    {
         $inner = render_template($template, $data);
         $css = file_get_contents(__DIR__ . '/../assets/pdf.css');
 
@@ -41,7 +53,6 @@ class Pdf
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        $dompdf->stream($filename, ['Attachment' => $download]);
-        exit;
+        return $dompdf;
     }
 }

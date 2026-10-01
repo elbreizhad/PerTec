@@ -64,6 +64,7 @@ $ville = $s['signature_city'] ?? ($s['landlord_city'] ?? '');
 Elle atteste du paiement intégral du loyer et des charges pour la période indiquée.</p>
 
 <?php if (empty($forPdf)): ?>
+    <?= render_template('partials/quittance_email', ['payment' => $payment, 'lease' => $lease, 'settings' => $s]) ?>
     <?= render_template('partials/signature_pad', [
         'signature' => $s['landlord_signature'] ?? null,
         'back'      => '/quittance/' . (int) $payment['id'],

@@ -76,6 +76,7 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
             <td class="right actions" style="justify-content:flex-end">
                 <?php if ($pay['status']==='paid'): ?>
                     <a href="<?= url('/quittance/'.$pay['id']) ?>" class="btn btn-sm btn-primary" target="_blank">🧾 Quittance</a>
+                    <a href="<?= url('/quittance/'.$pay['id']).'#email' ?>" class="btn btn-sm" target="_blank" title="Envoyer la quittance par email"><?= !empty($pay['emailed_at']) ? '✔ ' : '' ?>📧 Email</a>
                     <form class="inline-form" method="post" action="<?= url('/loyers/'.$pay['id'].'/annuler') ?>"><?= csrf_field() ?><button class="btn btn-sm">Annuler</button></form>
                 <?php else: ?>
                     <form class="inline-form" method="post" action="<?= url('/loyers/'.$pay['id'].'/paye') ?>"><?= csrf_field() ?><button class="btn btn-sm btn-primary">Marquer payé</button></form>
