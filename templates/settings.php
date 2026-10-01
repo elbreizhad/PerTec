@@ -37,6 +37,13 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
 </form>
 
+<?php if (!empty($s['landlord_signature'])): ?>
+    <div class="card mt"><strong>Signature actuelle</strong><br>
+        <img src="<?= e($s['landlord_signature']) ?>" alt="Signature" style="max-height:80px;margin-top:.4rem">
+    </div>
+<?php endif; ?>
+<?= render_template('partials/signature_pad', ['signature' => $s['landlord_signature'] ?? null, 'back' => '/parametres']) ?>
+
 <form method="post" action="<?= url('/parametres/motdepasse') ?>" class="mt">
     <?= csrf_field() ?>
     <fieldset>

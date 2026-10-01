@@ -403,6 +403,7 @@ App::get('/quittance/{id}/pdf', function ($params) {
         'payment'  => $payment,
         'lease'    => $lease,
         'settings' => Setting::all(),
+        'forPdf'   => true,
     ], $filename);
 });
 
@@ -535,6 +536,33 @@ App::post('/parametres', function () {
     ]);
     flash('Paramètres enregistrés.');
     redirect('/parametres');
+});
+
+// Signature manuscrite du bailleur (dessinée à la souris), ajoutée automatiquement aux quittances
+App::post('/signature', function () {
+    Auth::requireLogin();
+    csrf_check();
+    $back = (string) post('back', '/parametres');
+    if (!preg_match('#^/[A-Za-z0-9/_-]*$#', $back)) $back = '/parametres';
+
+    if (post('action') === 'delete') {
+        Setting::set('landlord_signature', null);
+        flash('Signature supprimée.');
+        redirect($back);
+    }
+
+    $data = (string) post('signature');
+    $prefix = 'data:image/png;base64,';
+    $raw = str_starts_with($data, $prefix) ? base64_decode(substr($data, strlen($prefix)), true) : false;
+    if ($raw === false || substr($raw, 0, 8) !== "\x89PNG\r\n\x1a\n") {
+        flash('Signature invalide, veuillez la redessiner.', 'error');
+    } elseif (strlen($data) > 60000) {
+        flash('Signature trop volumineuse, veuillez la redessiner plus simplement.', 'error');
+    } else {
+        Setting::set('landlord_signature', $data);
+        flash('Signature enregistrée : elle sera ajoutée automatiquement sur les quittances.');
+    }
+    redirect($back);
 });
 
 App::post('/parametres/motdepasse', function () {

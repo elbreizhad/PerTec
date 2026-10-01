@@ -2,6 +2,9 @@ body.print-body{font-family:'Times New Roman',Georgia,serif;color:#111;backgroun
 .print-toolbar{position:sticky;top:0;display:flex;gap:.6rem;justify-content:center;padding:.8rem;background:#1f2937}
 .print-toolbar .btn{padding:.5rem 1rem;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#111;font-weight:600;cursor:pointer;text-decoration:none;font-family:sans-serif}
 .print-toolbar .btn-primary{background:#2563EB;color:#fff;border-color:#2563EB}
+.signature-pad .btn{padding:.45rem .9rem;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#111;font-weight:600;cursor:pointer;font-family:sans-serif}
+.signature-pad .btn-primary{background:#2563EB;color:#fff;border-color:#2563EB}
+.signature-pad .btn-danger{color:#b91c1c;border-color:#fca5a5}
 .sheet{background:#fff;max-width:780px;margin:1.5rem auto;padding:3rem 3.2rem;box-shadow:0 2px 10px rgba(0,0,0,.15);min-height:1000px}
 .sheet h1{font-size:1.5rem;text-align:center;margin:0 0 .3rem}
 .sheet h2{font-size:1.1rem;margin:1.4rem 0 .5rem;border-bottom:1px solid #999;padding-bottom:.2rem}
@@ -16,6 +19,8 @@ body.print-body{font-family:'Times New Roman',Georgia,serif;color:#111;backgroun
 .doc-sign{margin-top:3rem;display:flex;justify-content:space-between}
 .doc-sign .sign-box{width:45%}
 .doc-sign .line{margin-top:3rem;border-top:1px solid #333;padding-top:.3rem}
+.doc-sign .signature-img{display:block;max-height:70px;max-width:100%;margin-top:.6rem}
+.doc-sign .signature-img + .line{margin-top:.2rem}
 .mention{font-size:.85rem;color:#333;margin-top:2rem}
 p.article{margin:.6rem 0}
 @media print{

@@ -30,5 +30,8 @@ p.article { margin: 7px 0; text-align: justify; }
 .doc-sign { display: table; width: 100%; margin-top: 34px; }
 .doc-sign .sign-box { display: table-cell; width: 50%; vertical-align: top; padding-right: 12px; }
 .doc-sign .line { margin-top: 40px; border-top: 1px solid #333; padding-top: 3px; }
+.doc-sign .signature-img { display: block; height: 60px; margin-top: 8px; }
+.doc-sign .signature-img + .line { margin-top: 2px; }
 
 .mt { margin-top: 12px; }
+.no-print { display: none; }

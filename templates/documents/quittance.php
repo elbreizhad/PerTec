@@ -53,9 +53,19 @@ $ville = $s['signature_city'] ?? ($s['landlord_city'] ?? '');
 <div class="doc-sign">
     <div class="sign-box">
         <p>Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($payment['paid_date'] ?: date('Y-m-d')) ?></p>
+        <?php if (!empty($s['landlord_signature'])): ?>
+            <img class="signature-img" src="<?= e($s['landlord_signature']) ?>" alt="Signature du bailleur">
+        <?php endif; ?>
         <div class="line">Signature du bailleur</div>
     </div>
 </div>
 
 <p class="mention">Cette quittance annule tous les reçus qui auraient pu être établis précédemment en cas de paiement partiel du terme.
 Elle atteste du paiement intégral du loyer et des charges pour la période indiquée.</p>
+
+<?php if (empty($forPdf)): ?>
+    <?= render_template('partials/signature_pad', [
+        'signature' => $s['landlord_signature'] ?? null,
+        'back'      => '/quittance/' . (int) $payment['id'],
+    ]) ?>
+<?php endif; ?>
