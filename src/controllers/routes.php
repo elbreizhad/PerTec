@@ -591,7 +591,12 @@ App::post('/parametres/email', function () {
     ]);
     // Mot de passe : champ vide = on garde l'actuel.
     if ((string) post('smtp_pass') !== '') {
-        Setting::set('smtp_pass', (string) post('smtp_pass'));
+        $pass = trim((string) post('smtp_pass'));
+        // Mot de passe d'application Google : affiché « abcd efgh ijkl mnop », à saisir sans espaces.
+        if (stripos((string) post('smtp_host'), 'gmail.com') !== false) {
+            $pass = str_replace(' ', '', $pass);
+        }
+        Setting::set('smtp_pass', $pass);
     }
     if (post('action') === 'test') {
         $s = Setting::all();

@@ -50,7 +50,10 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
         <legend>Envoi des emails (quittances)</legend>
         <p class="hint">Réglages enregistrés en base de données : ils ne sont jamais écrasés par un déploiement.
             Chez PlanetHoster : serveur SMTP de votre hébergement (ex. <code>mail.votre-domaine.fr</code>), port 465 en SSL,
-            identifiant = adresse email complète. Sans serveur SMTP, la fonction mail() du serveur est utilisée.</p>
+            identifiant = adresse email complète.<br>
+            Avec Gmail : serveur <code>smtp.gmail.com</code>, port 465 en SSL, identifiant = votre adresse Gmail,
+            mot de passe = un <strong>mot de passe d'application</strong> de 16 caractères (<a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener">à créer ici</a>, la validation en 2 étapes doit être activée), pas votre mot de passe Gmail.<br>
+            Sans serveur SMTP, la fonction mail() du serveur est utilisée.</p>
         <div class="form-grid">
             <div class="field"><label>Adresse d'expédition</label><input type="email" name="mail_from" value="<?= $v('mail_from') ?>" placeholder="<?= $v('landlord_email') ?: 'contact@votre-domaine.fr' ?>"></div>
             <div class="field"><label>Nom affiché</label><input name="mail_from_name" value="<?= $v('mail_from_name') ?>" placeholder="<?= $v('landlord_name') ?>"></div>

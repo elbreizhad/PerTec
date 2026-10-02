@@ -125,7 +125,10 @@ class Mailer
         if ($user !== '') {
             $cmd('AUTH LOGIN', [334]);
             $cmd(base64_encode($user), [334], 'identifiant');
-            $cmd(base64_encode((string) ($s['smtp_pass'] ?? '')), [235], 'identifiant ou mot de passe refusé');
+            $cmd(base64_encode((string) ($s['smtp_pass'] ?? '')), [235],
+                stripos($host, 'gmail.com') !== false
+                    ? "identifiant ou mot de passe refusé — Gmail exige un « mot de passe d'application » (compte Google → Sécurité → Validation en 2 étapes → Mots de passe des applications), pas votre mot de passe habituel"
+                    : 'identifiant ou mot de passe refusé');
         }
         $cmd("MAIL FROM:<$from>", [250]);
         $cmd("RCPT TO:<$to>", [250, 251]);
