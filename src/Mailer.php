@@ -14,9 +14,10 @@ class Mailer
 {
     /**
      * @param array $attachments liste de ['name' => 'x.pdf', 'type' => 'application/pdf', 'data' => binaire]
+     * @param string|null $bcc copie cachée (ex. au bailleur), invisible pour le destinataire
      * @throws RuntimeException en cas d'échec (message lisible)
      */
-    public static function send(string $to, string $subject, string $body, array $attachments = [], ?string $replyTo = null): void
+    public static function send(string $to, string $subject, string $body, array $attachments = [], ?string $replyTo = null, ?string $bcc = null): void
     {
         $s = Setting::all();
         $to = trim($to);
@@ -29,14 +30,15 @@ class Mailer
         }
         $fromName = trim((string) ($s['mail_from_name'] ?? '')) ?: trim((string) ($s['landlord_name'] ?? ''));
         $replyTo  = $replyTo ?: (trim((string) ($s['landlord_email'] ?? '')) ?: null);
+        $bcc = $bcc !== null && filter_var(trim($bcc), FILTER_VALIDATE_EMAIL) && strcasecmp(trim($bcc), $to) !== 0 ? trim($bcc) : null;
 
         [$headers, $mime] = self::build($from, $fromName, $to, $subject, $body, $attachments, $replyTo);
 
         if (trim((string) ($s['smtp_host'] ?? '')) !== '') {
-            self::smtp($s, $from, $to, "To: <$to>\r\nSubject: " . self::encodeHeader($subject) . "\r\n" . $headers, $mime);
+            self::smtp($s, $from, array_filter([$to, $bcc]), "To: <$to>\r\nSubject: " . self::encodeHeader($subject) . "\r\n" . $headers, $mime);
             return;
         }
-        if (!@mail($to, self::encodeHeader($subject), $mime, $headers, '-f' . $from)) {
+        if (!@mail($to, self::encodeHeader($subject), $mime, $headers . ($bcc ? "\r\nBcc: <$bcc>" : ''), '-f' . $from)) {
             throw new RuntimeException("La fonction mail() du serveur a échoué. Renseignez un serveur SMTP dans les Paramètres.");
         }
     }
@@ -44,7 +46,7 @@ class Mailer
     /** Construit les en-têtes et le corps MIME (texte + pièces jointes). */
     private static function build(string $from, string $fromName, string $to, string $subject, string $body, array $attachments, ?string $replyTo): array
     {
-        $boundary = 'pertec_' . bin2hex(random_bytes(12));
+        $boundary = '=_' . bin2hex(random_bytes(12));
         $domain = substr(strrchr($from, '@'), 1);
         $headers = 'From: ' . ($fromName !== '' ? self::encodeHeader($fromName) . ' ' : '') . "<$from>\r\n"
             . ($replyTo ? "Reply-To: <$replyTo>\r\n" : '')
@@ -76,7 +78,7 @@ class Mailer
     }
 
     /** Dialogue SMTP minimal (SSL implicite, STARTTLS ou clair) avec AUTH LOGIN. */
-    private static function smtp(array $s, string $from, string $to, string $headers, string $mime): void
+    private static function smtp(array $s, string $from, array $recipients, string $headers, string $mime): void
     {
         $host   = trim((string) $s['smtp_host']);
         $secure = (string) ($s['smtp_secure'] ?? 'ssl');
@@ -131,7 +133,9 @@ class Mailer
                     : 'identifiant ou mot de passe refusé');
         }
         $cmd("MAIL FROM:<$from>", [250]);
-        $cmd("RCPT TO:<$to>", [250, 251]);
+        foreach ($recipients as $rcpt) {
+            $cmd("RCPT TO:<$rcpt>", [250, 251]);
+        }
         $cmd('DATA', [354]);
         // Échappement des lignes commençant par un point (RFC 5321 §4.5.2).
         $data = preg_replace('/^\./m', '..', $headers . "\r\n\r\n" . $mime);

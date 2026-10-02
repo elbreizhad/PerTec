@@ -563,13 +563,14 @@ App::post('/quittance/{id}/email', function ($params) {
         'forPdf'   => true,
     ]);
     try {
+        $copy = post('copy') ? QuittanceMail::copyAddress($settings) : null;
         Mailer::send($to, (string) post('subject'), (string) post('message'), [[
-            'name' => 'quittance-' . ($payment['receipt_number'] ?: $id) . '.pdf',
+            'name' => QuittanceMail::attachmentName($payment),
             'type' => 'application/pdf',
             'data' => $pdf,
-        ]]);
+        ]], null, $copy);
         Database::update('rent_payments', ['emailed_at' => date('Y-m-d H:i:s'), 'emailed_to' => $to], 'id = :id', ['id' => $id]);
-        flash("Quittance envoyée à $to.");
+        flash("Quittance envoyée à $to." . ($copy ? " Une copie vous a été envoyée ($copy)." : ''));
     } catch (Throwable $e) {
         flash("Échec de l'envoi : " . $e->getMessage(), 'error');
     }
@@ -587,7 +588,6 @@ App::post('/parametres/email', function () {
         'smtp_secure'    => in_array($secure, ['ssl', 'tls', 'none'], true) ? $secure : 'ssl',
         'smtp_user'      => trim((string) post('smtp_user')),
         'mail_from'      => trim((string) post('mail_from')),
-        'mail_from_name' => trim((string) post('mail_from_name')),
     ]);
     // Mot de passe : champ vide = on garde l'actuel.
     if ((string) post('smtp_pass') !== '') {
@@ -602,7 +602,7 @@ App::post('/parametres/email', function () {
         $s = Setting::all();
         $to = trim((string) ($s['landlord_email'] ?? '')) ?: trim((string) ($s['mail_from'] ?? ''));
         try {
-            Mailer::send($to, 'PerTec — email de test', "Bonjour,\n\nCet email confirme que l'envoi depuis PerTec fonctionne.\n");
+            Mailer::send($to, 'Email de test — envoi des quittances', "Bonjour,\n\nCet email confirme que l'envoi des quittances fonctionne.\n");
             flash("Réglages enregistrés. Email de test envoyé à $to.");
         } catch (Throwable $e) {
             flash("Réglages enregistrés, mais le test a échoué : " . $e->getMessage(), 'error');
@@ -611,6 +611,25 @@ App::post('/parametres/email', function () {
         flash("Réglages d'envoi enregistrés.");
     }
     redirect('/parametres');
+});
+
+// Modèle de l'email de quittance (objet, message, copie)
+App::post('/parametres/modele-email', function () {
+    Auth::requireLogin();
+    csrf_check();
+    if (post('action') === 'reset') {
+        Setting::saveMany(['mail_quittance_subject' => null, 'mail_quittance_body' => null]);
+        flash('Modèle d\'email remis par défaut.');
+        redirect('/parametres#modele-email');
+    }
+    Setting::saveMany([
+        'mail_from_name'         => trim((string) post('mail_from_name')),
+        'mail_quittance_subject' => trim((string) post('mail_quittance_subject')),
+        'mail_quittance_body'    => str_replace("\r\n", "\n", trim((string) post('mail_quittance_body'))),
+        'mail_quittance_copy'    => post('mail_quittance_copy') ? '1' : '0',
+    ]);
+    flash('Modèle d\'email enregistré.');
+    redirect('/parametres#modele-email');
 });
 
 // Signature manuscrite du bailleur (dessinée à la souris), ajoutée automatiquement aux quittances

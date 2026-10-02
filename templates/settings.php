@@ -56,7 +56,6 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
             Sans serveur SMTP, la fonction mail() du serveur est utilisée.</p>
         <div class="form-grid">
             <div class="field"><label>Adresse d'expédition</label><input type="email" name="mail_from" value="<?= $v('mail_from') ?>" placeholder="<?= $v('landlord_email') ?: 'contact@votre-domaine.fr' ?>"></div>
-            <div class="field"><label>Nom affiché</label><input name="mail_from_name" value="<?= $v('mail_from_name') ?>" placeholder="<?= $v('landlord_name') ?>"></div>
             <div class="field"><label>Serveur SMTP</label><input name="smtp_host" value="<?= $v('smtp_host') ?>" placeholder="mail.votre-domaine.fr"></div>
             <div class="field"><label>Sécurité</label>
                 <select name="smtp_secure">
@@ -73,6 +72,73 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
     <button type="submit" class="btn btn-primary" name="action" value="save">Enregistrer</button>
     <button type="submit" class="btn" name="action" value="test">Enregistrer et envoyer un email de test</button>
 </form>
+
+<?php
+$tplSubject = QuittanceMail::subjectTemplate($s);
+$tplBody    = QuittanceMail::bodyTemplate($s);
+$sample     = QuittanceMail::sampleVars($s);
+$fromName   = trim((string) ($s['mail_from_name'] ?? '')) ?: trim((string) ($s['landlord_name'] ?? ''));
+$fromAddr   = trim((string) ($s['mail_from'] ?? '')) ?: trim((string) ($s['landlord_email'] ?? ''));
+?>
+<form method="post" action="<?= url('/parametres/modele-email') ?>" class="mt" id="modele-email">
+    <?= csrf_field() ?>
+    <fieldset>
+        <legend>Email envoyé au locataire</legend>
+        <p class="hint">C'est exactement ce que reçoit le locataire avec sa quittance en PDF. Vous pourrez encore retoucher le texte au moment de chaque envoi.</p>
+        <div class="form-grid">
+            <div class="field"><label>Nom de l'expéditeur (vu par le locataire)</label>
+                <input name="mail_from_name" id="tpl-from" value="<?= $v('mail_from_name') ?>" placeholder="<?= $v('landlord_name') ?: 'ex. Jean Dupont' ?>">
+                <span class="hint">Vide = votre nom (« <?= $v('landlord_name') ?: 'Coordonnées du bailleur' ?> »).</span>
+            </div>
+        </div>
+        <div class="field"><label>Objet</label>
+            <input name="mail_quittance_subject" id="tpl-subject" value="<?= e($tplSubject) ?>">
+        </div>
+        <div class="field"><label>Message</label>
+            <textarea name="mail_quittance_body" id="tpl-body" rows="9"><?= e($tplBody) ?></textarea>
+        </div>
+        <p class="hint">Champs remplis automatiquement (cliquez pour les insérer dans le message) :</p>
+        <p class="actions" style="flex-wrap:wrap">
+            <?php foreach (QuittanceMail::tags() as $tag => $desc): ?>
+                <button type="button" class="btn btn-sm tpl-tag" data-tag="<?= e($tag) ?>" title="<?= e($desc) ?>"><?= e($tag) ?> <span class="muted small"><?= e($desc) ?></span></button>
+            <?php endforeach; ?>
+        </p>
+        <div class="field"><label style="font-weight:400"><input type="checkbox" name="mail_quittance_copy" value="1" style="width:auto;display:inline;margin-right:.4rem" <?= ($s['mail_quittance_copy'] ?? '1') === '1' ? 'checked' : '' ?>>
+            M'envoyer une copie de chaque email (à <?= e(QuittanceMail::copyAddress($s) ?: 'votre email') ?>), pour garder une trace de ce qui a été envoyé</label></div>
+
+        <h3 style="margin-top:1rem">Aperçu (exemple avec une locataire fictive)</h3>
+        <div class="card" style="background:#f9fafb;border:1px solid #e5e7eb;font-family:sans-serif">
+            <div class="small muted">De : <strong id="pv-from"><?= e($fromName) ?></strong> &lt;<?= e($fromAddr ?: 'adresse d\'expédition') ?>&gt;</div>
+            <div class="small muted">À : marie.martin@exemple.fr</div>
+            <div style="margin:.4rem 0"><strong id="pv-subject"></strong></div>
+            <div id="pv-body" style="white-space:pre-wrap;border-top:1px solid #e5e7eb;padding-top:.5rem"></div>
+            <div class="small muted" style="margin-top:.6rem">📎 <?= e(QuittanceMail::attachmentName(['period_month' => (int) date('n'), 'period_year' => date('Y')])) ?></div>
+        </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary" name="action" value="save">Enregistrer le modèle</button>
+    <button type="submit" class="btn" name="action" value="reset" onclick="return confirm('Remettre le modèle par défaut ?')">Remettre par défaut</button>
+</form>
+<script>
+(function () {
+    var vars = <?= json_encode($sample, JSON_UNESCAPED_UNICODE) ?>, defName = <?= json_encode($s['landlord_name'] ?? '', JSON_UNESCAPED_UNICODE) ?>;
+    var subj = document.getElementById('tpl-subject'), body = document.getElementById('tpl-body'), from = document.getElementById('tpl-from');
+    function fill(t) { return Object.keys(vars).reduce(function (acc, k) { return acc.split(k).join(vars[k]); }, t); }
+    function update() {
+        document.getElementById('pv-subject').textContent = fill(subj.value);
+        document.getElementById('pv-body').textContent = fill(body.value);
+        document.getElementById('pv-from').textContent = from.value.trim() || defName;
+    }
+    [subj, body, from].forEach(function (el) { el.addEventListener('input', update); });
+    document.querySelectorAll('.tpl-tag').forEach(function (b) {
+        b.addEventListener('click', function () {
+            var t = b.dataset.tag, p = body.selectionStart || body.value.length;
+            body.value = body.value.slice(0, p) + t + body.value.slice(body.selectionEnd || p);
+            body.focus(); body.selectionStart = body.selectionEnd = p + t.length; update();
+        });
+    });
+    update();
+})();
+</script>
 
 <form method="post" action="<?= url('/parametres/motdepasse') ?>" class="mt">
     <?= csrf_field() ?>

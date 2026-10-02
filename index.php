@@ -29,6 +29,7 @@ require __DIR__ . '/src/models/Property.php';
 require __DIR__ . '/src/models/Tenant.php';
 require __DIR__ . '/src/models/Lease.php';
 require __DIR__ . '/src/models/Payment.php';
+require __DIR__ . '/src/models/QuittanceMail.php';
 require __DIR__ . '/src/models/Checklist.php';
 
 App::boot();

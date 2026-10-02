@@ -1,13 +1,10 @@
 <?php /** @var array $payment */ /** @var array $lease */ /** @var array $settings */
 $s = $settings;
-$mois = ucfirst(moisFr((int) $payment['period_month'])) . ' ' . $payment['period_year'];
-$total = (float) $payment['amount_rent'] + (float) $payment['amount_charges'];
-$signName = $s['landlord_name'] ?? '';
-$subject = "Quittance de loyer — $mois";
-$message = "Bonjour " . trim($lease['first_name'] . ' ' . $lease['last_name']) . ",\n\n"
-    . "Veuillez trouver ci-joint votre quittance de loyer pour la période de $mois"
-    . " (montant réglé : " . euros($total) . ").\n\n"
-    . "Cordialement,\n" . $signName;
+$vars = QuittanceMail::vars($payment, $lease, $s);
+$subject = QuittanceMail::render(QuittanceMail::subjectTemplate($s), $vars);
+$message = QuittanceMail::render(QuittanceMail::bodyTemplate($s), $vars);
+$fromName = trim((string) ($s['mail_from_name'] ?? '')) ?: trim((string) ($s['landlord_name'] ?? ''));
+$copyTo = QuittanceMail::copyAddress($s);
 $field = 'width:100%;box-sizing:border-box;padding:.45rem .6rem;border:1px solid #d1d5db;border-radius:8px;font:inherit;font-weight:400';
 ?>
 <div class="quittance-email no-print" id="email" style="font-family:sans-serif;margin-top:1.5rem;padding:1rem;border:1px dashed #9ca3af;border-radius:10px;background:#f9fafb">
@@ -32,7 +29,12 @@ $field = 'width:100%;box-sizing:border-box;padding:.45rem .6rem;border:1px solid
         <label style="font-size:.85rem;font-weight:600">Message
             <textarea name="message" rows="7" style="<?= $field ?>"><?= e($message) ?></textarea>
         </label>
-        <span style="font-size:.8rem;color:#4b5563">La quittance est jointe en PDF<?= !empty($s['landlord_signature']) ? ', avec votre signature' : '' ?>.</span>
+        <span style="font-size:.8rem;color:#4b5563">Expéditeur vu par le locataire : <strong><?= e($fromName ?: '—') ?></strong>
+            · Pièce jointe : <?= e(QuittanceMail::attachmentName($payment)) ?><?= !empty($s['landlord_signature']) ? ' (signée)' : '' ?>
+            · <a href="<?= url('/parametres#modele-email') ?>">modifier le modèle</a></span>
+        <?php if ($copyTo): ?>
+            <label style="font-size:.85rem"><input type="checkbox" name="copy" value="1" <?= ($s['mail_quittance_copy'] ?? '1') === '1' ? 'checked' : '' ?>> M'envoyer une copie (<?= e($copyTo) ?>)</label>
+        <?php endif; ?>
         <div><button class="btn btn-primary">Envoyer la quittance</button></div>
     </form>
     <?php endif; ?>
