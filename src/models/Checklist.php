@@ -25,7 +25,7 @@ class Checklist
         ['key' => 'justif_revenus',       'group' => 'locataire', 'label' => 'Justificatifs de revenus (bulletins / avis d\'imposition)'],
         ['key' => 'attestation_assurance','group' => 'locataire', 'label' => "Attestation d'assurance habitation"],
         ['key' => 'rib',                  'group' => 'locataire', 'label' => 'RIB / mandat de prélèvement'],
-        ['key' => 'garant',               'group' => 'locataire', 'label' => 'Acte de cautionnement + pièces du garant (si applicable)'],
+        ['key' => 'garant',               'group' => 'locataire', 'label' => 'Acte de cautionnement + pièces du garant, ou visa et contrat Visale (si applicable)'],
 
         ['key' => 'premier_loyer',        'group' => 'suivi',     'label' => 'Premier loyer encaissé'],
         ['key' => 'quittance_fournie',    'group' => 'suivi',     'label' => 'Quittances transmises au locataire'],

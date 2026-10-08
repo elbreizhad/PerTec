@@ -147,6 +147,13 @@ Le présent bail est garanti par deux <strong>actes de cautionnement solidaire</
 <strong><?= e($guarantNames[0]) ?></strong> et <strong><?= e($guarantNames[1]) ?></strong>, documents distincts annexés aux présentes.
 <?php endif; ?>
 Chaque caution répond solidairement des obligations du locataire dans les conditions et limites fixées à son acte.</p>
+<?php elseif (($l['guarantee_type'] ?? '') === 'visale'): // Garantie Visale (Action Logement) ?>
+<h2>Article <?= $artNum++ ?> — Garantie Visale</h2>
+<p class="article">
+Le paiement des loyers et charges est garanti par le dispositif <strong>Visale</strong> d'Action Logement
+(caution accordée au locataire<?= !empty($l['visale_visa_number']) ? ' sous le visa n° <strong>' . e($l['visale_visa_number']) . '</strong>' : '' ?><?php
+if (!empty($l['visale_contract_number'])): ?>, contrat de cautionnement n° <strong><?= e($l['visale_contract_number']) ?></strong> souscrit par le bailleur<?php endif; ?>),
+dans les conditions et limites prévues par ce dispositif. Le locataire déclare en avoir été informé.</p>
 <?php endif; ?>
 
 <h2>Article <?= $artNum++ ?> — Obligations du bailleur</h2>

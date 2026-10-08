@@ -45,6 +45,22 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
     <div class="stat"><div class="label">Dépôt garantie</div><div class="value"><?= euros($l['deposit_amount']) ?></div></div>
 </div>
 
+<?php $gType = $l['guarantee_type'] ?? ($guarants ? 'garant' : 'aucune'); ?>
+<div class="card">
+    <h3>Garantie</h3>
+    <?php if ($gType === 'visale'): ?>
+        <p><strong>Visale (Action Logement)</strong>
+            — visa n° <?= e($l['visale_visa_number'] ?: '— à renseigner') ?>
+            <?php if (!empty($l['visale_visa_expiry'])): ?> · valable jusqu'au <?= fdate($l['visale_visa_expiry']) ?><?php endif; ?>
+            <?php if ($l['visale_max_rent'] !== null && $l['visale_max_rent'] !== ''): ?> · loyer max. couvert <?= euros($l['visale_max_rent']) ?><?php endif; ?>
+            <br>Contrat de cautionnement n° <?= e($l['visale_contract_number'] ?: '— à signer sur visale.fr') ?></p>
+    <?php elseif ($guarants): ?>
+        <p><strong>Caution solidaire</strong> — <?= e(implode(' et ', array_map(fn($g) => $g['name'], $guarants))) ?></p>
+    <?php else: ?>
+        <p class="muted">Aucune garantie. <a href="<?= url('/baux/'.$l['id'].'/edit') ?>">Ajouter un garant ou Visale</a></p>
+    <?php endif; ?>
+</div>
+
 <div class="card">
     <h3>Ajouter une échéance de loyer</h3>
     <form method="post" action="<?= url('/baux/'.$l['id'].'/echeance') ?>" class="actions">

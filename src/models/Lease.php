@@ -58,6 +58,12 @@ class Lease
             'charge_type'     => post('charge_type') === 'forfait' ? 'forfait' : 'provisions',
             'signature_date'  => post('signature_date') ?: null,
             'tenant_current_address' => post('tenant_current_address') ?: null,
+            'guarantee_type'        => in_array(post('guarantee_type'), ['garant', 'visale'], true) ? post('guarantee_type') : 'aucune',
+            'visale_visa_number'     => trim((string) post('visale_visa_number')) ?: null,
+            'visale_visa_expiry'     => post('visale_visa_expiry') ?: null,
+            'visale_contract_number' => trim((string) post('visale_contract_number')) ?: null,
+            'visale_max_rent'        => post('visale_max_rent') !== null && post('visale_max_rent') !== ''
+                ? num(post('visale_max_rent')) : null,
             'guarantor_name'        => post('guarantor_name') ?: null,
             'guarantor_address'     => post('guarantor_address') ?: null,
             'guarantor_birth_date'  => post('guarantor_birth_date') ?: null,
@@ -102,6 +108,8 @@ class Lease
      */
     public static function guarantors(array $lease): array
     {
+        // Garants pris en compte uniquement si le type de garantie choisi est « garant ».
+        if (($lease['guarantee_type'] ?? 'garant') !== 'garant') return [];
         $out = [];
         foreach (['', '2'] as $suffix) {
             $name = trim((string) ($lease["guarantor{$suffix}_name"] ?? ''));
@@ -176,6 +184,23 @@ class Lease
         foreach (self::guarantors($lease) as $i => $g) {
             if (empty($g['max_amount']))
                 $warnings[] = sprintf('Garant « %s » : montant maximal garanti non renseigné (recommandé).', $g['name']);
+        }
+
+        // — Garantie Visale (Action Logement) —
+        if (($lease['guarantee_type'] ?? '') === 'visale') {
+            if (trim((string) ($lease['visale_visa_number'] ?? '')) === '')
+                $warnings[] = 'Visale : numéro de visa du locataire non renseigné.';
+            if (trim((string) ($lease['visale_contract_number'] ?? '')) === '')
+                $warnings[] = 'Visale : numéro du contrat de cautionnement non renseigné — à signer sur visale.fr avant la signature du bail.';
+            $expiry = $lease['visale_visa_expiry'] ?? null;
+            $signDate = $lease['signature_date'] ?: ($lease['start_date'] ?? null);
+            if ($expiry && $signDate && $expiry < $signDate)
+                $warnings[] = 'Visale : le visa expire (' . fdate($expiry) . ') avant la signature du bail — il doit être valide à la signature.';
+            $max = $lease['visale_max_rent'] ?? null;
+            $loyerCc = (float) ($lease['rent_amount'] ?? 0) + (float) ($lease['charges_amount'] ?? 0);
+            if ($max !== null && $max !== '' && $loyerCc > (float) $max + 0.001)
+                $warnings[] = sprintf('Visale : loyer charges comprises (%s) supérieur au loyer maximum couvert par le visa (%s).',
+                    euros($loyerCc), euros((float) $max));
         }
 
         // — Annexes remises séparément (rappel, non bloquant) —

@@ -78,6 +78,45 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         </div>
     </fieldset>
 
+    <?php
+    // Type de garantie : valeur enregistrée, sinon « garant » si un garant est déjà saisi.
+    $gType = $l['guarantee_type'] ?? (!empty($l['guarantor_name']) ? 'garant' : 'aucune');
+    $gOpts = [
+        'aucune' => ['Aucune garantie', 'Pas de caution sur ce bail.'],
+        'garant' => ['Garant(s) — caution solidaire', 'Une ou deux personnes se portent caution (ex. les parents).'],
+        'visale' => ['Visale (Action Logement)', 'Caution gratuite d\'Action Logement : le locataire a un visa Visale.'],
+    ];
+    ?>
+    <fieldset>
+        <legend>Type de garantie</legend>
+        <p class="hint">Un seul type par bail : Visale ne peut pas être cumulé avec un garant personne physique.</p>
+        <div class="form-grid">
+            <?php foreach ($gOpts as $k => [$lbl, $desc]): ?>
+                <label class="card" style="display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;margin:0 0 .6rem;padding:.8rem;font-weight:400">
+                    <input type="radio" name="guarantee_type" value="<?= $k ?>" <?= $gType === $k ? 'checked' : '' ?> style="width:auto;margin-top:.2rem">
+                    <span><strong><?= $lbl ?></strong><br><span class="hint"><?= $desc ?></span></span>
+                </label>
+            <?php endforeach; ?>
+        </div>
+    </fieldset>
+
+    <div data-guarantee="visale">
+    <fieldset>
+        <legend>Garantie Visale</legend>
+        <p class="hint">Le locataire obtient son <strong>visa</strong> sur visale.fr et vous le transmet. Vous signez ensuite
+            en ligne le <strong>contrat de cautionnement Visale</strong> (sur <a href="https://www.visale.fr" target="_blank" rel="noopener">visale.fr</a>,
+            espace bailleur) <strong>avant la signature du bail</strong>. Le visa doit être valide le jour de la signature,
+            et le loyer ne doit pas dépasser le montant maximum indiqué sur le visa.</p>
+        <div class="form-grid">
+            <div class="field"><label>Numéro de visa du locataire</label><input name="visale_visa_number" value="<?= $val('visale_visa_number') ?>" placeholder="ex. V123456789"></div>
+            <div class="field"><label>Visa valable jusqu'au</label><input type="date" name="visale_visa_expiry" value="<?= $val('visale_visa_expiry') ?>"></div>
+            <div class="field"><label>Loyer maximum couvert (€ charges comprises)</label><input name="visale_max_rent" value="<?= $val('visale_max_rent') ?>" placeholder="indiqué sur le visa"></div>
+            <div class="field"><label>N° du contrat de cautionnement Visale</label><input name="visale_contract_number" value="<?= $val('visale_contract_number') ?>" placeholder="après signature sur visale.fr"></div>
+        </div>
+    </fieldset>
+    </div>
+
+    <div data-guarantee="garant">
     <fieldset>
         <legend>Garant n° 1 (caution solidaire)</legend>
         <p class="hint">Facultatif. Renseigné, un <strong>acte de cautionnement solidaire</strong> imprimable / PDF
@@ -123,6 +162,8 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         </div>
     </fieldset>
 
+    </div>
+
     <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Enregistrer' : 'Créer le bail' ?></button>
 </form>
 
@@ -151,6 +192,17 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         depositInput.value = (rent * months).toFixed(2);
     }
     rentInput.addEventListener('change', suggestDeposit);
+
+    // Affiche uniquement les champs du type de garantie choisi.
+    var gRadios = document.querySelectorAll('input[name="guarantee_type"]');
+    function toggleGuarantee() {
+        var chosen = (document.querySelector('input[name="guarantee_type"]:checked') || {}).value || 'aucune';
+        document.querySelectorAll('[data-guarantee]').forEach(function (el) {
+            el.style.display = el.dataset.guarantee === chosen ? '' : 'none';
+        });
+    }
+    gRadios.forEach(function (r) { r.addEventListener('change', toggleGuarantee); });
+    toggleGuarantee();
     typeSelect.addEventListener('change', suggestDeposit);
 })();
 </script>
