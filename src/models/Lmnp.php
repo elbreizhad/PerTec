@@ -93,14 +93,17 @@ class Lmnp
         $mgmt = $recettes * ((float)$p['mgmt_fees_pct'] / 100);
         $interest = self::loanInterestForYear($p, $year);
         $deductibleOneOff = Expense::totalByCategories((int)$p['id'], Expense::DEDUCTIBLE, $year);
+        // Montants réels de l'année (appels de charges, avis de taxe foncière…) s'ils sont saisis,
+        // sinon estimations de la fiche du bien.
+        $real = PropertyCost::totals((int)$p['id'], $year);
         $charges = [
-            'taxe_fonciere' => (float)$p['property_tax'],
-            'assurance'     => (float)$p['insurance_year'],
-            'charges_copro' => (float)$p['charges_year'],
+            'taxe_fonciere' => $real['taxe_fonciere']['amount'] ?? (float)$p['property_tax'],
+            'assurance'     => $real['assurance']['amount'] ?? (float)$p['insurance_year'],
+            'charges_copro' => $real['copro']['amount'] ?? (float)$p['charges_year'],
             'gestion'       => $mgmt,
             'interets'      => $interest,
             'comptable'     => (float)($p['accountant_fees'] ?? 0),
-            'autres'        => $deductibleOneOff,
+            'autres'        => $deductibleOneOff + ($real['autre']['amount'] ?? 0.0),
         ];
         $chargesTotal = array_sum($charges);
 

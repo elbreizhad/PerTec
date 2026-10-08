@@ -17,6 +17,7 @@ $links = [
     ['/locataires',  'Locataires',      'users'],
     ['/baux',        'Baux',            'file'],
     ['/loyers',      'Loyers',          'euro'],
+    ['/bilan',       'Bilan annuel',    'chart'],
     ['/fiscalite',   'Fiscalité',       'chart'],
 ];
 ?>

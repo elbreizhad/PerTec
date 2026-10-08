@@ -923,3 +923,52 @@ App::post('/signature/{token}', function ($params) use ($publicLease) {
     }
     redirect('/signature/' . $params['token']);
 });
+
+/* =========================================================================
+ * CHARGES ET IMPÔTS RÉELS — BILAN ANNUEL
+ * ========================================================================= */
+
+App::post('/biens/{id}/couts', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    if (!Property::find($id)) redirect('/biens');
+    $data = PropertyCost::fromRequest($id);
+    if ($data['amount'] == 0.0) {
+        flash('Indiquez un montant.', 'error');
+    } else {
+        PropertyCost::create($data);
+        flash(PropertyCost::label($data) . ' enregistré(e) pour ' . $data['year'] . '.');
+    }
+    redirect('/biens/' . $id . '?annee=' . $data['year'] . '#charges');
+});
+
+App::post('/biens/{id}/couts/{cost}/delete', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $c = PropertyCost::find((int) $params['cost']);
+    if ($c && (int) $c['property_id'] === (int) $params['id']) {
+        PropertyCost::delete((int) $c['id']);
+        flash('Ligne supprimée.');
+    }
+    redirect('/biens/' . (int) $params['id'] . '?annee=' . (int) ($c['year'] ?? date('Y')) . '#charges');
+});
+
+App::get('/bilan', function () {
+    Auth::requireLogin();
+    $year = (int) ($_GET['year'] ?? date('Y'));
+    view('bilan/index', ['year' => $year] + Bilan::all($year));
+});
+
+App::get('/bilan/{id}', function ($params) {
+    Auth::requireLogin();
+    $property = Property::find((int) $params['id']);
+    if (!$property) redirect('/bilan');
+    $year = (int) ($_GET['year'] ?? date('Y'));
+    view('bilan/show', [
+        'property' => $property,
+        'year'     => $year,
+        'b'        => Bilan::compute($property, $year),
+        'costs'    => PropertyCost::forProperty((int) $property['id'], $year),
+    ]);
+});

@@ -111,6 +111,79 @@ et alimentent les amortissements LMNP.</p>
 <?php endif; ?>
 
 <?php
+$cy = (int) date('Y');
+$costYear = (int) ($_GET['annee'] ?? $cy);
+$costs = PropertyCost::forProperty((int) $p['id'], $costYear);
+$costTot = array_sum(array_column($costs, 'amount'));
+$costRec = array_sum(array_column($costs, 'recoverable'));
+?>
+<div class="page-head" id="charges" style="margin-top:1.5rem">
+    <h2 style="margin:0">Charges et impôts réels</h2>
+    <form method="get" action="<?= url('/biens/'.$p['id']) ?>#charges" class="actions">
+        <select name="annee" onchange="this.form.submit()">
+            <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option <?= $y === $costYear ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
+        </select>
+        <a class="btn btn-secondary" href="<?= url('/bilan/'.$p['id'].'?year='.$costYear) ?>">📒 Bilan <?= $costYear ?></a>
+    </form>
+</div>
+<p class="muted small">Saisissez les appels de charges du syndic, la régularisation annuelle et l'avis de taxe foncière.
+    Ces montants réels remplacent les estimations dans le bilan annuel et la fiscalité LMNP, et servent à la régularisation des charges du locataire.</p>
+<?php if ($costs): ?>
+<div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Nature</th><th class="num">Montant</th><th class="num">dont récupérable</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach ($costs as $c): ?>
+        <tr>
+            <td><?= $c['cost_date'] ? fdate($c['cost_date']) : '—' ?></td>
+            <td><?= e(PropertyCost::label($c)) ?><?= $c['notes'] ? '<br><span class="small muted">' . e($c['notes']) . '</span>' : '' ?></td>
+            <td class="num"><?= euros($c['amount']) ?></td>
+            <td class="num"><?= (float) $c['recoverable'] != 0.0 ? euros($c['recoverable']) : '—' ?></td>
+            <td class="right"><form class="inline-form" method="post" action="<?= url('/biens/'.$p['id'].'/couts/'.$c['id'].'/delete') ?>" onsubmit="return confirm('Supprimer cette ligne ?')">
+                <?= csrf_field() ?><button class="btn btn-sm btn-danger">×</button></form></td>
+        </tr>
+    <?php endforeach; ?>
+        <tr class="total"><td colspan="2"><strong>Total <?= $costYear ?></strong></td><td class="num"><strong><?= euros($costTot) ?></strong></td><td class="num"><strong><?= euros($costRec) ?></strong></td><td></td></tr>
+    </tbody>
+</table></div>
+<?php else: ?>
+    <div class="card empty">Aucune charge réelle saisie pour <?= $costYear ?> : le bilan utilise les estimations de la fiche du bien.</div>
+<?php endif; ?>
+<form method="post" action="<?= url('/biens/'.$p['id'].'/couts') ?>" class="card">
+    <?= csrf_field() ?>
+    <h3>Ajouter une charge ou un impôt</h3>
+    <div class="form-grid">
+        <div class="field"><label>Nature</label>
+            <select name="kind" id="cost-kind">
+                <?php foreach (PropertyCost::KINDS as $k => [$label, $help]): ?>
+                    <option value="<?= $k ?>" data-help="<?= e($help) ?>"><?= e($label) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="field"><label>Date (appel, avis…)</label><input type="date" name="cost_date" id="cost-date"></div>
+        <div class="field"><label>Année concernée</label><input type="number" name="year" id="cost-year" value="<?= $costYear ?>" min="2000" max="2100"></div>
+        <div class="field"><label>Montant (€)</label><input name="amount" inputmode="decimal" required placeholder="ex. 312,50"></div>
+        <div class="field"><label id="rec-label">dont récupérable sur le locataire (€)</label><input name="recoverable" id="cost-rec" inputmode="decimal" placeholder="0"></div>
+        <div class="field"><label>Libellé (optionnel)</label><input name="label" placeholder="ex. Appel T1 2026"></div>
+    </div>
+    <p class="hint" id="cost-help"></p>
+    <div class="field"><label>Note (optionnel)</label><input name="notes" maxlength="255"></div>
+    <button class="btn btn-primary">Ajouter</button>
+</form>
+<script>
+(function () {
+    var k = document.getElementById('cost-kind'), help = document.getElementById('cost-help'), rec = document.getElementById('cost-rec'),
+        lab = document.getElementById('rec-label'), d = document.getElementById('cost-date'), y = document.getElementById('cost-year');
+    function upd() {
+        help.textContent = k.options[k.selectedIndex].dataset.help || '';
+        rec.disabled = k.value === 'assurance';
+        lab.textContent = k.value === 'taxe_fonciere' ? 'dont TEOM — récupérable (€)' : 'dont récupérable sur le locataire (€)';
+    }
+    k.addEventListener('change', upd); upd();
+    d.addEventListener('change', function () { if (d.value) y.value = d.value.slice(0, 4); });
+})();
+</script>
+
+<?php
 $pid = (int) $property['id'];
 $docTypes = PropertyDocument::types();
 $allDocs = PropertyDocument::forProperty($pid);

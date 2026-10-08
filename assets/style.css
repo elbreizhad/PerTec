@@ -166,3 +166,15 @@ body.bare{display:flex;align-items:center;justify-content:center;min-height:100v
   .topbar .burger{display:block}
   .content{padding:1.1rem}
 }
+
+/* Bilan annuel */
+td .neg, span.neg{color:var(--red)}
+table tr.total td{border-top:2px solid var(--ink);font-weight:700}
+@media print{
+  .sidebar,.side-nav,.topbar,.burger,.backdrop,.actions select,.actions .btn,form.card{display:none!important}
+  .content{margin:0!important;padding:0!important}
+  body{background:#fff}
+  .card,.stat{box-shadow:none;border:1px solid #ddd}
+}
+td.num{white-space:nowrap}
+.side-bottom .ico{width:20px;height:20px;flex-shrink:0;color:#8ea0c0;display:inline-flex}
