@@ -31,6 +31,9 @@ $menu = [
     ['/biens', 'Biens',           'home',      $biensChildren],
     ['/baux',  'Locations',       'file',      [['/locataires', 'Locataires'], ['/baux', 'Baux'], ['/loyers', 'Loyers & quittances']]],
     ['/bilan', 'Finances',        'chart',     [['/bilan', 'Bilan'], ['/projection', 'Projection'], ['/fiscalite', 'Fiscalité LMNP']]],
+    ['/parametres', 'Paramètres', 'gear',      [['/parametres#coordonnees', 'Coordonnées & IRL'], ['/parametres#signature', 'Signature'],
+                                                ['/parametres#emails', 'Envoi des emails'], ['/parametres#modele-email', 'Modèle d\'email'],
+                                                ['/parametres#motdepasse', 'Mot de passe']]],
 ];
 /** Lien actif : correspondance exacte, ou préfixe (sauf liens « exacts »). */
 $isActive = function (string $href, bool $exact = false) use ($cur): bool {
@@ -45,7 +48,7 @@ $isActive = function (string $href, bool $exact = false) use ($cur): bool {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e(App::config('app')['name']) ?></title>
-    <link rel="stylesheet" href="<?= url('/assets/style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/assets/style.css') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -57,23 +60,27 @@ $isActive = function (string $href, bool $exact = false) use ($cur): bool {
             <div class="side-name">PerTec</div>
             <div class="side-mail"><?= e($u['username'] ?? 'Gestion locative') ?></div>
         </div>
-        <nav class="side-nav">
+        <nav class="side-nav" id="side-nav">
             <?php foreach ($menu as [$href, $label, $ico, $children]):
                 if (!$children): ?>
-                <a href="<?= url($href) ?>"<?= $isActive($href) ? ' class="active"' : '' ?>><?= $icons[$ico] ?><span><?= $label ?></span></a>
+                <a class="side-link<?= $isActive($href) ? ' active' : '' ?>" href="<?= url($href) ?>"><?= $icons[$ico] ?><span><?= $label ?></span></a>
             <?php else:
                 $groupActive = false;
                 foreach ($children as $c) if ($isActive($c[0], $c[2] ?? false)) $groupActive = true; ?>
-                <details class="side-group"<?= $groupActive ? ' open' : '' ?>>
-                    <summary class="<?= $groupActive ? 'active' : '' ?>"><?= $icons[$ico] ?><span><?= $label ?></span><span class="chev">›</span></summary>
+                <details class="side-group<?= $groupActive ? ' current' : '' ?>"<?= $groupActive ? ' open' : '' ?>>
+                    <summary><?= $icons[$ico] ?><span class="side-label"><?= $label ?></span>
+                        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></summary>
                     <div class="side-sub">
                     <?php foreach ($children as $c):
-                        [$chref, $clabel] = $c; $cact = $isActive($chref, $c[2] ?? false); ?>
-                        <a href="<?= url($chref) ?>"<?= $cact ? ' class="active"' : '' ?>><?= e($clabel) ?></a>
+                        [$chref, $clabel] = $c;
+                        $anchor = str_contains($chref, '#');
+                        $cact = !$anchor && $isActive($chref, $c[2] ?? false);
+                        $link = $anchor ? url(strtok($chref, '#')) . '#' . substr($chref, strpos($chref, '#') + 1) : url($chref); ?>
+                        <a href="<?= $link ?>" title="<?= e($clabel) ?>"<?= $cact ? ' class="active"' : '' ?><?= $anchor ? ' data-anchor="' . e(substr($chref, strpos($chref, '#') + 1)) . '"' : '' ?>><?= e($clabel) ?></a>
                         <?php if (!empty($c[3])): ?>
                             <div class="side-sub2">
-                            <?php foreach ($c[3] as [$thref, $tlabel]): ?>
-                                <a href="<?= url(strtok($thref, '#')) . '#' . substr($thref, strpos($thref, '#') + 1) ?>" data-tab-link="<?= e(substr($thref, strpos($thref, '#') + 1)) ?>"><?= e($tlabel) ?></a>
+                            <?php foreach ($c[3] as [$thref, $tlabel]): $tid = substr($thref, strpos($thref, '#') + 1); ?>
+                                <a href="<?= url(strtok($thref, '#')) . '#' . $tid ?>" data-tab-link="<?= e($tid) ?>"><?= e($tlabel) ?></a>
                             <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -83,7 +90,6 @@ $isActive = function (string $href, bool $exact = false) use ($cur): bool {
             <?php endif; endforeach; ?>
         </nav>
         <div class="side-bottom">
-            <a href="<?= url('/parametres') ?>"<?= $isActive('/parametres') ? ' class="active"' : '' ?>><?= $icons['gear'] ?><span>Paramètres</span></a>
             <a href="<?= url('/logout') ?>"><?= $icons['logout'] ?><span>Déconnexion</span></a>
         </div>
     </aside>
@@ -112,6 +118,26 @@ $isActive = function (string $href, bool $exact = false) use ($cur): bool {
 
     <div class="backdrop" onclick="document.body.classList.remove('nav-open')"></div>
 </div>
-<script src="<?= url('/assets/tabs.js') ?>"></script>
+<script src="<?= asset('/assets/tabs.js') ?>"></script>
+<script>
+// Menu en accordéon : un seul groupe ouvert à la fois.
+(function () {
+    var groups = document.querySelectorAll('#side-nav .side-group');
+    groups.forEach(function (g) {
+        g.querySelector('summary').addEventListener('click', function (e) {
+            if (g.open) return; // fermeture : comportement normal
+            groups.forEach(function (o) { if (o !== g) o.open = false; });
+        });
+    });
+    // Ancres du menu (ex. Paramètres) : surligne la rubrique de l'URL courante.
+    function mark() {
+        var h = location.hash.slice(1);
+        document.querySelectorAll('#side-nav [data-anchor]').forEach(function (a) {
+            a.classList.toggle('active', !!h && a.dataset.anchor === h && a.pathname === location.pathname);
+        });
+    }
+    window.addEventListener('hashchange', mark); mark();
+})();
+</script>
 </body>
 </html>

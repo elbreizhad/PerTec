@@ -12,7 +12,7 @@ if ($public): ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signature du bail</title>
-    <link rel="stylesheet" href="<?= url('/assets/style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/assets/style.css') ?>">
 </head>
 <body style="background:#f3f4f6">
 <main style="max-width:900px;margin:0 auto;padding:1rem">

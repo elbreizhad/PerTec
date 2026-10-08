@@ -3,7 +3,7 @@ $s = $settings;
 $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
 <h1>Paramètres</h1>
 
-<form method="post" action="<?= url('/parametres') ?>">
+<form method="post" action="<?= url('/parametres') ?>" id="coordonnees">
     <?= csrf_field() ?>
     <fieldset>
         <legend>Coordonnées du bailleur</legend>
@@ -37,14 +37,16 @@ $v = fn($k) => e((string) ($s[$k] ?? '')); ?>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
 </form>
 
+<div id="signature">
 <?php if (!empty($s['landlord_signature'])): ?>
     <div class="card mt"><strong>Signature actuelle</strong><br>
         <img src="<?= e($s['landlord_signature']) ?>" alt="Signature" style="max-height:80px;margin-top:.4rem">
     </div>
 <?php endif; ?>
 <?= render_template('partials/signature_pad', ['signature' => $s['landlord_signature'] ?? null, 'back' => '/parametres']) ?>
+</div>
 
-<form method="post" action="<?= url('/parametres/email') ?>" class="mt">
+<form method="post" action="<?= url('/parametres/email') ?>" class="mt" id="emails">
     <?= csrf_field() ?>
     <fieldset>
         <legend>Envoi des emails (quittances)</legend>
@@ -140,7 +142,7 @@ $fromAddr   = trim((string) ($s['mail_from'] ?? '')) ?: trim((string) ($s['landl
 })();
 </script>
 
-<form method="post" action="<?= url('/parametres/motdepasse') ?>" class="mt">
+<form method="post" action="<?= url('/parametres/motdepasse') ?>" class="mt" id="motdepasse">
     <?= csrf_field() ?>
     <fieldset>
         <legend>Changer le mot de passe</legend>

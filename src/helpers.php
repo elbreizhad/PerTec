@@ -15,6 +15,13 @@ function url(string $path = ''): string
     return $base . ($path === '/' ? '/' : rtrim($path, '/'));
 }
 
+/** URL d'un fichier statique avec sa date de modification : le navigateur recharge le fichier à chaque mise à jour. */
+function asset(string $path): string
+{
+    $file = __DIR__ . '/../' . ltrim($path, '/');
+    return url($path) . (is_file($file) ? '?v=' . filemtime($file) : '');
+}
+
 /** Redirection interne. */
 function redirect(string $path): never
 {

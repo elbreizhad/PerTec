@@ -899,7 +899,7 @@ App::get('/signature/{token}/contrat', function ($params) use ($publicLease) {
     $lease = $publicLease((string) $params['token']);
     $html = render_template(LeaseSignature::template($lease), ['lease' => $lease, 'settings' => Setting::all()]);
     echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
-        . '<link rel="stylesheet" href="' . url('/assets/print.css') . '"></head><body class="print-body"><div class="sheet">' . $html . '</div></body></html>';
+        . '<link rel="stylesheet" href="' . asset('/assets/print.css') . '"></head><body class="print-body"><div class="sheet">' . $html . '</div></body></html>';
 });
 
 App::get('/signature/{token}/pdf', function ($params) use ($publicLease, $sendFile) {

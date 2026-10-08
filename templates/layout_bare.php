@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e(App::config('app')['name']) ?></title>
-    <link rel="stylesheet" href="<?= url('/assets/style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/assets/style.css') ?>">
 </head>
 <body class="bare">
 <div class="auth-box">
