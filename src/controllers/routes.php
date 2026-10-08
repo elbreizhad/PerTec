@@ -276,6 +276,18 @@ App::post('/baux/{id}/delete', function ($params) {
     redirect('/baux');
 });
 
+// Enregistrer l'inventaire du mobilier (annexe 1 du bail meublé)
+App::post('/baux/{id}/inventaire', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $lease = Lease::find((int) $params['id']);
+    if ($lease) {
+        Inventory::save($lease, (array) post('present', []), (array) post('inv_notes', []), (array) post('inv_label', []));
+        flash('Inventaire enregistré : il apparaît coché dans l\'annexe 1 du contrat.');
+    }
+    redirect('/baux/' . (int) $params['id'] . '#inventaire');
+});
+
 // Enregistrer la checklist de conformité d'un bail
 App::post('/baux/{id}/checklist', function ($params) {
     Auth::requireLogin();

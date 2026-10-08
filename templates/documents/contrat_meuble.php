@@ -18,7 +18,6 @@ $bienAdresse = trim(($l['address'] ?? '') . ', ' . ($l['postal_code'] ?? '') . '
 $loyerCC = (float)$l['rent_amount'] + (float)$l['charges_amount'];
 $ville = $s['signature_city'] ?? ($s['landlord_city'] ?? '');
 $sigDate = $l['signature_date'] ?: date('Y-m-d');
-$furnitureExtra = array_filter(array_map('trim', explode("\n", (string) ($l['furniture_extra'] ?? ''))));
 
 // Mode de charges retenu (une seule formulation, sans ambiguïté). Art. 23 (provisions) / art. 25-9 (forfait meublé).
 $forfait = ($l['charge_type'] ?? 'provisions') === 'forfait';
@@ -40,19 +39,7 @@ $dureeBail = dureeBail($l['start_date'], $finBail);
 $artNum = 1;
 
 // Inventaire du mobilier obligatoire (décret n° 2015-981 du 31 juillet 2015)
-$mobilierObligatoire = [
-    'Literie comprenant couette ou couverture',
-    'Dispositif d\'occultation des fenêtres dans les chambres (volets ou rideaux)',
-    'Plaques de cuisson',
-    'Four ou four à micro-ondes',
-    'Réfrigérateur et congélateur (ou compartiment à -6 °C)',
-    'Vaisselle nécessaire à la prise des repas',
-    'Ustensiles de cuisine',
-    'Table et sièges',
-    'Étagères de rangement',
-    'Luminaires',
-    'Matériel d\'entretien ménager adapté au logement',
-];
+$inventaire = Inventory::rows($l); // annexe 1 : éléments cochés dans l'application
 ?>
 <h1>CONTRAT DE LOCATION MEUBLÉE</h1>
 <p class="doc-sub">À usage de résidence principale — Location meublée (LMNP)<br>
@@ -190,41 +177,37 @@ et la <strong>notice d'information</strong> relative aux droits et obligations d
 <p class="article"><?= nl2br(e($l['notes'])) ?></p>
 <?php endif; ?>
 
+<div class="keep">
+<p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($sigDate) ?>, en deux exemplaires originaux.</p>
 <div class="doc-sign">
     <div class="sign-box"><p>Le bailleur</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
     <div class="sign-box"><p>Le locataire</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
 </div>
-<p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($sigDate) ?>, en deux exemplaires originaux.</p>
+</div>
 
 <div style="page-break-before:always"></div>
 <h1>ANNEXE 1 — INVENTAIRE DU MOBILIER</h1>
 <p class="doc-sub">Éléments d'ameublement obligatoires (décret n° 2015-981 du 31 juillet 2015)</p>
-<table class="doc-amounts">
-    <thead><tr><th style="text-align:left">Élément</th><th>Présent</th><th>État / observations</th></tr></thead>
+<?php $cb = fn(bool $on) => '<span class="cb">' . ($on ? 'X' : '&nbsp;') . '</span>'; ?>
+<table class="doc-amounts inventory">
+    <thead><tr><th>Élément</th><th class="col-present">Présent</th><th class="col-etat">État / observations</th></tr></thead>
     <tbody>
-    <?php foreach ($mobilierObligatoire as $item): ?>
+    <?php foreach ($inventaire as $it): ?>
         <tr>
-            <td><?= e($item) ?></td>
-            <td class="center">☐ Oui ☐ Non</td>
-            <td>______________________</td>
+            <td><?= $it['free'] ? ($it['label'] !== '' ? e($it['label']) : 'Autre (à préciser) : ________________') : e($it['label']) ?></td>
+            <td class="col-present"><?= $cb($it['present'] === 'oui') ?> Oui&nbsp;&nbsp;<?= $cb($it['present'] === 'non') ?> Non</td>
+            <td class="col-etat"><?= $it['notes'] !== '' ? e($it['notes']) : '<span class="blank">&nbsp;</span>' ?></td>
         </tr>
     <?php endforeach; ?>
-    <?php foreach ($furnitureExtra as $item): ?>
-        <tr>
-            <td><?= e($item) ?></td>
-            <td class="center">☐ Oui ☐ Non</td>
-            <td>______________________</td>
-        </tr>
-    <?php endforeach; ?>
-        <tr><td>Autre (à préciser) : ____________________</td><td class="center">☐ Oui ☐ Non</td><td>______________________</td></tr>
-        <tr><td>Autre (à préciser) : ____________________</td><td class="center">☐ Oui ☐ Non</td><td>______________________</td></tr>
     </tbody>
 </table>
+<div class="keep">
 <p class="mention">Le logement meublé doit comporter au minimum l'ensemble des éléments ci-dessus, en nombre suffisant
 et en bon état de fonctionnement, pour permettre au locataire d'y vivre normalement avec ses seuls effets personnels.
-<br><span class="small">Les cases « Présent » et la colonne « État / observations » sont renseignées à la main lors de l'état des lieux d'entrée.</span></p>
+<br><span class="small">Les cases non cochées et les observations vides sont complétées à la main lors de l'état des lieux d'entrée.</span></p>
 
 <div class="doc-sign">
     <div class="sign-box"><p>Le bailleur</p><div class="line">Signature</div></div>
     <div class="sign-box"><p>Le locataire</p><div class="line">Signature</div></div>
+</div>
 </div>

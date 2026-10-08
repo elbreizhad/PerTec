@@ -35,3 +35,21 @@ p.article { margin: 7px 0; text-align: justify; }
 
 .mt { margin-top: 12px; }
 .no-print { display: none; }
+
+/* --- Sauts de page --- */
+/* Un titre n'est jamais laissé seul en bas de page : il suit son contenu. */
+h1, h2, h3 { page-break-after: avoid; page-break-inside: avoid; }
+/* Paragraphes : pas de ligne isolée en haut ou en bas de page. */
+p, li { orphans: 3; widows: 3; }
+li, tr { page-break-inside: avoid; }
+/* Blocs insécables (signatures + « Fait à », mentions de fin d'annexe). */
+.keep, .doc-sign { page-break-inside: avoid; }
+
+/* --- Inventaire (annexe 1) --- */
+.inventory td { padding: 4px 7px; vertical-align: middle; }
+.inventory .col-present { white-space: nowrap; width: 105px; text-align: center; }
+.inventory .col-etat { width: 34%; }
+.inventory .blank { display: block; border-bottom: 1px dotted #777; height: 11px; }
+.cb { display: inline-block; width: 11px; height: 11px; border: 1px solid #333; margin-right: 2px;
+      font-size: 9px; line-height: 9px; font-weight: bold; text-align: center; vertical-align: middle;
+      font-family: "DejaVu Sans", sans-serif; }

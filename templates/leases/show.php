@@ -111,6 +111,47 @@ $checked    = Checklist::checkedKeys((int) $l['id']);
 [$done, $total] = Checklist::progress((int) $l['id'], $l['lease_type']);
 $pct = $total > 0 ? round($done / $total * 100) : 0;
 ?>
+<?php if ($l['lease_type'] === 'meuble'):
+    $invRows = Inventory::rows($l);
+    [$invDone, $invTotal] = Inventory::progress($invRows); ?>
+<h2 id="inventaire">Inventaire du mobilier (annexe 1)</h2>
+<p class="muted small">Cochez la présence de chaque élément et notez son état (à faire lors de l'état des lieux d'entrée).
+    L'annexe 1 du contrat est imprimée avec vos réponses ; les lignes non renseignées restent à cocher à la main.
+    — <?= $invDone ?>/<?= $invTotal ?> renseigné(s)</p>
+<form method="post" action="<?= url('/baux/'.$l['id'].'/inventaire') ?>" class="card">
+    <?= csrf_field() ?>
+    <div class="table-wrap"><table>
+        <thead><tr><th>Élément</th><th style="white-space:nowrap">Présent</th><th>État / observations</th></tr></thead>
+        <tbody>
+        <?php foreach ($invRows as $r): $k = e($r['key']); ?>
+            <tr>
+                <td><?php if ($r['free']): ?>
+                        <input name="inv_label[<?= $k ?>]" value="<?= e($r['label']) ?>" placeholder="Autre élément (à préciser)">
+                    <?php else: ?><?= e($r['label']) ?><?php endif; ?></td>
+                <td style="white-space:nowrap">
+                    <?php foreach (['oui' => 'Oui', 'non' => 'Non'] as $v => $lbl): ?>
+                        <label style="display:inline-flex;align-items:center;gap:.25rem;margin-right:.6rem;font-weight:400">
+                            <input type="radio" name="present[<?= $k ?>]" value="<?= $v ?>" <?= $r['present'] === $v ? 'checked' : '' ?> style="width:auto"> <?= $lbl ?>
+                        </label>
+                    <?php endforeach; ?>
+                    <?php if ($r['present'] !== null): ?>
+                        <label style="display:inline-flex;align-items:center;gap:.25rem;font-weight:400" class="muted small">
+                            <input type="radio" name="present[<?= $k ?>]" value="" style="width:auto"> effacer
+                        </label>
+                    <?php endif; ?>
+                </td>
+                <td><input name="inv_notes[<?= $k ?>]" value="<?= e($r['notes']) ?>" placeholder="ex. bon état, neuf, rayure…"></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table></div>
+    <div class="actions mt">
+        <button class="btn btn-primary">Enregistrer l'inventaire</button>
+        <button type="button" class="btn" onclick="this.form.querySelectorAll('input[type=radio][value=oui]').forEach(function(r){r.checked=true})">Tout cocher « Oui »</button>
+    </div>
+</form>
+<?php endif; ?>
+
 <h2>Checklist de conformité</h2>
 <p class="muted small">Vérifiez que tout est en règle côté bailleur et que le locataire a bien fourni toutes les pièces.</p>
 

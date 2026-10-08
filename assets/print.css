@@ -24,6 +24,12 @@ body.print-body{font-family:'Times New Roman',Georgia,serif;color:#111;backgroun
 .doc-sign .signature-img + .line{margin-top:.2rem}
 .mention{font-size:.85rem;color:#333;margin-top:2rem}
 p.article{margin:.6rem 0}
+.inventory .col-present{white-space:nowrap;text-align:center}
+.inventory .blank{display:block;border-bottom:1px dotted #777;height:1em}
+.cb{display:inline-block;width:.8em;height:.8em;line-height:.8em;border:1px solid #333;font:bold .65em sans-serif;text-align:center;vertical-align:middle;margin-right:2px}
+h1,h2,h3{break-after:avoid;page-break-after:avoid}
+li,tr,.keep,.doc-sign{break-inside:avoid;page-break-inside:avoid}
+p,li{orphans:3;widows:3}
 @media print{
   .no-print{display:none!important}
   body.print-body{background:#fff}
