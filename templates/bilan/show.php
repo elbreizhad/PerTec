@@ -15,6 +15,12 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
     </form>
 </div>
 
+<?php $per = $b['period']; if ($per['from']): ?>
+    <p class="muted">Période : du <?= fdate($per['from']) ?> au <?= fdate($per['to']) ?>
+        <?= $per['to_date'] ? '— <strong>année en cours, montants à date</strong> (les loyers et échéances à venir ne sont pas comptés)' : '' ?></p>
+<?php else: ?>
+    <div class="card empty">Ce bien n'était pas encore détenu en <?= $year ?>.</div>
+<?php endif; ?>
 <?php if ($b['warnings']): ?>
     <div class="flash flash-error small"><?= implode('<br>', array_map('e', $b['warnings'])) ?></div>
 <?php endif; ?>

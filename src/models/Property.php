@@ -6,7 +6,7 @@ class Property
     public const FIELDS = [
         'label','type','address','postal_code','city','surface_m2','rooms',
         'purchase_date','purchase_price','notary_fees','agency_fees','works_cost',
-        'other_costs','loan_amount','loan_rate','loan_duration_months','loan_monthly',
+        'other_costs','loan_amount','loan_rate','loan_duration_months','loan_monthly','loan_start_date',
         'property_tax','insurance_year','charges_year','mgmt_fees_pct',
         'land_share_pct','amort_years_building','amort_years_furniture',
         'amort_years_works','accountant_fees','tax_regime','notes',
@@ -36,7 +36,7 @@ class Property
             $v = post($f);
             if (in_array($f, $numFields, true)) {
                 $data[$f] = num($v);
-            } elseif ($f === 'purchase_date') {
+            } elseif ($f === 'purchase_date' || $f === 'loan_start_date') {
                 $data[$f] = $v ?: null;
             } elseif ($f === 'tax_regime') {
                 $data[$f] = $v === 'micro' ? 'micro' : 'reel';

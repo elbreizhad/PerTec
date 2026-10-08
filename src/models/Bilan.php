@@ -12,9 +12,30 @@ declare(strict_types=1);
  */
 class Bilan
 {
+    /**
+     * Période couverte par le bilan : de l'achat (s'il a lieu dans l'année) au 31/12,
+     * ou jusqu'à aujourd'hui pour l'année en cours. null si le bien n'était pas détenu.
+     */
+    public static function period(array $p, int $year): ?array
+    {
+        $from = sprintf('%04d-01-01', $year);
+        $to   = sprintf('%04d-12-31', $year);
+        if (!empty($p['purchase_date']) && $p['purchase_date'] > $from) $from = substr($p['purchase_date'], 0, 10);
+        $today = date('Y-m-d');
+        $partial = false;
+        if ($today < $to) { $to = $today; $partial = true; }
+        if ($from > $to) return null;
+        $days = (int) ((strtotime($to) - strtotime($from)) / 86400) + 1;
+        $yearDays = (int) date('z', mktime(0, 0, 0, 12, 31, $year)) + 1;
+        return ['from' => $from, 'to' => $to, 'to_date' => $partial, 'ratio' => min(1.0, $days / $yearDays)];
+    }
+
     public static function compute(array $p, int $year): array
     {
         $pid = (int) $p['id'];
+        // Période réellement couverte : les estimations annuelles sont proratisées dessus.
+        $period = self::period($p, $year) ?? ['from' => null, 'to' => null, 'to_date' => false, 'ratio' => 0.0];
+        $ratio = $period['ratio'];
 
         // --- Encaissements de l'année (date de paiement) ---
         $loyers = 0.0; $provisionsCash = 0.0;
@@ -46,14 +67,19 @@ class Bilan
                 ? ['amount' => $real[$key]['amount'], 'recoverable' => $real[$key]['recoverable'], 'estimated' => false]
                 : ['amount' => $estimate, 'recoverable' => 0.0, 'estimated' => $estimate > 0];
         };
+        // Emprunt : échéances réellement passées sur la période (à date pour l'année en cours).
+        $untilMonth = $period['to'] ? (int) substr($period['to'], 5, 2) : 0;
+        $loan = $untilMonth > 0 ? Lmnp::loanForYear($p, $year, $untilMonth) : ['payments' => 0.0, 'interest' => 0.0, 'months' => 0];
+
         $charges = [
-            'copro'         => ['label' => 'Charges de copropriété (appels + régularisation)'] + $line('copro', (float) $p['charges_year']),
-            'taxe_fonciere' => ['label' => 'Taxe foncière'] + $line('taxe_fonciere', (float) $p['property_tax']),
-            'assurance'     => ['label' => 'Assurance propriétaire (PNO)'] + $line('assurance', (float) $p['insurance_year']),
+            'copro'         => ['label' => 'Charges de copropriété (appels + régularisation)'] + $line('copro', round((float) $p['charges_year'] * $ratio, 2)),
+            'taxe_fonciere' => ['label' => 'Taxe foncière'] + $line('taxe_fonciere', round((float) $p['property_tax'] * $ratio, 2)),
+            'assurance'     => ['label' => 'Assurance propriétaire (PNO)'] + $line('assurance', round((float) $p['insurance_year'] * $ratio, 2)),
             'autre'         => ['label' => 'Autres charges'] + $line('autre', 0.0),
             'gestion'       => ['label' => 'Frais de gestion (' . rtrim(rtrim(number_format((float) $p['mgmt_fees_pct'], 2, ',', ''), '0'), ',') . ' % des loyers)',
                                 'amount' => $loyers * (float) $p['mgmt_fees_pct'] / 100, 'recoverable' => 0.0, 'estimated' => false],
-            'interets'      => ['label' => 'Intérêts d\'emprunt', 'amount' => Lmnp::loanInterestForYear($p, $year), 'recoverable' => 0.0, 'estimated' => false],
+            'interets'      => ['label' => 'Intérêts d\'emprunt (' . $loan['months'] . ' échéance' . ($loan['months'] > 1 ? 's' : '') . ')',
+                                'amount' => $loan['interest'], 'recoverable' => 0.0, 'estimated' => false],
             'depenses'      => ['label' => 'Autres dépenses déductibles (fiche du bien)',
                                 'amount' => Expense::totalByCategories($pid, Expense::DEDUCTIBLE, $year), 'recoverable' => 0.0, 'estimated' => false],
         ];
@@ -62,10 +88,9 @@ class Bilan
         // --- Investissements de l'année (travaux, mobilier, équipement) ---
         $investissements = Expense::totalByCategories($pid, array_merge(Expense::AMORT_WORKS, Expense::AMORT_FURNITURE), $year);
 
-        // --- Emprunt : mensualités de l'année (capital + intérêts + assurance) ---
-        $loanActive = (float) $p['loan_monthly'] > 0 && !empty($p['purchase_date']) && (int) substr($p['purchase_date'], 0, 4) <= $year;
-        $mensualites = $loanActive ? self::loanPaymentsForYear($p, $year) : 0.0;
-        $capital = max(0.0, $mensualites - $charges['interets']['amount']);
+        // --- Emprunt : mensualités versées (capital + intérêts + assurance) ---
+        $mensualites = $loan['payments'];
+        $capital = max(0.0, $mensualites - $loan['interest']);
 
         $resultat = $encaissements - $chargesTotal;                       // hors amortissements et hors capital remboursé
         $cashflow = $encaissements - $chargesTotal - $capital - $investissements;
@@ -75,7 +100,8 @@ class Bilan
         $copro = $real['copro'];
         $warnings = [];
         foreach ($charges as $k => $c) {
-            if ($c['estimated']) $warnings[] = $c['label'] . ' : montant réel non saisi, estimation de la fiche du bien utilisée.';
+            if ($c['estimated']) $warnings[] = $c['label'] . ' : montant réel non saisi, estimation de la fiche du bien utilisée'
+                . ($ratio < 0.999 ? ' (proratisée : ' . round($ratio * 100) . ' % de l\'année)' : '') . '.';
         }
         if ($copro !== null && $copro['amount'] > 0 && $copro['recoverable'] == 0.0) {
             $warnings[] = 'Charges de copropriété : part récupérable non renseignée (régularisation incomplète).';
@@ -86,6 +112,8 @@ class Bilan
 
         return [
             'year'            => $year,
+            'period'          => $period,
+            'loan_months'     => $loan['months'],
             'loyers'          => $loyers,
             'provisions_cash' => $provisionsCash,
             'encaissements'   => $encaissements,
@@ -105,21 +133,6 @@ class Bilan
             ],
             'warnings'        => $warnings,
         ];
-    }
-
-    /** Mensualités payées dans l'année (mois écoulés depuis l'achat, durée du prêt). */
-    private static function loanPaymentsForYear(array $p, int $year): float
-    {
-        $start = new DateTime(substr($p['purchase_date'], 0, 7) . '-01');
-        $months = 0;
-        $max = (int) ($p['loan_duration_months'] ?? 0) ?: 600;
-        for ($m = 1; $m <= 12; $m++) {
-            $d = new DateTime(sprintf('%04d-%02d-01', $year, $m));
-            if ($d < $start) continue;
-            $elapsed = ((int) $d->format('Y') - (int) $start->format('Y')) * 12 + (int) $d->format('n') - (int) $start->format('n');
-            if ($elapsed < $max) $months++;
-        }
-        return $months * (float) $p['loan_monthly'];
     }
 
     /** Bilan de tous les biens + totaux. */

@@ -36,35 +36,53 @@ class Lmnp
         return $sum;
     }
 
-    /**
-     * Intérêts d'emprunt payés durant l'année (tableau d'amortissement
-     * calculé à partir de la date d'achat, du capital, du taux et de la mensualité).
-     */
-    public static function loanInterestForYear(array $p, int $year): float
+    /** 1er jour du mois de la première échéance : date saisie, sinon le mois qui suit l'achat. */
+    public static function loanStart(array $p): ?DateTime
     {
+        if (!empty($p['loan_start_date'])) return new DateTime(substr($p['loan_start_date'], 0, 7) . '-01');
+        if (empty($p['purchase_date'])) return null;
+        return (new DateTime(substr($p['purchase_date'], 0, 7) . '-01'))->modify('+1 month');
+    }
+
+    /**
+     * Échéances payées sur une année (tableau d'amortissement à mensualité constante) :
+     * ['payments' => total versé, 'interest' => intérêts, 'months' => nombre d'échéances].
+     * $untilMonth limite le calcul aux mois 1..$untilMonth (année en cours, à date).
+     */
+    public static function loanForYear(array $p, int $year, int $untilMonth = 12): array
+    {
+        $out = ['payments' => 0.0, 'interest' => 0.0, 'months' => 0];
         $amount  = (float) $p['loan_amount'];
         $monthly = (float) $p['loan_monthly'];
         $rate    = (float) $p['loan_rate'] / 100 / 12;
-        if ($amount <= 0 || $monthly <= 0 || $rate <= 0 || empty($p['purchase_date'])) {
-            return 0.0;
-        }
-        $startYear  = (int) substr($p['purchase_date'], 0, 4);
-        $startMonth = (int) substr($p['purchase_date'], 5, 2) ?: 1;
-        $maxMonths  = (int) $p['loan_duration_months'] ?: 600;
+        $start   = self::loanStart($p);
+        if ($amount <= 0 || $monthly <= 0 || !$start) return $out;
+        $maxMonths = (int) $p['loan_duration_months'] ?: 600;
 
         $balance = $amount;
-        $y = $startYear; $m = $startMonth;
-        $interestYear = 0.0;
+        $y = (int) $start->format('Y'); $m = (int) $start->format('n');
         for ($i = 0; $i < $maxMonths && $balance > 0.01; $i++) {
+            if ($y > $year || ($y === $year && $m > $untilMonth)) break;
             $interest  = $balance * $rate;
-            $principal = $monthly - $interest;
-            if ($principal <= 0) break; // mensualité insuffisante
-            if ($y === $year) $interestYear += $interest;
-            $balance -= $principal;
+            $payment   = min($monthly, $balance + $interest);
+            if ($payment - $interest <= 0) break; // mensualité insuffisante
+            if ($y === $year) {
+                $out['payments'] += $payment;
+                $out['interest'] += $interest;
+                $out['months']++;
+            }
+            $balance -= $payment - $interest;
             if (++$m > 12) { $m = 1; $y++; }
-            if ($y > $year) break;
         }
-        return round($interestYear, 2);
+        $out['payments'] = round($out['payments'], 2);
+        $out['interest'] = round($out['interest'], 2);
+        return $out;
+    }
+
+    /** Intérêts d'emprunt payés durant l'année. */
+    public static function loanInterestForYear(array $p, int $year): float
+    {
+        return self::loanForYear($p, $year)['interest'];
     }
 
     /** Bases amortissables. */
@@ -96,10 +114,18 @@ class Lmnp
         // Montants réels de l'année (appels de charges, avis de taxe foncière…) s'ils sont saisis,
         // sinon estimations de la fiche du bien.
         $real = PropertyCost::totals((int)$p['id'], $year);
+        // Année d'acquisition : estimations annuelles proratisées à partir de la date d'achat.
+        $ratio = 1.0;
+        if (!empty($p['purchase_date']) && (int) substr($p['purchase_date'], 0, 4) === $year) {
+            $yearDays = (int) date('z', mktime(0, 0, 0, 12, 31, $year)) + 1;
+            $ratio = ((int) date('z', mktime(0, 0, 0, 12, 31, $year)) - (int) date('z', strtotime($p['purchase_date'])) + 1) / $yearDays;
+        } elseif (!empty($p['purchase_date']) && (int) substr($p['purchase_date'], 0, 4) > $year) {
+            $ratio = 0.0;
+        }
         $charges = [
-            'taxe_fonciere' => $real['taxe_fonciere']['amount'] ?? (float)$p['property_tax'],
-            'assurance'     => $real['assurance']['amount'] ?? (float)$p['insurance_year'],
-            'charges_copro' => $real['copro']['amount'] ?? (float)$p['charges_year'],
+            'taxe_fonciere' => $real['taxe_fonciere']['amount'] ?? round((float)$p['property_tax'] * $ratio, 2),
+            'assurance'     => $real['assurance']['amount'] ?? round((float)$p['insurance_year'] * $ratio, 2),
+            'charges_copro' => $real['copro']['amount'] ?? round((float)$p['charges_year'] * $ratio, 2),
             'gestion'       => $mgmt,
             'interets'      => $interest,
             'comptable'     => (float)($p['accountant_fees'] ?? 0),

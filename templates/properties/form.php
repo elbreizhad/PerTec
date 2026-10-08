@@ -54,6 +54,8 @@ $action = $isEdit ? url('/biens/' . $p['id']) : url('/biens');
             <div class="field"><label>Taux annuel (%)</label><input name="loan_rate" value="<?= $val('loan_rate','0') ?>"></div>
             <div class="field"><label>Durée (mois)</label><input name="loan_duration_months" value="<?= $val('loan_duration_months','0') ?>"></div>
             <div class="field"><label>Mensualité (€, assurance incl.)</label><input name="loan_monthly" value="<?= $val('loan_monthly','0') ?>"></div>
+            <div class="field"><label>Date de la 1re échéance</label><input type="date" name="loan_start_date" value="<?= $val('loan_start_date') ?>">
+                <span class="hint">Vide = le mois qui suit l'achat. À renseigner en cas de différé.</span></div>
         </div>
     </fieldset>
 

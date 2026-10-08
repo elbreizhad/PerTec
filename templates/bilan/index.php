@@ -5,7 +5,8 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
 <div class="page-head">
     <div>
         <h1>Bilan annuel <?= $year ?></h1>
-        <p class="muted">Encaissements, charges réelles, résultat et cash-flow de chaque bien.</p>
+        <p class="muted">Encaissements, charges réelles, résultat et cash-flow de chaque bien.
+            <?= $year === (int) date('Y') ? '<br><strong>Année en cours : montants au ' . date('d/m/Y') . '</strong> (loyers et échéances à venir non comptés).' : '' ?></p>
     </div>
     <form method="get" action="<?= url('/bilan') ?>" class="actions">
         <select name="year" onchange="this.form.submit()">
@@ -32,7 +33,8 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
     <?php foreach ($rows as ['p' => $p, 'b' => $b]): ?>
         <tr>
             <td><a href="<?= url('/bilan/'.$p['id'].'?year='.$year) ?>"><?= e($p['label']) ?></a>
-                <?= $b['warnings'] ? ' <span class="badge badge-pending" title="' . e(implode("\n", $b['warnings'])) . '">estimations</span>' : '' ?></td>
+                <?= $b['warnings'] ? ' <span class="badge badge-pending" title="' . e(implode("\n", $b['warnings'])) . '">estimations</span>' : '' ?>
+                <?php if ($b['period']['from'] && $b['period']['from'] > $year . '-01-01'): ?><br><span class="small muted">depuis le <?= fdate($b['period']['from']) ?></span><?php endif; ?></td>
             <td class="num"><?= euros($b['encaissements']) ?></td>
             <td class="num"><?= euros($b['charges_total']) ?></td>
             <td class="num"><strong><?= $money($b['resultat']) ?></strong></td>
