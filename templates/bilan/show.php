@@ -1,15 +1,17 @@
-<?php /** @var array $property */ /** @var int $year */ /** @var array $b */ /** @var array $costs */
+<?php /** @var array $property */ /** @var int $year */ /** @var string $asOf */ /** @var array $b */ /** @var array $costs */
 $p = $property; $cy = (int) date('Y'); $r = $b['regul'];
 $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . '</span>';
 ?>
 <div class="page-head">
     <div>
-        <h1>Bilan <?= $year ?> — <?= e($p['label']) ?></h1>
-        <p class="muted"><a href="<?= url('/bilan?year='.$year) ?>">← Tous les biens</a> · <a href="<?= url('/biens/'.$p['id'].'?annee='.$year.'#charges') ?>">Saisir les charges réelles</a></p>
+        <h1>Bilan au <?= fdate($asOf) ?> — <?= e($p['label']) ?></h1>
+        <p class="muted"><a href="<?= url('/bilan?au='.$asOf) ?>">← Tous les biens</a> · <a href="<?= url('/biens/'.$p['id'].'?annee='.$year.'#charges') ?>">Saisir les charges réelles</a></p>
     </div>
-    <form method="get" action="<?= url('/bilan/'.$p['id']) ?>" class="actions">
-        <select name="year" onchange="this.form.submit()">
-            <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option <?= $y === $year ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
+    <form method="get" action="<?= url('/bilan/'.$p['id']) ?>" class="no-print" style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:flex-end">
+        <label class="small" style="font-weight:600;display:flex;align-items:center;gap:.4rem">Arrêté au
+            <input type="date" name="au" value="<?= e($asOf) ?>" onchange="this.form.submit()" style="width:auto"></label>
+        <select style="width:auto" onchange="location.href='<?= url('/bilan/'.$p['id']) ?>?year='+this.value" title="Fin d'année">
+            <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option value="<?= $y ?>" <?= $y === $year ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
         </select>
         <button type="button" class="btn" onclick="window.print()">🖨️ Imprimer</button>
     </form>
@@ -17,9 +19,9 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
 
 <?php $per = $b['period']; if ($per['from']): ?>
     <p class="muted">Période : du <?= fdate($per['from']) ?> au <?= fdate($per['to']) ?>
-        <?= $per['to_date'] ? '— <strong>année en cours, montants à date</strong> (les loyers et échéances à venir ne sont pas comptés)' : '' ?></p>
+        — seuls les loyers encaissés, les échéances de prêt passées et les charges datées jusqu'au <?= fdate($per['to']) ?> sont comptés.</p>
 <?php else: ?>
-    <div class="card empty">Ce bien n'était pas encore détenu en <?= $year ?>.</div>
+    <div class="card empty">Ce bien n'était pas encore détenu au <?= fdate($asOf) ?>.</div>
 <?php endif; ?>
 <?php if ($b['warnings']): ?>
     <div class="flash flash-error small"><?= implode('<br>', array_map('e', $b['warnings'])) ?></div>
@@ -72,6 +74,7 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
 </div>
 
 <h2>Détail des charges réelles saisies — <?= $year ?></h2>
+<p class="small muted">Les lignes datées après le <?= fdate($asOf) ?> apparaissent ici mais ne sont pas comptées dans le bilan.</p>
 <?php if (!$costs): ?>
     <div class="card empty">Aucune charge réelle saisie. <a href="<?= url('/biens/'.$p['id'].'?annee='.$year.'#charges') ?>">Saisir les appels de charges et la taxe foncière</a>.</div>
 <?php else: ?>

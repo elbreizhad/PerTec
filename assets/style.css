@@ -171,7 +171,7 @@ body.bare{display:flex;align-items:center;justify-content:center;min-height:100v
 td .neg, span.neg{color:var(--red)}
 table tr.total td{border-top:2px solid var(--ink);font-weight:700}
 @media print{
-  .sidebar,.side-nav,.topbar,.burger,.backdrop,.actions select,.actions .btn,form.card{display:none!important}
+  .sidebar,.side-nav,.topbar,.burger,.backdrop,.actions select,.actions .btn,form.card,.no-print{display:none!important}
   .content{margin:0!important;padding:0!important}
   body{background:#fff}
   .card,.stat{box-shadow:none;border:1px solid #ddd}

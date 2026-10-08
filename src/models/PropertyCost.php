@@ -76,13 +76,15 @@ class PropertyCost
     }
 
     /**
-     * Totaux réels d'une année par type : ['copro' => [amount, recoverable], 'taxe_fonciere' => …, …]
+     * Totaux réels d'une année par type (jusqu'à $until si fourni) : ['copro' => [amount, recoverable], 'taxe_fonciere' => …, …]
      * (« copro » regroupe appels + régularisation). null pour un type sans saisie.
      */
-    public static function totals(int $propertyId, int $year): array
+    public static function totals(int $propertyId, int $year, ?string $until = null): array
     {
         $out = ['copro' => null, 'taxe_fonciere' => null, 'assurance' => null, 'autre' => null];
         foreach (self::forProperty($propertyId, $year) as $c) {
+            // Bilan à date : les lignes datées après la date d'arrêté ne sont pas comptées.
+            if ($until !== null && !empty($c['cost_date']) && $c['cost_date'] > $until) continue;
             $k = str_starts_with($c['kind'], 'copro') ? 'copro' : $c['kind'];
             if (!array_key_exists($k, $out)) $k = 'autre';
             $out[$k] ??= ['amount' => 0.0, 'recoverable' => 0.0];

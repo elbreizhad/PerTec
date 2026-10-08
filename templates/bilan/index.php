@@ -1,16 +1,19 @@
-<?php /** @var int $year */ /** @var array $rows */ /** @var array $totals */
+<?php /** @var int $year */ /** @var string $asOf */ /** @var array $rows */ /** @var array $totals */
 $cy = (int) date('Y'); $t = $totals;
 $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . '</span>';
 ?>
 <div class="page-head">
     <div>
-        <h1>Bilan annuel <?= $year ?></h1>
+        <h1>Bilan au <?= fdate($asOf) ?></h1>
         <p class="muted">Encaissements, charges réelles, résultat et cash-flow de chaque bien.
-            <?= $year === (int) date('Y') ? '<br><strong>Année en cours : montants au ' . date('d/m/Y') . '</strong> (loyers et échéances à venir non comptés).' : '' ?></p>
+            <br>Du 1<sup>er</sup> janvier <?= $year ?> (ou de la date d'achat) au <strong><?= fdate($asOf) ?></strong> :
+            seuls les loyers encaissés, les échéances de prêt passées et les charges datées jusqu'à cette date sont comptés.</p>
     </div>
-    <form method="get" action="<?= url('/bilan') ?>" class="actions">
-        <select name="year" onchange="this.form.submit()">
-            <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option <?= $y === $year ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
+    <form method="get" action="<?= url('/bilan') ?>" class="no-print" style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:flex-end">
+        <label class="small" style="font-weight:600;display:flex;align-items:center;gap:.4rem">Arrêté au
+            <input type="date" name="au" value="<?= e($asOf) ?>" onchange="this.form.submit()" style="width:auto"></label>
+        <select style="width:auto" onchange="location.href='<?= url('/bilan') ?>?year='+this.value" title="Fin d'année">
+            <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option value="<?= $y ?>" <?= $y === $year ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
         </select>
         <button type="button" class="btn" onclick="window.print()">🖨️ Imprimer</button>
     </form>
@@ -32,7 +35,7 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
     <tbody>
     <?php foreach ($rows as ['p' => $p, 'b' => $b]): ?>
         <tr>
-            <td><a href="<?= url('/bilan/'.$p['id'].'?year='.$year) ?>"><?= e($p['label']) ?></a>
+            <td><a href="<?= url('/bilan/'.$p['id'].'?au='.$asOf) ?>"><?= e($p['label']) ?></a>
                 <?= $b['warnings'] ? ' <span class="badge badge-pending" title="' . e(implode("\n", $b['warnings'])) . '">estimations</span>' : '' ?>
                 <?php if ($b['period']['from'] && $b['period']['from'] > $year . '-01-01'): ?><br><span class="small muted">depuis le <?= fdate($b['period']['from']) ?></span><?php endif; ?></td>
             <td class="num"><?= euros($b['encaissements']) ?></td>

@@ -12,30 +12,37 @@ declare(strict_types=1);
  */
 class Bilan
 {
+    /** Date d'arrêté par défaut : aujourd'hui pour l'année en cours, sinon le 31/12. */
+    public static function defaultAsOf(int $year): string
+    {
+        return min(date('Y-m-d'), sprintf('%04d-12-31', $year));
+    }
+
     /**
-     * Période couverte par le bilan : de l'achat (s'il a lieu dans l'année) au 31/12,
-     * ou jusqu'à aujourd'hui pour l'année en cours. null si le bien n'était pas détenu.
+     * Période couverte par le bilan : du 1er janvier (ou de la date d'achat) à la date
+     * d'arrêté (aujourd'hui par défaut). null si le bien n'était pas encore détenu.
      */
-    public static function period(array $p, int $year): ?array
+    public static function period(array $p, int $year, ?string $asOf = null): ?array
     {
         $from = sprintf('%04d-01-01', $year);
-        $to   = sprintf('%04d-12-31', $year);
+        $end  = sprintf('%04d-12-31', $year);
         if (!empty($p['purchase_date']) && $p['purchase_date'] > $from) $from = substr($p['purchase_date'], 0, 10);
-        $today = date('Y-m-d');
-        $partial = false;
-        if ($today < $to) { $to = $today; $partial = true; }
+        $to = min($end, max(sprintf('%04d-01-01', $year), $asOf ?: self::defaultAsOf($year)));
+        $partial = $to < $end;
         if ($from > $to) return null;
         $days = (int) ((strtotime($to) - strtotime($from)) / 86400) + 1;
         $yearDays = (int) date('z', mktime(0, 0, 0, 12, 31, $year)) + 1;
         return ['from' => $from, 'to' => $to, 'to_date' => $partial, 'ratio' => min(1.0, $days / $yearDays)];
     }
 
-    public static function compute(array $p, int $year): array
+    public static function compute(array $p, int $year, ?string $asOf = null): array
     {
         $pid = (int) $p['id'];
-        // Période réellement couverte : les estimations annuelles sont proratisées dessus.
-        $period = self::period($p, $year) ?? ['from' => null, 'to' => null, 'to_date' => false, 'ratio' => 0.0];
+        // Période réellement couverte (jusqu'à la date d'arrêté) : tout est compté à cette date,
+        // et les estimations annuelles sont proratisées dessus.
+        $period = self::period($p, $year, $asOf) ?? ['from' => null, 'to' => null, 'to_date' => false, 'ratio' => 0.0];
         $ratio = $period['ratio'];
+        $until = $period['to'] ?? sprintf('%04d-01-00', $year); // rien n'est compté si le bien n'était pas détenu
 
         // --- Encaissements de l'année (date de paiement) ---
         $loyers = 0.0; $provisionsCash = 0.0;
@@ -44,15 +51,18 @@ class Bilan
         $forfait = false;
         $rented = false; // au moins un mois loué dans l'année
         $rows = Database::all(
-            "SELECT rp.amount_rent, rp.amount_charges, rp.paid_date, rp.period_year, rp.status, l.charge_type
+            "SELECT rp.amount_rent, rp.amount_charges, rp.paid_date, rp.period_year, rp.period_month, rp.status, l.charge_type
              FROM rent_payments rp JOIN leases l ON l.id = rp.lease_id WHERE l.property_id = ?",
             [$pid]
         );
         foreach ($rows as $r) {
             if ($r['status'] !== 'paid') continue;
-            $y = $r['paid_date'] ? (int) substr($r['paid_date'], 0, 4) : (int) $r['period_year'];
-            if ($y === $year) { $loyers += (float) $r['amount_rent']; $provisionsCash += (float) $r['amount_charges']; }
-            if ((int) $r['period_year'] === $year) {
+            $periodStart = sprintf('%04d-%02d-01', $r['period_year'], $r['period_month']);
+            $paid = $r['paid_date'] ? substr($r['paid_date'], 0, 10) : $periodStart;
+            // Encaissé dans l'année, au plus tard à la date d'arrêté.
+            if ((int) substr($paid, 0, 4) === $year && $paid <= $until) { $loyers += (float) $r['amount_rent']; $provisionsCash += (float) $r['amount_charges']; }
+            // Provisions des mois de l'année déjà commencés à la date d'arrêté (régularisation).
+            if ((int) $r['period_year'] === $year && $periodStart <= $until) {
                 $rented = true;
                 if (($r['charge_type'] ?? 'provisions') === 'forfait') $forfait = true;
                 else $provisionsYear += (float) $r['amount_charges'];
@@ -61,7 +71,7 @@ class Bilan
         $encaissements = $loyers + $provisionsCash;
 
         // --- Charges et impôts : réel si saisi, sinon estimation de la fiche du bien ---
-        $real = PropertyCost::totals($pid, $year);
+        $real = PropertyCost::totals($pid, $year, $until);
         $line = function (string $key, float $estimate) use ($real): array {
             return $real[$key] !== null
                 ? ['amount' => $real[$key]['amount'], 'recoverable' => $real[$key]['recoverable'], 'estimated' => false]
@@ -81,12 +91,12 @@ class Bilan
             'interets'      => ['label' => 'Intérêts d\'emprunt (' . $loan['months'] . ' échéance' . ($loan['months'] > 1 ? 's' : '') . ')',
                                 'amount' => $loan['interest'], 'recoverable' => 0.0, 'estimated' => false],
             'depenses'      => ['label' => 'Autres dépenses déductibles (fiche du bien)',
-                                'amount' => Expense::totalByCategories($pid, Expense::DEDUCTIBLE, $year), 'recoverable' => 0.0, 'estimated' => false],
+                                'amount' => self::expenses($pid, Expense::DEDUCTIBLE, $year, $until), 'recoverable' => 0.0, 'estimated' => false],
         ];
         $chargesTotal = array_sum(array_column($charges, 'amount'));
 
         // --- Investissements de l'année (travaux, mobilier, équipement) ---
-        $investissements = Expense::totalByCategories($pid, array_merge(Expense::AMORT_WORKS, Expense::AMORT_FURNITURE), $year);
+        $investissements = self::expenses($pid, array_merge(Expense::AMORT_WORKS, Expense::AMORT_FURNITURE), $year, $until);
 
         // --- Emprunt : mensualités versées (capital + intérêts + assurance) ---
         $mensualites = $loan['payments'];
@@ -135,13 +145,25 @@ class Bilan
         ];
     }
 
+    /** Dépenses de la fiche du bien datées entre le 1er janvier et la date d'arrêté. */
+    private static function expenses(int $pid, array $categories, int $year, string $until): float
+    {
+        $in = implode(',', array_fill(0, count($categories), '?'));
+        $row = Database::one(
+            "SELECT COALESCE(SUM(amount),0) AS t FROM property_expenses
+             WHERE property_id = ? AND category IN ($in) AND expense_date >= ? AND expense_date <= ?",
+            array_merge([$pid], $categories, [sprintf('%04d-01-01', $year), $until])
+        );
+        return (float) ($row['t'] ?? 0);
+    }
+
     /** Bilan de tous les biens + totaux. */
-    public static function all(int $year): array
+    public static function all(int $year, ?string $asOf = null): array
     {
         $rows = [];
         $tot = ['encaissements' => 0.0, 'charges_total' => 0.0, 'resultat' => 0.0, 'cashflow' => 0.0, 'regul' => 0.0, 'investissements' => 0.0, 'capital' => 0.0];
         foreach (Property::all() as $p) {
-            $b = self::compute($p, $year);
+            $b = self::compute($p, $year, $asOf);
             $rows[] = ['p' => $p, 'b' => $b];
             foreach (['encaissements', 'charges_total', 'resultat', 'cashflow', 'investissements', 'capital'] as $k) $tot[$k] += $b[$k];
             if ($b['regul']['applicable']) $tot['regul'] += $b['regul']['solde'];

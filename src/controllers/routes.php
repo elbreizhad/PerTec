@@ -954,21 +954,30 @@ App::post('/biens/{id}/couts/{cost}/delete', function ($params) {
     redirect('/biens/' . (int) $params['id'] . '?annee=' . (int) ($c['year'] ?? date('Y')) . '#charges');
 });
 
-App::get('/bilan', function () {
-    Auth::requireLogin();
+/** Date d'arrêté du bilan : ?au=AAAA-MM-JJ, sinon ?year=AAAA (aujourd'hui pour l'année en cours, 31/12 sinon). */
+$bilanDate = function (): array {
+    $au = (string) ($_GET['au'] ?? '');
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $au) && strtotime($au)) return [(int) substr($au, 0, 4), $au];
     $year = (int) ($_GET['year'] ?? date('Y'));
-    view('bilan/index', ['year' => $year] + Bilan::all($year));
+    return [$year, Bilan::defaultAsOf($year)];
+};
+
+App::get('/bilan', function () use ($bilanDate) {
+    Auth::requireLogin();
+    [$year, $asOf] = $bilanDate();
+    view('bilan/index', ['year' => $year, 'asOf' => $asOf] + Bilan::all($year, $asOf));
 });
 
-App::get('/bilan/{id}', function ($params) {
+App::get('/bilan/{id}', function ($params) use ($bilanDate) {
     Auth::requireLogin();
     $property = Property::find((int) $params['id']);
     if (!$property) redirect('/bilan');
-    $year = (int) ($_GET['year'] ?? date('Y'));
+    [$year, $asOf] = $bilanDate();
     view('bilan/show', [
         'property' => $property,
         'year'     => $year,
-        'b'        => Bilan::compute($property, $year),
+        'asOf'     => $asOf,
+        'b'        => Bilan::compute($property, $year, $asOf),
         'costs'    => PropertyCost::forProperty((int) $property['id'], $year),
     ]);
 });
