@@ -45,7 +45,7 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
             <td class="num"><?= euros($b['investissements']) ?></td>
             <td class="num"><strong><?= $money($b['cashflow']) ?></strong></td>
             <td class="num"><?php if (!$b['regul']['applicable']): ?><span class="muted small"><?= $b['regul']['forfait'] ? 'forfait' : '—' ?></span>
-                <?php else: $sd = $b['regul']['solde']; ?><?= euros(abs($sd)) ?><br><span class="small muted"><?= $sd >= 0 ? 'à réclamer' : 'à rembourser' ?></span><?php endif; ?></td>
+                <?php else: $sd = $b['regul']['solde']; ?><?= euros(abs($sd)) ?><br><span class="small muted"><?= $sd >= 0 ? 'à réclamer' : 'à rembourser' ?><?= $b['regul']['provisoire'] ? ' (provisoire)' : '' ?></span><?php endif; ?></td>
         </tr>
     <?php endforeach; ?>
         <tr class="total">

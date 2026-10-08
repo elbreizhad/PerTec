@@ -55,18 +55,33 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
 </div>
 
 <div class="card">
-    <h3>Régularisation des charges du locataire</h3>
+    <h3>Régularisation des charges <?= $year ?></h3>
     <?php if ($r['forfait']): ?>
         <p class="muted">Charges au forfait : pas de régularisation.</p>
     <?php elseif (!$r['applicable']): ?>
-        <p class="muted">Aucun loyer encaissé pour <?= $year ?> : pas de régularisation.</p>
+        <p class="muted">Aucun bail sur <?= $year ?> : pas de régularisation.</p>
     <?php else: ?>
-        <div class="table-wrap"><table><tbody>
-            <tr><td>Charges récupérables réelles <span class="small muted">(copropriété, TEOM, autres)</span></td><td class="num"><?= euros($r['recuperable']) ?></td></tr>
-            <tr><td>− Provisions versées par le locataire pour <?= $year ?></td><td class="num"><?= euros($r['provisions']) ?></td></tr>
-            <tr class="total"><td><strong><?= $r['solde'] >= 0 ? 'Complément à réclamer au locataire' : 'Trop-perçu à rembourser au locataire' ?></strong></td>
-                <td class="num"><strong><?= euros(abs($r['solde'])) ?></strong></td></tr>
-        </tbody></table></div>
+        <?php if ($r['provisoire']): ?>
+            <p class="small" style="color:#92400e">Estimation provisoire : la régularisation se calcule sur l'exercice complet
+                (charges récupérables de toute l'année <?= $year ?>, provisions de tous les mois). Elle sera définitive une fois
+                toutes les charges de l'année saisies (dernier appel, décompte du syndic, TEOM).</p>
+        <?php endif; ?>
+        <p class="small muted">Charges récupérables saisies pour <?= $year ?> : <strong><?= euros($r['recuperable']) ?></strong>
+            pour <?= $r['own_days'] ?> jours de détention (du <?= fdate($r['own_from']) ?> au 31/12/<?= $year ?>).
+            Chaque locataire n'en supporte que la part correspondant à ses jours d'occupation.</p>
+        <div class="table-wrap"><table>
+            <thead><tr><th>Locataire</th><th class="num">Part des charges</th><th class="num">Provisions</th><th class="num">Solde</th></tr></thead>
+            <tbody>
+            <?php foreach ($r['rows'] as $t): ?>
+                <tr>
+                    <td><?= e($t['tenant']) ?><br><span class="small muted">du <?= fdate($t['from']) ?> au <?= fdate($t['to']) ?> — <?= $t['days'] ?> jours</span></td>
+                    <td class="num"><?= euros($t['share']) ?><br><span class="small muted"><?= euros($r['recuperable']) ?> × <?= $t['days'] ?>/<?= $r['own_days'] ?></span></td>
+                    <td class="num"><?= euros($t['provisions']) ?><br><span class="small muted"><?= $t['months'] ?> mois<?= $t['paid'] < $t['months'] ? ', dont ' . ($t['months'] - $t['paid']) . ' non encore payé(s)' : '' ?></span></td>
+                    <td class="num"><strong><?= euros(abs($t['solde'])) ?></strong><br><span class="small muted"><?= $t['solde'] >= 0 ? 'à réclamer' : 'à rembourser' ?></span></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table></div>
         <p class="small muted">La régularisation se fait une fois par an, avec le décompte par nature de charges, un mois avant
             (art. 23 de la loi du 6 juillet 1989). Les justificatifs sont tenus à disposition du locataire pendant six mois.</p>
     <?php endif; ?>

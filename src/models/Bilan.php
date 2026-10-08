@@ -46,12 +46,8 @@ class Bilan
 
         // --- Encaissements de l'année (date de paiement) ---
         $loyers = 0.0; $provisionsCash = 0.0;
-        // --- Provisions appelées pour les mois de l'année (base de la régularisation) ---
-        $provisionsYear = 0.0;
-        $forfait = false;
-        $rented = false; // au moins un mois loué dans l'année
         $rows = Database::all(
-            "SELECT rp.amount_rent, rp.amount_charges, rp.paid_date, rp.period_year, rp.period_month, rp.status, l.charge_type
+            "SELECT rp.amount_rent, rp.amount_charges, rp.paid_date, rp.period_year, rp.period_month, rp.status
              FROM rent_payments rp JOIN leases l ON l.id = rp.lease_id WHERE l.property_id = ?",
             [$pid]
         );
@@ -61,12 +57,6 @@ class Bilan
             $paid = $r['paid_date'] ? substr($r['paid_date'], 0, 10) : $periodStart;
             // Encaissé dans l'année, au plus tard à la date d'arrêté.
             if ((int) substr($paid, 0, 4) === $year && $paid <= $until) { $loyers += (float) $r['amount_rent']; $provisionsCash += (float) $r['amount_charges']; }
-            // Provisions des mois de l'année déjà commencés à la date d'arrêté (régularisation).
-            if ((int) $r['period_year'] === $year && $periodStart <= $until) {
-                $rented = true;
-                if (($r['charge_type'] ?? 'provisions') === 'forfait') $forfait = true;
-                else $provisionsYear += (float) $r['amount_charges'];
-            }
         }
         $encaissements = $loyers + $provisionsCash;
 
@@ -134,14 +124,68 @@ class Bilan
             'capital'         => $capital,
             'resultat'        => $resultat,
             'cashflow'        => $cashflow,
-            'regul' => [
-                'applicable'   => $rented && !$forfait,
-                'forfait'      => $forfait,
-                'provisions'   => $provisionsYear,
-                'recuperable'  => $recuperable,
-                'solde'        => $recuperable - $provisionsYear, // > 0 : à réclamer ; < 0 : à rembourser
-            ],
+            'regul'           => self::regularisation($p, $year),
             'warnings'        => $warnings,
+        ];
+    }
+
+    /**
+     * Régularisation annuelle des charges récupérables, par locataire, sur l'EXERCICE complet
+     * (indépendamment de la date d'arrêté) : chaque locataire ne supporte les charges que pour
+     * ses jours d'occupation (art. 23 de la loi du 6 juillet 1989).
+     * Part locataire = charges récupérables de l'année × jours occupés / jours de détention.
+     */
+    public static function regularisation(array $p, int $year): array
+    {
+        $pid = (int) $p['id'];
+        $yStart = sprintf('%04d-01-01', $year);
+        $yEnd   = sprintf('%04d-12-31', $year);
+        $ownFrom = (!empty($p['purchase_date']) && $p['purchase_date'] > $yStart) ? substr($p['purchase_date'], 0, 10) : $yStart;
+        $days = fn(string $a, string $b): int => $a > $b ? 0 : (int) round((strtotime($b) - strtotime($a)) / 86400) + 1;
+        $ownDays = $days($ownFrom, $yEnd);
+
+        $real = PropertyCost::totals($pid, $year); // toutes les charges de l'exercice
+        $recuperable = 0.0;
+        foreach (['copro', 'taxe_fonciere', 'autre'] as $k) $recuperable += (float) ($real[$k]['recoverable'] ?? 0);
+
+        $leases = Database::all(
+            "SELECT l.id, l.start_date, l.end_date, l.charge_type, t.first_name, t.last_name
+             FROM leases l JOIN tenants t ON t.id = l.tenant_id
+             WHERE l.property_id = ? AND l.start_date <= ? AND (l.end_date IS NULL OR l.end_date >= ?)
+             ORDER BY l.start_date",
+            [$pid, $yEnd, $ownFrom]
+        );
+        $rows = []; $solde = 0.0; $forfait = false;
+        foreach ($leases as $l) {
+            $from = max($ownFrom, substr($l['start_date'], 0, 10));
+            $to   = min($yEnd, $l['end_date'] ? substr($l['end_date'], 0, 10) : $yEnd);
+            $d = $days($from, $to);
+            if ($d <= 0) continue;
+            if (($l['charge_type'] ?? 'provisions') === 'forfait') { $forfait = true; continue; }
+            // Provisions appelées pour les mois de l'année (payées ou à venir).
+            $prov = Database::one(
+                "SELECT COALESCE(SUM(amount_charges),0) AS t, SUM(status = 'paid') AS paid, COUNT(*) AS n
+                 FROM rent_payments WHERE lease_id = ? AND period_year = ?",
+                [(int) $l['id'], $year]
+            );
+            $share = $ownDays > 0 ? round($recuperable * $d / $ownDays, 2) : 0.0;
+            $sd = round($share - (float) $prov['t'], 2);
+            $solde += $sd;
+            $rows[] = [
+                'tenant' => trim($l['first_name'] . ' ' . $l['last_name']), 'from' => $from, 'to' => $to, 'days' => $d,
+                'share' => $share, 'provisions' => (float) $prov['t'], 'months' => (int) $prov['n'], 'paid' => (int) $prov['paid'],
+                'solde' => $sd,
+            ];
+        }
+        return [
+            'applicable'  => (bool) $rows,
+            'forfait'     => $forfait && !$rows,
+            'own_from'    => $ownFrom,
+            'own_days'    => $ownDays,
+            'recuperable' => $recuperable,
+            'rows'        => $rows,
+            'solde'       => round($solde, 2),      // > 0 : à réclamer ; < 0 : à rembourser
+            'provisoire'  => date('Y-m-d') < $yEnd,  // exercice pas encore terminé
         ];
     }
 
