@@ -80,8 +80,18 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
                     <td class="num"><strong><?= euros(abs($t['solde'])) ?></strong><br><span class="small muted"><?= $t['solde'] >= 0 ? 'à réclamer' : 'à rembourser' ?></span></td>
                 </tr>
             <?php endforeach; ?>
+            <?php if ($r['vacant_days'] > 0): ?>
+                <tr class="muted">
+                    <td>Logement vacant<br><span class="small"><?= $r['vacant_days'] ?> jours sans locataire</span></td>
+                    <td class="num"><?= euros($r['vacant_share']) ?><br><span class="small">à votre charge</span></td>
+                    <td class="num">—</td><td class="num">—</td>
+                </tr>
+            <?php endif; ?>
             </tbody>
         </table></div>
+        <p class="small muted">Locataire parti en cours d'année : sa régularisation peut être faite dès que les charges de sa
+            période sont connues (vous pouvez conserver jusqu'à 20 % du dépôt de garantie dans l'attente de l'arrêté des
+            comptes de la copropriété — art. 22 de la loi du 6 juillet 1989).</p>
         <p class="small muted">La régularisation se fait une fois par an, avec le décompte par nature de charges, un mois avant
             (art. 23 de la loi du 6 juillet 1989). Les justificatifs sont tenus à disposition du locataire pendant six mois.</p>
     <?php endif; ?>

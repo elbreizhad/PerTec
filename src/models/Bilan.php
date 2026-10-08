@@ -155,12 +155,18 @@ class Bilan
              ORDER BY l.start_date",
             [$pid, $yEnd, $ownFrom]
         );
-        $rows = []; $solde = 0.0; $forfait = false;
-        foreach ($leases as $l) {
+        $rows = []; $solde = 0.0; $forfait = false; $occupied = 0;
+        foreach ($leases as $i => $l) {
             $from = max($ownFrom, substr($l['start_date'], 0, 10));
             $to   = min($yEnd, $l['end_date'] ? substr($l['end_date'], 0, 10) : $yEnd);
+            // Baux successifs : un bail sans date de fin (ou qui chevauche le suivant) s'arrête la veille du bail suivant.
+            if (isset($leases[$i + 1])) {
+                $next = substr($leases[$i + 1]['start_date'], 0, 10);
+                if ($to >= $next) $to = date('Y-m-d', strtotime($next . ' -1 day'));
+            }
             $d = $days($from, $to);
             if ($d <= 0) continue;
+            $occupied += $d;
             if (($l['charge_type'] ?? 'provisions') === 'forfait') { $forfait = true; continue; }
             // Provisions appelées pour les mois de l'année (payées ou à venir).
             $prov = Database::one(
@@ -184,6 +190,9 @@ class Bilan
             'own_days'    => $ownDays,
             'recuperable' => $recuperable,
             'rows'        => $rows,
+            // Jours sans locataire : la part correspondante des charges récupérables reste au propriétaire.
+            'vacant_days' => max(0, $ownDays - $occupied),
+            'vacant_share' => $ownDays > 0 ? round($recuperable * max(0, $ownDays - $occupied) / $ownDays, 2) : 0.0,
             'solde'       => round($solde, 2),      // > 0 : à réclamer ; < 0 : à rembourser
             'provisoire'  => date('Y-m-d') < $yEnd,  // exercice pas encore terminé
         ];
