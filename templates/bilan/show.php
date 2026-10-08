@@ -61,23 +61,28 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
     <?php elseif (!$r['applicable']): ?>
         <p class="muted">Aucun bail sur <?= $year ?> : pas de régularisation.</p>
     <?php else: ?>
-        <?php if ($r['provisoire']): ?>
-            <p class="small" style="color:#92400e">Estimation provisoire : la régularisation se calcule sur l'exercice complet
-                (charges récupérables de toute l'année <?= $year ?>, provisions de tous les mois). Elle sera définitive une fois
-                toutes les charges de l'année saisies (dernier appel, décompte du syndic, TEOM).</p>
+        <?php if ($r['attente_syndic']): ?>
+            <div class="flash flash-error small" style="background:#fffbeb;color:#92400e;border-color:#fde68a">
+                <strong>En attente du décompte annuel de la copropriété.</strong> Les appels de charges ne sont que des
+                provisions : le montant réellement récupérable n'est connu qu'avec le décompte du syndic. Aucun solde n'est
+                calculé d'ici là. Dès réception, saisissez-le sur la fiche du bien (« Régularisation annuelle (syndic) »,
+                avec sa part récupérable).</div>
+        <?php elseif ($r['provisoire']): ?>
+            <p class="small" style="color:#92400e">Estimation provisoire : l'exercice <?= $year ?> n'est pas terminé.</p>
         <?php endif; ?>
         <p class="small muted">Charges récupérables saisies pour <?= $year ?> : <strong><?= euros($r['recuperable']) ?></strong>
             pour <?= $r['own_days'] ?> jours de détention (du <?= fdate($r['own_from']) ?> au 31/12/<?= $year ?>).
             Chaque locataire n'en supporte que la part correspondant à ses jours d'occupation.</p>
         <div class="table-wrap"><table>
-            <thead><tr><th>Locataire</th><th class="num">Part des charges</th><th class="num">Provisions</th><th class="num">Solde</th></tr></thead>
+            <thead><tr><th>Locataire</th><th class="num">Part des charges<?= $r['attente_syndic'] ? ' (provisions syndic)' : '' ?></th><th class="num">Provisions</th><th class="num">Solde</th></tr></thead>
             <tbody>
             <?php foreach ($r['rows'] as $t): ?>
                 <tr>
                     <td><?= e($t['tenant']) ?><br><span class="small muted">du <?= fdate($t['from']) ?> au <?= fdate($t['to']) ?> — <?= $t['days'] ?> jours</span></td>
                     <td class="num"><?= euros($t['share']) ?><br><span class="small muted"><?= euros($r['recuperable']) ?> × <?= $t['days'] ?>/<?= $r['own_days'] ?></span></td>
                     <td class="num"><?= euros($t['provisions']) ?><br><span class="small muted"><?= $t['months'] ?> mois<?= $t['paid'] < $t['months'] ? ', dont ' . ($t['months'] - $t['paid']) . ' non encore payé(s)' : '' ?></span></td>
-                    <td class="num"><strong><?= euros(abs($t['solde'])) ?></strong><br><span class="small muted"><?= $t['solde'] >= 0 ? 'à réclamer' : 'à rembourser' ?></span></td>
+                    <td class="num"><?php if ($r['attente_syndic']): ?><span class="muted">en attente<br><span class="small">du décompte syndic</span></span>
+                        <?php else: ?><strong><?= euros(abs($t['solde'])) ?></strong><br><span class="small muted"><?= $t['solde'] >= 0 ? 'à réclamer' : 'à rembourser' ?></span><?php endif; ?></td>
                 </tr>
             <?php endforeach; ?>
             <?php if ($r['vacant_days'] > 0): ?>

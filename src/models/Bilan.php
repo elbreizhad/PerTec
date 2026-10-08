@@ -145,6 +145,10 @@ class Bilan
         $ownDays = $days($ownFrom, $yEnd);
 
         $real = PropertyCost::totals($pid, $year); // toutes les charges de l'exercice
+        // Les appels de charges ne sont que des provisions : le montant récupérable réel n'est connu
+        // qu'avec le décompte annuel du syndic (ligne « Régularisation annuelle (syndic) »).
+        $kinds = array_column(PropertyCost::forProperty($pid, $year), 'kind');
+        $awaitingSyndic = in_array('copro_appel', $kinds, true) && !in_array('copro_regul', $kinds, true);
         $recuperable = 0.0;
         foreach (['copro', 'taxe_fonciere', 'autre'] as $k) $recuperable += (float) ($real[$k]['recoverable'] ?? 0);
 
@@ -195,6 +199,7 @@ class Bilan
             'vacant_share' => $ownDays > 0 ? round($recuperable * max(0, $ownDays - $occupied) / $ownDays, 2) : 0.0,
             'solde'       => round($solde, 2),      // > 0 : à réclamer ; < 0 : à rembourser
             'provisoire'  => date('Y-m-d') < $yEnd,  // exercice pas encore terminé
+            'attente_syndic' => $awaitingSyndic,     // pas de solde tant que le décompte du syndic n'est pas saisi
         ];
     }
 
@@ -219,7 +224,7 @@ class Bilan
             $b = self::compute($p, $year, $asOf);
             $rows[] = ['p' => $p, 'b' => $b];
             foreach (['encaissements', 'charges_total', 'resultat', 'cashflow', 'investissements', 'capital'] as $k) $tot[$k] += $b[$k];
-            if ($b['regul']['applicable']) $tot['regul'] += $b['regul']['solde'];
+            if ($b['regul']['applicable'] && !$b['regul']['attente_syndic']) $tot['regul'] += $b['regul']['solde'];
         }
         return ['rows' => $rows, 'totals' => $tot];
     }
