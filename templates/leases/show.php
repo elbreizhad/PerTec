@@ -111,6 +111,113 @@ $checked    = Checklist::checkedKeys((int) $l['id']);
 [$done, $total] = Checklist::progress((int) $l['id'], $l['lease_type']);
 $pct = $total > 0 ? round($done / $total * 100) : 0;
 ?>
+<?php
+$sigAll    = LeaseSignature::forLease((int) $l['id']);
+$sigValid  = $sigAll ? LeaseSignature::valid($l, $settings) : [];
+$sigDone   = count($sigValid) === count(LeaseSignature::ROLES);
+$signedPdf = LeaseSignature::signedPdf((int) $l['id']);
+$sigLink   = $_SESSION['sign_link_' . (int) $l['id']] ?? null;
+$blocked   = $l['lease_type'] === 'meuble' && $issues['blocking'];
+?>
+<h2 id="signature">Signature du bail</h2>
+<div class="card">
+    <?php if ($sigAll && count($sigValid) < count($sigAll)): ?>
+        <div class="flash flash-error">Le bail a été modifié après signature : les signatures ne correspondent plus à la version actuelle.
+            <?= $signedPdf ? 'Le contrat signé précédent reste archivé.' : '' ?> Faites signer à nouveau.</div>
+    <?php endif; ?>
+    <?php if ($blocked): ?>
+        <p class="small" style="color:#b91c1c">Corrigez d'abord les points bloquants du contrôle ci-dessus pour pouvoir faire signer le bail.</p>
+    <?php endif; ?>
+    <div class="table-wrap"><table>
+        <thead><tr><th>Partie</th><th>État</th><th></th></tr></thead>
+        <tbody>
+        <?php foreach (LeaseSignature::ROLES as $role => $label): $sg = $sigValid[$role] ?? null; ?>
+            <tr>
+                <td><?= $label ?></td>
+                <td><?php if ($sg): ?>
+                        <span class="badge badge-paid">Signé</span> par <?= e($sg['signer_name']) ?> le <?= e(date('d/m/Y à H:i', strtotime($sg['signed_at']))) ?>
+                    <?php else: ?><span class="badge badge-pending">À signer</span><?php endif; ?></td>
+                <td class="right">
+                    <?php if (!$sg && !$blocked): ?>
+                        <a class="btn btn-sm btn-primary" href="<?= url('/baux/'.$l['id'].'/signer/'.$role) ?>">
+                            <?= $role === 'bailleur' ? '✍️ Signer' : '✍️ Faire signer sur cet appareil' ?></a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table></div>
+
+    <?php if (!$sigDone && !isset($sigValid['locataire']) && !$blocked): ?>
+        <form method="post" action="<?= url('/baux/'.$l['id'].'/lien-signature') ?>" class="mt">
+            <?= csrf_field() ?>
+            <p><strong>Faire signer le locataire à distance</strong> <span class="muted small">— il reçoit un lien personnel, lit le bail et signe sur son téléphone ou son ordinateur.</span></p>
+            <div class="actions" style="flex-wrap:wrap">
+                <input type="email" name="to" value="<?= e($l['email'] ?? '') ?>" placeholder="email du locataire" style="max-width:280px">
+                <label class="small" style="font-weight:400"><input type="checkbox" name="copy" value="1" checked style="width:auto"> m'envoyer une copie</label>
+                <button class="btn btn-primary" name="send" value="1">📧 Envoyer le lien par email</button>
+                <button class="btn" name="send" value="">🔗 Créer le lien seulement</button>
+            </div>
+        </form>
+        <?php if ($sigLink): ?>
+            <p class="small mt">Lien de signature (valable <?= LeaseSignature::TOKEN_DAYS ?> jours) :
+                <input readonly value="<?= e($sigLink) ?>" onclick="this.select()" style="width:100%"></p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <div class="actions mt">
+        <?php if ($signedPdf): ?>
+            <a class="btn btn-primary" href="<?= url('/baux/'.$l['id'].'/bail-signe') ?>" target="_blank">📄 Bail signé (PDF archivé le <?= e(date('d/m/Y', strtotime($signedPdf['created_at']))) ?>)</a>
+        <?php endif; ?>
+        <?php if ($sigAll): ?>
+            <form method="post" action="<?= url('/baux/'.$l['id'].'/signatures/reset') ?>" class="inline-form" onsubmit="return confirm('Annuler les signatures pour faire signer à nouveau ?')">
+                <?= csrf_field() ?><button class="btn btn-sm">Annuler les signatures</button></form>
+        <?php endif; ?>
+    </div>
+    <p class="small muted mt">Signature électronique simple (art. 1366-1367 du Code civil) : date, heure, adresse IP, navigateur et
+        empreinte du contrat sont enregistrés comme preuve. Le PDF signé est archivé dès que les deux parties ont signé.</p>
+</div>
+
+<?php
+$docIssues = PropertyDocument::issues((int) $l['property_id'], $l['signature_date'] ?: $l['start_date']);
+$docs = PropertyDocument::current((int) $l['property_id']);
+$guarantsList = Lease::guarantors($l);
+?>
+<h2 id="liasse">Dossier du locataire (liasse)</h2>
+<div class="card">
+    <p class="small muted">Tous les documents à remettre au locataire, en un seul envoi :</p>
+    <ol class="small">
+        <li><?= $l['lease_type'] === 'meuble' ? 'Contrat de location meublée et inventaire du mobilier' : 'Contrat de location' ?>
+            — <?= $sigDone ? '<strong>version signée</strong>' : '<em>non signé</em>' ?></li>
+        <?php foreach ($guarantsList as $g): ?><li>Acte de cautionnement — <?= e($g['name']) ?></li><?php endforeach; ?>
+        <?php foreach ($docs as $d): ?><li><?= e(PropertyDocument::label($d)) ?><?= $d['doc_date'] ? ' (du ' . fdate($d['doc_date']) . ')' : '' ?></li><?php endforeach; ?>
+        <li>Bordereau de remise des documents (à faire signer par le locataire)</li>
+    </ol>
+    <?php if ($docIssues): ?>
+        <div class="flash flash-error small"><strong>Documents du logement à compléter :</strong><br><?= implode('<br>', array_map('e', $docIssues)) ?>
+            <br><a href="<?= url('/biens/'.$l['property_id'].'#documents') ?>">Ajouter les documents sur la fiche du logement</a></div>
+    <?php endif; ?>
+    <div class="actions">
+        <a class="btn btn-primary" href="<?= url('/baux/'.$l['id'].'/liasse') ?>">⬇️ Télécharger le dossier (ZIP)</a>
+    </div>
+    <form method="post" action="<?= url('/baux/'.$l['id'].'/liasse/email') ?>" class="mt" onsubmit="var b=this.querySelector('button');b.disabled=true;b.textContent='Envoi en cours…'">
+        <?= csrf_field() ?>
+        <p><strong>Envoyer le dossier par email</strong></p>
+        <div class="form-grid">
+            <div class="field"><label>Destinataire</label><input type="email" name="to" required value="<?= e($l['email'] ?? '') ?>"></div>
+            <div class="field"><label>Objet</label><input name="subject" required value="Votre dossier de location — <?= e(trim(($l['address'] ?? '') . ' ' . ($l['city'] ?? '')) ?: $l['property_label']) ?>"></div>
+        </div>
+        <div class="field"><label>Message</label><textarea name="message" rows="5">Bonjour <?= e($l['first_name']) ?>,
+
+Veuillez trouver ci-joint votre dossier de location : le bail et les documents obligatoires relatifs au logement.
+
+Cordialement,
+<?= e(trim((string) ($settings['mail_from_name'] ?? '')) ?: ($settings['landlord_name'] ?? '')) ?></textarea></div>
+        <label class="small" style="font-weight:400"><input type="checkbox" name="copy" value="1" checked style="width:auto"> M'envoyer une copie</label>
+        <div class="mt"><button class="btn">📧 Envoyer le dossier</button></div>
+    </form>
+</div>
+
 <?php if ($l['lease_type'] === 'meuble'):
     $invRows = Inventory::rows($l);
     [$invDone, $invTotal] = Inventory::progress($invRows); ?>

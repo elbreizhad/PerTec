@@ -70,8 +70,7 @@ jouissance paisible, conformément à la loi du 6 juillet 1989.</p>
 <p class="article"><?= nl2br(e($l['notes'])) ?></p>
 <?php endif; ?>
 
-<div class="doc-sign">
-    <div class="sign-box"><p>Le bailleur</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
-    <div class="sign-box"><p>Le locataire</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
+<div class="keep">
+<p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($l['signature_date'] ?: date('Y-m-d')) ?>, en deux exemplaires originaux.</p>
+<?= render_template('partials/sign_boxes', ['lease' => $l, 'settings' => $s, 'forHash' => !empty($forHash), 'caption' => 'Signature (précédée de « Lu et approuvé »)']) ?>
 </div>
-<p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate(date('Y-m-d')) ?>, en deux exemplaires originaux.</p>

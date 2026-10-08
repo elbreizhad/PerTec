@@ -179,10 +179,7 @@ et la <strong>notice d'information</strong> relative aux droits et obligations d
 
 <div class="keep">
 <p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($sigDate) ?>, en deux exemplaires originaux.</p>
-<div class="doc-sign">
-    <div class="sign-box"><p>Le bailleur</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
-    <div class="sign-box"><p>Le locataire</p><div class="line">Signature (précédée de « Lu et approuvé »)</div></div>
-</div>
+<?= render_template('partials/sign_boxes', ['lease' => $l, 'settings' => $s, 'forHash' => !empty($forHash), 'caption' => 'Signature (précédée de « Lu et approuvé »)']) ?>
 </div>
 
 <div style="page-break-before:always"></div>
@@ -206,8 +203,5 @@ et la <strong>notice d'information</strong> relative aux droits et obligations d
 et en bon état de fonctionnement, pour permettre au locataire d'y vivre normalement avec ses seuls effets personnels.
 <br><span class="small">Les cases non cochées et les observations vides sont complétées à la main lors de l'état des lieux d'entrée.</span></p>
 
-<div class="doc-sign">
-    <div class="sign-box"><p>Le bailleur</p><div class="line">Signature</div></div>
-    <div class="sign-box"><p>Le locataire</p><div class="line">Signature</div></div>
-</div>
+<?= render_template('partials/sign_boxes', ['lease' => $l, 'settings' => $s, 'forHash' => !empty($forHash), 'caption' => 'Signature']) ?>
 </div>

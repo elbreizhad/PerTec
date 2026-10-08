@@ -687,3 +687,239 @@ App::post('/parametres/motdepasse', function () {
     }
     redirect('/parametres');
 });
+
+/* =========================================================================
+ * DOCUMENTS LÉGAUX DU LOGEMENT
+ * ========================================================================= */
+
+/** Envoie un fichier binaire au navigateur (affichage ou téléchargement). */
+$sendFile = function (string $data, string $mime, string $name, bool $inline = false): void {
+    header('Content-Type: ' . $mime);
+    header('Content-Length: ' . strlen($data));
+    header('Content-Disposition: ' . ($inline ? 'inline' : 'attachment') . '; filename="' . str_replace('"', '', $name) . '"');
+    header('X-Content-Type-Options: nosniff');
+    header('Cache-Control: private, no-store');
+    echo $data;
+    exit;
+};
+
+App::post('/biens/{id}/documents', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    if (!Property::find($id)) redirect('/biens');
+    try {
+        PropertyDocument::store($id, (string) post('doc_type'), post('title'), post('doc_date'), $_FILES['file'] ?? []);
+        flash('Document ajouté.');
+    } catch (Throwable $e) {
+        flash('Document non ajouté : ' . $e->getMessage(), 'error');
+    }
+    redirect('/biens/' . $id . '#documents');
+});
+
+App::get('/biens/{id}/documents/{doc}', function ($params) use ($sendFile) {
+    Auth::requireLogin();
+    $doc = PropertyDocument::find((int) $params['doc']);
+    if (!$doc || (int) $doc['property_id'] !== (int) $params['id']) redirect('/biens/' . (int) $params['id']);
+    $sendFile($doc['content'], $doc['mime'], $doc['filename'], true);
+});
+
+App::post('/biens/{id}/documents/{doc}/delete', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $doc = PropertyDocument::find((int) $params['doc']);
+    if ($doc && (int) $doc['property_id'] === (int) $params['id']) {
+        PropertyDocument::delete((int) $doc['id']);
+        flash('Document supprimé.');
+    }
+    redirect('/biens/' . (int) $params['id'] . '#documents');
+});
+
+/* =========================================================================
+ * LIASSE LOCATAIRE (bail + annexes + documents légaux)
+ * ========================================================================= */
+
+App::get('/baux/{id}/liasse', function ($params) use ($sendFile) {
+    Auth::requireLogin();
+    $lease = Lease::find((int) $params['id']);
+    if (!$lease) redirect('/baux');
+    if (!Pdf::available() || !class_exists('ZipArchive')) {
+        flash('Génération impossible : extension PDF ou ZIP absente du serveur.', 'error');
+        redirect('/baux/' . (int) $lease['id']);
+    }
+    $files = Liasse::files($lease, Setting::all());
+    $sendFile(Liasse::zip($files), 'application/zip', Liasse::zipName($lease));
+});
+
+App::post('/baux/{id}/liasse/email', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $lease = Lease::find((int) $params['id']);
+    if (!$lease) redirect('/baux');
+    $settings = Setting::all();
+    $to = trim((string) post('to'));
+    try {
+        $files = Liasse::files($lease, $settings);
+        $total = array_sum(array_map(fn($f) => strlen($f['data']), $files));
+        if ($total > 18 * 1024 * 1024) {
+            throw new RuntimeException('documents trop volumineux pour un email (' . round($total / 1048576, 1) . ' Mo) : téléchargez le ZIP et transmettez-le autrement.');
+        }
+        $list = implode("\n", array_map(fn($f) => '- ' . $f['label'], $files));
+        $body = trim((string) post('message')) . "\n\nDocuments joints :\n" . $list . "\n";
+        Mailer::send($to, (string) post('subject'), $body, $files, null,
+            post('copy') ? QuittanceMail::copyAddress($settings) : null);
+        flash("Dossier envoyé à $to (" . count($files) . ' documents).');
+    } catch (Throwable $e) {
+        flash("Échec de l'envoi : " . $e->getMessage(), 'error');
+    }
+    redirect('/baux/' . (int) $lease['id'] . '#liasse');
+});
+
+/* =========================================================================
+ * SIGNATURE ÉLECTRONIQUE DU BAIL
+ * ========================================================================= */
+
+// Page de signature (bailleur, ou locataire présent sur cet appareil)
+App::get('/baux/{id}/signer/{role}', function ($params) {
+    Auth::requireLogin();
+    $lease = Lease::find((int) $params['id']);
+    $role = (string) $params['role'];
+    if (!$lease || !isset(LeaseSignature::ROLES[$role])) redirect('/baux');
+    $settings = Setting::all();
+    view('leases/sign', [
+        'lease'       => $lease,
+        'role'        => $role,
+        'settings'    => $settings,
+        'contractUrl' => url('/contrat/' . (int) $lease['id']),
+        'action'      => url('/baux/' . (int) $lease['id'] . '/signer/' . $role),
+        'defaultName' => $role === 'bailleur' ? ($settings['landlord_name'] ?? '') : trim($lease['first_name'] . ' ' . $lease['last_name']),
+        'savedSignature' => $role === 'bailleur' ? ($settings['landlord_signature'] ?? null) : null,
+        'public'      => false,
+    ]);
+});
+
+App::post('/baux/{id}/signer/{role}', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $lease = Lease::find((int) $params['id']);
+    $role = (string) $params['role'];
+    if (!$lease || !isset(LeaseSignature::ROLES[$role])) redirect('/baux');
+    if ($lease['lease_type'] === 'meuble' && ($issues = Lease::contractIssues($lease, Setting::all())['blocking'])) {
+        flash('Bail incomplet — corrigez avant signature : ' . implode(' · ', $issues), 'error');
+        redirect('/baux/' . (int) $lease['id']);
+    }
+    try {
+        if (!post('approve')) throw new RuntimeException('Cochez « Lu et approuvé » pour signer.');
+        $image = post('use_saved') && $role === 'bailleur' ? (string) Setting::get('landlord_signature') : (string) post('signature');
+        $done = LeaseSignature::sign($lease, $role, (string) post('signer_name'), $image);
+        flash($done ? 'Bail signé par les deux parties : le PDF signé est archivé.' : LeaseSignature::ROLES[$role] . ' a signé le bail.');
+    } catch (Throwable $e) {
+        flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
+        redirect('/baux/' . (int) $lease['id'] . '/signer/' . $role);
+    }
+    redirect('/baux/' . (int) $lease['id'] . '#signature');
+});
+
+// Lien de signature à distance pour le locataire (créé et, si demandé, envoyé par email)
+App::post('/baux/{id}/lien-signature', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $lease = Lease::find((int) $params['id']);
+    if (!$lease) redirect('/baux');
+    $settings = Setting::all();
+    if ($lease['lease_type'] === 'meuble' && ($issues = Lease::contractIssues($lease, $settings)['blocking'])) {
+        flash('Bail incomplet — corrigez avant de l\'envoyer à la signature : ' . implode(' · ', $issues), 'error');
+        redirect('/baux/' . (int) $lease['id']);
+    }
+    $link = LeaseSignature::absoluteUrl('/signature/' . LeaseSignature::newToken((int) $lease['id']));
+    if (post('send')) {
+        $to = trim((string) post('to'));
+        $name = trim((string) ($settings['mail_from_name'] ?? '')) ?: ($settings['landlord_name'] ?? '');
+        try {
+            Mailer::send($to, 'Votre bail à signer', "Bonjour " . $lease['first_name'] . ",\n\n"
+                . "Votre contrat de location est prêt. Vous pouvez le lire et le signer en ligne à cette adresse :\n\n$link\n\n"
+                . "Ce lien est personnel et valable " . LeaseSignature::TOKEN_DAYS . " jours.\n\nCordialement,\n$name", [], null,
+                post('copy') ? QuittanceMail::copyAddress($settings) : null);
+            flash("Lien de signature envoyé à $to.");
+        } catch (Throwable $e) {
+            flash("Lien créé, mais l'email n'est pas parti : " . $e->getMessage() . ' — copiez le lien ci-dessous pour l\'envoyer autrement.', 'error');
+        }
+    } else {
+        flash('Lien de signature créé : copiez-le pour l\'envoyer au locataire (SMS, messagerie…).');
+    }
+    $_SESSION['sign_link_' . (int) $lease['id']] = $link;
+    redirect('/baux/' . (int) $lease['id'] . '#signature');
+});
+
+App::post('/baux/{id}/signatures/reset', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    LeaseSignature::reset((int) $params['id']);
+    flash('Signatures annulées : le bail peut être signé à nouveau (le PDF signé précédent reste archivé).');
+    redirect('/baux/' . (int) $params['id'] . '#signature');
+});
+
+App::get('/baux/{id}/bail-signe', function ($params) use ($sendFile) {
+    Auth::requireLogin();
+    $pdf = LeaseSignature::signedPdf((int) $params['id']);
+    if (!$pdf) redirect('/baux/' . (int) $params['id']);
+    $sendFile($pdf['pdf'], 'application/pdf', 'bail-signe-' . (int) $params['id'] . '.pdf', true);
+});
+
+/* --- Pages publiques du locataire (accès par lien personnel, sans compte) --- */
+
+$publicLease = function (string $token): array {
+    $lease = LeaseSignature::leaseForToken($token);
+    if (!$lease) {
+        http_response_code(404);
+        exit('Ce lien de signature n\'est plus valable. Demandez un nouveau lien à votre bailleur.');
+    }
+    return $lease;
+};
+
+App::get('/signature/{token}', function ($params) use ($publicLease) {
+    $lease = $publicLease((string) $params['token']);
+    $settings = Setting::all();
+    $base = '/signature/' . $params['token'];
+    view('leases/sign', [
+        'lease'       => $lease,
+        'role'        => 'locataire',
+        'settings'    => $settings,
+        'contractUrl' => url($base . '/contrat'),
+        'action'      => url($base),
+        'pdfUrl'      => url($base . '/pdf'),
+        'defaultName' => trim($lease['first_name'] . ' ' . $lease['last_name']),
+        'savedSignature' => null,
+        'public'      => true,
+        'signatures'  => LeaseSignature::valid($lease, $settings),
+    ], null);
+});
+
+App::get('/signature/{token}/contrat', function ($params) use ($publicLease) {
+    $lease = $publicLease((string) $params['token']);
+    $html = render_template(LeaseSignature::template($lease), ['lease' => $lease, 'settings' => Setting::all()]);
+    echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        . '<link rel="stylesheet" href="' . url('/assets/print.css') . '"></head><body class="print-body"><div class="sheet">' . $html . '</div></body></html>';
+});
+
+App::get('/signature/{token}/pdf', function ($params) use ($publicLease, $sendFile) {
+    $lease = $publicLease((string) $params['token']);
+    $settings = Setting::all();
+    $signed = count(LeaseSignature::valid($lease, $settings)) === count(LeaseSignature::ROLES) ? LeaseSignature::signedPdf((int) $lease['id']) : null;
+    $data = $signed ? $signed['pdf'] : Pdf::renderDocument(LeaseSignature::template($lease), ['lease' => $lease, 'settings' => $settings]);
+    $sendFile($data, 'application/pdf', ($signed ? 'bail-signe' : 'bail') . '.pdf', true);
+});
+
+App::post('/signature/{token}', function ($params) use ($publicLease) {
+    csrf_check();
+    $lease = $publicLease((string) $params['token']);
+    try {
+        if (!post('approve')) throw new RuntimeException('Cochez « Lu et approuvé » pour signer.');
+        $done = LeaseSignature::sign($lease, 'locataire', (string) post('signer_name'), (string) post('signature'));
+        flash($done ? 'Merci, le bail est signé par les deux parties. Vous pouvez télécharger le contrat signé.'
+                    : 'Merci, votre signature est enregistrée. Le bail sera complet après la signature du bailleur.');
+    } catch (Throwable $e) {
+        flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
+    }
+    redirect('/signature/' . $params['token']);
+});

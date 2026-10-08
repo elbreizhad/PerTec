@@ -214,7 +214,9 @@ class Lease
         }
 
         // — Annexes remises séparément (rappel, non bloquant) —
-        $warnings[] = 'Pensez à joindre au locataire : DPE, état des risques et pollutions (ERP) et notice d’information (annexes séparées).';
+        // Documents légaux du logement (DPE, ERP, notice…) : présents et en cours de validité ?
+        foreach (PropertyDocument::issues((int) ($lease['property_id'] ?? 0), ($lease['signature_date'] ?? null) ?: ($lease['start_date'] ?? null)) as $w)
+            $warnings[] = $w;
 
         return ['blocking' => $blocking, 'warnings' => $warnings];
     }

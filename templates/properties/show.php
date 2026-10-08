@@ -110,6 +110,64 @@ et alimentent les amortissements LMNP.</p>
     <div class="card empty">Aucune dépense enregistrée pour ce bien.</div>
 <?php endif; ?>
 
+<?php
+$pid = (int) $property['id'];
+$docTypes = PropertyDocument::types();
+$allDocs = PropertyDocument::forProperty($pid);
+$docIssues = PropertyDocument::issues($pid);
+$currentIds = array_column(PropertyDocument::current($pid), 'id');
+?>
+<h2 id="documents">Documents légaux du logement</h2>
+<p class="muted small">Diagnostics et documents à remettre au locataire avec le bail. Ils sont ajoutés automatiquement au
+    dossier du locataire (fiche du bail → « Dossier du locataire »). Formats acceptés : PDF, JPG, PNG — 10 Mo maximum.</p>
+<?php if ($docIssues): ?>
+    <div class="flash flash-error small"><?= implode('<br>', array_map('e', $docIssues)) ?></div>
+<?php endif; ?>
+<?php if ($allDocs): ?>
+<div class="table-wrap"><table>
+    <thead><tr><th>Document</th><th>Date</th><th>Valable jusqu'au</th><th>Fichier</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach ($allDocs as $d): $exp = PropertyDocument::expiry($d); $old = !in_array($d['id'], $currentIds, false); ?>
+        <tr<?= $old ? ' class="muted"' : '' ?>>
+            <td><?= e(PropertyDocument::label($d)) ?><?= $old ? ' <span class="small">(remplacé)</span>' : '' ?></td>
+            <td><?= $d['doc_date'] ? fdate($d['doc_date']) : '—' ?></td>
+            <td><?php if ($exp): ?><span class="badge badge-<?= $exp < date('Y-m-d') ? 'late' : 'paid' ?>"><?= fdate($exp) ?></span><?php else: ?>—<?php endif; ?></td>
+            <td><a href="<?= url('/biens/'.$pid.'/documents/'.$d['id']) ?>" target="_blank"><?= e($d['filename']) ?></a>
+                <span class="small muted">(<?= number_format($d['size'] / 1024, 0, ',', ' ') ?> Ko)</span></td>
+            <td class="right"><form class="inline-form" method="post" action="<?= url('/biens/'.$pid.'/documents/'.$d['id'].'/delete') ?>" onsubmit="return confirm('Supprimer ce document ?')">
+                <?= csrf_field() ?><button class="btn btn-sm btn-danger">×</button></form></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table></div>
+<?php endif; ?>
+<form method="post" action="<?= url('/biens/'.$pid.'/documents') ?>" enctype="multipart/form-data" class="card">
+    <?= csrf_field() ?>
+    <h3>Ajouter un document</h3>
+    <div class="form-grid">
+        <div class="field"><label>Type de document</label>
+            <select name="doc_type" id="doc-type">
+                <?php foreach ($docTypes as $k => [$label, $help, $req]): ?>
+                    <option value="<?= $k ?>" data-help="<?= e($help) ?>"><?= e($label) ?><?= $req ? ' *' : '' ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="hint" id="doc-help"></span>
+        </div>
+        <div class="field"><label>Date du document / du diagnostic</label><input type="date" name="doc_date"></div>
+        <div class="field" id="doc-title" style="display:none"><label>Intitulé</label><input name="title" placeholder="ex. Attestation d'entretien chaudière"></div>
+        <div class="field"><label>Fichier</label><input type="file" name="file" accept="application/pdf,image/jpeg,image/png" required></div>
+    </div>
+    <p class="hint">* document obligatoire pour toute location. Ajouter un document du même type remplace le précédent dans le dossier du locataire.</p>
+    <button class="btn btn-primary">Ajouter</button>
+</form>
+<script>
+(function () {
+    var sel = document.getElementById('doc-type'), help = document.getElementById('doc-help'), title = document.getElementById('doc-title');
+    function upd() { help.textContent = sel.options[sel.selectedIndex].dataset.help || ''; title.style.display = sel.value === 'autre' ? '' : 'none'; }
+    sel.addEventListener('change', upd); upd();
+})();
+</script>
+
 <h2>Baux liés à ce bien</h2>
 <?php if (!$leases): ?>
     <div class="card empty">Aucun bail. <a href="<?= url('/baux/new') ?>">Créer un bail</a>.</div>
