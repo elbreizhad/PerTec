@@ -8,12 +8,29 @@ $expensesTotal = Expense::totalForProperty((int) $p['id']); ?>
         <p class="muted"><?= e(trim(($p['address'] ?: '').' '.($p['postal_code'] ?: '').' '.($p['city'] ?: ''))) ?: e(ucfirst($p['type'])) ?></p>
     </div>
     <div class="actions">
+        <a href="<?= url('/bilan/'.$p['id']) ?>" class="btn btn-secondary">📒 Bilan</a>
+        <a href="<?= url('/projection/'.$p['id']) ?>" class="btn btn-secondary">📈 Projection</a>
         <a href="<?= url('/biens/'.$p['id'].'/fiscalite') ?>" class="btn btn-secondary">📊 Fiscalité LMNP</a>
         <a href="<?= url('/biens/'.$p['id'].'/edit') ?>" class="btn">Modifier</a>
         <a href="<?= url('/baux/new') ?>" class="btn btn-primary">+ Nouveau bail</a>
     </div>
 </div>
 
+<?php
+// Compteurs des onglets
+$tabDocIssues = count(PropertyDocument::issues((int) $p['id']));
+$tabCosts = count(PropertyCost::forProperty((int) $p['id'], (int) ($_GET['annee'] ?? date('Y'))));
+?>
+<div data-tabs>
+<nav class="tabs">
+    <a href="#apercu">Vue d'ensemble</a>
+    <a href="#depenses">Dépenses &amp; travaux <span class="tab-count"><?= count($expenses) ?></span></a>
+    <a href="#charges">Charges et impôts <span class="tab-count"><?= $tabCosts ?></span></a>
+    <a href="#documents">Documents légaux<?php if ($tabDocIssues): ?> <span class="tab-count tab-alert" title="Documents manquants ou expirés"><?= $tabDocIssues ?> ⚠</span><?php endif; ?></a>
+    <a href="#baux">Baux <span class="tab-count"><?= count($leases) ?></span></a>
+</nav>
+
+<section class="tab-panel" id="apercu">
 <div class="grid grid-4 mb">
     <div class="stat"><div class="label">Coût total</div><div class="value"><?= euros($ind['total_cost']) ?></div></div>
     <div class="stat"><div class="label">Rentab. brute</div><div class="value"><?= number_format($ind['gross_yield'],2,',',' ') ?> %</div></div>
@@ -63,7 +80,9 @@ $expensesTotal = Expense::totalForProperty((int) $p['id']); ?>
         <?php if ($p['notes']): ?><p class="small muted mt"><?= nl2br(e($p['notes'])) ?></p><?php endif; ?>
     </div>
 </div>
+</section>
 
+<section class="tab-panel" id="depenses">
 <h2>Dépenses &amp; travaux</h2>
 <p class="muted small">Achat, travaux, aménagement, mobilier… Ces montants s'ajoutent au coût total d'acquisition
 et alimentent les amortissements LMNP.</p>
@@ -109,7 +128,9 @@ et alimentent les amortissements LMNP.</p>
 <?php else: ?>
     <div class="card empty">Aucune dépense enregistrée pour ce bien.</div>
 <?php endif; ?>
+</section>
 
+<section class="tab-panel" id="charges">
 <?php
 $cy = (int) date('Y');
 $costYear = (int) ($_GET['annee'] ?? $cy);
@@ -117,7 +138,7 @@ $costs = PropertyCost::forProperty((int) $p['id'], $costYear);
 $costTot = array_sum(array_column($costs, 'amount'));
 $costRec = array_sum(array_column($costs, 'recoverable'));
 ?>
-<div class="page-head" id="charges" style="margin-top:1.5rem">
+<div class="page-head">
     <h2 style="margin:0">Charges et impôts réels</h2>
     <form method="get" action="<?= url('/biens/'.$p['id']) ?>#charges" class="actions">
         <select name="annee" onchange="this.form.submit()">
@@ -182,7 +203,9 @@ $costRec = array_sum(array_column($costs, 'recoverable'));
     d.addEventListener('change', function () { if (d.value) y.value = d.value.slice(0, 4); });
 })();
 </script>
+</section>
 
+<section class="tab-panel" id="documents">
 <?php
 $pid = (int) $property['id'];
 $docTypes = PropertyDocument::types();
@@ -190,7 +213,7 @@ $allDocs = PropertyDocument::forProperty($pid);
 $docIssues = PropertyDocument::issues($pid);
 $currentIds = array_column(PropertyDocument::current($pid), 'id');
 ?>
-<h2 id="documents">Documents légaux du logement</h2>
+<h2>Documents légaux du logement</h2>
 <p class="muted small">Diagnostics et documents à remettre au locataire avec le bail. Ils sont ajoutés automatiquement au
     dossier du locataire (fiche du bail → « Dossier du locataire »). Formats acceptés : PDF, JPG, PNG — 10 Mo maximum.</p>
 <?php if ($docIssues): ?>
@@ -240,7 +263,9 @@ $currentIds = array_column(PropertyDocument::current($pid), 'id');
     sel.addEventListener('change', upd); upd();
 })();
 </script>
+</section>
 
+<section class="tab-panel" id="baux">
 <h2>Baux liés à ce bien</h2>
 <?php if (!$leases): ?>
     <div class="card empty">Aucun bail. <a href="<?= url('/baux/new') ?>">Créer un bail</a>.</div>
@@ -260,3 +285,6 @@ $currentIds = array_column(PropertyDocument::current($pid), 'id');
     </tbody>
 </table></div>
 <?php endif; ?>
+</section>
+
+</div>

@@ -11,15 +11,33 @@ $icons = [
     'gear'      => '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2l-.3-2.5h-4l-.3 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.3 2.5h4l.3-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5A7 7 0 0 0 19 12z"/></svg>',
     'logout'    => '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4.5H5.5A1.5 1.5 0 0 0 4 6v12a1.5 1.5 0 0 0 1.5 1.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9"/></svg>',
 ];
-$links = [
-    ['/',            'Tableau de bord', 'dashboard'],
-    ['/biens',       'Biens',           'home'],
-    ['/locataires',  'Locataires',      'users'],
-    ['/baux',        'Baux',            'file'],
-    ['/loyers',      'Loyers',          'euro'],
-    ['/bilan',       'Bilan',           'chart'],
-    ['/fiscalite',   'Fiscalité',       'chart'],
+// Menu de gauche : groupes dépliables avec sous-menus.
+$propertiesMenu = [];
+try { $propertiesMenu = Property::all(); } catch (Throwable $e) { /* base indisponible */ }
+$propertyTabs = [
+    'apercu' => 'Vue d\'ensemble', 'depenses' => 'Dépenses & travaux', 'charges' => 'Charges et impôts',
+    'documents' => 'Documents légaux', 'baux' => 'Baux',
 ];
+$biensChildren = [['/biens', 'Tous les biens', true]];
+foreach ($propertiesMenu as $pm) {
+    $href = '/biens/' . (int) $pm['id'];
+    $sub = [];
+    if ($cur === $href) foreach ($propertyTabs as $k => $lbl) $sub[] = [$href . '#' . $k, $lbl];
+    $biensChildren[] = [$href, $pm['label'], false, $sub];
+}
+$biensChildren[] = ['/biens/new', '+ Ajouter un bien', true];
+$menu = [
+    ['/',      'Tableau de bord', 'dashboard', []],
+    ['/biens', 'Biens',           'home',      $biensChildren],
+    ['/baux',  'Locations',       'file',      [['/locataires', 'Locataires'], ['/baux', 'Baux'], ['/loyers', 'Loyers & quittances']]],
+    ['/bilan', 'Finances',        'chart',     [['/bilan', 'Bilan'], ['/projection', 'Projection'], ['/fiscalite', 'Fiscalité LMNP']]],
+];
+/** Lien actif : correspondance exacte, ou préfixe (sauf liens « exacts »). */
+$isActive = function (string $href, bool $exact = false) use ($cur): bool {
+    $path = strtok($href, '#');
+    if ($path === '/') return $cur === '/';
+    return $exact ? $cur === $path : ($cur === $path || str_starts_with($cur, $path . '/'));
+};
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,13 +58,32 @@ $links = [
             <div class="side-mail"><?= e($u['username'] ?? 'Gestion locative') ?></div>
         </div>
         <nav class="side-nav">
-            <?php foreach ($links as [$href, $label, $ico]):
-                $active = ($href === '/' ? $cur === '/' : str_starts_with($cur, $href)) ? ' class="active"' : ''; ?>
-                <a href="<?= url($href) ?>"<?= $active ?>><?= $icons[$ico] ?><span><?= $label ?></span></a>
-            <?php endforeach; ?>
+            <?php foreach ($menu as [$href, $label, $ico, $children]):
+                if (!$children): ?>
+                <a href="<?= url($href) ?>"<?= $isActive($href) ? ' class="active"' : '' ?>><?= $icons[$ico] ?><span><?= $label ?></span></a>
+            <?php else:
+                $groupActive = false;
+                foreach ($children as $c) if ($isActive($c[0], $c[2] ?? false)) $groupActive = true; ?>
+                <details class="side-group"<?= $groupActive ? ' open' : '' ?>>
+                    <summary class="<?= $groupActive ? 'active' : '' ?>"><?= $icons[$ico] ?><span><?= $label ?></span><span class="chev">›</span></summary>
+                    <div class="side-sub">
+                    <?php foreach ($children as $c):
+                        [$chref, $clabel] = $c; $cact = $isActive($chref, $c[2] ?? false); ?>
+                        <a href="<?= url($chref) ?>"<?= $cact ? ' class="active"' : '' ?>><?= e($clabel) ?></a>
+                        <?php if (!empty($c[3])): ?>
+                            <div class="side-sub2">
+                            <?php foreach ($c[3] as [$thref, $tlabel]): ?>
+                                <a href="<?= url(strtok($thref, '#')) . '#' . substr($thref, strpos($thref, '#') + 1) ?>" data-tab-link="<?= e(substr($thref, strpos($thref, '#') + 1)) ?>"><?= e($tlabel) ?></a>
+                            <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    </div>
+                </details>
+            <?php endif; endforeach; ?>
         </nav>
         <div class="side-bottom">
-            <a href="<?= url('/parametres') ?>"><?= $icons['gear'] ?><span>Paramètres</span></a>
+            <a href="<?= url('/parametres') ?>"<?= $isActive('/parametres') ? ' class="active"' : '' ?>><?= $icons['gear'] ?><span>Paramètres</span></a>
             <a href="<?= url('/logout') ?>"><?= $icons['logout'] ?><span>Déconnexion</span></a>
         </div>
     </aside>
@@ -75,5 +112,6 @@ $links = [
 
     <div class="backdrop" onclick="document.body.classList.remove('nav-open')"></div>
 </div>
+<script src="<?= url('/assets/tabs.js') ?>"></script>
 </body>
 </html>

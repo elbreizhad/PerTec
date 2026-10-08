@@ -51,38 +51,49 @@ class Lmnp
      */
     public static function loanForYear(array $p, int $year, int $untilMonth = 12): array
     {
-        $out = ['payments' => 0.0, 'interest' => 0.0, 'months' => 0];
+        $out = ['payments' => 0.0, 'interest' => 0.0, 'insurance' => 0.0, 'months' => 0, 'balance' => 0.0];
         $amount  = (float) $p['loan_amount'];
         $monthly = (float) $p['loan_monthly'];
         $rate    = (float) $p['loan_rate'] / 100 / 12;
         $start   = self::loanStart($p);
         if ($amount <= 0 || $monthly <= 0 || !$start) return $out;
         $maxMonths = (int) $p['loan_duration_months'] ?: 600;
+        // La mensualité saisie inclut l'assurance emprunteur : l'échéance hors assurance se déduit
+        // du capital, du taux et de la durée ; la différence est l'assurance (charge déductible).
+        $pmt = $monthly; $insurance = 0.0;
+        if ((int) $p['loan_duration_months'] > 0) {
+            $theoretical = $amount * $rate / (1 - pow(1 + $rate, -$maxMonths));
+            if ($theoretical < $monthly) { $pmt = $theoretical; $insurance = $monthly - $theoretical; }
+        }
 
         $balance = $amount;
         $y = (int) $start->format('Y'); $m = (int) $start->format('n');
         for ($i = 0; $i < $maxMonths && $balance > 0.01; $i++) {
             if ($y > $year || ($y === $year && $m > $untilMonth)) break;
             $interest  = $balance * $rate;
-            $payment   = min($monthly, $balance + $interest);
+            $payment   = min($pmt, $balance + $interest);
             if ($payment - $interest <= 0) break; // mensualité insuffisante
             if ($y === $year) {
-                $out['payments'] += $payment;
+                $out['payments'] += $payment + $insurance;
                 $out['interest'] += $interest;
+                $out['insurance'] += $insurance;
                 $out['months']++;
             }
             $balance -= $payment - $interest;
             if (++$m > 12) { $m = 1; $y++; }
         }
+        $out['balance'] = round(max(0.0, $balance), 2); // capital restant dû à la fin de la période
         $out['payments'] = round($out['payments'], 2);
         $out['interest'] = round($out['interest'], 2);
+        $out['insurance'] = round($out['insurance'], 2);
         return $out;
     }
 
-    /** Intérêts d'emprunt payés durant l'année. */
+    /** Intérêts et assurance d'emprunt payés durant l'année (charges déductibles). */
     public static function loanInterestForYear(array $p, int $year): float
     {
-        return self::loanForYear($p, $year)['interest'];
+        $l = self::loanForYear($p, $year);
+        return $l['interest'] + $l['insurance'];
     }
 
     /** Bases amortissables. */

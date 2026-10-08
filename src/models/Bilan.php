@@ -78,8 +78,8 @@ class Bilan
             'autre'         => ['label' => 'Autres charges'] + $line('autre', 0.0),
             'gestion'       => ['label' => 'Frais de gestion (' . rtrim(rtrim(number_format((float) $p['mgmt_fees_pct'], 2, ',', ''), '0'), ',') . ' % des loyers)',
                                 'amount' => $loyers * (float) $p['mgmt_fees_pct'] / 100, 'recoverable' => 0.0, 'estimated' => false],
-            'interets'      => ['label' => 'Intérêts d\'emprunt (' . $loan['months'] . ' échéance' . ($loan['months'] > 1 ? 's' : '') . ')',
-                                'amount' => $loan['interest'], 'recoverable' => 0.0, 'estimated' => false],
+            'interets'      => ['label' => 'Intérêts et assurance d\'emprunt (' . $loan['months'] . ' échéance' . ($loan['months'] > 1 ? 's' : '') . ')',
+                                'amount' => $loan['interest'] + ($loan['insurance'] ?? 0.0), 'recoverable' => 0.0, 'estimated' => false],
             'depenses'      => ['label' => 'Autres dépenses déductibles (fiche du bien)',
                                 'amount' => self::expenses($pid, Expense::DEDUCTIBLE, $year, $until), 'recoverable' => 0.0, 'estimated' => false],
         ];
@@ -90,7 +90,7 @@ class Bilan
 
         // --- Emprunt : mensualités versées (capital + intérêts + assurance) ---
         $mensualites = $loan['payments'];
-        $capital = max(0.0, $mensualites - $loan['interest']);
+        $capital = max(0.0, $mensualites - $loan['interest'] - ($loan['insurance'] ?? 0.0));
 
         $resultat = $encaissements - $chargesTotal;                       // hors amortissements et hors capital remboursé
         $cashflow = $encaissements - $chargesTotal - $capital - $investissements;

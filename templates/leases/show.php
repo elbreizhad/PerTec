@@ -18,6 +18,28 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
     </div>
 </div>
 
+<?php
+$applicable = Checklist::applicableItems($l['lease_type']);
+$checked    = Checklist::checkedKeys((int) $l['id']);
+[$done, $total] = Checklist::progress((int) $l['id'], $l['lease_type']);
+$pct = $total > 0 ? round($done / $total * 100) : 0;
+?>
+<?php
+$tabSigned = count(LeaseSignature::valid($l, $settings)) === count(LeaseSignature::ROLES);
+$tabDocIssues = count(PropertyDocument::issues((int) $l['property_id'], $l['signature_date'] ?: $l['start_date']));
+$tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l)) : null;
+?>
+<div data-tabs>
+<nav class="tabs">
+    <a href="#apercu">Vue d'ensemble<?php if ($l['lease_type'] === 'meuble' && $issues['blocking']): ?> <span class="tab-count tab-alert">⚠</span><?php endif; ?></a>
+    <a href="#loyers">Loyers <span class="tab-count"><?= count($payments) ?></span></a>
+    <a href="#signature">Signature <span class="tab-count<?= $tabSigned ? '' : ' tab-alert' ?>"><?= $tabSigned ? '✔' : 'à faire' ?></span></a>
+    <a href="#liasse">Dossier locataire<?php if ($tabDocIssues): ?> <span class="tab-count tab-alert"><?= $tabDocIssues ?> ⚠</span><?php endif; ?></a>
+    <?php if ($tabInv): ?><a href="#inventaire">Inventaire <span class="tab-count"><?= $tabInv[0] ?>/<?= $tabInv[1] ?></span></a><?php endif; ?>
+    <a href="#checklist">Checklist <span class="tab-count"><?= $done ?>/<?= $total ?></span></a>
+</nav>
+
+<section class="tab-panel" id="apercu">
 <?php if ($l['lease_type'] === 'meuble' && ($issues['blocking'] || $issues['warnings'])): ?>
 <div class="card">
     <h3>Contrôle avant génération du bail</h3>
@@ -60,7 +82,9 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
         <p class="muted">Aucune garantie. <a href="<?= url('/baux/'.$l['id'].'/edit') ?>">Ajouter un garant ou Visale</a></p>
     <?php endif; ?>
 </div>
+</section>
 
+<section class="tab-panel" id="loyers">
 <div class="card">
     <h3>Ajouter une échéance de loyer</h3>
     <form method="post" action="<?= url('/baux/'.$l['id'].'/echeance') ?>" class="actions">
@@ -104,13 +128,9 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
     </tbody>
 </table></div>
 <?php endif; ?>
+</section>
 
-<?php
-$applicable = Checklist::applicableItems($l['lease_type']);
-$checked    = Checklist::checkedKeys((int) $l['id']);
-[$done, $total] = Checklist::progress((int) $l['id'], $l['lease_type']);
-$pct = $total > 0 ? round($done / $total * 100) : 0;
-?>
+<section class="tab-panel" id="signature">
 <?php
 $sigAll    = LeaseSignature::forLease((int) $l['id']);
 $sigValid  = $sigAll ? LeaseSignature::valid($l, $settings) : [];
@@ -119,7 +139,7 @@ $signedPdf = LeaseSignature::signedPdf((int) $l['id']);
 $sigLink   = $_SESSION['sign_link_' . (int) $l['id']] ?? null;
 $blocked   = $l['lease_type'] === 'meuble' && $issues['blocking'];
 ?>
-<h2 id="signature">Signature du bail</h2>
+<h2>Signature du bail</h2>
 <div class="card">
     <?php if ($sigAll && count($sigValid) < count($sigAll)): ?>
         <div class="flash flash-error">Le bail a été modifié après signature : les signatures ne correspondent plus à la version actuelle.
@@ -177,13 +197,15 @@ $blocked   = $l['lease_type'] === 'meuble' && $issues['blocking'];
     <p class="small muted mt">Signature électronique simple (art. 1366-1367 du Code civil) : date, heure, adresse IP, navigateur et
         empreinte du contrat sont enregistrés comme preuve. Le PDF signé est archivé dès que les deux parties ont signé.</p>
 </div>
+</section>
 
+<section class="tab-panel" id="liasse">
 <?php
 $docIssues = PropertyDocument::issues((int) $l['property_id'], $l['signature_date'] ?: $l['start_date']);
 $docs = PropertyDocument::current((int) $l['property_id']);
 $guarantsList = Lease::guarantors($l);
 ?>
-<h2 id="liasse">Dossier du locataire (liasse)</h2>
+<h2>Dossier du locataire (liasse)</h2>
 <div class="card">
     <p class="small muted">Tous les documents à remettre au locataire, en un seul envoi :</p>
     <ol class="small">
@@ -217,11 +239,14 @@ Cordialement,
         <div class="mt"><button class="btn">📧 Envoyer le dossier</button></div>
     </form>
 </div>
+</section>
 
+<?php if ($l['lease_type'] === 'meuble'): ?>
+<section class="tab-panel" id="inventaire">
 <?php if ($l['lease_type'] === 'meuble'):
     $invRows = Inventory::rows($l);
     [$invDone, $invTotal] = Inventory::progress($invRows); ?>
-<h2 id="inventaire">Inventaire du mobilier (annexe 1)</h2>
+<h2>Inventaire du mobilier (annexe 1)</h2>
 <p class="muted small">Cochez la présence de chaque élément et notez son état (à faire lors de l'état des lieux d'entrée).
     L'annexe 1 du contrat est imprimée avec vos réponses ; les lignes non renseignées restent à cocher à la main.
     — <?= $invDone ?>/<?= $invTotal ?> renseigné(s)</p>
@@ -258,7 +283,11 @@ Cordialement,
     </div>
 </form>
 <?php endif; ?>
+</section>
 
+<?php endif; ?>
+
+<section class="tab-panel" id="checklist">
 <h2>Checklist de conformité</h2>
 <p class="muted small">Vérifiez que tout est en règle côté bailleur et que le locataire a bien fourni toutes les pièces.</p>
 
@@ -293,3 +322,6 @@ Cordialement,
 <form method="post" action="<?= url('/baux/'.$l['id'].'/delete') ?>" onsubmit="return confirm('Supprimer ce bail et tout son historique ?')" class="mt">
     <?= csrf_field() ?><button class="btn btn-danger btn-sm">Supprimer le bail</button>
 </form>
+</section>
+
+</div>

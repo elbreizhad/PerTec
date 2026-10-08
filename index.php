@@ -37,6 +37,7 @@ require __DIR__ . '/src/models/LeaseSignature.php';
 require __DIR__ . '/src/models/Liasse.php';
 require __DIR__ . '/src/models/PropertyCost.php';
 require __DIR__ . '/src/models/Bilan.php';
+require __DIR__ . '/src/models/Projection.php';
 
 App::boot();
 

@@ -13,6 +13,7 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
         <select style="width:auto" onchange="location.href='<?= url('/bilan/'.$p['id']) ?>?year='+this.value" title="Fin d'année">
             <?php for ($y = $cy + 1; $y >= $cy - 6; $y--): ?><option value="<?= $y ?>" <?= $y === $year ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
         </select>
+        <a class="btn btn-secondary" href="<?= url('/projection/'.$p['id']) ?>">📈 Projection</a>
         <button type="button" class="btn" onclick="window.print()">🖨️ Imprimer</button>
     </form>
 </div>
@@ -51,7 +52,7 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
             <tr class="total"><td><strong>Cash-flow</strong></td><td class="num"><strong><?= $money($b['cashflow']) ?></strong></td></tr>
         </tbody>
     </table></div>
-    <p class="small muted">Mensualités d'emprunt payées sur l'année : <?= euros($b['mensualites']) ?> (dont intérêts <?= euros($b['charges']['interets']['amount']) ?>).</p>
+    <p class="small muted">Mensualités d'emprunt payées sur l'année : <?= euros($b['mensualites']) ?> (dont intérêts et assurance <?= euros($b['charges']['interets']['amount']) ?>).</p>
 </div>
 
 <div class="card">

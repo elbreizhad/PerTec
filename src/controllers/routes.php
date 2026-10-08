@@ -128,7 +128,7 @@ App::post('/biens/{id}/depenses', function ($params) {
         Expense::create(Expense::fromRequest($pid));
         flash('Dépense ajoutée.');
     }
-    redirect('/biens/' . $pid);
+    redirect('/biens/' . $pid . '#depenses');
 });
 
 App::post('/depenses/{id}/delete', function ($params) {
@@ -137,7 +137,7 @@ App::post('/depenses/{id}/delete', function ($params) {
     $exp = Expense::find((int) $params['id']);
     Expense::delete((int) $params['id']);
     flash('Dépense supprimée.');
-    redirect('/biens/' . (int) ($exp['property_id'] ?? 0));
+    redirect('/biens/' . (int) ($exp['property_id'] ?? 0) . '#depenses');
 });
 
 /* =========================================================================
@@ -297,7 +297,7 @@ App::post('/baux/{id}/checklist', function ($params) {
         Checklist::save($id, (array) post('items', []));
         flash('Checklist enregistrée.');
     }
-    redirect('/baux/' . $id);
+    redirect('/baux/' . $id . '#checklist');
 });
 
 // Générer une échéance manuelle pour un bail (mois/année choisis)
@@ -312,7 +312,7 @@ App::post('/baux/{id}/echeance', function ($params) {
             ? flash('Échéance ajoutée.')
             : flash('Cette échéance existe déjà.', 'error');
     }
-    redirect('/baux/' . (int) $params['id']);
+    redirect('/baux/' . (int) $params['id'] . '#loyers');
 });
 
 /* =========================================================================
@@ -375,7 +375,7 @@ App::post('/loyers/{id}/modifier', function ($params) {
     if (!$payment) redirect('/loyers');
     Payment::updateAmounts($id, num(post('amount_rent')), num(post('amount_charges')), post('notes'));
     flash('Échéance mise à jour.');
-    redirect('/baux/' . (int) $payment['lease_id']);
+    redirect('/baux/' . (int) $payment['lease_id'] . '#loyers');
 });
 
 App::post('/loyers/{id}/delete', function ($params) {
@@ -980,4 +980,24 @@ App::get('/bilan/{id}', function ($params) use ($bilanDate) {
         'b'        => Bilan::compute($property, $year, $asOf),
         'costs'    => PropertyCost::forProperty((int) $property['id'], $year),
     ]);
+});
+
+/* =========================================================================
+ * PROJECTION DE RENTABILITÉ
+ * ========================================================================= */
+
+App::get('/projection', function () {
+    Auth::requireLogin();
+    $h = Projection::params($_GET);
+    $all = Projection::all($h);
+    view('projection/show', ['property' => null, 'h' => $h, 'rows' => $all['rows'], 'per' => $all['per'], 'r' => null]);
+});
+
+App::get('/projection/{id}', function ($params) {
+    Auth::requireLogin();
+    $property = Property::find((int) $params['id']);
+    if (!$property) redirect('/projection');
+    $h = Projection::params($_GET);
+    $r = Projection::compute($property, $h);
+    view('projection/show', ['property' => $property, 'h' => $h, 'rows' => $r['rows'], 'per' => null, 'r' => $r]);
 });

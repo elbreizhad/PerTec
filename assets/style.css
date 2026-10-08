@@ -178,3 +178,31 @@ table tr.total td{border-top:2px solid var(--ink);font-weight:700}
 }
 td.num{white-space:nowrap}
 .side-bottom .ico{width:20px;height:20px;flex-shrink:0;color:#8ea0c0;display:inline-flex}
+
+/* ===== Menu de gauche : groupes et sous-menus ===== */
+.side-group{border-radius:10px}
+.side-group summary{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border-radius:10px;color:#c2cde0;font-weight:500;font-size:.93rem;cursor:pointer;list-style:none;user-select:none}
+.side-group summary::-webkit-details-marker{display:none}
+.side-group summary:hover{background:rgba(255,255,255,.06);color:#fff}
+.side-group summary.active{color:#fff}
+.side-group summary.active .ico{color:var(--accent)}
+.side-group .chev{margin-left:auto;font-size:1.1rem;transition:transform .15s;color:#8ea0c0}
+.side-group[open] .chev{transform:rotate(90deg)}
+.side-sub{display:flex;flex-direction:column;gap:.05rem;margin:.1rem 0 .3rem 1.55rem;padding-left:.75rem;border-left:1px solid rgba(255,255,255,.1)}
+.side-nav .side-sub a{padding:.42rem .7rem;font-size:.86rem;color:#a9b6d0;border-radius:8px;gap:.4rem}
+.side-nav .side-sub a.active{background:rgba(245,165,36,.14);color:#fff}
+.side-sub2{display:flex;flex-direction:column;margin:.05rem 0 .25rem .7rem;padding-left:.6rem;border-left:1px dashed rgba(255,255,255,.12)}
+.side-nav .side-sub2 a{padding:.3rem .6rem;font-size:.8rem;color:#8ea0c0}
+.side-nav .side-sub2 a.active{color:var(--accent);background:none}
+.side-bottom a.active{background:rgba(245,165,36,.14);color:#fff}
+
+/* ===== Onglets de page ===== */
+.tabs{display:flex;gap:.25rem;border-bottom:2px solid #e5e7eb;margin:0 0 1.2rem;overflow-x:auto;scrollbar-width:thin}
+.tabs a{padding:.65rem 1rem;font-weight:600;font-size:.92rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;display:flex;align-items:center;gap:.4rem}
+.tabs a:hover{color:var(--ink);text-decoration:none}
+.tabs a.active{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs .tab-count{background:#eef2f7;color:var(--muted);border-radius:999px;font-size:.72rem;padding:.05rem .45rem;font-weight:700}
+.tabs .tab-alert{background:#fef2f2;color:#991b1b}
+.js-tabs .tab-panel{display:none}
+.js-tabs .tab-panel.active{display:block}
+@media print{.tabs{display:none}.js-tabs .tab-panel{display:block!important}}

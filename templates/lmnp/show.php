@@ -50,7 +50,7 @@ $impotReel = max(0.0, $f['result_reel']);
             <tr><td>Assurance PNO</td><td class="num"><?= euros($f['charges']['assurance']) ?></td></tr>
             <tr><td>Charges de copropriété</td><td class="num"><?= euros($f['charges']['charges_copro']) ?></td></tr>
             <tr><td>Frais de gestion</td><td class="num"><?= euros($f['charges']['gestion']) ?></td></tr>
-            <tr><td>Intérêts d'emprunt</td><td class="num"><?= euros($f['charges']['interets']) ?></td></tr>
+            <tr><td>Intérêts et assurance d'emprunt</td><td class="num"><?= euros($f['charges']['interets']) ?></td></tr>
             <tr><td>Frais de comptable</td><td class="num"><?= euros($f['charges']['comptable']) ?></td></tr>
             <tr><td>Autres charges déductibles</td><td class="num"><?= euros($f['charges']['autres']) ?></td></tr>
             <tr class="total"><td><strong>Total</strong></td><td class="num"><strong><?= euros($f['charges_total']) ?></strong></td></tr>
