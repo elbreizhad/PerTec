@@ -42,6 +42,16 @@ class Lease
 
     public static function fromRequest(): array
     {
+        $data = self::requestData();
+        // Champs Visale conservés uniquement si Visale est le type de garantie choisi.
+        if ($data['guarantee_type'] !== 'visale') {
+            foreach (['visale_visa_number', 'visale_visa_expiry', 'visale_contract_number', 'visale_max_rent'] as $k) $data[$k] = null;
+        }
+        return $data;
+    }
+
+    private static function requestData(): array
+    {
         return [
             'property_id'    => (int) post('property_id'),
             'tenant_id'      => (int) post('tenant_id'),

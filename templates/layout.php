@@ -60,6 +60,9 @@ $links = [
         </header>
 
         <main class="content">
+            <?php if (class_exists('Migrator') && Migrator::$error): ?>
+                <div class="flash flash-error">⚠️ Mise à jour de la base de données incomplète — certaines fonctions peuvent échouer.<br><small><?= e(Migrator::$error) ?></small></div>
+            <?php endif; ?>
             <?php foreach ((flash() ?: []) as $f): ?>
                 <div class="flash flash-<?= e($f['type']) ?>"><?= e($f['msg']) ?></div>
             <?php endforeach; ?>
