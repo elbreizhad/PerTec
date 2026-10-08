@@ -63,8 +63,10 @@ au domicile du bailleur ou par tout moyen convenu entre les parties.</p>
 habitation et à en justifier chaque année. Le bailleur s'engage à délivrer un logement décent et à en assurer la
 jouissance paisible, conformément à la loi du 6 juillet 1989.</p>
 
+<?= render_template('partials/clause_resolutoire', ['num' => 6]) ?>
+
 <?php if (!empty($l['notes'])): ?>
-<h2>Article 6 — Conditions particulières</h2>
+<h2>Article 7 — Conditions particulières</h2>
 <p class="article"><?= nl2br(e($l['notes'])) ?></p>
 <?php endif; ?>
 

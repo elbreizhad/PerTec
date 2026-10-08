@@ -173,10 +173,7 @@ Le <strong>bailleur</strong> peut donner congé pour l'échéance du bail, moyen
 et pour un motif légitime et sérieux, pour reprise ou pour vente. Le congé est notifié par lettre recommandée avec accusé
 de réception, acte d'huissier ou remise en main propre contre récépissé.</p>
 
-<h2>Article <?= $artNum++ ?> — Clause résolutoire</h2>
-<p class="article">À défaut de paiement du loyer ou des charges aux échéances convenues, de versement du dépôt de garantie,
-ou de défaut d'assurance, le bail sera résilié de plein droit deux mois après un commandement de payer ou de
-s'exécuter demeuré infructueux.</p>
+<?= render_template('partials/clause_resolutoire', ['num' => $artNum++]) ?>
 
 <h2>Article <?= $artNum++ ?> — État des lieux et inventaire</h2>
 <p class="article">Un état des lieux contradictoire ainsi qu'un inventaire détaillé du mobilier (Annexe 1) sont établis lors
