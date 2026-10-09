@@ -223,3 +223,29 @@ td.num{white-space:nowrap}
 .js-tabs .tab-panel{display:none}
 .js-tabs .tab-panel.active{display:block}
 @media print{.tabs{display:none}.js-tabs .tab-panel{display:block!important}}
+
+/* ===== Espace locataire ===== */
+body.portal{background:var(--bg)}
+.portal-wrap{max-width:960px;margin:0 auto;padding:0 1rem}
+.portal-top{background:var(--white);box-shadow:var(--shadow-sm);padding:.9rem 0;margin-bottom:1.4rem}
+.portal-top .portal-wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.portal-main{padding-bottom:2rem}
+.portal-login{max-width:420px;margin:2rem auto}
+.portal-code{font-size:1.6rem;letter-spacing:.4em;text-align:center;font-weight:700}
+.portal-docs{list-style:none;padding:0;margin:0}
+.portal-docs li{padding:.45rem 0;border-bottom:1px solid #eef2f7}
+.portal-lease h3{margin-top:1.2rem}
+.portal-pay .pp-lbl{display:none}
+@media(max-width:640px){
+  .portal-pay thead{display:none}
+  .portal-pay,.portal-pay tbody,.portal-pay tr,.portal-pay td{display:block;width:100%}
+  .portal-pay tr{display:grid;grid-template-columns:1fr auto;gap:.25rem .6rem;padding:.75rem .2rem;border-bottom:1px solid #eef2f7}
+  .portal-pay td{padding:0;border:none}
+  .portal-pay .pp-period{font-weight:600}
+  .portal-pay .pp-amount{text-align:right;font-weight:600}
+  .portal-pay .pp-due{color:var(--muted);font-size:.85rem}
+  .portal-pay .pp-lbl{display:inline}
+  .portal-pay .pp-status{text-align:right}
+  .portal-pay .pp-action{grid-column:1 / -1;text-align:left}
+  .portal-pay .pp-action:empty{display:none}
+}

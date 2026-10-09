@@ -1001,3 +1001,140 @@ App::get('/projection/{id}', function ($params) {
     $r = Projection::compute($property, $h);
     view('projection/show', ['property' => $property, 'h' => $h, 'rows' => $r['rows'], 'per' => null, 'r' => $r]);
 });
+
+/* =========================================================================
+ * ESPACE LOCATAIRE (connexion par code envoyé par email)
+ * ========================================================================= */
+
+/**
+ * Accès à l'espace : locataire connecté, ou administrateur en aperçu (?apercu=ID locataire).
+ * Renvoie [ids des fiches locataire, aperçu admin ?] ou redirige vers la connexion.
+ */
+$portalAccess = function (): array {
+    $preview = (int) ($_GET['apercu'] ?? 0);
+    if ($preview && Auth::check()) {
+        $t = Tenant::find($preview);
+        if (!$t) redirect('/locataires');
+        $ids = $t['email'] ? array_map('intval', array_column(TenantPortal::tenantsByEmail($t['email']), 'id')) : [];
+        return [$ids ?: [$preview], $preview];
+    }
+    $ids = TenantPortal::sessionTenantIds();
+    if (!$ids) redirect('/locataire');
+    return [$ids, 0];
+};
+/** Lien interne à l'espace, en conservant l'aperçu administrateur. */
+$portalUrl = fn(string $path, int $preview): string => url($path) . ($preview ? '?apercu=' . $preview : '');
+
+App::get('/locataire', function () {
+    if (TenantPortal::sessionTenantIds()) redirect('/locataire/espace');
+    view('portal/login', ['step' => 'email', 'email' => $_SESSION['portal_email'] ?? ''], 'portal/layout');
+});
+
+App::post('/locataire', function () {
+    csrf_check();
+    $email = trim((string) post('email'));
+    $_SESSION['portal_email'] = $email;
+    try {
+        TenantPortal::sendCode($email);
+        flash('Si cette adresse correspond à un locataire, un code de connexion vient de lui être envoyé par email.');
+        redirect('/locataire/code');
+    } catch (Throwable $e) {
+        flash($e->getMessage(), 'error');
+        redirect('/locataire');
+    }
+});
+
+App::get('/locataire/code', function () {
+    if (empty($_SESSION['portal_email'])) redirect('/locataire');
+    view('portal/login', ['step' => 'code', 'email' => $_SESSION['portal_email']], 'portal/layout');
+});
+
+App::post('/locataire/code', function () {
+    csrf_check();
+    $email = (string) ($_SESSION['portal_email'] ?? '');
+    try {
+        $ids = TenantPortal::verify($email, (string) post('code'));
+        session_regenerate_id(true);
+        $_SESSION['tenant_ids'] = $ids;
+        unset($_SESSION['portal_email']);
+        redirect('/locataire/espace');
+    } catch (Throwable $e) {
+        flash($e->getMessage(), 'error');
+        redirect('/locataire/code');
+    }
+});
+
+App::get('/locataire/deconnexion', function () {
+    unset($_SESSION['tenant_ids']);
+    flash('Vous êtes déconnecté.');
+    redirect('/locataire');
+});
+
+App::get('/locataire/espace', function () use ($portalAccess, $portalUrl) {
+    [$ids, $preview] = $portalAccess();
+    $tenants = array_values(array_filter(array_map(fn($id) => Tenant::find($id), $ids)));
+    view('portal/home', [
+        'tenants'  => $tenants,
+        'leases'   => TenantPortal::leases($ids),
+        'settings' => Setting::all(),
+        'preview'  => $preview,
+        'link'     => fn(string $p) => $portalUrl($p, $preview),
+    ], 'portal/layout');
+});
+
+App::get('/locataire/quittance/{id}', function ($params) use ($portalAccess) {
+    [$ids] = $portalAccess();
+    $payment = Payment::find((int) $params['id']);
+    $lease = $payment ? TenantPortal::ownsLease($ids, (int) $payment['lease_id']) : null;
+    if (!$lease || $payment['status'] !== 'paid') { http_response_code(404); exit('Quittance introuvable.'); }
+    Pdf::streamDocument('documents/quittance', ['payment' => $payment, 'lease' => $lease, 'settings' => Setting::all(), 'forPdf' => true],
+        QuittanceMail::attachmentName($payment), false);
+});
+
+App::get('/locataire/bail/{id}', function ($params) use ($portalAccess, $sendFile) {
+    [$ids] = $portalAccess();
+    $lease = TenantPortal::ownsLease($ids, (int) $params['id']);
+    if (!$lease) { http_response_code(404); exit('Bail introuvable.'); }
+    $settings = Setting::all();
+    $signed = count(LeaseSignature::valid($lease, $settings)) === count(LeaseSignature::ROLES) ? LeaseSignature::signedPdf((int) $lease['id']) : null;
+    $data = $signed ? $signed['pdf'] : Pdf::renderDocument(LeaseSignature::template($lease), ['lease' => $lease, 'settings' => $settings]);
+    $sendFile($data, 'application/pdf', ($signed ? 'Bail-signe' : 'Bail') . '.pdf', true);
+});
+
+App::get('/locataire/document/{id}', function ($params) use ($portalAccess, $sendFile) {
+    [$ids] = $portalAccess();
+    $doc = PropertyDocument::find((int) $params['id']);
+    $propertyIds = array_map(fn($l) => (int) $l['property_id'], TenantPortal::leases($ids));
+    if (!$doc || !in_array((int) $doc['property_id'], $propertyIds, true)) { http_response_code(404); exit('Document introuvable.'); }
+    $sendFile($doc['content'], $doc['mime'], $doc['filename'], true);
+});
+
+// Administrateur : voir l'espace d'un locataire tel qu'il le voit, sans code
+App::get('/locataires/{id}/espace', function ($params) {
+    Auth::requireLogin();
+    redirect('/locataire/espace?apercu=' . (int) $params['id']);
+});
+
+// Administrateur : envoyer au locataire le lien de son espace
+App::post('/locataires/{id}/invitation', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $t = Tenant::find((int) $params['id']);
+    if (!$t || !filter_var((string) $t['email'], FILTER_VALIDATE_EMAIL)) {
+        flash('Renseignez d\'abord l\'email du locataire.', 'error');
+        redirect('/locataires');
+    }
+    $s = Setting::all();
+    $name = trim((string) ($s['mail_from_name'] ?? '')) ?: (string) ($s['landlord_name'] ?? '');
+    try {
+        Mailer::send($t['email'], 'Votre espace locataire', "Bonjour " . $t['first_name'] . ",\n\n"
+            . "Vous pouvez désormais retrouver en ligne votre bail, vos quittances de loyer, l'état de vos paiements et les documents du logement :\n\n"
+            . LeaseSignature::absoluteUrl('/locataire') . "\n\n"
+            . "Pour vous connecter, saisissez votre adresse email (" . $t['email'] . ") : vous recevrez un code de connexion par email. Aucun mot de passe n'est nécessaire.\n\n"
+            . "Cordialement,\n$name");
+        flash('Invitation envoyée à ' . $t['email'] . '.');
+    } catch (Throwable $e) {
+        flash("Échec de l'envoi : " . $e->getMessage(), 'error');
+    }
+    redirect('/locataires');
+});

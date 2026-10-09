@@ -14,6 +14,7 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
         <?php foreach ($guarants as $i => $g): ?>
             <a href="<?= url('/caution/'.$l['id'].($i===1?'?g=2':'')) ?>" class="btn btn-secondary" target="_blank">🖋️ Acte de cautionnement<?= count($guarants) > 1 ? ' — '.e($g['name']) : '' ?></a>
         <?php endforeach; ?>
+        <a href="<?= url('/locataires/'.$l['tenant_id'].'/espace') ?>" class="btn" target="_blank">👁 Espace locataire</a>
         <a href="<?= url('/baux/'.$l['id'].'/edit') ?>" class="btn">Modifier</a>
     </div>
 </div>

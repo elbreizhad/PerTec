@@ -38,6 +38,7 @@ require __DIR__ . '/src/models/Liasse.php';
 require __DIR__ . '/src/models/PropertyCost.php';
 require __DIR__ . '/src/models/Bilan.php';
 require __DIR__ . '/src/models/Projection.php';
+require __DIR__ . '/src/models/TenantPortal.php';
 
 App::boot();
 
