@@ -38,6 +38,11 @@ class Projection
     {
         $startYear = (int) date('Y') + 1; // première année complète
         $rentMonthly = Finance::currentMonthlyRent((int) $prop['id']);
+        // Révision IRL à chaque date anniversaire du bail en cours (le loyer actuel inclut déjà les révisions passées).
+        $lease = Database::one("SELECT start_date FROM leases WHERE property_id = ? AND status = 'active' ORDER BY start_date DESC LIMIT 1", [(int) $prop['id']]);
+        $anniv = $lease ? substr($lease['start_date'], 5, 5) : '01-01'; // MM-JJ
+        $firstRevisionYear = $lease ? (int) substr($lease['start_date'], 0, 4) + 1 : (int) date('Y') + 1; // 1er anniversaire
+        $today = date('Y-m-d');
         $cost = Finance::totalCost($prop);
         $baseCharges = (float) $prop['property_tax'] + (float) $prop['insurance_year'] + (float) $prop['charges_year']
             + (float) ($prop['accountant_fees'] ?? 0);
@@ -48,7 +53,18 @@ class Projection
         $rows = []; $cumul = 0.0; $loanEnd = null;
         for ($i = 0; $i < $h['annees']; $i++) {
             $y = $startYear + $i;
-            $loyers = $rentMonthly * pow(1 + $h['loyer'] / 100, $i) * max(0, 12 - $h['vacance']);
+            // Loyer mois par mois : nombre de révisions intervenues depuis aujourd'hui au début du mois.
+            $loyersBruts = 0.0;
+            for ($m = 1; $m <= 12; $m++) {
+                $monthStart = sprintf('%04d-%02d-01', $y, $m);
+                $revisions = 0;
+                for ($ay = max((int) date('Y'), $firstRevisionYear); $ay <= $y; $ay++) {
+                    $d = $ay . '-' . $anniv;
+                    if ($d > $today && $d <= $monthStart) $revisions++;
+                }
+                $loyersBruts += $rentMonthly * pow(1 + $h['loyer'] / 100, $revisions);
+            }
+            $loyers = $loyersBruts * max(0, 12 - $h['vacance']) / 12;
             $charges = $baseCharges * pow(1 + $h['charges'] / 100, $i) + $loyers * $mgmtPct;
             $loan = Lmnp::loanForYear($prop, $y);
             $interets = $loan['interest'] + $loan['insurance']; // intérêts + assurance emprunteur
@@ -74,6 +90,7 @@ class Projection
             'brute'      => $cost > 0 ? $rentMonthly * 12 / $cost * 100 : 0.0,
             'nette'      => $first['renta_nette'] ?? 0.0,
             'cf_mensuel' => $first ? $first['cashflow'] / 12 : 0.0,
+            'cf_moyen'   => $rows ? $cumul / count($rows) / 12 : 0.0,
             'loan_end'   => $loanEnd,
             'cumul'      => $cumul,
             'patrimoine' => $rows ? end($rows)['patrimoine'] : 0.0,

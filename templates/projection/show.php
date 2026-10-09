@@ -5,13 +5,13 @@ $money = fn($v) => '<span class="' . ($v < 0 ? 'neg' : '') . '">' . euros($v) . 
 $last = $rows ? end($rows) : null;
 // Synthèse (un bien : calculée ; tous les biens : à partir des sommes)
 if ($r) {
-    $cards = ['brute' => $r['brute'], 'nette' => $r['nette'], 'cf' => $r['cf_mensuel'], 'loan_end' => $r['loan_end'], 'patrimoine' => $r['patrimoine'], 'cumul' => $r['cumul']];
+    $cards = ['brute' => $r['brute'], 'nette' => $r['nette'], 'cf' => $r['cf_mensuel'], 'cf_moyen' => $r['cf_moyen'], 'loan_end' => $r['loan_end'], 'patrimoine' => $r['patrimoine'], 'cumul' => $r['cumul']];
 } else {
     $cost = 0.0; $rent = 0.0;
     foreach ($per as $x) { $cost += $x['r']['cost']; $rent += $x['r']['rent']; }
     $first = $rows[0] ?? ['loyers' => 0, 'charges' => 0, 'cashflow' => 0];
     $cards = ['brute' => $cost > 0 ? $rent * 12 / $cost * 100 : 0, 'nette' => $cost > 0 ? ($first['loyers'] - $first['charges']) / $cost * 100 : 0,
-              'cf' => $first['cashflow'] / 12, 'loan_end' => null, 'patrimoine' => $last['patrimoine'] ?? 0, 'cumul' => $last['cumul'] ?? 0];
+              'cf' => $first['cashflow'] / 12, 'cf_moyen' => $rows ? ($last['cumul'] ?? 0) / count($rows) / 12 : 0, 'loan_end' => null, 'patrimoine' => $last['patrimoine'] ?? 0, 'cumul' => $last['cumul'] ?? 0];
 }
 $pct = fn($v) => number_format($v, 2, ',', ' ') . ' %';
 ?>
@@ -28,7 +28,7 @@ $pct = fn($v) => number_format($v, 2, ',', ' ') . ' %';
     <h3>Hypothèses</h3>
     <div class="form-grid">
         <div class="field"><label>Durée (années)</label><input type="number" name="annees" min="1" max="40" value="<?= $h['annees'] ?>"></div>
-        <div class="field"><label>Hausse des loyers / an (IRL, %)</label><input name="loyer" inputmode="decimal" value="<?= e((string) $h['loyer']) ?>"></div>
+        <div class="field"><label>Hausse des loyers / an (IRL, %, à la date anniversaire du bail)</label><input name="loyer" inputmode="decimal" value="<?= e((string) $h['loyer']) ?>"></div>
         <div class="field"><label>Hausse des charges / an (%)</label><input name="charges" inputmode="decimal" value="<?= e((string) $h['charges']) ?>"></div>
         <div class="field"><label>Vacance (mois sans locataire / an)</label><input name="vacance" inputmode="decimal" value="<?= e((string) $h['vacance']) ?>"></div>
         <div class="field"><label>Évolution de la valeur du bien / an (%)</label><input name="valeur" inputmode="decimal" value="<?= e((string) $h['valeur']) ?>"></div>
@@ -41,9 +41,9 @@ $pct = fn($v) => number_format($v, 2, ',', ' ') . ' %';
 </form>
 
 <div class="grid grid-4 mb">
-    <div class="stat"><div class="label">Rentabilité brute</div><div class="value"><?= $pct($cards['brute']) ?></div></div>
-    <div class="stat"><div class="label">Rentabilité nette (année 1)</div><div class="value"><?= $pct($cards['nette']) ?></div></div>
-    <div class="stat"><div class="label">Cash-flow / mois (année 1)</div><div class="value <?= $cards['cf'] >= 0 ? 'pos' : 'neg' ?>"><?= euros($cards['cf']) ?></div></div>
+    <div class="stat"><div class="label">Rentabilité brute / nette (<?= (int) date('Y') + 1 ?>)</div><div class="value"><?= $pct($cards['brute']) ?> <span class="small muted">/ <?= $pct($cards['nette']) ?></span></div></div>
+    <div class="stat"><div class="label">Cash-flow / mois en <?= (int) date('Y') + 1 ?></div><div class="value <?= $cards['cf'] >= 0 ? 'pos' : 'neg' ?>"><?= euros($cards['cf']) ?></div></div>
+    <div class="stat"><div class="label">Cash-flow moyen / mois sur <?= $h['annees'] ?> ans</div><div class="value <?= $cards['cf_moyen'] >= 0 ? 'pos' : 'neg' ?>"><?= euros($cards['cf_moyen']) ?></div></div>
     <div class="stat"><div class="label">Patrimoine net en <?= $last['year'] ?? '' ?></div><div class="value pos"><?= euros($cards['patrimoine']) ?></div></div>
 </div>
 <p class="muted small mb">
