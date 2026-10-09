@@ -7,7 +7,7 @@ $issues = $l['lease_type'] === 'meuble' ? Lease::contractIssues($l, $settings ??
     <div>
         <h1>Bail — <?= e($l['first_name'].' '.$l['last_name']) ?></h1>
         <p class="muted"><a href="<?= url('/biens/'.$l['property_id']) ?>"><?= e($l['property_label']) ?></a>
-            · <span class="badge badge-<?= e($l['status']) ?>"><?= $l['status']==='active'?'Actif':'Terminé' ?></span></p>
+            · <?php $ph = Lease::phase($l); ?><span class="badge badge-<?= $ph['badge'] ?>"><?= e($ph['label']) ?></span></p>
     </div>
     <div class="actions">
         <a href="<?= url('/contrat/'.$l['id']) ?>" class="btn btn-secondary" target="_blank">📄 <?= $l['lease_type']==='meuble' ? 'Contrat de bail meublé (LMNP)' : 'Contrat de bail' ?></a>
@@ -91,7 +91,7 @@ $tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l
             <form method="post" action="<?= url('/baux/'.$l['id'].'/depot') ?>" class="inline-form" onsubmit="return confirm('Annuler l\'encaissement du dépôt ?')">
                 <?= csrf_field() ?><input type="hidden" name="action" value="cancel"><button class="btn btn-sm">Annuler</button></form>
         <?php else: ?>
-            <p>À verser au plus tard le <strong><?= fdate($depDue) ?></strong> (signature du bail)
+            <p>À verser au plus tard le <strong><?= fdate($depDue) ?></strong> (jour du début du bail)
                 <?= $depDue && $depDue < date('Y-m-d') ? ' <span class="badge badge-late">En retard</span>' : ' <span class="badge badge-pending">À recevoir</span>' ?></p>
             <form method="post" action="<?= url('/baux/'.$l['id'].'/depot') ?>" class="actions">
                 <?= csrf_field() ?>

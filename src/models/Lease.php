@@ -132,11 +132,23 @@ class Lease
         return $end;
     }
 
-    /** Date limite de versement du dépôt de garantie : signature du bail, sinon prise d'effet. */
+    /** Date limite de versement du dépôt de garantie : au plus tard le jour de prise d'effet du bail. */
     public static function depositDue(array $l): ?string
     {
-        $d = $l['signature_date'] ?: $l['start_date'];
-        return $d ? substr($d, 0, 10) : null;
+        return !empty($l['start_date']) ? substr($l['start_date'], 0, 10) : null;
+    }
+
+    /**
+     * Phase du bail à aujourd'hui : ['key' => a_venir|en_cours|termine, 'label' => …, 'badge' => classe].
+     * Un bail « actif » dont la date de début n'est pas passée est « à venir ».
+     */
+    public static function phase(array $l): array
+    {
+        if (($l['status'] ?? 'active') !== 'active') return ['key' => 'termine', 'label' => 'Terminé', 'badge' => 'terminated'];
+        if (!empty($l['start_date']) && substr($l['start_date'], 0, 10) > date('Y-m-d')) {
+            return ['key' => 'a_venir', 'label' => 'À venir — débute le ' . fdate($l['start_date']), 'badge' => 'pending'];
+        }
+        return ['key' => 'en_cours', 'label' => 'En cours', 'badge' => 'active'];
     }
 
     /**

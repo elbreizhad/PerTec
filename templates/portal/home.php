@@ -29,10 +29,10 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
             <h2 style="margin:0"><?= e($adresse ?: $l['property_label']) ?></h2>
             <p class="muted small" style="margin:.2rem 0 0">
                 <?= $l['lease_type'] === 'meuble' ? 'Location meublée' : 'Location vide' ?>
-                · depuis le <?= fdate($l['start_date']) ?>
-                <?php $te = Lease::currentTermEnd($l); if (!empty($l['auto_renew']) && $active): ?>· renouvelable automatiquement<?= $te ? ' (période en cours jusqu\'au ' . fdate($te) . ')' : '' ?>
+                · <?= $l['start_date'] > $today ? 'à partir du' : 'depuis le' ?> <?= fdate($l['start_date']) ?>
+                <?php $te = Lease::currentTermEnd($l); if (!empty($l['auto_renew']) && $active): ?>· renouvelable automatiquement<?= $te ? ' (' . ($l['start_date'] > $today ? 'première période' : 'période en cours') . ' jusqu\'au ' . fdate($te) . ')' : '' ?>
                 <?php elseif ($l['end_date']): ?>· jusqu'au <?= fdate($l['end_date']) ?><?php endif; ?>
-                · <span class="badge badge-<?= $active ? 'paid' : 'pending' ?>"><?= $active ? 'Bail en cours' : 'Bail terminé' ?></span></p>
+                <?php $ph = Lease::phase($l); ?>· <span class="badge badge-<?= ['en_cours' => 'paid', 'a_venir' => 'pending', 'termine' => 'pending'][$ph['key']] ?>"><?= e(['en_cours' => 'Bail en cours', 'a_venir' => 'Bail à venir — débute le ' . fdate($l['start_date']), 'termine' => 'Bail terminé'][$ph['key']]) ?></span></p>
         </div>
         <a class="btn btn-primary" href="<?= $link('/locataire/bail/' . $l['id']) ?>" target="_blank">📄 <?= $signed ? 'Mon bail signé' : 'Mon bail' ?> (PDF)</a>
     </div>
@@ -48,7 +48,7 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
         <p><strong>Dépôt de garantie : <?= euros($l['deposit_amount']) ?></strong> —
             <?php if (!empty($l['deposit_paid_date'])): ?><span class="badge badge-paid">Reçu le <?= fdate($l['deposit_paid_date']) ?></span>
             <?php else: ?>à verser au plus tard le <?= fdate($dd) ?>
-                <?= $dd && $dd < $today ? '<span class="badge badge-late">En attente</span>' : '<span class="badge badge-pending">À verser</span>' ?><?php endif; ?></p>
+                (jour du début du bail) <?= $dd && $dd < $today ? '<span class="badge badge-late">En attente</span>' : '<span class="badge badge-pending">À verser</span>' ?><?php endif; ?></p>
     <?php endif; ?>
 
     <h3>Mes loyers et quittances</h3>

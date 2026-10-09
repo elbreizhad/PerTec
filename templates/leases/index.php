@@ -17,7 +17,7 @@
             <td><?= $l['lease_type']==='meuble'?'Meublé':'Vide' ?></td>
             <td><?= fdate($l['start_date']) ?></td>
             <td class="num"><?= euros((float)$l['rent_amount'] + (float)$l['charges_amount']) ?></td>
-            <td><span class="badge badge-<?= e($l['status']) ?>"><?= $l['status']==='active'?'Actif':'Terminé' ?></span></td>
+            <td><?php $ph = Lease::phase($l); ?><span class="badge badge-<?= $ph['badge'] ?>"><?= e($ph['label']) ?></span></td>
             <td class="right"><a href="<?= url('/baux/'.$l['id']) ?>" class="btn btn-sm">Gérer</a></td>
         </tr>
     <?php endforeach; ?>
