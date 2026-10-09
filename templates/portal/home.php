@@ -67,7 +67,7 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
                 <td class="pp-due"><span class="pp-lbl">Échéance : </span><?= fdate($p['due_date']) ?></td>
                 <td class="pp-status"><?php if ($paid): ?><span class="badge badge-paid">Payé le <?= fdate($p['paid_date']) ?></span>
                     <?php elseif ($isLate): ?><span class="badge badge-late">En retard</span>
-                    <?php else: ?><span class="badge badge-pending">À venir</span><?php endif; ?></td>
+                    <?php else: ?><span class="badge badge-pending">En attente de paiement</span><?php endif; ?></td>
                 <td class="right pp-action"><?php if ($paid): ?><a class="btn btn-sm" href="<?= $link('/locataire/quittance/' . $p['id']) ?>" target="_blank">🧾 Quittance</a><?php endif; ?></td>
             </tr>
         <?php endforeach; ?>
