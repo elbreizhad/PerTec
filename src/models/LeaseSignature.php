@@ -141,6 +141,23 @@ class LeaseSignature
         return Lease::find((int) $row['id']);
     }
 
+    /** Libellé lisible du navigateur et du système (ex. « Chrome 129 — Android »). */
+    public static function deviceLabel(string $ua): string
+    {
+        if ($ua === '') return '—';
+        $browser = 'Navigateur';
+        foreach (['Edg' => 'Edge', 'OPR' => 'Opera', 'SamsungBrowser' => 'Samsung Internet', 'Firefox' => 'Firefox',
+                  'CriOS' => 'Chrome', 'Chrome' => 'Chrome', 'Version' => 'Safari'] as $k => $name) {
+            if (preg_match('#' . $k . '/(\d+)#', $ua, $m)) { $browser = $name . ' ' . $m[1]; break; }
+        }
+        $os = 'système inconnu';
+        foreach (['iPhone' => 'iPhone', 'iPad' => 'iPad', 'Android' => 'Android', 'Windows' => 'Windows',
+                  'Mac OS X' => 'macOS', 'Linux' => 'Linux'] as $k => $name) {
+            if (str_contains($ua, $k)) { $os = $name; break; }
+        }
+        return $browser . ' — ' . $os;
+    }
+
     /** URL absolue (pour l'email envoyé au locataire). */
     public static function absoluteUrl(string $path): string
     {

@@ -30,6 +30,7 @@ p.article{margin:.6rem 0}
 h1,h2,h3{break-after:avoid;page-break-after:avoid}
 li,tr,.keep,.doc-sign{break-inside:avoid;page-break-inside:avoid}
 p,li{orphans:3;widows:3}
+.sign-proof{margin-top:2rem}
 @media print{
   .no-print{display:none!important}
   body.print-body{background:#fff}

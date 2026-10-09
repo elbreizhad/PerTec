@@ -53,3 +53,4 @@ li, tr { page-break-inside: avoid; }
 .cb { display: inline-block; width: 11px; height: 11px; border: 1px solid #333; margin-right: 2px;
       font-size: 9px; line-height: 9px; font-weight: bold; text-align: center; vertical-align: middle;
       font-family: "DejaVu Sans", sans-serif; }
+.sign-proof { margin-top: 24px; }

@@ -179,7 +179,7 @@ et la <strong>notice d'information</strong> relative aux droits et obligations d
 
 <div class="keep">
 <p class="article mt">Fait à <?= e($ville ?: '____________') ?>, le <?= fdate($sigDate) ?>, en deux exemplaires originaux.</p>
-<?= render_template('partials/sign_boxes', ['lease' => $l, 'settings' => $s, 'forHash' => !empty($forHash), 'caption' => 'Signature (précédée de « Lu et approuvé »)']) ?>
+<?= render_template('partials/sign_boxes', ['lease' => $l, 'settings' => $s, 'forHash' => !empty($forHash), 'caption' => 'Signature (précédée de « Lu et approuvé »)', 'proof' => true]) ?>
 </div>
 
 <div style="page-break-before:always"></div>
