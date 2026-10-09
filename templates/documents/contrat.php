@@ -42,7 +42,7 @@ $meuble = $l['lease_type'] === 'meuble';
 <p class="article">Le présent bail est consenti pour une durée de <strong><?= $meuble ? 'un (1) an' : 'trois (3) ans' ?></strong>,
 à compter du <strong><?= fdate($l['start_date']) ?></strong>
 <?php if ($l['end_date']): ?>, soit jusqu'au <strong><?= fdate($l['end_date']) ?></strong><?php endif; ?>.
-Il se renouvelle ensuite par tacite reconduction dans les conditions prévues par la loi.</p>
+<?php if ($l['auto_renew'] ?? 1): ?>Il se renouvelle ensuite par tacite reconduction dans les conditions prévues par la loi.<?php else: ?>Il prend fin à son terme, sans tacite reconduction.<?php endif; ?></p>
 
 <h2>Article 3 — Loyer et charges</h2>
 <table class="doc-amounts">

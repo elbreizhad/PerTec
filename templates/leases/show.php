@@ -68,6 +68,40 @@ $tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l
     <div class="stat"><div class="label">Dépôt garantie</div><div class="value"><?= euros($l['deposit_amount']) ?></div></div>
 </div>
 
+<?php $depDue = Lease::depositDue($l); $termEnd = Lease::currentTermEnd($l); ?>
+<div class="grid grid-2col mb">
+    <div class="card">
+        <h3>Durée du bail</h3>
+        <p>Du <strong><?= fdate($l['start_date']) ?></strong><?= $l['end_date'] ? ' au <strong>' . fdate($l['end_date']) . '</strong> (période initiale)' : '' ?><br>
+        <?php if (!empty($l['auto_renew']) && $l['status'] === 'active'): ?>
+            <span class="badge badge-paid">Renouvelable automatiquement</span>
+            <?php if ($termEnd && $termEnd !== $l['end_date']): ?><span class="small muted"> · période en cours jusqu'au <?= fdate($termEnd) ?></span><?php endif; ?>
+        <?php elseif ($l['status'] === 'active'): ?>
+            <span class="badge badge-pending">Sans tacite reconduction</span>
+        <?php else: ?>
+            <span class="badge badge-pending">Bail terminé</span>
+        <?php endif; ?></p>
+    </div>
+    <div class="card" id="depot">
+        <h3>Dépôt de garantie — <?= euros($l['deposit_amount']) ?></h3>
+        <?php if ((float) $l['deposit_amount'] <= 0): ?>
+            <p class="muted">Aucun dépôt de garantie prévu.</p>
+        <?php elseif (!empty($l['deposit_paid_date'])): ?>
+            <p><span class="badge badge-paid">✔ Encaissé le <?= fdate($l['deposit_paid_date']) ?></span></p>
+            <form method="post" action="<?= url('/baux/'.$l['id'].'/depot') ?>" class="inline-form" onsubmit="return confirm('Annuler l\'encaissement du dépôt ?')">
+                <?= csrf_field() ?><input type="hidden" name="action" value="cancel"><button class="btn btn-sm">Annuler</button></form>
+        <?php else: ?>
+            <p>À verser au plus tard le <strong><?= fdate($depDue) ?></strong> (signature du bail)
+                <?= $depDue && $depDue < date('Y-m-d') ? ' <span class="badge badge-late">En retard</span>' : ' <span class="badge badge-pending">À recevoir</span>' ?></p>
+            <form method="post" action="<?= url('/baux/'.$l['id'].'/depot') ?>" class="actions">
+                <?= csrf_field() ?>
+                <input type="date" name="paid_date" value="<?= date('Y-m-d') ?>" style="width:auto" required>
+                <button class="btn btn-primary">✔ Marquer comme encaissé</button>
+            </form>
+        <?php endif; ?>
+    </div>
+</div>
+
 <?php $gType = $l['guarantee_type'] ?? ($guarants ? 'garant' : 'aucune'); ?>
 <div class="card">
     <h3>Garantie</h3>

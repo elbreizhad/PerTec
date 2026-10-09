@@ -94,7 +94,8 @@ Le présent bail est conclu pour une durée de <strong><?= e($dureeBail) ?></str
 <?php else: ?>
 Le présent bail prend effet le <strong><?= fdate($l['start_date']) ?></strong><?php if ($finBail): ?> et s'achève le <strong><?= fdate($finBail) ?></strong> inclus<?php endif; ?>.
 <?php endif; ?>
-Il est reconductible tacitement, sauf congé donné dans les conditions de l'article « Congé ».
+<?php if ($l['auto_renew'] ?? 1): ?>Il est reconductible tacitement, sauf congé donné dans les conditions de l'article « Congé ».<?php else: ?>Il prend fin de plein droit à son terme, sans tacite reconduction (bail étudiant d'une durée de neuf mois).<?php endif; ?>
+
 <br><span class="small">(La durée minimale d'un bail meublé de résidence principale est d'un an, ou de neuf mois pour un étudiant, sans tacite reconduction.)</span></p>
 
 <h2>Article <?= $artNum++ ?> — Loyer et charges</h2>

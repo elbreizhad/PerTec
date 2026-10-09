@@ -1138,3 +1138,25 @@ App::post('/locataires/{id}/invitation', function ($params) {
     }
     redirect('/locataires');
 });
+
+// Dépôt de garantie : marquer encaissé (coche aussi la checklist) ou annuler
+App::post('/baux/{id}/depot', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    if (!Lease::find($id)) redirect('/baux');
+    if (post('action') === 'cancel') {
+        Database::update('leases', ['deposit_paid_date' => null], 'id = :id', ['id' => $id]);
+        Database::query("DELETE FROM lease_checklist WHERE lease_id = ? AND item_key = 'depot_encaisse'", [$id]);
+        flash('Encaissement du dépôt de garantie annulé.');
+    } else {
+        $date = (string) post('paid_date');
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) $date = date('Y-m-d');
+        Database::update('leases', ['deposit_paid_date' => $date], 'id = :id', ['id' => $id]);
+        if (!in_array('depot_encaisse', Checklist::checkedKeys($id), true)) {
+            Database::query("INSERT INTO lease_checklist (lease_id, item_key) VALUES (?, 'depot_encaisse')", [$id]);
+        }
+        flash('Dépôt de garantie marqué encaissé le ' . fdate($date) . ' (checklist mise à jour).');
+    }
+    redirect('/baux/' . $id . '#apercu');
+});

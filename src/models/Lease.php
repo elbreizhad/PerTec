@@ -58,6 +58,7 @@ class Lease
             'lease_type'     => post('lease_type') === 'meuble' ? 'meuble' : 'vide',
             'start_date'     => post('start_date') ?: date('Y-m-d'),
             'end_date'       => post('end_date') ?: null,
+            'auto_renew'     => post('auto_renew') ? 1 : 0,
             'rent_amount'    => num(post('rent_amount')),
             'charges_amount' => num(post('charges_amount')),
             'deposit_amount' => num(post('deposit_amount')),
@@ -108,6 +109,34 @@ class Lease
     public static function delete(int $id): void
     {
         Database::query('DELETE FROM leases WHERE id = ?', [$id]);
+    }
+
+    /**
+     * Fin de facturation : null tant qu'un bail actif se renouvelle tacitement
+     * (la date de fin n'est alors que la fin de la période en cours).
+     */
+    public static function billingEnd(array $l): ?string
+    {
+        if (!empty($l['auto_renew']) && ($l['status'] ?? 'active') === 'active') return null;
+        return !empty($l['end_date']) ? substr($l['end_date'], 0, 10) : null;
+    }
+
+    /** Fin de la période en cours (reconductions successives : 1 an en meublé, 3 ans en vide). */
+    public static function currentTermEnd(array $l): ?string
+    {
+        if (empty($l['end_date'])) return null;
+        $end = substr($l['end_date'], 0, 10);
+        if (empty($l['auto_renew']) || ($l['status'] ?? 'active') !== 'active') return $end;
+        $step = $l['lease_type'] === 'meuble' ? '+1 year' : '+3 years';
+        for ($i = 0; $end < date('Y-m-d') && $i < 50; $i++) $end = date('Y-m-d', strtotime($end . ' ' . $step));
+        return $end;
+    }
+
+    /** Date limite de versement du dépôt de garantie : signature du bail, sinon prise d'effet. */
+    public static function depositDue(array $l): ?string
+    {
+        $d = $l['signature_date'] ?: $l['start_date'];
+        return $d ? substr($d, 0, 10) : null;
     }
 
     /**

@@ -29,7 +29,9 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
             <h2 style="margin:0"><?= e($adresse ?: $l['property_label']) ?></h2>
             <p class="muted small" style="margin:.2rem 0 0">
                 <?= $l['lease_type'] === 'meuble' ? 'Location meublée' : 'Location vide' ?>
-                · du <?= fdate($l['start_date']) ?><?= $l['end_date'] ? ' au ' . fdate($l['end_date']) : '' ?>
+                · depuis le <?= fdate($l['start_date']) ?>
+                <?php $te = Lease::currentTermEnd($l); if (!empty($l['auto_renew']) && $active): ?>· renouvelable automatiquement<?= $te ? ' (période en cours jusqu\'au ' . fdate($te) . ')' : '' ?>
+                <?php elseif ($l['end_date']): ?>· jusqu'au <?= fdate($l['end_date']) ?><?php endif; ?>
                 · <span class="badge badge-<?= $active ? 'paid' : 'pending' ?>"><?= $active ? 'Bail en cours' : 'Bail terminé' ?></span></p>
         </div>
         <a class="btn btn-primary" href="<?= $link('/locataire/bail/' . $l['id']) ?>" target="_blank">📄 <?= $signed ? 'Mon bail signé' : 'Mon bail' ?> (PDF)</a>
@@ -41,6 +43,13 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
         <div class="stat"><div class="label">Total mensuel</div><div class="value"><?= euros((float) $l['rent_amount'] + (float) $l['charges_amount']) ?></div></div>
         <div class="stat"><div class="label">Situation</div><div class="value <?= $late ? 'neg' : 'pos' ?>" style="font-size:1.05rem"><?= $late ? count($late) . ' échéance(s) en retard' : 'À jour' ?></div></div>
     </div>
+
+    <?php if ((float) $l['deposit_amount'] > 0): $dd = Lease::depositDue($l); ?>
+        <p><strong>Dépôt de garantie : <?= euros($l['deposit_amount']) ?></strong> —
+            <?php if (!empty($l['deposit_paid_date'])): ?><span class="badge badge-paid">Reçu le <?= fdate($l['deposit_paid_date']) ?></span>
+            <?php else: ?>à verser au plus tard le <?= fdate($dd) ?>
+                <?= $dd && $dd < $today ? '<span class="badge badge-late">En attente</span>' : '<span class="badge badge-pending">À verser</span>' ?><?php endif; ?></p>
+    <?php endif; ?>
 
     <h3>Mes loyers et quittances</h3>
     <?php if (!$payments): ?>

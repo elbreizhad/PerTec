@@ -50,7 +50,13 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         </div>
         <div class="form-grid">
             <div class="field"><label>Date de début *</label><input type="date" name="start_date" value="<?= $val('start_date', date('Y-m-d')) ?>" required></div>
-            <div class="field"><label>Date de fin</label><input type="date" name="end_date" value="<?= $val('end_date') ?>"></div>
+            <div class="field"><label>Fin de la période initiale</label><input type="date" name="end_date" value="<?= $val('end_date') ?>"></div>
+            <div class="field"><label>&nbsp;</label>
+                <label style="font-weight:400;display:flex;gap:.5rem;align-items:flex-start">
+                    <input type="checkbox" name="auto_renew" value="1" <?= ($l['auto_renew'] ?? 1) ? 'checked' : '' ?> style="width:auto;margin-top:.25rem">
+                    <span><strong>Renouvelable automatiquement</strong> (tacite reconduction)<br>
+                    <span class="hint">Cas général. Décochez pour un bail étudiant de 9 mois. Quand le locataire donne congé, passez le bail en « Terminé » : la date de fin servira alors à la dernière échéance (prorata).</span></span>
+                </label></div>
             <div class="field"><label>Loyer hors charges (€)</label><input name="rent_amount" value="<?= $val('rent_amount','0') ?>"></div>
             <div class="field"><label>Provision charges (€)</label><input name="charges_amount" value="<?= $val('charges_amount','0') ?>"></div>
             <div class="field"><label>Dépôt de garantie (€)</label><input name="deposit_amount" value="<?= $val('deposit_amount','0') ?>"></div>

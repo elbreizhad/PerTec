@@ -153,16 +153,16 @@ class Bilan
         foreach (['copro', 'taxe_fonciere', 'autre'] as $k) $recuperable += (float) ($real[$k]['recoverable'] ?? 0);
 
         $leases = Database::all(
-            "SELECT l.id, l.start_date, l.end_date, l.charge_type, t.first_name, t.last_name
+            "SELECT l.id, l.start_date, l.end_date, l.auto_renew, l.status, l.lease_type, l.charge_type, t.first_name, t.last_name
              FROM leases l JOIN tenants t ON t.id = l.tenant_id
-             WHERE l.property_id = ? AND l.start_date <= ? AND (l.end_date IS NULL OR l.end_date >= ?)
+             WHERE l.property_id = ? AND l.start_date <= ? AND (l.end_date IS NULL OR l.end_date >= ? OR (l.auto_renew = 1 AND l.status = 'active'))
              ORDER BY l.start_date",
             [$pid, $yEnd, $ownFrom]
         );
         $rows = []; $solde = 0.0; $forfait = false; $occupied = 0;
         foreach ($leases as $i => $l) {
             $from = max($ownFrom, substr($l['start_date'], 0, 10));
-            $to   = min($yEnd, $l['end_date'] ? substr($l['end_date'], 0, 10) : $yEnd);
+            $to   = min($yEnd, Lease::billingEnd($l) ?? $yEnd); // bail reconduit : occupé jusqu'à la fin de l'année
             // Baux successifs : un bail sans date de fin (ou qui chevauche le suivant) s'arrête la veille du bail suivant.
             if (isset($leases[$i + 1])) {
                 $next = substr($leases[$i + 1]['start_date'], 0, 10);

@@ -58,6 +58,8 @@ class Payment
         }
         $day = min(28, max(1, (int)$lease['payment_day']));
         $due = sprintf('%04d-%02d-%02d', $year, $month, $day);
+        // Premier mois : l'échéance ne peut pas précéder la date d'effet du bail.
+        if (!empty($lease['start_date']) && $due < substr($lease['start_date'], 0, 10)) $due = substr($lease['start_date'], 0, 10);
         $pro = self::prorata($lease, $year, $month);
         return Database::insert('rent_payments', [
             'lease_id'       => (int) $lease['id'],
@@ -93,8 +95,8 @@ class Payment
             }
         }
         // Sortie en cours de mois (mois de la date de fin, si renseignée).
-        if (!empty($lease['end_date'])) {
-            $end = new DateTime($lease['end_date']);
+        if (Lease::billingEnd($lease) !== null) { // bail reconduit tacitement : pas de prorata de fin
+            $end = new DateTime(Lease::billingEnd($lease));
             if ((int) $end->format('Y') === $year && (int) $end->format('n') === $month) {
                 $lastDay = (int) $end->format('j');
             }
@@ -145,7 +147,7 @@ class Payment
         foreach ($leases as $lease) {
             $start = new DateTime($lease['start_date']);
             $start->modify('first day of this month');
-            $end = $lease['end_date'] ? new DateTime($lease['end_date']) : clone $now;
+            $end = Lease::billingEnd($lease) ? new DateTime(Lease::billingEnd($lease)) : clone $now;
             if ($end > $now) $end = clone $now;
             $cursor = clone $start;
             while ($cursor <= $end) {
