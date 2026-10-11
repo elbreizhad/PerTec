@@ -46,6 +46,8 @@ $tabCosts = count(PropertyCost::forProperty((int) $p['id'], (int) ($_GET['annee'
             <dt>Surface</dt><dd><?= $p['surface_m2'] ? e($p['surface_m2']).' m²' : '—' ?></dd>
             <dt>Pièces</dt><dd><?= $p['rooms'] ?: '—' ?></dd>
             <dt>Date d'achat</dt><dd><?= fdate($p['purchase_date']) ?></dd>
+            <dt>Compteur d'eau</dt><dd><?= !empty($p['water_meter']) ? e($p['water_meter']) : '—' ?></dd>
+            <dt>PDL Enedis</dt><dd><?= !empty($p['enedis_pdl']) ? e($p['enedis_pdl']) : '—' ?></dd>
         </dl>
     </div>
     <div class="card">

@@ -22,6 +22,7 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
     $adresse = trim(($l['address'] ?? '') . ', ' . ($l['postal_code'] ?? '') . ' ' . ($l['city'] ?? ''), ', ');
     $late = array_filter($payments, fn($p) => $p['status'] !== 'paid' && $p['due_date'] && $p['due_date'] < $today);
     $active = $l['status'] === 'active';
+    $prop = Property::find((int) $l['property_id']) ?? [];
 ?>
 <section class="card portal-lease">
     <div class="page-head" style="margin-bottom:.6rem">
@@ -49,6 +50,15 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
             <?php if (!empty($l['deposit_paid_date'])): ?><span class="badge badge-paid">Reçu le <?= fdate($l['deposit_paid_date']) ?></span>
             <?php else: ?>à verser au plus tard le <?= fdate($dd) ?>
                 (jour du début du bail) <?= $dd && $dd < $today ? '<span class="badge badge-late">En attente</span>' : '<span class="badge badge-pending">À verser</span>' ?><?php endif; ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($prop['water_meter']) || !empty($prop['enedis_pdl'])): ?>
+        <h3>Compteurs du logement</h3>
+        <p class="muted small" style="margin-top:-.3rem">À communiquer pour ouvrir vos contrats d'eau et d'électricité.</p>
+        <dl class="kv mb" style="max-width:420px">
+            <?php if (!empty($prop['water_meter'])): ?><dt>💧 N° compteur d'eau</dt><dd><strong><?= e($prop['water_meter']) ?></strong></dd><?php endif; ?>
+            <?php if (!empty($prop['enedis_pdl'])): ?><dt>⚡ PDL Enedis</dt><dd><strong><?= e($prop['enedis_pdl']) ?></strong></dd><?php endif; ?>
+        </dl>
     <?php endif; ?>
 
     <h3>Mes loyers et quittances</h3>

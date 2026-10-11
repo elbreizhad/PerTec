@@ -36,6 +36,16 @@ $action = $isEdit ? url('/biens/' . $p['id']) : url('/biens');
     </fieldset>
 
     <fieldset>
+        <legend>Compteurs</legend>
+        <p class="hint">Visibles par le locataire dans son espace (ouverture des contrats d'eau et d'électricité).</p>
+        <div class="form-grid">
+            <div class="field"><label>N° compteur d'eau</label><input name="water_meter" value="<?= $val('water_meter') ?>"></div>
+            <div class="field"><label>PDL Enedis (point de livraison)</label><input name="enedis_pdl" value="<?= $val('enedis_pdl') ?>" inputmode="numeric" placeholder="14 chiffres">
+                <span class="hint">Figure sur le compteur Linky et les factures d'électricité.</span></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
         <legend>Coût d'acquisition (investissement)</legend>
         <div class="form-grid">
             <div class="field"><label>Date d'achat</label><input type="date" name="purchase_date" value="<?= $val('purchase_date') ?>"></div>

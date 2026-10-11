@@ -9,7 +9,7 @@ class Property
         'other_costs','loan_amount','loan_rate','loan_duration_months','loan_monthly','loan_start_date',
         'property_tax','insurance_year','charges_year','mgmt_fees_pct',
         'land_share_pct','amort_years_building','amort_years_furniture',
-        'amort_years_works','accountant_fees','tax_regime','notes',
+        'amort_years_works','accountant_fees','tax_regime','water_meter','enedis_pdl','notes',
     ];
 
     public const TYPES = ['appartement','maison','studio','immeuble','parking','local commercial','terrain'];
@@ -38,6 +38,10 @@ class Property
                 $data[$f] = num($v);
             } elseif ($f === 'purchase_date' || $f === 'loan_start_date') {
                 $data[$f] = $v ?: null;
+            } elseif ($f === 'enedis_pdl') {
+                // PDL : 14 chiffres, saisi souvent avec des espaces.
+                $v = preg_replace('/\s+/', '', (string) $v);
+                $data[$f] = $v !== '' ? $v : null;
             } elseif ($f === 'tax_regime') {
                 $data[$f] = $v === 'micro' ? 'micro' : 'reel';
             } else {
