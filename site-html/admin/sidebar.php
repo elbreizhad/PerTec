@@ -20,6 +20,17 @@
                 <span class="badge"><?= $unread ?></span>
             <?php endif; ?>
         </a>
+        <a href="estimations.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'estimations.php' ? 'active' : '' ?>">
+            <span class="nav-icon">💰</span>
+            Estimations
+            <?php
+            $ef = __DIR__ . '/estimations.json';
+            $ests = file_exists($ef) ? (json_decode(file_get_contents($ef), true) ?: []) : [];
+            $unreadEst = count(array_filter($ests, fn($e) => !($e['read'] ?? false)));
+            if ($unreadEst > 0): ?>
+                <span class="badge"><?= $unreadEst ?></span>
+            <?php endif; ?>
+        </a>
         <a href="settings.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'settings.php' ? 'active' : '' ?>">
             <span class="nav-icon">⚙️</span>
             Paramètres

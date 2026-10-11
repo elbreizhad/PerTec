@@ -426,6 +426,32 @@ TEXT;
         fclose($fp);
     }
 
+    // Sauvegarde JSON pour l'admin
+    $jsonFile = __DIR__ . '/admin/estimations.json';
+    $estimations = [];
+    if (file_exists($jsonFile)) {
+        $estimations = json_decode(file_get_contents($jsonFile), true) ?: [];
+    }
+
+    $estimations[] = [
+        'date' => date('d/m/Y H:i'),
+        'email' => $email,
+        'telephone' => $telephone,
+        'type_site' => $typeSiteData['label'] ?? $typeSite,
+        'type_site_id' => $typeSite,
+        'options' => array_map(fn($id) => $tarifs['options']['options'][$id]['label'] ?? $id, $options),
+        'suivi' => array_map(fn($id) => $tarifs['suivi']['options'][$id]['label'] ?? $id, $suivi),
+        'delai' => $tarifs['delai']['options'][$delai]['label'] ?? $delai,
+        'creation' => $surDevis ? 'Sur devis' : $creation,
+        'mensuel' => $mensuel,
+        'detail_creation' => $lignesCreation,
+        'detail_mensuel' => $lignesMensuel,
+        'read' => false,
+        'ip' => $ip
+    ];
+
+    file_put_contents($jsonFile, json_encode($estimations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
+
     $response = ['success' => true];
 
 } catch (Exception $e) {
