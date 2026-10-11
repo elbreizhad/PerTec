@@ -1,24 +1,27 @@
 <?php
 /**
  * Gestionnaire de formulaire de contact Pertec
- * Enregistre les messages et envoie un email de notification
+ * Enregistre les messages et envoie un email de notification via SMTP
  */
 
-// Charger la config admin si disponible
+// Charger la config et le mailer
+require_once __DIR__ . '/admin/mailer.php';
+
 $settings = [];
 $settings_file = __DIR__ . '/admin/settings.json';
 if (file_exists($settings_file)) {
     $settings = json_decode(file_get_contents($settings_file), true) ?: [];
 }
 
-// Configuration par défaut
+// Configuration
 $contact_email = $settings['contact_email'] ?? 'contact@pertec.fr';
 $site_name = $settings['site_name'] ?? 'Pertec';
 
-// Headers CORS pour les requêtes AJAX
+// Créer le mailer
+$mailer = new PertecMailer($settings);
+
+// Headers
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
 
 // Vérifier la méthode
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -51,9 +54,8 @@ if (empty($telephone)) {
     $errors[] = 'Le téléphone est requis';
 }
 
-// Protection anti-spam basique (honeypot)
+// Protection anti-spam (honeypot)
 if (!empty($_POST['website'])) {
-    // Champ honeypot rempli = bot
     http_response_code(200);
     echo json_encode(['success' => true, 'message' => 'Message envoyé']);
     exit;
@@ -89,50 +91,40 @@ if (file_exists($messages_file)) {
 $messages[] = $new_message;
 file_put_contents($messages_file, json_encode($messages, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-// Préparer l'email
+// Préparer l'email de notification admin
 $subject = "[$site_name] Nouvelle demande de devis - $nom";
 
 $email_body = "
-Nouvelle demande de devis reçue sur $site_name
+Nouvelle demande de devis recue sur $site_name
+================================================
 
---------------------------------------------------
 INFORMATIONS CLIENT
---------------------------------------------------
-
+-------------------
 Nom : $nom
 Entreprise : $entreprise
 Email : $email
-Téléphone : $telephone
+Telephone : $telephone
 Ville : $ville
 Type de projet : $projet
 
---------------------------------------------------
 MESSAGE
---------------------------------------------------
-
+-------
 $message
 
---------------------------------------------------
-INFORMATIONS TECHNIQUES
---------------------------------------------------
+---
 Date : " . date('d/m/Y H:i:s') . "
 IP : " . ($_SERVER['REMOTE_ADDR'] ?? 'inconnue') . "
+
+Voir dans l'admin : " . ($settings['site_url'] ?? 'https://pertec.fr') . "/admin/messages.php
 ";
 
-// Envoyer l'email
-$headers = [
-    'From' => ($settings['smtp_from_name'] ?? $site_name) . ' <' . ($settings['smtp_from'] ?? $contact_email) . '>',
-    'Reply-To' => "$nom <$email>",
-    'Content-Type' => 'text/plain; charset=UTF-8',
-    'X-Mailer' => 'PHP/' . phpversion(),
-];
-
-$headers_string = '';
-foreach ($headers as $key => $value) {
-    $headers_string .= "$key: $value\r\n";
-}
-
-$email_sent = @mail($contact_email, $subject, $email_body, $headers_string);
+// Envoyer l'email de notification à l'admin
+$email_sent = $mailer->send(
+    $contact_email,
+    $subject,
+    $email_body,
+    "$nom <$email>"
+);
 
 // Email de confirmation au client
 $confirm_subject = "Votre demande de devis - $site_name";
@@ -141,31 +133,21 @@ Bonjour $nom,
 
 Merci pour votre demande de devis !
 
-J'ai bien reçu votre message et je vous recontacterai dans les 24 heures.
+J'ai bien recu votre message et je vous recontacterai dans les 24 heures.
 
-Récapitulatif de votre demande :
+Recapitulatif de votre demande :
 - Entreprise : $entreprise
 - Projet : $projet
 
-À très bientôt,
+A tres bientot,
 $site_name
 
 --
-Ce message est automatique, merci de ne pas y répondre directement.
+Ce message est automatique.
 Pour me contacter : $contact_email
 ";
 
-$confirm_headers = [
-    'From' => "$site_name <" . ($settings['smtp_from'] ?? $contact_email) . ">",
-    'Content-Type' => 'text/plain; charset=UTF-8',
-];
-
-$confirm_headers_string = '';
-foreach ($confirm_headers as $key => $value) {
-    $confirm_headers_string .= "$key: $value\r\n";
-}
-
-@mail($email, $confirm_subject, $confirm_body, $confirm_headers_string);
+$mailer->send($email, $confirm_subject, $confirm_body);
 
 // Réponse
 echo json_encode([
