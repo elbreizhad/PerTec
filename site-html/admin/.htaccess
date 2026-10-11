@@ -1,0 +1,18 @@
+# Protection du dossier admin
+
+# Autoriser PHP
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Bloquer l'accès direct aux fichiers JSON
+<FilesMatch "\.(json)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Bloquer l'accès au fichier config
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

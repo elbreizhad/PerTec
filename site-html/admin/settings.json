@@ -1,0 +1,17 @@
+{
+    "site_name": "Pertec",
+    "site_tagline": "Création de sites internet",
+    "contact_email": "contact@pertec.fr",
+    "contact_phone": "",
+    "address": "Evreux, Eure (27)",
+    "social_facebook": "",
+    "social_linkedin": "",
+    "social_instagram": "",
+    "analytics_id": "",
+    "smtp_host": "",
+    "smtp_port": "587",
+    "smtp_user": "",
+    "smtp_pass": "",
+    "smtp_from": "contact@pertec.fr",
+    "smtp_from_name": "Pertec"
+}

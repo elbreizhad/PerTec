@@ -107,7 +107,10 @@
         <div class="form-box glass-strong" data-animate>
           <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Demander un devis gratuit</h2>
 
-          <form id="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+          <form id="contact-form" action="contact-handler.php" method="POST">
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
             <div class="form-grid">
               <div class="form-group">
                 <label for="nom">Nom et prénom <span>*</span></label>
