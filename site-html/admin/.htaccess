@@ -1,18 +1,14 @@
-# Protection du dossier admin
+# Protection du dossier admin Pertec
 
-# Autoriser PHP
-<FilesMatch "\.php$">
-    SetHandler application/x-httpd-php
-</FilesMatch>
-
-# Bloquer l'accès direct aux fichiers JSON
+# Bloquer l'accès direct aux fichiers JSON et config
 <FilesMatch "\.(json)$">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
-# Bloquer l'accès au fichier config
 <Files "config.php">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
+</Files>
+
+<Files "sidebar.php">
+    Require all denied
 </Files>
