@@ -1,0 +1,8 @@
+# Protection du dossier data
+# Aucun accès direct aux fichiers
+
+Require all denied
+
+<Files "*">
+    Require all denied
+</Files>
