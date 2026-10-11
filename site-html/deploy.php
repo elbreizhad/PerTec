@@ -1,13 +1,7 @@
 <?php
 /**
  * Script de déploiement automatique depuis GitHub
- *
  * Usage: https://pertec.fr/deploy.php?secret=VOTRE_SECRET
- *
- * Configuration:
- * 1. Copiez deploy.config.example.php en deploy.config.php
- * 2. Renseignez vos valeurs dans deploy.config.php
- * 3. Appelez /deploy.php?secret=VOTRE_SECRET
  */
 
 // ============================================
@@ -15,19 +9,16 @@
 // ============================================
 
 $config = [];
-
-// Charger la config depuis le fichier (prioritaire)
 if (file_exists(__DIR__ . '/deploy.config.php')) {
     $config = require __DIR__ . '/deploy.config.php';
 }
 
-// Valeurs par défaut / fallback sur variables d'environnement
-$secret_key   = $config['DEPLOY_SECRET'] ?? getenv('DEPLOY_SECRET') ?: 'CHANGEZ_MOI';
-$github_token = $config['GITHUB_TOKEN'] ?? getenv('GITHUB_TOKEN') ?: '';
-$github_repo  = $config['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?: 'elbreizhad/PerTec';
-$branch       = $config['DEPLOY_BRANCH'] ?? getenv('DEPLOY_BRANCH') ?: 'claude/analyze-requirements-IB5yN';
-$repo_path    = $config['REPO_PATH'] ?? getenv('REPO_PATH') ?: '/home/pertecfr/repo';
-$public_path  = $config['PUBLIC_PATH'] ?? getenv('PUBLIC_PATH') ?: '/home/pertecfr/public_html';
+$secret_key    = $config['DEPLOY_SECRET'] ?? getenv('DEPLOY_SECRET') ?: 'CHANGEZ_MOI';
+$github_token  = $config['GITHUB_TOKEN'] ?? getenv('GITHUB_TOKEN') ?: '';
+$github_repo   = $config['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?: 'elbreizhad/PerTec';
+$branch        = $config['DEPLOY_BRANCH'] ?? getenv('DEPLOY_BRANCH') ?: 'claude/analyze-requirements-IB5yN';
+$repo_path     = $config['REPO_PATH'] ?? getenv('REPO_PATH') ?: __DIR__ . '/../repo';
+$public_path   = $config['PUBLIC_PATH'] ?? getenv('PUBLIC_PATH') ?: __DIR__;
 $source_folder = $config['SOURCE_FOLDER'] ?? getenv('SOURCE_FOLDER') ?: 'site-html';
 
 // ============================================
@@ -48,10 +39,14 @@ header('Content-Type: text/plain; charset=utf-8');
 echo "=== DÉPLOIEMENT PERTEC.FR ===\n\n";
 echo "Date: " . date('Y-m-d H:i:s') . "\n";
 echo "Repo: $github_repo\n";
-echo "Branche: $branch\n\n";
+echo "Branche: $branch\n";
+echo "Repo path: $repo_path\n";
+echo "Public path: $public_path\n";
+echo "Source folder: $source_folder\n";
+echo "Current dir: " . __DIR__ . "\n";
+echo "Home: " . getenv('HOME') . "\n\n";
 
-// Fonction pour exécuter une commande
-function run_command($cmd, $description) {
+function run_command($cmd, $description, $stop_on_error = false) {
     echo ">> $description\n";
     echo "$ $cmd\n";
 
@@ -63,6 +58,10 @@ function run_command($cmd, $description) {
 
     if ($return_var !== 0) {
         echo "⚠️  Erreur (code: $return_var)\n";
+        if ($stop_on_error) {
+            echo "\n❌ ARRÊT DU DÉPLOIEMENT\n";
+            exit(1);
+        }
     } else {
         echo "✅ OK\n";
     }
@@ -71,43 +70,69 @@ function run_command($cmd, $description) {
     return $return_var === 0;
 }
 
-// Construire l'URL du repo (avec token si privé)
+// Construire l'URL du repo
 $repo_url = "https://github.com/$github_repo.git";
 if (!empty($github_token)) {
     $repo_url = "https://$github_token@github.com/$github_repo.git";
+    echo "🔑 Token GitHub configuré\n\n";
+} else {
+    echo "ℹ️  Pas de token GitHub (repo public)\n\n";
+}
+
+// Créer le dossier parent si nécessaire
+$parent_dir = dirname($repo_path);
+if (!is_dir($parent_dir)) {
+    echo "📁 Création du dossier parent: $parent_dir\n";
+    if (!mkdir($parent_dir, 0755, true)) {
+        echo "❌ Impossible de créer $parent_dir\n";
+        echo "Vérifiez que vous avez les droits d'écriture.\n";
+        exit(1);
+    }
+    echo "✅ OK\n\n";
 }
 
 // Vérifier si le repo existe
-if (!is_dir($repo_path)) {
+if (!is_dir($repo_path . '/.git')) {
     echo "📁 Le dépôt n'existe pas, clonage...\n\n";
 
-    $parent_dir = dirname($repo_path);
-    $repo_name = basename($repo_path);
+    // Supprimer le dossier s'il existe mais n'est pas un repo git
+    if (is_dir($repo_path)) {
+        run_command("rm -rf $repo_path", "Suppression du dossier existant");
+    }
 
-    run_command("cd $parent_dir && git clone $repo_url $repo_name", "Clonage du dépôt");
+    // Cloner le repo
+    $clone_cmd = "git clone --branch $branch $repo_url $repo_path";
+    if (!run_command($clone_cmd, "Clonage du dépôt", true)) {
+        echo "\n💡 Solutions possibles:\n";
+        echo "1. Vérifiez que le token GitHub est valide\n";
+        echo "2. Vérifiez que le repo existe: https://github.com/$github_repo\n";
+        echo "3. Vérifiez que la branche existe: $branch\n";
+        exit(1);
+    }
+} else {
+    echo "📁 Dépôt existant trouvé\n\n";
 }
 
 // Se placer dans le repo
-chdir($repo_path);
+if (!chdir($repo_path)) {
+    echo "❌ Impossible d'accéder à $repo_path\n";
+    exit(1);
+}
 
-// Fetch les dernières modifications
+echo "📍 Working directory: " . getcwd() . "\n\n";
+
+// Fetch et pull
 run_command("git fetch origin", "Récupération des modifications");
-
-// Checkout de la branche
 run_command("git checkout $branch", "Changement de branche");
-
-// Reset hard pour éviter les conflits
 run_command("git reset --hard origin/$branch", "Reset sur la branche distante");
 
-// Pull des modifications
-run_command("git pull origin $branch", "Mise à jour du code");
-
 // Synchroniser les fichiers vers public_html
-$sync_cmd = "rsync -av --delete --exclude='deploy.config.php' --exclude='.git' $repo_path/$source_folder/ $public_path/";
-run_command($sync_cmd, "Synchronisation vers public_html");
-
-// Définir les permissions
-run_command("chmod -R 755 $public_path/", "Mise à jour des permissions");
+if ($public_path !== $repo_path . '/' . $source_folder) {
+    $sync_cmd = "rsync -av --delete --exclude='deploy.config.php' --exclude='deploy.php' --exclude='.git' --exclude='.gitignore' $repo_path/$source_folder/ $public_path/";
+    run_command($sync_cmd, "Synchronisation vers public_html");
+} else {
+    echo "ℹ️  Pas de rsync nécessaire (même dossier)\n\n";
+}
 
 echo "=== DÉPLOIEMENT TERMINÉ ===\n";
 echo "🚀 Site mis à jour avec succès !\n";
