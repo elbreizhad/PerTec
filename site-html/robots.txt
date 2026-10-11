@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
+# Bloquer les pages admin et fichiers sensibles
+Disallow: /admin/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /data/
+Disallow: /contact-handler.php
+Disallow: /envoi-estimation.php
+Disallow: /deploy.php
+
 Sitemap: https://pertec.fr/sitemap.xml
