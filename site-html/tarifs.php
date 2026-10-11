@@ -308,7 +308,7 @@ function formatPrix($prix) {
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
-                <p>© 2025 Pertec.fr - Création de sites internet à Evreux</p>
+                <p>© 2025 Pertec.fr - Création de sites internet</p>
                 <div class="footer-legal">
                     <a href="mentions-legales.html">Mentions légales</a>
                     <a href="politique-confidentialite.html">Confidentialité</a>

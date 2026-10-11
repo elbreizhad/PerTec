@@ -15,7 +15,7 @@ $turnstileSiteKey = get_turnstile_site_key();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | Demande de Devis Gratuit | Pertec.fr</title>
-  <meta name="description" content="Contactez-moi pour votre projet de création de site internet à Evreux. Devis gratuit sous 24h, sans engagement.">
+  <meta name="description" content="Contactez-moi pour votre projet de création de site internet. 100% en ligne, partout en France. Devis gratuit sous 24h, sans engagement.">
   <link rel="canonical" href="https://pertec.fr/contact">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,7 +95,7 @@ $turnstileSiteKey = get_turnstile_site_key();
             <div class="contact-icon">📍</div>
             <div>
               <p style="color: var(--gray-400); font-size: 0.875rem; margin-bottom: 0.25rem;">Localisation</p>
-              <p style="font-weight: 600;">Evreux, Eure (27)</p>
+              <p style="font-weight: 600;">100% en ligne</p>
             </div>
           </div>
 
@@ -152,7 +152,7 @@ $turnstileSiteKey = get_turnstile_site_key();
 
               <div class="form-group">
                 <label for="ville">Ville</label>
-                <input type="text" id="ville" name="ville" placeholder="Evreux">
+                <input type="text" id="ville" name="ville" placeholder="Votre ville">
               </div>
 
               <div class="form-group">
@@ -207,9 +207,9 @@ $turnstileSiteKey = get_turnstile_site_key();
           <div class="grid-pattern" style="position: absolute; inset: 0; opacity: 0.5;"></div>
           <div style="text-align: center; position: relative; z-index: 1;">
             <div style="font-size: 4rem; margin-bottom: 1rem;">📍</div>
-            <p style="font-size: 1.5rem; font-weight: 700;">Evreux</p>
-            <p style="color: var(--gray-400);">Eure (27) · Normandie · France</p>
-            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 1rem;">Rendez-vous possibles sur place ou en visioconférence</p>
+            <p style="font-size: 1.5rem; font-weight: 700;">100% en ligne</p>
+            <p style="color: var(--gray-400);">Partout en France</p>
+            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 1rem;">Échanges par visio, téléphone ou email</p>
           </div>
         </div>
       </div>
@@ -222,7 +222,7 @@ $turnstileSiteKey = get_turnstile_site_key();
       <div class="footer-content">
         <div class="footer-brand">
           <a href="index.html"><img src="images/logo-pertec.svg" alt="Pertec" style="height: 40px;"></a>
-          <p>Création de sites internet clé en main à Evreux et dans l'Eure.</p>
+          <p>Création de sites internet clé en main, 100% en ligne.</p>
           <div class="footer-social">
             <a href="#" aria-label="LinkedIn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
             <a href="#" aria-label="Facebook"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
@@ -248,7 +248,7 @@ $turnstileSiteKey = get_turnstile_site_key();
         <div class="footer-col">
           <h4>Contact</h4>
           <ul>
-            <li>📍 Evreux, Eure (27)</li>
+            <li>🌐 100% en ligne</li>
             <li>📧 contact@pertec.fr</li>
           </ul>
         </div>
