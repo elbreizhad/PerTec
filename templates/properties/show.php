@@ -28,6 +28,7 @@ $tabCosts = count(PropertyCost::forProperty((int) $p['id'], (int) ($_GET['annee'
     <a href="#charges">Charges et impôts <span class="tab-count"><?= $tabCosts ?></span></a>
     <a href="#documents">Documents légaux<?php if ($tabDocIssues): ?> <span class="tab-count tab-alert" title="Documents manquants ou expirés"><?= $tabDocIssues ?> ⚠</span><?php endif; ?></a>
     <a href="#baux">Baux <span class="tab-count"><?= count($leases) ?></span></a>
+    <a href="#edl">Modèle d'état des lieux<?php if (empty($p['inspection_template'])): ?> <span class="tab-count">par défaut</span><?php endif; ?></a>
 </nav>
 
 <section class="tab-panel" id="apercu">
@@ -287,6 +288,55 @@ $currentIds = array_column(PropertyDocument::current($pid), 'id');
     </tbody>
 </table></div>
 <?php endif; ?>
+</section>
+
+<section class="tab-panel" id="edl">
+<?php $tpl = Inspection::template($p); ?>
+<h2>Modèle d'état des lieux du logement</h2>
+<p class="muted small">Pièces, clés et inventaire propres à ce logement : chaque nouvel état des lieux d'entrée part de ce modèle,
+    et celui de sortie reprend l'état des lieux d'entrée. Les états des lieux déjà créés ne sont pas modifiés.
+    <?= $tpl['custom'] ? '' : '<strong>Modèle par défaut</strong> — adaptez-le à ce logement puis enregistrez.' ?></p>
+<form method="post" action="<?= url('/biens/'.$p['id'].'/modele-edl') ?>" class="card" id="edl-template">
+    <?= csrf_field() ?>
+    <div class="form-grid">
+        <div class="field"><label>Désignation</label><input name="designation" value="<?= e($tpl['designation']) ?>" placeholder="Appartement meublé — 1er étage — 23 m² (loi Carrez)"></div>
+        <div class="field"><label>Annexe privative</label><input name="annexe" value="<?= e($tpl['annexe']) ?>" placeholder="Parking n° 105 (sous-sol)"></div>
+        <div class="field"><label>Chauffage / eau chaude</label><input name="heating" value="<?= e($tpl['heating']) ?>" placeholder="Individuels électriques"></div>
+    </div>
+    <div class="form-grid">
+        <div class="field"><label>Pièces et éléments</label>
+            <textarea name="rooms" rows="16" style="font-family:monospace;font-size:.85rem"><?= e($tpl['rooms']) ?></textarea>
+            <span class="hint">« # Nom de la pièce » puis un élément par ligne.</span></div>
+        <div class="field"><label>Clés et accès</label>
+            <textarea name="keys" rows="6" style="font-family:monospace;font-size:.85rem"><?= e($tpl['keys']) ?></textarea>
+            <span class="hint">Une ligne par élément : « libellé | nombre remis ».</span></div>
+    </div>
+    <div class="field"><label>Inventaire du mobilier (location meublée)</label>
+        <textarea name="inventory" rows="16" style="font-family:monospace;font-size:.85rem"><?= e($tpl['inventory']) ?></textarea>
+        <span class="hint">« # Catégorie » puis une ligne par élément : « libellé | quantité | état (Neuf, Bon, Usagé, Dégradé) | observation ».
+            Ex. : <code>Chaise coque | 3 | Bon</code></span></div>
+    <div class="actions">
+        <button class="btn btn-primary">Enregistrer le modèle</button>
+        <button type="button" class="btn" data-fill="example">Charger l'exemple « studio meublé »</button>
+        <button type="button" class="btn" data-fill="default">Revenir au modèle par défaut</button>
+    </div>
+</form>
+<script>
+(function () {
+    var presets = <?= json_encode([
+        'example' => ['rooms' => Inspection::EXAMPLE_ROOMS, 'keys' => Inspection::EXAMPLE_KEYS, 'inventory' => Inspection::EXAMPLE_INVENTORY],
+        'default' => ['rooms' => Inspection::DEFAULT_ROOMS, 'keys' => Inspection::DEFAULT_KEYS, 'inventory' => Inspection::DEFAULT_INVENTORY],
+    ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    var form = document.getElementById('edl-template');
+    form.querySelectorAll('[data-fill]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            if (!confirm('Remplacer les pièces, les clés et l\'inventaire ci-dessus ? (rien n\'est enregistré tant que vous ne cliquez pas sur « Enregistrer le modèle »)')) return;
+            var p = presets[b.dataset.fill];
+            ['rooms', 'keys', 'inventory'].forEach(function (k) { form.elements[k].value = p[k]; });
+        });
+    });
+})();
+</script>
 </section>
 
 </div>

@@ -85,6 +85,19 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
     </table></div>
     <?php endif; ?>
 
+    <?php $edls = array_filter(Inspection::forLease((int) $l['id']), fn($i) => !empty($i['shared_at'])); if ($edls): ?>
+        <h3 class="mt">États des lieux</h3>
+        <ul class="portal-docs">
+        <?php foreach ($edls as $ed): $edSig = Inspection::valid($ed, $l, $s); ?>
+            <li><a href="<?= $link('/locataire/edl/' . $ed['id']) ?>">📋 <?= e(Inspection::title($ed)) ?></a>
+                <?= $ed['inspected_at'] ? '<span class="muted small"> — du ' . fdate($ed['inspected_at']) . '</span>' : '' ?>
+                <?php if (count($edSig) === count(Inspection::ROLES)): ?><span class="badge badge-paid">Signé</span>
+                <?php elseif (isset($edSig['locataire'])): ?><span class="badge badge-pending">Signé par vous — en attente du bailleur</span>
+                <?php else: ?><span class="badge badge-late">À relire et signer</span><?php endif; ?></li>
+        <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+
     <h3 class="mt">Documents du logement</h3>
     <?php if (!$docs): ?>
         <p class="muted">Aucun document en ligne pour le moment.</p>

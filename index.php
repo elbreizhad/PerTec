@@ -34,6 +34,7 @@ require __DIR__ . '/src/models/Checklist.php';
 require __DIR__ . '/src/models/Inventory.php';
 require __DIR__ . '/src/models/PropertyDocument.php';
 require __DIR__ . '/src/models/LeaseSignature.php';
+require __DIR__ . '/src/models/Inspection.php';
 require __DIR__ . '/src/models/Liasse.php';
 require __DIR__ . '/src/models/PropertyCost.php';
 require __DIR__ . '/src/models/Bilan.php';

@@ -1160,3 +1160,248 @@ App::post('/baux/{id}/depot', function ($params) {
     }
     redirect('/baux/' . $id . '#apercu');
 });
+
+/* =========================================================================
+ * ÉTATS DES LIEUX D'ENTRÉE ET DE SORTIE
+ * ========================================================================= */
+
+/** État des lieux + bail associé (administrateur), sinon retour à la liste des baux. */
+$edlLoad = function (int $id): array {
+    $insp = Inspection::find($id);
+    $lease = $insp ? Lease::find((int) $insp['lease_id']) : null;
+    if (!$insp || !$lease) {
+        flash('État des lieux introuvable.', 'error');
+        redirect('/baux');
+    }
+    return [$insp, $lease];
+};
+
+/** Email au locataire : un état des lieux l'attend dans son espace. */
+$edlNotify = function (array $insp, array $lease): void {
+    if (!filter_var((string) $lease['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new RuntimeException("le locataire n'a pas d'adresse email valide.");
+    }
+    $s = Setting::all();
+    $name = trim((string) ($s['mail_from_name'] ?? '')) ?: (string) ($s['landlord_name'] ?? '');
+    $sortie = $insp['kind'] === 'sortie';
+    Mailer::send($lease['email'], ($sortie ? 'Votre état des lieux de sortie' : "Votre état des lieux d'entrée") . ' à consulter et signer',
+        "Bonjour " . $lease['first_name'] . ",\n\n"
+        . "L'" . mb_strtolower(Inspection::title($insp)) . " de votre logement est disponible dans votre espace locataire. "
+        . "Vous pouvez le relire, " . ($sortie ? "indiquer votre nouvelle adresse et l'IBAN pour la restitution du dépôt de garantie, " : '')
+        . "ajouter vos observations et le signer en ligne :\n\n" . LeaseSignature::absoluteUrl('/locataire') . "\n\n"
+        . "Connectez-vous avec votre adresse email (" . $lease['email'] . ") : vous recevrez un code de connexion.\n\n"
+        . "Cordialement,\n$name");
+};
+
+// Modèle d'état des lieux du logement (désignation, pièces, clés, inventaire)
+App::post('/biens/{id}/modele-edl', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    if (!Property::find($id)) redirect('/biens');
+    Inspection::saveTemplate($id, $_POST);
+    flash("Modèle d'état des lieux enregistré : il sera repris par les prochains états des lieux de ce logement.");
+    redirect('/biens/' . $id . '#edl');
+});
+
+App::post('/baux/{id}/edl/{kind}', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $lease = Lease::find((int) $params['id']);
+    if (!$lease || !isset(Inspection::KINDS[$params['kind']])) redirect('/baux');
+    try {
+        $iid = Inspection::create($lease, (string) $params['kind']);
+    } catch (Throwable $e) {
+        flash("État des lieux non créé : " . $e->getMessage(), 'error');
+        redirect('/baux/' . (int) $lease['id'] . '#edl');
+    }
+    redirect('/edl/' . $iid);
+});
+
+App::get('/edl/{id}', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    view('inspections/edit', ['insp' => $insp, 'lease' => $lease, 'settings' => Setting::all()]);
+});
+
+App::post('/edl/{id}', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    if (Inspection::isComplete($insp, $lease, Setting::all())) {
+        flash('État des lieux signé : annulez les signatures pour le modifier.', 'error');
+        redirect('/edl/' . (int) $insp['id']);
+    }
+    // Formulaire tronqué par PHP (max_input_vars) : on n'enregistre pas une saisie incomplète.
+    $n = 0;
+    array_walk_recursive($_POST, function () use (&$n) { $n++; });
+    if ($n >= (int) ini_get('max_input_vars')) {
+        flash('Formulaire trop long pour le serveur (limite max_input_vars = ' . ini_get('max_input_vars') . ') : rien n\'a été enregistré. '
+            . 'Allégez le modèle du logement ou demandez à l\'hébergeur d\'augmenter cette limite.', 'error');
+        redirect('/edl/' . (int) $insp['id']);
+    }
+    Inspection::saveAdmin($insp, $_POST);
+    flash('État des lieux enregistré.');
+    if (post('then') === 'document') redirect('/edl/' . (int) $insp['id'] . '/document');
+    redirect('/edl/' . (int) $insp['id']);
+});
+
+App::get('/edl/{id}/document', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    view('documents/etat_des_lieux', Inspection::docData($insp, $lease, Setting::all()), 'layout_print');
+});
+
+App::get('/edl/{id}/document/pdf', function ($params) use ($edlLoad, $sendFile) {
+    Auth::requireLogin();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    if (!Pdf::available()) {
+        flash('Librairie PDF indisponible sur le serveur.', 'error');
+        redirect('/edl/' . (int) $insp['id'] . '/document');
+    }
+    [$data, $name] = Inspection::pdf($insp, $lease, Setting::all());
+    $sendFile($data, 'application/pdf', $name, true);
+});
+
+// Signature du bailleur, ou du locataire présent sur cet appareil (état des lieux sur place)
+App::get('/edl/{id}/signer/{role}', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    $role = (string) $params['role'];
+    if (!isset(Inspection::ROLES[$role])) redirect('/edl/' . (int) $insp['id']);
+    view('inspections/sign', ['insp' => $insp, 'lease' => $lease, 'role' => $role, 'settings' => Setting::all()]);
+});
+
+App::post('/edl/{id}/signer/{role}', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    $role = (string) $params['role'];
+    if (!isset(Inspection::ROLES[$role])) redirect('/edl/' . (int) $insp['id']);
+    try {
+        if (!post('approve')) throw new RuntimeException('Cochez « Lu et approuvé » pour signer.');
+        if ($role === 'locataire') {
+            Inspection::saveTenant($insp, ['tenant_observations' => post('tenant_observations'),
+                'new_address' => $insp['data']['tenant']['new_address'], 'iban' => $insp['data']['tenant']['iban']]);
+            $insp = Inspection::find((int) $insp['id']);
+        }
+        $image = post('use_saved') && $role === 'bailleur' ? (string) Setting::get('landlord_signature') : (string) post('signature');
+        $done = Inspection::sign($insp, $lease, $role, (string) post('signer_name'), $image);
+        flash($done ? 'État des lieux signé par les deux parties : le PDF signé est archivé.' : Inspection::ROLES[$role] . " a signé l'état des lieux.");
+    } catch (Throwable $e) {
+        flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
+        redirect('/edl/' . (int) $insp['id'] . '/signer/' . $role);
+    }
+    redirect('/edl/' . (int) $insp['id']);
+});
+
+App::post('/edl/{id}/partage', function ($params) use ($edlLoad, $edlNotify) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    $action = (string) post('action');
+    if ($action === 'unshare') {
+        Inspection::setShared((int) $insp['id'], false);
+        flash("État des lieux retiré de l'espace locataire.");
+    } else {
+        if (!$insp['shared_at']) Inspection::setShared((int) $insp['id'], true);
+        if ($action === 'share_notify' || $action === 'notify') {
+            try {
+                $edlNotify($insp, $lease);
+                flash("État des lieux disponible dans l'espace locataire ; " . $lease['email'] . ' a été prévenu par email.');
+            } catch (Throwable $e) {
+                flash("État des lieux disponible dans l'espace locataire, mais l'email n'est pas parti : " . $e->getMessage(), 'error');
+            }
+        } else {
+            flash("État des lieux disponible dans l'espace locataire.");
+        }
+    }
+    redirect('/edl/' . (int) $insp['id']);
+});
+
+App::post('/edl/{id}/signatures/reset', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp] = $edlLoad((int) $params['id']);
+    Inspection::resetSignatures((int) $insp['id']);
+    flash('Signatures annulées : l\'état des lieux peut être modifié puis signé à nouveau (le PDF signé précédent reste archivé).');
+    redirect('/edl/' . (int) $insp['id']);
+});
+
+App::post('/edl/{id}/delete', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    if (Inspection::signatures((int) $insp['id'])) {
+        flash('État des lieux signé : annulez d\'abord les signatures.', 'error');
+        redirect('/edl/' . (int) $insp['id']);
+    }
+    Inspection::delete((int) $insp['id']);
+    flash('État des lieux supprimé.');
+    redirect('/baux/' . (int) $lease['id'] . '#edl');
+});
+
+/* --- Espace locataire --- */
+
+/** État des lieux mis à disposition d'un des baux du locataire, sinon 404. */
+$edlPortal = function (array $tenantIds, int $id): array {
+    $insp = Inspection::find($id);
+    $lease = $insp && $insp['shared_at'] ? TenantPortal::ownsLease($tenantIds, (int) $insp['lease_id']) : null;
+    if (!$lease) { http_response_code(404); exit('État des lieux introuvable.'); }
+    return [$insp, $lease];
+};
+
+App::get('/locataire/edl/{id}', function ($params) use ($portalAccess, $portalUrl, $edlPortal) {
+    [$ids, $preview] = $portalAccess();
+    [$insp, $lease] = $edlPortal($ids, (int) $params['id']);
+    view('portal/inspection', [
+        'insp'     => $insp,
+        'lease'    => $lease,
+        'settings' => Setting::all(),
+        'preview'  => $preview,
+        'link'     => fn(string $p) => $portalUrl($p, $preview),
+    ], 'portal/layout');
+});
+
+App::get('/locataire/edl/{id}/document', function ($params) use ($portalAccess, $edlPortal) {
+    [$ids] = $portalAccess();
+    [$insp, $lease] = $edlPortal($ids, (int) $params['id']);
+    $html = render_template('documents/etat_des_lieux', Inspection::docData($insp, $lease, Setting::all()));
+    echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        . '<link rel="stylesheet" href="' . asset('/assets/print.css') . '"></head><body class="print-body"><div class="sheet">' . $html . '</div></body></html>';
+});
+
+App::get('/locataire/edl/{id}/pdf', function ($params) use ($portalAccess, $edlPortal, $sendFile) {
+    [$ids] = $portalAccess();
+    [$insp, $lease] = $edlPortal($ids, (int) $params['id']);
+    [$data, $name] = Inspection::pdf($insp, $lease, Setting::all());
+    $sendFile($data, 'application/pdf', $name, true);
+});
+
+// Le locataire complète (adresse, IBAN, observations) puis signe — ou enregistre seulement
+App::post('/locataire/edl/{id}', function ($params) use ($edlPortal) {
+    csrf_check();
+    $ids = TenantPortal::sessionTenantIds();
+    if (!$ids) redirect('/locataire');
+    [$insp, $lease] = $edlPortal($ids, (int) $params['id']);
+    $back = '/locataire/edl/' . (int) $insp['id'];
+    $settings = Setting::all();
+    if (isset(Inspection::valid($insp, $lease, $settings)['locataire'])) {
+        flash('Vous avez déjà signé cet état des lieux.', 'error');
+        redirect($back);
+    }
+    try {
+        Inspection::saveTenant($insp, $_POST);
+        if (post('save_only')) {
+            flash('Vos informations sont enregistrées. Pensez à signer l\'état des lieux.');
+            redirect($back);
+        }
+        if (!post('approve')) throw new RuntimeException('Cochez « Lu et approuvé » pour signer.');
+        $done = Inspection::sign(Inspection::find((int) $insp['id']), $lease, 'locataire', (string) post('signer_name'), (string) post('signature'));
+        flash($done ? "Merci, l'état des lieux est signé par les deux parties. Vous pouvez télécharger la version signée."
+                    : "Merci, votre signature est enregistrée. L'état des lieux sera complet après la signature du bailleur.");
+    } catch (Throwable $e) {
+        flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
+    }
+    redirect($back);
+});

@@ -36,6 +36,8 @@ $tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l
     <a href="#loyers">Loyers <span class="tab-count"><?= count($payments) ?></span></a>
     <a href="#signature">Signature <span class="tab-count<?= $tabSigned ? '' : ' tab-alert' ?>"><?= $tabSigned ? '✔' : 'à faire' ?></span></a>
     <a href="#liasse">Dossier locataire<?php if ($tabDocIssues): ?> <span class="tab-count tab-alert"><?= $tabDocIssues ?> ⚠</span><?php endif; ?></a>
+    <?php $edls = Inspection::forLease((int) $l['id']); ?>
+    <a href="#edl">États des lieux <span class="tab-count"><?= count($edls) ?>/2</span></a>
     <?php if ($tabInv): ?><a href="#inventaire">Inventaire <span class="tab-count"><?= $tabInv[0] ?>/<?= $tabInv[1] ?></span></a><?php endif; ?>
     <a href="#checklist">Checklist <span class="tab-count"><?= $done ?>/<?= $total ?></span></a>
 </nav>
@@ -274,6 +276,40 @@ Cordialement,
         <div class="mt"><button class="btn">📧 Envoyer le dossier</button></div>
     </form>
 </div>
+</section>
+
+<section class="tab-panel" id="edl">
+<h2>États des lieux</h2>
+<p class="muted small">Saisie sur place (téléphone ou tablette), signature des deux parties sur l'appareil ou à distance depuis
+    l'espace locataire. Les pièces, clés et l'inventaire viennent du <a href="<?= url('/biens/'.$l['property_id'].'#edl') ?>">modèle d'état des lieux du logement</a> ;
+    l'état des lieux de sortie reprend celui d'entrée.</p>
+<div class="table-wrap"><table>
+    <thead><tr><th>Document</th><th>Date</th><th>État</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach (Inspection::KINDS as $kind => $label): $ed = $edls[$kind] ?? null; ?>
+        <tr>
+            <td><strong><?= e($label) ?></strong></td>
+            <td><?= $ed && $ed['inspected_at'] ? e(date('d/m/Y H:i', strtotime($ed['inspected_at']))) : '—' ?></td>
+            <td><?php if (!$ed): ?><span class="muted">Non commencé</span>
+                <?php else: $edSig = Inspection::valid($ed, $l, $settings); [$edDone, $edTotal] = Inspection::progress($ed); ?>
+                    <?php if (count($edSig) === count(Inspection::ROLES)): ?><span class="badge badge-paid">Signé</span>
+                    <?php elseif ($edSig): ?><span class="badge badge-pending">Signé par <?= e(implode(' et ', array_map(fn($r) => mb_strtolower(Inspection::ROLES[$r]), array_keys($edSig)))) ?></span>
+                    <?php else: ?><span class="badge badge-pending">En cours — <?= $edDone ?>/<?= $edTotal ?></span><?php endif; ?>
+                    <?php if ($ed['shared_at']): ?><span class="badge badge-active">Espace locataire</span><?php endif; ?>
+                <?php endif; ?></td>
+            <td class="right">
+                <?php if ($ed): ?>
+                    <a class="btn btn-sm btn-primary" href="<?= url('/edl/'.$ed['id']) ?>">Ouvrir</a>
+                    <a class="btn btn-sm" href="<?= url('/edl/'.$ed['id'].'/document/pdf') ?>" target="_blank">PDF</a>
+                <?php else: ?>
+                    <form method="post" action="<?= url('/baux/'.$l['id'].'/edl/'.$kind) ?>" class="inline-form"><?= csrf_field() ?>
+                        <button class="btn btn-sm btn-primary">+ Commencer</button></form>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table></div>
 </section>
 
 <?php if ($l['lease_type'] === 'meuble'): ?>

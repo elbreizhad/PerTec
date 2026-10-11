@@ -37,3 +37,5 @@ p,li{orphans:3;widows:3}
   .sheet{box-shadow:none;margin:0;max-width:none;padding:1.5cm 2cm;min-height:auto}
   @page{size:A4;margin:0}
 }
+.doc-amounts th{padding:.45rem .6rem;border-bottom:1px solid #ddd;background:#f2f2f2;text-align:left;vertical-align:top}
+.sheet .small{font-size:.82rem} .sheet .center{text-align:center} .sheet .mt{margin-top:1rem}
