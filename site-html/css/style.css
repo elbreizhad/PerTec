@@ -72,6 +72,9 @@ ul {
   border-radius: 50%;
   filter: blur(128px);
   animation: float 8s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .orb-1 {
@@ -1753,5 +1756,56 @@ button:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Safari Mobile Optimizations */
+@supports (-webkit-touch-callout: none) {
+  .orb {
+    filter: blur(80px);
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .glass,
+  .glass-strong {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Mobile Performance */
+@media (max-width: 768px) {
+  .orb {
+    filter: blur(60px);
+    animation: none;
+  }
+
+  .orb-1 { width: 300px; height: 300px; }
+  .orb-2 { width: 250px; height: 250px; }
+  .orb-3 { width: 200px; height: 200px; }
+
+  .glass,
+  .glass-strong {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .grid-pattern {
+    display: none;
+  }
+
+  [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .portfolio-card::before,
+  .feature-card::before {
+    display: none;
+  }
+
+  .scroll-progress {
+    display: none;
   }
 }
