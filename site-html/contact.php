@@ -1,3 +1,14 @@
+<?php
+session_start();
+require_once __DIR__ . '/includes/turnstile.php';
+
+// CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$turnstileSiteKey = get_turnstile_site_key();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,6 +22,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <?php if ($turnstileSiteKey): ?>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <?php endif; ?>
 </head>
 <body>
   <div class="bg-effects">
@@ -32,9 +46,9 @@
           <a href="tarifs.php" class="nav-link">Tarifs</a>
           <a href="realisations.html" class="nav-link">Réalisations</a>
           <a href="a-propos.html" class="nav-link">À propos</a>
-          <a href="contact.html" class="nav-link active">Contact</a>
+          <a href="contact.php" class="nav-link active">Contact</a>
         </nav>
-        <a href="contact.html" class="btn btn-primary header-cta">Devis gratuit</a>
+        <a href="contact.php" class="btn btn-primary header-cta">Devis gratuit</a>
         <button class="menu-toggle" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -47,8 +61,8 @@
     <a href="tarifs.php">Tarifs</a>
     <a href="realisations.html">Réalisations</a>
     <a href="a-propos.html">À propos</a>
-    <a href="contact.html">Contact</a>
-    <a href="contact.html" class="btn btn-primary">Devis gratuit</a>
+    <a href="contact.php">Contact</a>
+    <a href="contact.php" class="btn btn-primary">Devis gratuit</a>
   </div>
 
   <!-- Page Header -->
@@ -110,6 +124,8 @@
           <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Demander un devis gratuit</h2>
 
           <form id="contact-form" action="contact-handler.php" method="POST">
+            <!-- CSRF token -->
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <!-- Honeypot anti-spam -->
             <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 
@@ -159,6 +175,12 @@
                 <input type="checkbox" id="consent" name="consent" required>
                 <label for="consent">J'accepte d'être recontacté concernant ma demande <span>*</span></label>
               </div>
+
+              <?php if ($turnstileSiteKey): ?>
+              <div class="form-group full">
+                <div class="cf-turnstile" data-sitekey="<?= htmlspecialchars($turnstileSiteKey) ?>" data-theme="dark"></div>
+              </div>
+              <?php endif; ?>
 
               <div class="form-group full">
                 <button type="submit" class="btn btn-primary form-submit">Envoyer ma demande</button>
@@ -220,7 +242,7 @@
             <li><a href="a-propos.html">À propos</a></li>
             <li><a href="realisations.html">Réalisations</a></li>
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">

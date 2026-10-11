@@ -108,7 +108,7 @@ $unread_count = count(array_filter($messages, fn($m) => !($m['read'] ?? false)))
                         <span class="quick-icon">📬</span>
                         <span>Messages</span>
                     </a>
-                    <a href="../contact.html" target="_blank" class="quick-link">
+                    <a href="../contact.php" target="_blank" class="quick-link">
                         <span class="quick-icon">📝</span>
                         <span>Formulaire</span>
                     </a>

@@ -5,6 +5,7 @@
  */
 
 session_start();
+require_once __DIR__ . '/includes/turnstile.php';
 
 // Générer le token CSRF si nécessaire
 if (empty($_SESSION['csrf_token'])) {
@@ -22,6 +23,9 @@ if (file_exists($settings_file)) {
     $config['contact_email'] = $settings['contact_email'] ?? $config['contact_email'];
     $config['contact_tel'] = $settings['contact_phone'] ?? $config['contact_tel'];
 }
+
+// Turnstile
+$turnstileSiteKey = get_turnstile_site_key();
 
 // Fonction pour échapper HTML
 function e($str) {
@@ -53,6 +57,9 @@ function formatPrix($prix) {
     <link rel="stylesheet" href="css/style.css">
     <!-- CSS spécifique tarifs -->
     <link rel="stylesheet" href="css/tarifs.css">
+    <?php if ($turnstileSiteKey): ?>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <?php endif; ?>
 </head>
 <body class="page-tarifs">
 
@@ -76,9 +83,9 @@ function formatPrix($prix) {
                     <a href="tarifs.php" class="nav-link active">Tarifs</a>
                     <a href="realisations.html" class="nav-link">Réalisations</a>
                     <a href="a-propos.html" class="nav-link">À propos</a>
-                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="contact.php" class="nav-link">Contact</a>
                 </nav>
-                <a href="contact.html" class="btn btn-primary header-cta">Devis gratuit</a>
+                <a href="contact.php" class="btn btn-primary header-cta">Devis gratuit</a>
                 <button class="menu-toggle" aria-label="Menu">
                     <span></span>
                     <span></span>
@@ -94,8 +101,8 @@ function formatPrix($prix) {
         <a href="tarifs.php">Tarifs</a>
         <a href="realisations.html">Réalisations</a>
         <a href="a-propos.html">À propos</a>
-        <a href="contact.html">Contact</a>
-        <a href="contact.html" class="btn btn-primary">Devis gratuit</a>
+        <a href="contact.php">Contact</a>
+        <a href="contact.php" class="btn btn-primary">Devis gratuit</a>
     </div>
 
     <main>
@@ -255,6 +262,11 @@ function formatPrix($prix) {
                         <div class="tarifs-form-groupe">
                             <input type="tel" name="telephone" class="tarifs-form-input" placeholder="06 00 00 00 00 (facultatif)" aria-label="Téléphone">
                         </div>
+                        <?php if ($turnstileSiteKey): ?>
+                        <div class="tarifs-form-groupe" style="display: flex; justify-content: center;">
+                            <div class="cf-turnstile" data-sitekey="<?= e($turnstileSiteKey) ?>" data-theme="dark"></div>
+                        </div>
+                        <?php endif; ?>
                         <button type="submit" class="tarifs-form-btn">Recevoir mon estimation</button>
                     </form>
 

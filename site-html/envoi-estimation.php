@@ -5,6 +5,7 @@
  */
 
 session_start();
+require_once __DIR__ . '/includes/turnstile.php';
 
 // Headers
 header('Content-Type: application/json; charset=utf-8');
@@ -30,6 +31,17 @@ try {
         $response = ['success' => true];
         echo json_encode($response);
         exit;
+    }
+
+    // Vérification Turnstile (CAPTCHA)
+    $turnstileSecret = get_turnstile_secret_key();
+    if ($turnstileSecret) {
+        $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+        $turnstileResult = verify_turnstile($turnstileToken, $turnstileSecret, $_SERVER['REMOTE_ADDR'] ?? null);
+
+        if (!$turnstileResult['success']) {
+            throw new Exception($turnstileResult['error']);
+        }
     }
 
     // Délai anti-spam (3 secondes minimum)

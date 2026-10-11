@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'smtp_pass' => trim($_POST['smtp_pass'] ?? ''),
         'smtp_from' => trim($_POST['smtp_from'] ?? ''),
         'smtp_from_name' => trim($_POST['smtp_from_name'] ?? ''),
+        'turnstile_site_key' => trim($_POST['turnstile_site_key'] ?? ''),
+        'turnstile_secret_key' => trim($_POST['turnstile_secret_key'] ?? ''),
     ];
 
     if (save_settings($settings)) {
@@ -136,6 +138,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="smtp_from_name">Nom expéditeur</label>
                             <input type="text" id="smtp_from_name" name="smtp_from_name" value="<?= e($settings['smtp_from_name']) ?>" placeholder="Pertec">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Protection anti-spam (Cloudflare Turnstile)</h2>
+                    <p class="form-hint">Créez un compte gratuit sur <a href="https://dash.cloudflare.com/sign-up?to=/:account/turnstile" target="_blank">Cloudflare Turnstile</a> pour obtenir vos clés.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="turnstile_site_key">Clé du site (Site Key)</label>
+                            <input type="text" id="turnstile_site_key" name="turnstile_site_key" value="<?= e($settings['turnstile_site_key'] ?? '') ?>" placeholder="0x...">
+                        </div>
+                        <div class="form-group">
+                            <label for="turnstile_secret_key">Clé secrète (Secret Key)</label>
+                            <input type="password" id="turnstile_secret_key" name="turnstile_secret_key" value="<?= e($settings['turnstile_secret_key'] ?? '') ?>" placeholder="0x...">
                         </div>
                     </div>
                 </div>

@@ -4,21 +4,17 @@
  * Enregistre les messages et envoie un email de notification via SMTP
  */
 
-// Charger la config et le mailer
+session_start();
+
+// Charger la config, le mailer et Turnstile
 require_once __DIR__ . '/admin/mailer.php';
+require_once __DIR__ . '/includes/turnstile.php';
 
 $settings = [];
 $settings_file = __DIR__ . '/admin/settings.json';
 if (file_exists($settings_file)) {
     $settings = json_decode(file_get_contents($settings_file), true) ?: [];
 }
-
-// Configuration
-$contact_email = $settings['contact_email'] ?? 'contact@pertec.fr';
-$site_name = $settings['site_name'] ?? 'Pertec';
-
-// Créer le mailer
-$mailer = new PertecMailer($settings);
 
 // Headers
 header('Content-Type: application/json; charset=utf-8');
@@ -29,6 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
     exit;
 }
+
+// CSRF validation
+$csrf = $_POST['csrf_token'] ?? '';
+if (empty($csrf) || !hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Session expirée. Veuillez recharger la page.']);
+    exit;
+}
+
+// Configuration
+$contact_email = $settings['contact_email'] ?? 'contact@pertec.fr';
+$site_name = $settings['site_name'] ?? 'Pertec';
+
+// Créer le mailer
+$mailer = new PertecMailer($settings);
 
 // Récupérer et valider les données
 $nom = trim($_POST['nom'] ?? '');
@@ -59,6 +70,19 @@ if (!empty($_POST['website'])) {
     http_response_code(200);
     echo json_encode(['success' => true, 'message' => 'Message envoyé']);
     exit;
+}
+
+// Vérification Turnstile (CAPTCHA)
+$turnstileSecret = get_turnstile_secret_key();
+if ($turnstileSecret) {
+    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+    $turnstileResult = verify_turnstile($turnstileToken, $turnstileSecret, $_SERVER['REMOTE_ADDR'] ?? null);
+
+    if (!$turnstileResult['success']) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => $turnstileResult['error']]);
+        exit;
+    }
 }
 
 // Si erreurs
