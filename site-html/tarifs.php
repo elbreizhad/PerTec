@@ -44,6 +44,11 @@ function formatPrix($prix) {
     <link rel="canonical" href="https://pertec.fr/tarifs">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- CSS principal du site -->
     <link rel="stylesheet" href="css/style.css">
     <!-- CSS spécifique tarifs -->
@@ -51,37 +56,45 @@ function formatPrix($prix) {
 </head>
 <body class="page-tarifs">
 
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-pattern"></div>
+    </div>
+
     <!-- Header -->
-    <header class="header" style="background: var(--fond); border-bottom: 1px solid var(--bordure);">
+    <header class="header">
         <div class="container">
             <div class="header-inner">
                 <a href="/" class="logo">
-                    <img src="images/logo-pertec.svg" alt="Pertec" style="filter: brightness(0);">
+                    <img src="images/logo-pertec.svg" alt="Pertec">
                 </a>
                 <nav class="nav">
-                    <a href="services.html" class="nav-link" style="color: var(--encre);">Services</a>
-                    <a href="tarifs.php" class="nav-link active" style="color: var(--accent);">Tarifs</a>
-                    <a href="realisations.html" class="nav-link" style="color: var(--encre);">Réalisations</a>
-                    <a href="a-propos.html" class="nav-link" style="color: var(--encre);">À propos</a>
-                    <a href="contact.html" class="nav-link" style="color: var(--encre);">Contact</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="tarifs.php" class="nav-link active">Tarifs</a>
+                    <a href="realisations.html" class="nav-link">Réalisations</a>
+                    <a href="a-propos.html" class="nav-link">À propos</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
                 <a href="contact.html" class="btn btn-primary header-cta">Devis gratuit</a>
                 <button class="menu-toggle" aria-label="Menu">
-                    <span style="background: var(--encre);"></span>
-                    <span style="background: var(--encre);"></span>
-                    <span style="background: var(--encre);"></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu" style="background: var(--fond);">
-        <a href="services.html" style="color: var(--encre);">Services</a>
-        <a href="tarifs.php" style="color: var(--accent);">Tarifs</a>
-        <a href="realisations.html" style="color: var(--encre);">Réalisations</a>
-        <a href="a-propos.html" style="color: var(--encre);">À propos</a>
-        <a href="contact.html" style="color: var(--encre);">Contact</a>
+    <div class="mobile-menu">
+        <a href="services.html">Services</a>
+        <a href="tarifs.php">Tarifs</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contact.html">Contact</a>
         <a href="contact.html" class="btn btn-primary">Devis gratuit</a>
     </div>
 
@@ -279,10 +292,10 @@ function formatPrix($prix) {
         </div>
     </div>
 
-    <!-- Footer simplifié -->
-    <footer class="footer" style="background: var(--encre); margin-top: 0;">
+    <!-- Footer -->
+    <footer class="footer">
         <div class="container">
-            <div class="footer-bottom" style="padding: 24px 0; border: none;">
+            <div class="footer-bottom">
                 <p>© 2025 Pertec.fr - Création de sites internet à Evreux</p>
                 <div class="footer-legal">
                     <a href="mentions-legales.html">Mentions légales</a>
