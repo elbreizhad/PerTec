@@ -27,7 +27,8 @@ if ($public): ?>
         <p class="muted">Logement : <?= e($adresse ?: $l['property_label']) ?> · Bailleur : <?= e($settings['landlord_name'] ?? '') ?>
             · Locataire : <?= e($l['first_name'] . ' ' . $l['last_name']) ?></p>
     </div>
-    <?php if (!$public): ?><a href="<?= url('/baux/' . (int) $l['id']) ?>" class="btn">Retour au bail</a><?php endif; ?>
+    <?php if (!$public): ?><a href="<?= url('/baux/' . (int) $l['id']) ?>" class="btn">Retour au bail</a>
+    <?php elseif (!empty($_SESSION['tenant_ids'])): ?><a href="<?= url('/locataire/espace') ?>" class="btn">← Mon espace locataire</a><?php endif; ?>
 </div>
 
 <div class="card">

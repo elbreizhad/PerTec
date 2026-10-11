@@ -281,3 +281,19 @@ body.portal{background:var(--bg)}
 .edl-save{flex-wrap:nowrap}
 .edl-save .btn{flex:1;justify-content:center;white-space:normal;text-align:center}
 @media(min-width:701px){.edl-save .btn{flex:0 0 auto}}
+
+/* ===== Espace locataire : démarches (✔ fait / ✘ à faire) ===== */
+.tasks h3{margin:1rem 0 .4rem;font-size:.95rem;color:var(--navy)}
+.tasks h3 .muted{font-weight:500;font-size:.82rem}
+.task{display:flex;align-items:center;gap:.75rem;padding:.6rem .2rem;border-bottom:1px solid #eef2f7}
+.task:last-child{border-bottom:none}
+.task-ico{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#fff}
+.task-ok .task-ico{background:var(--green)}
+.task-ko .task-ico{background:var(--red)}
+.task-body{flex:1;min-width:0}
+.task-body strong{display:block;font-size:.93rem}
+.task-ok .task-body strong{color:var(--muted);font-weight:600}
+.task-body .small{color:var(--muted)}
+.task form{margin:0}
+.tasks-progress{display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem}
+@media(max-width:640px){.task{flex-wrap:wrap}.task-body{flex:1 1 calc(100% - 42px)}.task>a.btn,.task>form{margin-left:calc(30px + .75rem)}}

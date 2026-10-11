@@ -1378,30 +1378,74 @@ App::get('/locataire/edl/{id}/pdf', function ($params) use ($portalAccess, $edlP
     $sendFile($data, 'application/pdf', $name, true);
 });
 
-// Le locataire complète (adresse, IBAN, observations) puis signe — ou enregistre seulement
-App::post('/locataire/edl/{id}', function ($params) use ($edlPortal) {
-    csrf_check();
+/** Locataire connecté (pas l'aperçu administrateur) : état des lieux encore modifiable par lui. */
+$edlTenant = function (int $id) use ($edlPortal): array {
     $ids = TenantPortal::sessionTenantIds();
     if (!$ids) redirect('/locataire');
-    [$insp, $lease] = $edlPortal($ids, (int) $params['id']);
-    $back = '/locataire/edl/' . (int) $insp['id'];
-    $settings = Setting::all();
-    if (isset(Inspection::valid($insp, $lease, $settings)['locataire'])) {
+    [$insp, $lease] = $edlPortal($ids, $id);
+    if (isset(Inspection::valid($insp, $lease, Setting::all())['locataire'])) {
         flash('Vous avez déjà signé cet état des lieux.', 'error');
-        redirect($back);
+        redirect('/locataire/edl/' . $id);
     }
+    return [$insp, $lease];
+};
+
+// Le locataire remplit l'état des lieux (états, compteurs, clés, inventaire, observations, adresse et IBAN)
+App::post('/locataire/edl/{id}', function ($params) use ($edlTenant) {
+    csrf_check();
+    [$insp] = $edlTenant((int) $params['id']);
+    $n = 0;
+    array_walk_recursive($_POST, function () use (&$n) { $n++; });
+    if ($n >= (int) ini_get('max_input_vars')) {
+        flash('Formulaire trop long pour le serveur : rien n\'a été enregistré. Prévenez votre bailleur.', 'error');
+    } else {
+        Inspection::saveByTenant($insp, $_POST);
+        flash('État des lieux enregistré. Quand tout est vérifié, signez-le en bas de la page.');
+    }
+    redirect('/locataire/edl/' . (int) $insp['id']);
+});
+
+App::post('/locataire/edl/{id}/signer', function ($params) use ($edlTenant) {
+    csrf_check();
+    [$insp, $lease] = $edlTenant((int) $params['id']);
     try {
-        Inspection::saveTenant($insp, $_POST);
-        if (post('save_only')) {
-            flash('Vos informations sont enregistrées. Pensez à signer l\'état des lieux.');
-            redirect($back);
-        }
         if (!post('approve')) throw new RuntimeException('Cochez « Lu et approuvé » pour signer.');
-        $done = Inspection::sign(Inspection::find((int) $insp['id']), $lease, 'locataire', (string) post('signer_name'), (string) post('signature'));
+        $done = Inspection::sign($insp, $lease, 'locataire', (string) post('signer_name'), (string) post('signature'));
         flash($done ? "Merci, l'état des lieux est signé par les deux parties. Vous pouvez télécharger la version signée."
                     : "Merci, votre signature est enregistrée. L'état des lieux sera complet après la signature du bailleur.");
     } catch (Throwable $e) {
         flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
     }
-    redirect($back);
+    redirect('/locataire/edl/' . (int) $insp['id']);
+});
+
+// Le locataire commence lui-même l'état des lieux d'entrée (modèle du logement)
+App::post('/locataire/bail/{id}/edl', function ($params) {
+    csrf_check();
+    $ids = TenantPortal::sessionTenantIds();
+    if (!$ids) redirect('/locataire');
+    $lease = TenantPortal::ownsLease($ids, (int) $params['id']);
+    if (!$lease) { http_response_code(404); exit('Bail introuvable.'); }
+    $iid = Inspection::create($lease, 'entree');
+    if (!(Inspection::find($iid)['shared_at'] ?? null)) Inspection::setShared($iid, true);
+    redirect('/locataire/edl/' . $iid);
+});
+
+// Signature du bail depuis l'espace : lien personnel de signature (réutilisé s'il est encore valable)
+App::get('/locataire/bail/{id}/signer', function ($params) use ($portalAccess, $portalUrl) {
+    [$ids, $preview] = $portalAccess();
+    $lease = TenantPortal::ownsLease($ids, (int) $params['id']);
+    if (!$lease) { http_response_code(404); exit('Bail introuvable.'); }
+    if ($preview) {
+        flash('Aperçu administrateur : la signature du bail par le locataire est désactivée.', 'error');
+        redirect('/locataire/espace?apercu=' . $preview);
+    }
+    if ($lease['lease_type'] === 'meuble' && Lease::contractIssues($lease, Setting::all())['blocking']) {
+        flash("Votre bail n'est pas encore prêt à être signé : votre bailleur le finalise.", 'error');
+        redirect('/locataire/espace');
+    }
+    $row = Database::one('SELECT sign_token, sign_token_expires FROM leases WHERE id = ?', [(int) $lease['id']]);
+    $token = $row && $row['sign_token'] && strtotime((string) $row['sign_token_expires']) > time() + 86400
+        ? $row['sign_token'] : LeaseSignature::newToken((int) $lease['id']);
+    redirect('/signature/' . $token);
 });

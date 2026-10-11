@@ -38,6 +38,12 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
         <a class="btn btn-primary" href="<?= $link('/locataire/bail/' . $l['id']) ?>" target="_blank">📄 <?= $signed ? 'Mon bail signé' : 'Mon bail' ?> (PDF)</a>
     </div>
 
+    <?php if ($active): ?>
+        <h3 style="margin-top:.4rem">Mes démarches</h3>
+        <?php view('portal/tasks', ['groups' => TenantPortal::tasks($l, $s, $payments), 'link' => $link, 'preview' => $preview], null); ?>
+        <hr style="border:none;border-top:1px solid var(--line);margin:1.2rem 0">
+    <?php endif; ?>
+
     <div class="grid grid-4 mb">
         <div class="stat"><div class="label">Loyer hors charges</div><div class="value"><?= euros($l['rent_amount']) ?></div></div>
         <div class="stat"><div class="label">Charges<?= ($l['charge_type'] ?? '') === 'forfait' ? ' (forfait)' : ' (provisions)' ?></div><div class="value"><?= euros($l['charges_amount']) ?></div></div>

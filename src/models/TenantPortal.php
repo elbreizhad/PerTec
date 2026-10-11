@@ -105,4 +105,78 @@ class TenantPortal
         $l = Lease::find($leaseId);
         return $l && in_array((int) $l['tenant_id'], $tenantIds, true) ? $l : null;
     }
+    /**
+     * Démarches du locataire pour un bail, classées par étape, avec leur état.
+     * Chaque tâche : ['label', 'done' (bool), 'hint', 'url' (lien à suivre), 'post' (action à envoyer), 'button'].
+     * @return array<string, array<int, array>>
+     */
+    public static function tasks(array $lease, array $settings, array $payments): array
+    {
+        $today = date('Y-m-d');
+        $edls = Inspection::forLease((int) $lease['id']);
+        $tenantSigned = fn(?array $i) => $i && isset(Inspection::valid($i, $lease, $settings)['locataire']);
+        $mail = !empty($settings['landlord_email']) ? 'mailto:' . $settings['landlord_email'] : null;
+
+        // --- Avant l'entrée dans le logement ---
+        $before = [];
+        $leaseSigned = isset(LeaseSignature::valid($lease, $settings)['locataire']);
+        $blocked = $lease['lease_type'] === 'meuble' && Lease::contractIssues($lease, $settings)['blocking'];
+        $before[] = ['label' => 'Signer le bail', 'done' => $leaseSigned,
+            'hint' => $leaseSigned ? 'Votre signature est enregistrée.' : ($blocked ? 'Le bail est en cours de préparation par votre bailleur.' : 'Lisez le contrat et signez-le en ligne.'),
+            'url' => !$leaseSigned && !$blocked ? '/locataire/bail/' . $lease['id'] . '/signer' : null, 'button' => 'Signer mon bail'];
+
+        if ((float) $lease['deposit_amount'] > 0) {
+            $paid = !empty($lease['deposit_paid_date']);
+            $before[] = ['label' => 'Verser le dépôt de garantie (' . euros($lease['deposit_amount']) . ')', 'done' => $paid,
+                'hint' => $paid ? 'Reçu le ' . fdate($lease['deposit_paid_date']) . '.' : 'À verser au plus tard le ' . fdate(Lease::depositDue($lease)) . ' (jour du début du bail).'];
+        }
+
+        $checked = Checklist::checkedKeys((int) $lease['id']);
+        foreach (Checklist::applicableItems($lease['lease_type']) as $item) {
+            if ($item['group'] !== 'locataire') continue;
+            if ($item['key'] === 'garant' && ($lease['guarantee_type'] ?? 'aucune') === 'aucune') continue;
+            $done = in_array($item['key'], $checked, true);
+            $before[] = ['label' => 'Fournir : ' . (preg_match('/^\p{Lu}\p{Ll}/u', $item['label']) ? mb_strtolower(mb_substr($item['label'], 0, 1)) . mb_substr($item['label'], 1) : $item['label']), 'done' => $done,
+                'hint' => $done ? 'Reçu par votre bailleur.' : 'À transmettre à votre bailleur.',
+                'url' => !$done ? $mail : null, 'button' => 'Envoyer par email'];
+        }
+
+        $first = $payments ? array_reduce($payments, fn($c, $p) => !$c || [$p['period_year'], $p['period_month']] < [$c['period_year'], $c['period_month']] ? $p : $c) : null;
+        $firstPaid = $first && $first['status'] === 'paid';
+        $before[] = ['label' => 'Payer le premier loyer', 'done' => $firstPaid,
+            'hint' => $firstPaid ? 'Payé le ' . fdate($first['paid_date']) . '.' : ($first && $first['due_date'] ? 'Échéance le ' . fdate($first['due_date']) . '.' : 'L\'échéance apparaîtra ci-dessous.')];
+
+        $in = $edls['entree'] ?? null;
+        $inDone = $tenantSigned($in);
+        $before[] = ['label' => "Faire et signer l'état des lieux d'entrée", 'done' => $inDone,
+            'hint' => $inDone ? 'Signé.' : ($in && $in['shared_at'] ? 'Vérifiez chaque pièce, complétez si besoin, puis signez.' : 'Faites le tour du logement pièce par pièce et notez l\'état de chaque élément.'),
+            'url' => !$inDone && $in && $in['shared_at'] ? '/locataire/edl/' . $in['id'] : null,
+            'post' => !$inDone && (!$in || !$in['shared_at']) ? '/locataire/bail/' . $lease['id'] . '/edl' : null,
+            'button' => $in && $in['shared_at'] && !$inDone ? "Faire l'état des lieux" : "Commencer l'état des lieux"];
+
+        $groups = ["Avant l'entrée dans le logement" => $before];
+
+        // --- Pendant la location ---
+        $late = array_filter($payments, fn($p) => $p['status'] !== 'paid' && $p['due_date'] && $p['due_date'] < $today);
+        $groups['Pendant la location'] = [
+            ['label' => 'Payer le loyer chaque mois', 'done' => !$late,
+             'hint' => $late ? count($late) . ' échéance(s) en retard — voir « Mes loyers et quittances ».' : 'Vos loyers sont à jour.'],
+        ];
+
+        // --- Départ ---
+        $out = $edls['sortie'] ?? null;
+        if ($out && $out['shared_at']) {
+            $outDone = $tenantSigned($out);
+            $hasInfo = $out['data']['tenant']['new_address'] !== '' && $out['data']['tenant']['iban'] !== '';
+            $groups['Départ du logement'] = [
+                ['label' => 'Indiquer votre nouvelle adresse et votre IBAN', 'done' => $hasInfo,
+                 'hint' => $hasInfo ? 'Renseignés.' : 'Nécessaires pour vous restituer le dépôt de garantie.',
+                 'url' => !$hasInfo ? '/locataire/edl/' . $out['id'] : null, 'button' => 'Compléter'],
+                ['label' => "Faire et signer l'état des lieux de sortie", 'done' => $outDone,
+                 'hint' => $outDone ? 'Signé.' : 'Vérifiez chaque pièce, complétez si besoin, puis signez.',
+                 'url' => !$outDone ? '/locataire/edl/' . $out['id'] : null, 'button' => "Faire l'état des lieux"],
+            ];
+        }
+        return $groups;
+    }
 }

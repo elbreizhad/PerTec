@@ -476,7 +476,7 @@ TXT;
         $txt = fn($v, int $max = 255) => trim(mb_substr(str_replace("\r\n", "\n", is_scalar($v) ? (string) $v : ''), 0, $max));
         $state = fn($v) => isset(self::STATES[(string) $v]) ? (string) $v : '';
 
-        foreach (['residence', 'designation', 'annexe', 'heating'] as $k) $d[$k] = $txt($post[$k] ?? '');
+        foreach (['residence', 'designation', 'annexe', 'heating'] as $k) if (array_key_exists($k, $post)) $d[$k] = $txt($post[$k]);
         foreach (array_keys($d['meters']) as $k) {
             if (array_key_exists($k, (array) ($post['meters'] ?? []))) $d['meters'][$k] = $txt($post['meters'][$k], 40);
         }
@@ -548,21 +548,59 @@ TXT;
         }
         unset($g);
 
-        $d['cleanliness'] = in_array($post['cleanliness'] ?? '', ['propre', 'a_nettoyer'], true) ? $post['cleanliness'] : '';
-        $d['cleanliness_notes'] = $txt($post['cleanliness_notes'] ?? '');
-        $d['observations'] = $txt($post['observations'] ?? '', 5000);
-        if ($sortie) {
-            $d['deposit']['amount']     = $txt($post['deposit']['amount'] ?? '', 20);
-            $d['deposit']['deductions'] = $txt($post['deposit']['deductions'] ?? '', 2000);
-            $d['deposit']['deducted']   = $txt($post['deposit']['deducted'] ?? '', 20);
-            $d['tenant']['new_address'] = $txt($post['tenant']['new_address'] ?? '', 500);
-            $d['tenant']['iban']        = self::cleanIban($post['tenant']['iban'] ?? '');
+        // Champs absents du formulaire (ex. saisie du locataire) : valeur conservée.
+        if (array_key_exists('cleanliness', $post)) {
+            $d['cleanliness'] = in_array($post['cleanliness'], ['propre', 'a_nettoyer'], true) ? $post['cleanliness'] : '';
         }
+        if (array_key_exists('cleanliness_notes', $post)) $d['cleanliness_notes'] = $txt($post['cleanliness_notes']);
+        if (array_key_exists('observations', $post)) $d['observations'] = $txt($post['observations'], 5000);
+        $pd = (array) ($post['deposit'] ?? []);
+        $pt = (array) ($post['tenant'] ?? []);
+        if ($sortie) {
+            if (array_key_exists('amount', $pd))     $d['deposit']['amount']     = $txt($pd['amount'], 20);
+            if (array_key_exists('deductions', $pd)) $d['deposit']['deductions'] = $txt($pd['deductions'], 2000);
+            if (array_key_exists('deducted', $pd))   $d['deposit']['deducted']   = $txt($pd['deducted'], 20);
+            if (array_key_exists('new_address', $pt)) $d['tenant']['new_address'] = $txt($pt['new_address'], 500);
+            if (array_key_exists('iban', $pt))        $d['tenant']['iban']        = self::cleanIban($pt['iban']);
+        }
+        if (array_key_exists('observations', $pt)) $d['tenant']['observations'] = $txt($pt['observations'], 3000);
 
-        $at = (string) ($post['inspected_at'] ?? '');
-        $at = preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $at) ? str_replace('T', ' ', $at) . ':00' : null;
-        Database::update('inspections', ['inspected_at' => $at, 'data' => json_encode($d, JSON_UNESCAPED_UNICODE)],
-            'id = :id', ['id' => (int) $insp['id']]);
+        $row = ['data' => json_encode($d, JSON_UNESCAPED_UNICODE)];
+        if (array_key_exists('inspected_at', $post)) {
+            $at = (string) $post['inspected_at'];
+            $row['inspected_at'] = preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $at) ? str_replace('T', ' ', $at) . ':00' : null;
+        }
+        Database::update('inspections', $row, 'id = :id', ['id' => (int) $insp['id']]);
+    }
+
+    /**
+     * Saisie de l'état des lieux par le locataire depuis son espace : états, observations,
+     * index des compteurs, clés, inventaire. Il ne modifie ni la désignation, ni la date,
+     * ni le dépôt de garantie, ni (à la sortie) les colonnes « entrée ».
+     */
+    public static function saveByTenant(array $insp, array $post): void
+    {
+        $sortie = $insp['kind'] === 'sortie';
+        $allowed = array_intersect_key($post, array_flip(['keys', 'rooms', 'inventory', 'cleanliness', 'cleanliness_notes']));
+        $allowed['meters'] = array_intersect_key((array) ($post['meters'] ?? []), array_flip(['elec_hp', 'elec_hc', 'water', 'date']));
+        $t = (array) ($post['tenant'] ?? []);
+        $allowed['tenant'] = array_intersect_key($t, array_flip($sortie ? ['observations', 'new_address', 'iban'] : ['observations']));
+        if ($sortie) {
+            foreach ((array) ($allowed['keys'] ?? []) as $i => $k) {
+                if ($i === 'new') {
+                    foreach ((array) $k as $j => $row) unset($allowed['keys']['new'][$j]['in']);
+                } else {
+                    unset($allowed['keys'][$i]['in']);
+                }
+            }
+            foreach ((array) ($allowed['inventory'] ?? []) as $gi => $g) {
+                foreach ((array) ($g['items'] ?? []) as $ii => $it) {
+                    if ($ii === 'new') continue;
+                    unset($allowed['inventory'][$gi]['items'][$ii]['in_qty'], $allowed['inventory'][$gi]['items'][$ii]['in_state']);
+                }
+            }
+        }
+        self::saveAdmin($insp, $allowed);
     }
 
     /** Ce que le locataire complète lui-même : nouvelle adresse, IBAN (sortie) et ses réserves. */
