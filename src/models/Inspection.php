@@ -162,6 +162,7 @@ Clé porte d'entrée logement | 2
 Clé / badge hall — parties communes | 2
 Clé boîte aux lettres | 2
 Télécommande / badge parking | 2
+Autre (à préciser) |
 TXT;
 
     public const EXAMPLE_INVENTORY = <<<TXT
@@ -170,11 +171,11 @@ Banquette-lit gigogne blanche (sommier à lattes) | 1 | Bon
 Matelas | 3 | Bon | dont surmatelas
 Grand coussin dossier / tête de lit gris | 1 | Bon
 Couette 140×200 (4 saisons) | 2 | Bon
-Coussins décoratifs | 4 | Bon
+Coussins décoratifs | 4 | Bon | 2 beiges frangés + 1 écru + 1 gris
 Plaid / jeté de lit beige | 1 | Bon
 
 # Rangement et surfaces
-Commode blanche 6 tiroirs | 1 | Bon
+Commode blanche 6 tiroirs (boutons noirs) | 1 | Bon
 Étagères murales bois | 2 | Bon
 Meuble TV / console bois | 1 | Bon
 Buffet / meuble bas bois | 1 | Bon
@@ -183,11 +184,11 @@ Tapis | 1 | Bon
 
 # Table, sièges et arts de la table
 Table à manger ronde blanche | 1 | Bon
-Chaise coque | 3 | Bon
-Sets de table | 4 | Bon
+Chaise coque (lilas) | 3 | Bon
+Sets de table (jute, motif mandala) | 4 | Bon | dont 1 sur le meuble blanc
 
 # Électroménager et multimédia
-Téléviseur + télécommande | 1 | Bon
+Téléviseur CHiQ (~40") + télécommande | 1 | Bon
 Réfrigérateur / congélateur | 1 | Bon
 Lave-linge | 1 | Bon
 Four à micro-ondes | 1 | Bon
@@ -201,11 +202,11 @@ Ardoise mémo décorative | 1 | Bon
 Étagère bois murale | 1 | Bon
 Distributeur de savon + porte-brosse à dents | 2 | Bon
 Poubelle de salle de bain | 1 | Bon
-Porte-balai WC + balayette | 1 | Bon
+Porte-balai WC (bambou) + balayette | 1 | Bon
 Dérouleur papier toilette | 1 | Bon
 
 # Luminaires
-Lampe à poser | 1 | Bon
+Lampe à poser (abat-jour taupe) | 1 | Bon
 Éclairages plafonniers / spots (fixes) | plus. | Bon
 
 # Vaisselle et couverts
@@ -224,15 +225,15 @@ Louche | 1 | Bon
 Cuillère de service | 1 | Bon
 Économe (éplucheur) | 1 | Bon
 Pelle à tarte | 1 | Bon
-Passoire | 1 | Bon
+Passoire verte | 1 | Bon
 Mixeur | 1 | Bon
 Saladier / bol mélangeur | 1 | Bon
 Casserole | 1 | Bon
 Poêle | 1 | Bon
 Ciseaux (paires) | 2 | Bon
-Récipient à ustensiles | 1 | Bon
+Récipient à ustensiles (pot inox) | 1 | Bon
 
-# Entretien ménager et divers
+# Entretien ménager et divers (décret 2015-981)
 Aspirateur | 1 | Bon
 Balai | 1 | Bon
 Serpillère | 1 | Bon
@@ -249,6 +250,7 @@ TXT;
         $t = is_array($saved) ? $saved : [];
         $surface = !empty($property['surface_m2']) ? ' — ' . rtrim(rtrim(number_format((float) $property['surface_m2'], 2, ',', ' '), '0'), ',') . ' m²' : '';
         return [
+            'residence'   => (string) ($t['residence'] ?? ''),
             'designation' => (string) ($t['designation'] ?? ucfirst((string) ($property['type'] ?? 'appartement')) . $surface),
             'annexe'      => (string) ($t['annexe'] ?? ''),
             'heating'     => (string) ($t['heating'] ?? ''),
@@ -263,7 +265,7 @@ TXT;
     {
         $clean = fn($k) => str_replace("\r\n", "\n", trim((string) ($in[$k] ?? '')));
         $t = [];
-        foreach (['designation', 'annexe', 'heating', 'rooms', 'keys', 'inventory'] as $k) $t[$k] = $clean($k);
+        foreach (['residence', 'designation', 'annexe', 'heating', 'rooms', 'keys', 'inventory'] as $k) $t[$k] = $clean($k);
         Database::update('properties', ['inspection_template' => json_encode($t, JSON_UNESCAPED_UNICODE)], 'id = :id', ['id' => $propertyId]);
     }
 
@@ -381,7 +383,7 @@ TXT;
             'out_qty' => '', 'out_state' => '', 'notes' => $it['notes'],
         ], $g['items'])], self::parseGroups($t['inventory'])) : [];
         return self::normalize([
-            'designation' => $t['designation'], 'annexe' => $t['annexe'], 'heating' => $t['heating'],
+            'residence' => $t['residence'], 'designation' => $t['designation'], 'annexe' => $t['annexe'], 'heating' => $t['heating'],
             'rooms' => $rooms, 'keys' => $keys, 'inventory' => $inventory,
         ]);
     }
@@ -390,7 +392,7 @@ TXT;
     private static function fromEntry(array $in): array
     {
         $d = self::normalize([]);
-        foreach (['designation', 'annexe', 'heating'] as $k) $d[$k] = $in[$k];
+        foreach (['residence', 'designation', 'annexe', 'heating'] as $k) $d[$k] = $in[$k];
         $d['meters']['elec_number']  = $in['meters']['elec_number'];
         $d['meters']['water_number'] = $in['meters']['water_number'];
         $d['meters']['elec_hp_in']   = $in['meters']['elec_hp'];
@@ -416,6 +418,7 @@ TXT;
     {
         $s = fn($v) => is_scalar($v) ? (string) $v : '';
         $out = [
+            'residence'   => $s($d['residence'] ?? ''),
             'designation' => $s($d['designation'] ?? ''),
             'annexe'      => $s($d['annexe'] ?? ''),
             'heating'     => $s($d['heating'] ?? ''),
@@ -437,7 +440,7 @@ TXT;
                 'deducted'   => $s($d['deposit']['deducted'] ?? ''),
             ],
         ];
-        foreach (['elec_number', 'elec_hp', 'elec_hc', 'elec_hp_in', 'elec_hc_in', 'water_number', 'water', 'water_in'] as $k) {
+        foreach (['elec_number', 'elec_hp', 'elec_hc', 'elec_hp_in', 'elec_hc_in', 'water_number', 'water', 'water_in', 'date'] as $k) {
             $out['meters'][$k] = $s($d['meters'][$k] ?? '');
         }
         foreach ((array) ($d['keys'] ?? []) as $k) {
@@ -473,7 +476,7 @@ TXT;
         $txt = fn($v, int $max = 255) => trim(mb_substr(str_replace("\r\n", "\n", is_scalar($v) ? (string) $v : ''), 0, $max));
         $state = fn($v) => isset(self::STATES[(string) $v]) ? (string) $v : '';
 
-        foreach (['designation', 'annexe', 'heating'] as $k) $d[$k] = $txt($post[$k] ?? '');
+        foreach (['residence', 'designation', 'annexe', 'heating'] as $k) $d[$k] = $txt($post[$k] ?? '');
         foreach (array_keys($d['meters']) as $k) {
             if (array_key_exists($k, (array) ($post['meters'] ?? []))) $d['meters'][$k] = $txt($post['meters'][$k], 40);
         }
@@ -620,6 +623,13 @@ TXT;
         return self::KINDS[$insp['kind']] ?? 'État des lieux';
     }
 
+    /** Pied de page du PDF, ex. « État des lieux de sortie — Studio Les Airelles — 73 av. …, 27930 Gravigny ». */
+    public static function footer(array $insp, array $lease): string
+    {
+        $adresse = trim(($lease['address'] ?? '') . ', ' . ($lease['postal_code'] ?? '') . ' ' . ($lease['city'] ?? ''), ', ');
+        return implode(' — ', array_filter([self::title($insp), (string) $lease['property_label'], $adresse], 'strlen'));
+    }
+
     /** Nom du fichier PDF. */
     public static function filename(array $insp, array $lease, bool $signed = false): string
     {
@@ -712,7 +722,7 @@ TXT;
         if (!self::isComplete($insp, $lease, $settings)) return false;
 
         if (Pdf::available()) {
-            $pdf = Pdf::renderDocument('documents/etat_des_lieux', self::docData($insp, $lease, $settings));
+            $pdf = Pdf::renderDocument('documents/etat_des_lieux', self::docData($insp, $lease, $settings), self::footer($insp, $lease));
             Database::query('DELETE FROM inspection_signed_pdf WHERE inspection_id = ?', [(int) $insp['id']]);
             Database::insert('inspection_signed_pdf', ['inspection_id' => (int) $insp['id'], 'pdf' => $pdf, 'sha256' => hash('sha256', $pdf)]);
         }
@@ -734,7 +744,7 @@ TXT;
         $signed = self::isComplete($insp, $lease, $settings) ? self::signedPdf((int) $insp['id']) : null;
         return $signed
             ? [$signed['pdf'], self::filename($insp, $lease, true)]
-            : [Pdf::renderDocument('documents/etat_des_lieux', self::docData($insp, $lease, $settings)), self::filename($insp, $lease)];
+            : [Pdf::renderDocument('documents/etat_des_lieux', self::docData($insp, $lease, $settings), self::footer($insp, $lease)), self::filename($insp, $lease)];
     }
 
     public static function resetSignatures(int $id): void

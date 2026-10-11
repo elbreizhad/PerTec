@@ -95,6 +95,7 @@ $stateSelect = function (string $name, string $current) use ($ro): string {
             <div class="field"><label>Date et heure de l'état des lieux</label>
                 <input type="datetime-local" name="inspected_at" value="<?= $insp['inspected_at'] ? e(date('Y-m-d\TH:i', strtotime($insp['inspected_at']))) : '' ?>">
                 <span class="hint">Vide = date de la première signature.</span></div>
+            <div class="field"><label>Résidence / bâtiment</label><input name="residence" value="<?= e($d['residence']) ?>" placeholder="Résidence Les Airelles"></div>
             <div class="field"><label>Désignation</label><input name="designation" value="<?= e($d['designation']) ?>" placeholder="Appartement meublé — 1er étage — 23 m²"></div>
             <div class="field"><label>Annexe privative</label><input name="annexe" value="<?= e($d['annexe']) ?>" placeholder="Cave, parking n°…"></div>
             <div class="field"><label>Chauffage / eau chaude</label><input name="heating" value="<?= e($d['heating']) ?>" placeholder="Individuels électriques"></div>
@@ -119,6 +120,8 @@ $stateSelect = function (string $name, string $current) use ($ro): string {
         <div class="form-grid">
             <div class="field"><label>💧 N° compteur d'eau</label><input name="meters[water_number]" value="<?= e($m['water_number']) ?>"></div>
             <div class="field"><label>Index eau (m³)</label><input name="meters[water]" value="<?= e($m['water']) ?>" inputmode="decimal"></div>
+            <div class="field"><label>Date du relevé</label><input type="date" name="meters[date]" value="<?= e($m['date']) ?>">
+                <span class="hint">Vide = date de l'état des lieux.</span></div>
         </div>
         <?php if ($sortie): ?>
             <p class="hint">Index relevés à l'entrée (pour calculer la consommation) :</p>

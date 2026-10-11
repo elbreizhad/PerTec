@@ -299,6 +299,7 @@ $currentIds = array_column(PropertyDocument::current($pid), 'id');
 <form method="post" action="<?= url('/biens/'.$p['id'].'/modele-edl') ?>" class="card" id="edl-template">
     <?= csrf_field() ?>
     <div class="form-grid">
+        <div class="field"><label>Résidence / bâtiment</label><input name="residence" value="<?= e($tpl['residence']) ?>" placeholder="Résidence Les Airelles"></div>
         <div class="field"><label>Désignation</label><input name="designation" value="<?= e($tpl['designation']) ?>" placeholder="Appartement meublé — 1er étage — 23 m² (loi Carrez)"></div>
         <div class="field"><label>Annexe privative</label><input name="annexe" value="<?= e($tpl['annexe']) ?>" placeholder="Parking n° 105 (sous-sol)"></div>
         <div class="field"><label>Chauffage / eau chaude</label><input name="heating" value="<?= e($tpl['heating']) ?>" placeholder="Individuels électriques"></div>

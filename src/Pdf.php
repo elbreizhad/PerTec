@@ -28,12 +28,13 @@ class Pdf
     }
 
     /** Rend un gabarit de document et renvoie le contenu binaire du PDF (pièce jointe email…). */
-    public static function renderDocument(string $template, array $data): string
+    public static function renderDocument(string $template, array $data, ?string $footer = null): string
     {
-        return (string) self::build($template, $data)->output();
+        return (string) self::build($template, $data, $footer)->output();
     }
 
-    private static function build(string $template, array $data): \Dompdf\Dompdf
+    /** $footer : texte répété en pied de chaque page, suivi du numéro de page. */
+    private static function build(string $template, array $data, ?string $footer = null): \Dompdf\Dompdf
     {
         $inner = render_template($template, $data);
         $css = file_get_contents(__DIR__ . '/../assets/pdf.css');
@@ -53,6 +54,14 @@ class Pdf
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
+        if ($footer !== null) {
+            $canvas = $dompdf->getCanvas();
+            $font = $dompdf->getFontMetrics()->getFont('DejaVu Serif');
+            $h = $canvas->get_height();
+            $w = $canvas->get_width();
+            $canvas->page_text(57, $h - 30, $footer, $font, 7, [0.35, 0.35, 0.35]);
+            $canvas->page_text($w - 90, $h - 30, 'Page {PAGE_NUM} / {PAGE_COUNT}', $font, 7, [0.35, 0.35, 0.35]);
+        }
         return $dompdf;
     }
 }

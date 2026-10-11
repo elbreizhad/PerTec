@@ -21,7 +21,8 @@ $n = 0;
 
 <p class="small">Établi contradictoirement entre les parties conformément à l'article 3-2 de la loi n° 89-462 du 6 juillet 1989
     et au décret n° 2016-382 du 30 mars 2016.
-    <?= $sortie ? "À comparer à l'état des lieux d'entrée. L'usure normale liée à l'usage et à l'ancienneté n'est pas imputable au locataire." : "Il est annexé au contrat de location." ?></p>
+    <?= $sortie ? "À comparer à l'état des lieux d'entrée, auquel il est annexé. L'usure normale liée à l'usage et à l'ancienneté n'est pas imputable au locataire."
+               : "Il est annexé au contrat de location et sera comparé à l'état des lieux de sortie." ?></p>
 
 <h2><?= ++$n ?> · Désignation des parties</h2>
 <table class="doc-amounts">
@@ -37,22 +38,25 @@ $n = 0;
 
 <h2><?= ++$n ?> · Désignation du logement</h2>
 <table class="doc-amounts">
-    <tr><th style="width:34%">Adresse</th><td><?= e($adresse ?: $l['property_label']) ?></td></tr>
+    <tr><th style="width:34%">Adresse</th><td><?= e(implode(' — ', array_filter([$d['residence'], $adresse ?: $l['property_label']], 'strlen'))) ?></td></tr>
     <tr><th>Désignation</th><td><?= $val($d['designation']) ?></td></tr>
-    <?php if ($d['annexe'] !== ''): ?><tr><th>Annexe privative</th><td><?= nl2br(e($d['annexe'])) ?></td></tr><?php endif; ?>
-    <?php if ($d['heating'] !== ''): ?><tr><th>Chauffage / eau chaude</th><td><?= nl2br(e($d['heating'])) ?></td></tr><?php endif; ?>
+    <tr><th>Annexe privative</th><td><?= $d['annexe'] !== '' ? nl2br(e($d['annexe'])) : 'Néant' ?></td></tr>
+    <tr><th>Chauffage / eau chaude</th><td><?= $val($d['heating']) ?></td></tr>
 </table>
 
 <h2><?= ++$n ?> · Relevé des compteurs</h2>
-<?php $m = $d['meters']; ?>
+<?php $m = $d['meters'];
+$mDate = $m['date'] !== '' ? fdate($m['date']) : ($insp['inspected_at'] ? date('d/m/Y', strtotime($insp['inspected_at'])) : ''); ?>
 <table class="doc-amounts small">
-    <thead><tr><th>Compteur</th><th>N° compteur / PDL</th><th>Index relevé</th><?php if ($sortie): ?><th>Index à l'entrée</th><?php endif; ?></tr></thead>
-    <tr><td>Électricité</td><td><?= e($m['elec_number']) ?></td>
-        <td><?= $m['elec_hp'] !== '' || $m['elec_hc'] !== '' ? 'HP : ' . e($m['elec_hp'] ?: '—') . ($m['elec_hc'] !== '' ? '<br>HC : ' . e($m['elec_hc']) : '') : $dots ?></td>
-        <?php if ($sortie): ?><td><?= $m['elec_hp_in'] !== '' || $m['elec_hc_in'] !== '' ? 'HP : ' . e($m['elec_hp_in'] ?: '—') . ($m['elec_hc_in'] !== '' ? '<br>HC : ' . e($m['elec_hc_in']) : '') : '—' ?></td><?php endif; ?></tr>
-    <tr><td>Eau froide</td><td><?= e($m['water_number']) ?></td><td><?= $m['water'] !== '' ? e($m['water']) : $dots ?></td>
-        <?php if ($sortie): ?><td><?= e($m['water_in'] ?: '—') ?></td><?php endif; ?></tr>
+    <thead><tr><th style="width:16%">Compteur</th><th>N° compteur / PDL</th><th class="center">Index HP</th><th class="center">Index HC</th><th class="center" style="width:14%">Date</th></tr></thead>
+    <tr><td>Électricité</td><td><?= e($m['elec_number']) ?></td><td class="center"><?= e($m['elec_hp']) ?></td><td class="center"><?= e($m['elec_hc']) ?></td><td class="center"><?= e($mDate) ?></td></tr>
+    <tr><td>Eau froide</td><td><?= e($m['water_number']) ?></td><td colspan="2">Index : <?= e($m['water']) ?></td><td class="center"><?= e($mDate) ?></td></tr>
 </table>
+<?php if ($sortie): ?>
+<p class="small">Reporter l'index relevé à l'entrée (état des lieux d'entrée) pour calculer la consommation, si nécessaire<?php
+    $inIdx = array_filter(['électricité HP' => $m['elec_hp_in'], 'HC' => $m['elec_hc_in'], 'eau' => $m['water_in']], 'strlen');
+    echo $inIdx ? ' — index à l\'entrée : ' . e(implode(' · ', array_map(fn($k, $v) => "$k $v", array_keys($inIdx), $inIdx))) : '' ?>.</p>
+<?php endif; ?>
 
 <h2><?= ++$n ?> · Clés et accès <?= $sortie ? 'restitués' : 'remis' ?></h2>
 <table class="doc-amounts small">
@@ -60,10 +64,14 @@ $n = 0;
     <?php foreach ($d['keys'] as $k): ?>
         <tr><td><?= e($k['label']) ?></td><td class="center"><?= e($k['in']) ?></td><?php if ($sortie): ?><td class="center"><?= e($k['out']) ?></td><?php endif; ?><td><?= e($k['notes']) ?></td></tr>
     <?php endforeach; ?>
+    <?php if (!array_filter($d['keys'], fn($k) => str_starts_with($k['label'], 'Autre'))): ?>
+        <tr><td>Autre (à préciser)</td><td></td><?php if ($sortie): ?><td></td><?php endif; ?><td></td></tr>
+    <?php endif; ?>
 </table>
 
 <h2><?= ++$n ?> · État détaillé par pièce</h2>
-<?php if ($sortie): ?><p class="small">État constaté à la sortie ; les différences par rapport à l'entrée sont décrites en observation.</p><?php endif; ?>
+<p class="small"><?= $sortie ? "Cocher l'état constaté à la sortie et décrire toute différence par rapport à l'entrée (trace, rayure, tache, casse, manque, mauvais fonctionnement)."
+                          : "Cocher l'état constaté à l'entrée et décrire tout défaut (trace, rayure, tache, casse, manque, mauvais fonctionnement)." ?></p>
 <?php foreach ($d['rooms'] as $r):
     $showIn = $sortie && array_filter(array_column($r['items'], 'in_state')); ?>
     <table class="doc-amounts small inventory">
@@ -85,7 +93,7 @@ $n = 0;
 
 <?php if ($meuble && $d['inventory']): ?>
 <h2><?= ++$n ?> · Inventaire du mobilier et des équipements</h2>
-<p class="small">Établi conformément au décret n° 2015-981 du 31 juillet 2015.<?= $sortie ? ' Les colonnes « Entrée » reprennent l\'état des lieux d\'entrée.' : '' ?></p>
+<p class="small">Établi conformément au décret n° 2015-981 du 31 juillet 2015.<?= $sortie ? ' Les colonnes « Entrée » reprennent l\'état des lieux d\'entrée ; renseigner les colonnes « Sortie ».' : '' ?></p>
 <?php foreach ($d['inventory'] as $g): ?>
     <table class="doc-amounts small inventory">
         <thead><tr><th style="width:38%"><?= e($g['name']) ?></th><th class="center" style="width:8%">Qté<?= $sortie ? '<br>entrée' : '' ?></th><th class="center" style="width:10%">État<?= $sortie ? '<br>entrée' : '' ?></th>
@@ -120,22 +128,22 @@ $n = 0;
 <?php endif; ?>
 
 <div class="keep">
-<p class="mt">Fait à <?= e($s['signature_city'] ?? '') ?: '………………' ?>, le <?= $insp['inspected_at'] ? e(date('d/m/Y', strtotime($insp['inspected_at']))) : '……………' ?>,
-    en deux exemplaires, un pour chaque partie.</p>
 <div class="doc-sign">
 <?php foreach (Inspection::ROLES as $role => $label): $sg = $sigs[$role] ?? null; ?>
     <div class="sign-box">
-        <p><?= $label ?></p>
+        <p><strong><?= $role === 'bailleur' ? 'Le Bailleur' : 'Le Locataire' ?></strong></p>
+        <p class="small">Fait à <?= e($s['signature_city'] ?? '') ?: '………………………' ?> le <?= $sg ? e(date('d/m/Y', strtotime($sg['signed_at']))) : '……………' ?></p>
         <?php if ($sg): ?>
             <img class="signature-img" src="<?= e($sg['image']) ?>" alt="Signature">
             <div class="line small">Lu et approuvé — signé électroniquement par <?= e($sg['signer_name']) ?>
                 le <?= e(date('d/m/Y à H:i', strtotime($sg['signed_at']))) ?><br>Adresse IP : <?= e($sg['ip'] ?: 'non disponible') ?></div>
         <?php else: ?>
-            <div class="line">Signature précédée de « Lu et approuvé »</div>
+            <div class="line small">Signature précédée de « Lu et approuvé »</div>
         <?php endif; ?>
     </div>
 <?php endforeach; ?>
 </div>
+<p class="mt small">Établi en deux exemplaires originaux, un pour chaque partie.</p>
 </div>
 
 <?php if ($sigs): ?>
