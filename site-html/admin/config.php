@@ -1,21 +1,28 @@
 <?php
 /**
  * Configuration de l'administration Pertec
- * Copiez ce fichier ou modifiez les valeurs selon votre installation
+ * Ce fichier charge la config personnalisée ou les valeurs par défaut
  */
 
-// Sécurité - Changez ces valeurs !
-define('ADMIN_USER', 'admin');
-define('ADMIN_PASS', 'pertec2024');  // Changez ce mot de passe !
-define('ADMIN_SECRET', 'changez_cette_cle_secrete_123');
+// Charger la config personnalisée si elle existe
+$config_file = __DIR__ . '/config.local.php';
+if (file_exists($config_file)) {
+    require_once $config_file;
+} else {
+    // Valeurs par défaut - À PERSONNALISER sur le serveur
+    define('ADMIN_USER', 'admin');
+    define('ADMIN_PASS', 'pertec2024');
+    define('ADMIN_SECRET', 'changez_cette_cle_secrete_123');
+}
 
-// Configuration email
-define('CONTACT_EMAIL', 'contact@pertec.fr');
-define('SITE_NAME', 'Pertec');
-define('SITE_URL', 'https://pertec.fr');
+// Configuration site (toujours définie)
+if (!defined('CONTACT_EMAIL')) define('CONTACT_EMAIL', 'contact@pertec.fr');
+if (!defined('SITE_NAME')) define('SITE_NAME', 'Pertec');
+if (!defined('SITE_URL')) define('SITE_URL', 'https://pertec.fr');
 
-// Chemin vers le fichier de paramètres (JSON)
+// Chemin vers le fichier de paramètres
 define('SETTINGS_FILE', __DIR__ . '/settings.json');
+define('SETTINGS_EXAMPLE', __DIR__ . '/settings.example.json');
 
 // Démarrer la session
 if (session_status() === PHP_SESSION_NONE) {
@@ -26,10 +33,24 @@ if (session_status() === PHP_SESSION_NONE) {
  * Charge les paramètres du site
  */
 function get_settings() {
+    // Charger settings.json s'il existe
     if (file_exists(SETTINGS_FILE)) {
         $json = file_get_contents(SETTINGS_FILE);
-        return json_decode($json, true) ?: get_default_settings();
+        $settings = json_decode($json, true);
+        if ($settings) return $settings;
     }
+
+    // Sinon charger l'exemple et créer le fichier
+    if (file_exists(SETTINGS_EXAMPLE)) {
+        $json = file_get_contents(SETTINGS_EXAMPLE);
+        $settings = json_decode($json, true);
+        if ($settings) {
+            // Créer le fichier settings.json
+            file_put_contents(SETTINGS_FILE, $json);
+            return $settings;
+        }
+    }
+
     return get_default_settings();
 }
 
@@ -40,6 +61,7 @@ function get_default_settings() {
     return [
         'site_name' => 'Pertec',
         'site_tagline' => 'Création de sites internet',
+        'site_url' => 'https://pertec.fr',
         'contact_email' => 'contact@pertec.fr',
         'contact_phone' => '',
         'address' => 'Evreux, Eure (27)',

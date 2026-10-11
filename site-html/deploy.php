@@ -128,7 +128,17 @@ run_command("git reset --hard origin/$branch", "Reset sur la branche distante");
 
 // Synchroniser les fichiers vers public_html
 if ($public_path !== $repo_path . '/' . $source_folder) {
-    $sync_cmd = "rsync -av --delete --exclude='deploy.config.php' --exclude='deploy.php' --exclude='.git' --exclude='.gitignore' $repo_path/$source_folder/ $public_path/";
+    $excludes = [
+        'deploy.config.php',
+        'deploy.php',
+        '.git',
+        '.gitignore',
+        'admin/settings.json',
+        'admin/messages.json',
+        'admin/config.local.php',
+    ];
+    $exclude_str = implode(' ', array_map(fn($e) => "--exclude='$e'", $excludes));
+    $sync_cmd = "rsync -av --delete $exclude_str $repo_path/$source_folder/ $public_path/";
     run_command($sync_cmd, "Synchronisation vers public_html");
 } else {
     echo "ℹ️  Pas de rsync nécessaire (même dossier)\n\n";
