@@ -297,3 +297,13 @@ body.portal{background:var(--bg)}
 .task form{margin:0}
 .tasks-progress{display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem}
 @media(max-width:640px){.task{flex-wrap:wrap}.task-body{flex:1 1 calc(100% - 42px)}.task>a.btn,.task>form{margin-left:calc(30px + .75rem)}}
+.portal-kv{grid-template-columns:auto 1fr}
+.portal-kv dd{text-align:left;word-break:break-word}
+.portal-lease .tabs{margin-top:.4rem}
+dl.kv.portal-kv dd{text-align:left;font-weight:600}
+@media(max-width:640px){
+  .portal-lease .tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:0;overflow:visible}
+  .portal-lease .tabs a{flex-direction:column;justify-content:center;white-space:normal;text-align:center;font-size:.8rem;padding:.55rem .25rem;gap:.2rem;line-height:1.2}
+  dl.kv.portal-kv{grid-template-columns:1fr;gap:0}
+  dl.kv.portal-kv dt{font-size:.8rem;margin-top:.5rem}
+}

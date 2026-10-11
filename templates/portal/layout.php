@@ -25,5 +25,6 @@ $logged = !empty($_SESSION['tenant_ids']) && empty($_GET['apercu']);
     <?php endforeach; ?>
     <?= $content ?>
 </main>
+<script src="<?= asset('/assets/tabs.js') ?>"></script>
 </body>
 </html>
