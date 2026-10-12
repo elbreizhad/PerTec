@@ -10,9 +10,12 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 # ===========================================
-# Redirections 301 .html vers .php (SEO)
+# Redirections 301 (SEO)
 # Les anciens liens Google redirigent vers les nouvelles URLs
 # ===========================================
+
+# Redirection sites-metiers/restaurant vers secteurs/restaurant (doublon supprimé)
+RewriteRule ^sites-metiers/restaurant\.?(html|php)?$ /secteurs/restaurant.php [R=301,L]
 
 # Redirection générique .html → .php (301 permanent)
 RewriteCond %{REQUEST_FILENAME} !-f
