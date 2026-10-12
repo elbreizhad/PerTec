@@ -6,7 +6,7 @@
           <a href="/">
             <img src="/images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;">
           </a>
-          <p>Création de sites internet clé en main, 100% en ligne. Design moderne, SEO optimisé, accompagnement personnalisé.</p>
+          <p>Création de sites internet clé en main pour artisans et commerces. Basé à Évreux, j'accompagne les entrepreneurs de Normandie.</p>
         </div>
 
         <div class="footer-col">
@@ -32,7 +32,7 @@
         <div class="footer-col">
           <h4>Contact</h4>
           <ul>
-            <li>🌐 100% en ligne</li>
+            <li>📍 Évreux, Normandie</li>
             <li>📧 contact@pertec.fr</li>
             <li>🕒 Lun - Ven : 9h - 18h</li>
           </ul>

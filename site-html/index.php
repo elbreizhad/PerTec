@@ -1,11 +1,11 @@
 <?php
 $pageTitle = 'Création Site Internet | Clé en Main | Pertec.fr';
-$pageDescription = 'Création de sites web clé en main, 100% en ligne. Domaine + hébergement + création + rédaction inclus. Pour artisans, commerces, restaurants. Devis gratuit 24h.';
+$pageDescription = 'Création de sites internet à Évreux et en Normandie. Formule clé en main pour artisans, commerces et restaurants. Devis gratuit sous 24h.';
 $canonicalUrl = '/';
 $activeMenu = '';
 $ogData = [
     'title' => 'Création Site Internet Clé en Main | Pertec.fr',
-    'description' => 'Création de sites web clé en main, 100% en ligne. Pour artisans, commerces, restaurants.',
+    'description' => 'Création de sites internet à Évreux et en Normandie. Pour artisans, commerces et restaurants.',
     'type' => 'website',
     'url' => '/'
 ];
@@ -13,11 +13,26 @@ $schemaJson = '{
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Pertec - Création de sites internet",
-    "description": "Création de sites internet clé en main, 100% en ligne",
+    "description": "Création de sites internet clé en main à Évreux et en Normandie",
     "url": "https://pertec.fr",
-    "image": "images/logo-pertec.svg?v=2",
-    "areaServed": "FR",
-    "serviceType": ["Création site internet", "Développement web", "Site e-commerce", "SEO"]
+    "image": "https://pertec.fr/images/logo-pertec.svg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Évreux",
+      "addressRegion": "Normandie",
+      "postalCode": "27000",
+      "addressCountry": "FR"
+    },
+    "areaServed": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": 49.0247,
+        "longitude": 1.1508
+      },
+      "geoRadius": "50000"
+    },
+    "serviceType": ["Création site internet", "Site vitrine", "Site artisan", "SEO local"]
   }';
 
 require_once __DIR__ . '/includes/header.php';
@@ -29,7 +44,7 @@ require_once __DIR__ . '/includes/header.php';
       <div class="hero-content">
         <div class="hero-badge glass" data-animate>
           <span class="dot"></span>
-          Création de sites internet professionnels
+          Basé à Évreux · Création de sites internet
         </div>
 
         <h1 data-animate>
@@ -62,7 +77,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
           <div class="trust-item">
             <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            100% en ligne
+            Évreux &amp; environs
           </div>
         </div>
       </div>
@@ -207,31 +222,32 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- 100% en ligne -->
+  <!-- Zone d'intervention -->
   <section>
     <div class="container">
       <div class="zone-card glass-strong" data-animate>
         <div class="zone-content">
           <div>
-            <h2 class="section-title">100% <span class="gradient-text">en ligne</span></h2>
+            <h2 class="section-title">Basé à <span class="gradient-text">Évreux</span></h2>
             <p style="color: var(--gray-400); font-size: 1.1rem; margin-bottom: 1.5rem;">
-              Travaillons ensemble où que vous soyez. Échanges par visio, email ou téléphone — pas besoin de se déplacer.
+              J'accompagne les artisans, commerçants et TPE de l'Eure et de Normandie. Échanges en présentiel ou à distance selon vos préférences.
             </p>
 
             <div class="villes-tags">
-              <span class="ville-tag">Visioconférence</span>
-              <span class="ville-tag">Téléphone</span>
-              <span class="ville-tag">Email</span>
-              <span class="ville-tag">WhatsApp</span>
+              <span class="ville-tag">Évreux</span>
+              <span class="ville-tag">Louviers</span>
+              <span class="ville-tag">Vernon</span>
+              <span class="ville-tag">Bernay</span>
+              <span class="ville-tag">Les Andelys</span>
             </div>
 
             <p style="color: var(--gray-500); font-size: 0.9rem;">
-              Clients partout en France : Paris, Lyon, Marseille, Bordeaux, Lille, Nantes...
+              <a href="/zone-intervention.php" style="color: inherit; text-decoration: underline;">Voir toutes les villes →</a>
             </p>
           </div>
 
           <div class="zone-map">
-            <span class="pin">🌐</span>
+            <span class="pin">📍</span>
           </div>
         </div>
       </div>

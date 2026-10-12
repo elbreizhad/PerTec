@@ -15,7 +15,7 @@ $turnstileSiteKey = get_turnstile_site_key();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | Demande de Devis Gratuit | Pertec.fr</title>
-  <meta name="description" content="Contactez-moi pour votre projet de création de site internet. 100% en ligne, partout en France. Devis gratuit sous 24h, sans engagement.">
+  <meta name="description" content="Contactez-moi pour votre projet de création de site internet à Évreux et en Normandie. Devis gratuit sous 24h, sans engagement.">
   <link rel="canonical" href="https://pertec.fr/contact">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,7 +95,7 @@ $turnstileSiteKey = get_turnstile_site_key();
             <div class="contact-icon">📍</div>
             <div>
               <p style="color: var(--gray-400); font-size: 0.875rem; margin-bottom: 0.25rem;">Localisation</p>
-              <p style="font-weight: 600;">100% en ligne</p>
+              <p style="font-weight: 600;">Évreux, Normandie</p>
             </div>
           </div>
 
@@ -207,9 +207,9 @@ $turnstileSiteKey = get_turnstile_site_key();
           <div class="grid-pattern" style="position: absolute; inset: 0; opacity: 0.5;"></div>
           <div style="text-align: center; position: relative; z-index: 1;">
             <div style="font-size: 4rem; margin-bottom: 1rem;">📍</div>
-            <p style="font-size: 1.5rem; font-weight: 700;">100% en ligne</p>
-            <p style="color: var(--gray-400);">Partout en France</p>
-            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 1rem;">Échanges par visio, téléphone ou email</p>
+            <p style="font-size: 1.5rem; font-weight: 700;">Évreux, Normandie</p>
+            <p style="color: var(--gray-400);">Eure et environs</p>
+            <p style="color: var(--gray-500); font-size: 0.875rem; margin-top: 1rem;">Échanges en présentiel ou à distance selon vos préférences</p>
           </div>
         </div>
       </div>
@@ -221,43 +221,39 @@ $turnstileSiteKey = get_turnstile_site_key();
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <a href="index.html"><img src="images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;"></a>
-          <p>Création de sites internet clé en main, 100% en ligne.</p>
-          <div class="footer-social">
-            <a href="#" aria-label="LinkedIn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
-            <a href="#" aria-label="Facebook"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
-          </div>
+          <a href="/"><img src="/images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;"></a>
+          <p>Création de sites internet clé en main pour artisans et commerces. Basé à Évreux.</p>
         </div>
         <div class="footer-col">
           <h4>Services</h4>
           <ul>
-            <li><a href="services.html">Site vitrine</a></li>
-            <li><a href="secteurs/artisan.html">Site artisan</a></li>
-            <li><a href="secteurs/restaurant.html">Site restaurant</a></li>
+            <li><a href="/services.php">Site vitrine</a></li>
+            <li><a href="/secteurs/artisan.php">Site artisan</a></li>
+            <li><a href="/secteurs/restaurant.php">Site restaurant</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Entreprise</h4>
           <ul>
-            <li><a href="a-propos.html">À propos</a></li>
-            <li><a href="realisations.html">Réalisations</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.php">Contact</a></li>
+            <li><a href="/a-propos.php">À propos</a></li>
+            <li><a href="/realisations.php">Réalisations</a></li>
+            <li><a href="/tarifs.php">Tarifs</a></li>
+            <li><a href="/contact.php">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
           <ul>
-            <li>🌐 100% en ligne</li>
+            <li>📍 Évreux, Normandie</li>
             <li>📧 contact@pertec.fr</li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 Pertec.fr</p>
+        <p>© <?= date('Y') ?> Pertec.fr - Création de sites internet</p>
         <div class="footer-legal">
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="politique-confidentialite.html">Confidentialité</a>
+          <a href="/mentions-legales.php">Mentions légales</a>
+          <a href="/politique-confidentialite.php">Confidentialité</a>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'À Propos | Créateur de Sites Internet | Pertec.fr';
-$pageDescription = 'Découvrez Pertec, votre partenaire web 100% en ligne. Créateur de sites internet clé en main pour artisans, commerces et PME.';
+$pageDescription = 'Découvrez Pertec, créateur de sites internet basé à Évreux. Sites clé en main pour artisans, commerces et PME en Normandie.';
 $canonicalUrl = '/a-propos';
 $activeMenu = 'apropos';
 
@@ -14,8 +14,8 @@ require_once __DIR__ . '/includes/header.php';
         <span class="dot"></span>
         À propos
       </div>
-      <h1 data-animate>Votre partenaire web <span class="gradient-text">100% en ligne</span></h1>
-      <p data-animate>Un créateur de sites internet passionné, dédié aux entrepreneurs partout en France.</p>
+      <h1 data-animate>Votre partenaire web <span class="gradient-text">en Normandie</span></h1>
+      <p data-animate>Créateur de sites internet passionné, basé à Évreux, au service des entrepreneurs de l'Eure.</p>
     </div>
   </section>
 

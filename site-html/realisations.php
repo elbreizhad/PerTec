@@ -15,7 +15,7 @@ require_once __DIR__ . '/includes/header.php';
         Portfolio
       </div>
       <h1 data-animate>Mes <span class="gradient-text">réalisations</span></h1>
-      <p data-animate>Découvrez quelques exemples de sites internet créés pour des entrepreneurs partout en France.</p>
+      <p data-animate>Découvrez quelques exemples de sites internet créés pour des entrepreneurs de Normandie et de l'Eure.</p>
     </div>
   </section>
 

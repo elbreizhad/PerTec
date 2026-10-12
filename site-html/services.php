@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Services | Création Site Internet Clé en Main | Pertec.fr';
-$pageDescription = 'Création de sites internet clé en main, 100% en ligne. Sites vitrines, e-commerce, sur-mesure. Domaine, hébergement, design, rédaction SEO, maintenance inclus.';
+$pageDescription = 'Création de sites internet clé en main à Évreux et en Normandie. Sites vitrines, sur-mesure. Domaine, hébergement, design, rédaction SEO et maintenance inclus.';
 $canonicalUrl = '/services';
 $activeMenu = 'services';
 
