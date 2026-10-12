@@ -117,7 +117,8 @@ class Lease
 
     /** Natures de charges récupérables (décret n° 87-713 du 26 août 1987) et usuelles en meublé. */
     public const CHARGE_NATURES = [
-        'eau'              => 'Eau froide et eau chaude (consommation)',
+        'eau'              => 'Eau froide (consommation)',
+        'eau_chaude'       => 'Eau chaude collective (consommation)',
         'chauffage'        => 'Chauffage collectif / production d\'eau chaude',
         'parties_communes' => 'Entretien et électricité des parties communes',
         'nettoyage'        => 'Nettoyage des parties communes',
