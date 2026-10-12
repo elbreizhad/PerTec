@@ -1,5 +1,17 @@
 <?php
+session_start();
 require_once __DIR__ . '/config/site.php';
+require_once __DIR__ . '/includes/turnstile.php';
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$turnstileSiteKey = get_turnstile_site_key();
+
+// Prix lus depuis la grille tarifaire (source unique)
+$tarifs = require __DIR__ . '/config/tarifs.php';
+$typesSite = $tarifs['type_site']['options'];
+$suiviMensuel = $tarifs['suivi']['inclus']['mensuel'];
 $pageTitle = 'Création Site Internet | Clé en Main | Pertec.fr';
 $pageDescription = 'Création de sites internet à Évreux et en Normandie. Formule clé en main pour artisans, commerces et restaurants. Devis gratuit sous 24h.';
 $canonicalUrl = '/';
@@ -71,7 +83,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
           <div class="trust-item">
             <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Formule tout inclus
+            À partir de <?= $typesSite['page_unique']['creation'] ?> € tout inclus
           </div>
           <div class="trust-item">
             <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -122,6 +134,91 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </section>
 
+  <!-- Tarifs -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Des prix <span class="gradient-text">affichés</span></h2>
+        <p class="section-subtitle" data-animate>Création payée une fois, puis <?= $suiviMensuel ?> €/mois pour l'hébergement, le nom de domaine, les mises à jour et vos modifications.</p>
+      </div>
+
+      <div class="features-grid home-pricing">
+<?php foreach (['page_unique', 'vitrine5', 'vitrine10'] as $i => $cle): $offre = $typesSite[$cle]; ?>
+        <div class="feature-card glass<?= $i === 1 ? ' portfolio-featured' : '' ?>" data-animate>
+          <h3><?= htmlspecialchars($offre['label']) ?></h3>
+          <p class="home-price"><?= number_format($offre['creation'], 0, ',', ' ') ?> €</p>
+          <p><?= htmlspecialchars($offre['description']) ?></p>
+        </div>
+<?php endforeach; ?>
+      </div>
+
+      <p class="home-pricing-note" data-animate><?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · Boutique en ligne et sur-mesure : sur devis</p>
+
+      <div style="text-align: center; margin-top: 2rem;" data-animate>
+        <a href="/tarifs.php" class="btn btn-primary">Estimer mon projet en 1 minute</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Réalisations -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Sites <span class="gradient-text">en ligne</span></h2>
+        <p class="section-subtitle" data-animate>Quelques sites réalisés pour des entreprises de la région. Allez les voir, ils sont en ligne.</p>
+      </div>
+
+      <div class="portfolio-grid">
+<?php
+$realisations = [
+    ['nom' => 'CFSSIS', 'image' => 'cfssis.jpg', 'categorie' => 'Formation', 'url' => 'https://cfssis.fr', 'texte' => 'Site vitrine complet pour un centre de formation en sécurité incendie et sûreté.'],
+    ['nom' => 'Il Manque 1', 'image' => 'ilmanque1.jpg', 'categorie' => 'E-commerce', 'url' => 'https://ilmanque1.fr', 'texte' => 'Boutique en ligne avec catalogue produits, panier et commande en ligne.'],
+    ['nom' => 'Solution Sécurité', 'image' => 'solution-securite.jpg', 'categorie' => 'Sécurité privée', 'url' => 'https://solution-securite.fr', 'texte' => 'Site professionnel pour une entreprise de gardiennage et de surveillance.'],
+];
+foreach ($realisations as $r):
+?>
+        <div class="portfolio-card glass" data-animate>
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/<?= $r['image'] ?>'); background-size: cover; background-position: top center;">
+            <span class="portfolio-category glass"><?= htmlspecialchars($r['categorie']) ?></span>
+          </div>
+          <div class="portfolio-content">
+            <h3><?= htmlspecialchars($r['nom']) ?></h3>
+            <p><?= htmlspecialchars($r['texte']) ?></p>
+            <a href="<?= $r['url'] ?>" target="_blank" rel="noopener" class="btn btn-secondary portfolio-btn">Voir le site →</a>
+          </div>
+        </div>
+<?php endforeach; ?>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;" data-animate>
+        <a href="/realisations.php" class="btn btn-secondary">Toutes les réalisations</a>
+      </div>
+    </div>
+  </section>
+
+<?php if (!empty($avisClients)): ?>
+  <!-- Avis clients (affichés uniquement s'il existe de vrais avis) -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Ils en <span class="gradient-text">parlent</span></h2>
+      </div>
+      <div class="features-grid">
+<?php foreach ($avisClients as $avis): ?>
+        <figure class="feature-card glass home-avis" data-animate>
+          <div class="home-avis-note" aria-label="Note : <?= (int) $avis['note'] ?> sur 5"><?= str_repeat('★', (int) $avis['note']) ?></div>
+          <blockquote><?= htmlspecialchars($avis['texte']) ?></blockquote>
+          <figcaption><strong><?= htmlspecialchars($avis['nom']) ?></strong><?= !empty($avis['entreprise']) ? ' · ' . htmlspecialchars($avis['entreprise']) : '' ?></figcaption>
+        </figure>
+<?php endforeach; ?>
+      </div>
+      <div style="text-align: center; margin-top: 2rem;" data-animate>
+        <a href="<?= GOOGLE_BUSINESS_URL ?>" target="_blank" rel="noopener" class="btn btn-secondary">Voir tous les avis sur Google</a>
+      </div>
+    </div>
+  </section>
+<?php endif; ?>
+
   <!-- Why Choose Me -->
   <section>
     <div class="container">
@@ -132,7 +229,7 @@ require_once __DIR__ . '/includes/header.php';
       <div class="advantages" data-animate>
         <div class="advantage-item glass">
           <span>🌐</span>
-          <div><strong>En ligne</strong> · Partout en France</div>
+          <div><strong>Local</strong> · Basé à Évreux, rendez-vous possible</div>
         </div>
         <div class="advantage-item glass">
           <span>⚡</span>
@@ -263,7 +360,10 @@ require_once __DIR__ . '/includes/header.php';
         <h2 class="section-title">Prêt à <span class="gradient-text">lancer</span> votre site ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit sans engagement. Je vous réponds sous 24h.</p>
 
-        <form id="contact-form" action="https://formspree.io/f/your-form-id" method="POST" class="form-grid" style="max-width: 600px; margin: 0 auto;">
+        <form id="contact-form" action="/contact-handler.php" method="POST" class="form-grid" style="max-width: 600px; margin: 0 auto;">
+          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
           <div class="form-group">
             <label for="nom">Nom <span>*</span></label>
             <input type="text" id="nom" name="nom" placeholder="Jean Dupont" required>
@@ -280,8 +380,8 @@ require_once __DIR__ . '/includes/header.php';
           </div>
 
           <div class="form-group">
-            <label for="activite">Activité <span>*</span></label>
-            <input type="text" id="activite" name="activite" placeholder="Plomberie, Restaurant..." required>
+            <label for="entreprise">Activité <span>*</span></label>
+            <input type="text" id="entreprise" name="entreprise" placeholder="Plomberie, Restaurant..." required>
           </div>
 
           <div class="form-group full">
@@ -293,6 +393,12 @@ require_once __DIR__ . '/includes/header.php';
             <input type="checkbox" id="consent" name="consent" required>
             <label for="consent">J'accepte d'être recontacté concernant ma demande <span>*</span></label>
           </div>
+
+<?php if ($turnstileSiteKey): ?>
+          <div class="form-group full">
+            <div class="cf-turnstile" data-sitekey="<?= htmlspecialchars($turnstileSiteKey) ?>" data-theme="dark"></div>
+          </div>
+<?php endif; ?>
 
           <div class="form-group full">
             <button type="submit" class="btn btn-primary form-submit">Envoyer ma demande</button>
@@ -309,4 +415,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </section>
 
+<?php if ($turnstileSiteKey): ?>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<?php endif; ?>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

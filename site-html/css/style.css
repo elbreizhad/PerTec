@@ -1809,3 +1809,24 @@ button:focus-visible {
     display: none;
   }
 }
+
+/* Accueil : tarifs et avis */
+.home-pricing .feature-card { text-align: center; }
+.feature-card .home-price {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 0.5rem 0 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.home-pricing-note {
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
+}
+.home-avis { margin: 0; }
+.home-avis-note { color: #fbbf24; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+.home-avis blockquote { margin: 0 0 1rem; color: var(--gray-100); font-style: italic; }
+.home-avis figcaption { color: var(--gray-400); font-size: 0.9rem; }
+.section-header .section-subtitle { margin-left: auto; margin-right: auto; }
