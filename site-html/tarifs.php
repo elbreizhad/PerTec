@@ -76,7 +76,7 @@ function formatPrix($prix) {
         <div class="container">
             <div class="header-inner">
                 <a href="/" class="logo">
-                    <img src="images/logo-pertec.svg" alt="Pertec">
+                    <img src="images/logo-pertec.svg?v=2" alt="Pertec">
                 </a>
                 <nav class="nav">
                     <a href="services.html" class="nav-link">Services</a>

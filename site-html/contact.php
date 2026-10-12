@@ -39,7 +39,7 @@ $turnstileSiteKey = get_turnstile_site_key();
     <div class="container">
       <div class="header-inner">
         <a href="index.html" class="logo">
-          <img src="images/logo-pertec.svg" alt="Pertec">
+          <img src="images/logo-pertec.svg?v=2" alt="Pertec">
         </a>
         <nav class="nav">
           <a href="services.html" class="nav-link">Services</a>
@@ -221,7 +221,7 @@ $turnstileSiteKey = get_turnstile_site_key();
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <a href="index.html"><img src="images/logo-pertec.svg" alt="Pertec" style="height: 40px;"></a>
+          <a href="index.html"><img src="images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;"></a>
           <p>Création de sites internet clé en main, 100% en ligne.</p>
           <div class="footer-social">
             <a href="#" aria-label="LinkedIn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
