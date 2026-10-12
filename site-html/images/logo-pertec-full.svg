@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70">
+  <defs>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Browser window icon -->
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Window frame -->
+    <rect x="4" y="8" width="32" height="26" rx="3"/>
+    <!-- Window dots -->
+    <circle cx="10" cy="13" r="1.5" fill="white" stroke="none"/>
+    <circle cx="16" cy="13" r="1.5" fill="white" stroke="none"/>
+    <circle cx="22" cy="13" r="1.5" fill="white" stroke="none"/>
+    <!-- Divider line -->
+    <line x1="4" y1="18" x2="36" y2="18"/>
+    <!-- Mountain/image icon -->
+    <path d="M10 30 L16 24 L22 30 L26 26 L32 32" stroke-width="1.5"/>
+    <!-- Sun circle -->
+    <circle cx="28" cy="24" r="2" fill="white" stroke="none"/>
+  </g>
+
+  <!-- Cursor -->
+  <path d="M34 32 L34 42 L38 38 L42 44 L44 42 L40 36 L44 36 Z" fill="white"/>
+
+  <!-- Pertec text -->
+  <text x="52" y="33" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="700" fill="white">
+    <tspan>Per</tspan><tspan fill="url(#iconGrad)">tec</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="52" y="50" font-family="Inter, -apple-system, sans-serif" font-size="8" font-weight="500" fill="#9ca3af" letter-spacing="1.5">
+    CRÉATION DE SITES INTERNET
+  </text>
+</svg>
