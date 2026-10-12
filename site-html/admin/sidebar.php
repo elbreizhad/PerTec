@@ -17,7 +17,7 @@
             <span class="nav-icon">📧</span>
             Messages
             <?php
-            $mf = __DIR__ . '/messages.json';
+            $mf = pertec_data_file('messages.json');
             $msgs = file_exists($mf) ? (json_decode(file_get_contents($mf), true) ?: []) : [];
             $unread = count(array_filter($msgs, fn($m) => !($m['read'] ?? false)));
             if ($unread > 0): ?>
@@ -28,7 +28,7 @@
             <span class="nav-icon">💰</span>
             Estimations
             <?php
-            $ef = __DIR__ . '/estimations.json';
+            $ef = pertec_data_file('estimations.json');
             $ests = file_exists($ef) ? (json_decode(file_get_contents($ef), true) ?: []) : [];
             $unreadEst = count(array_filter($ests, fn($e) => !($e['read'] ?? false)));
             if ($unreadEst > 0): ?>

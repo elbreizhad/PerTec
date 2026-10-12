@@ -54,16 +54,16 @@ ErrorDocument 404 /404.php
     # HTML/PHP - cache court
     ExpiresByType text/html "access plus 0 seconds"
 
-    # CSS et JavaScript
+    # CSS et JavaScript : longue durée, l'adresse change à chaque déploiement (?v=...)
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
 
     # Images
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 week"
+    ExpiresByType image/jpeg "access plus 1 week"
+    ExpiresByType image/gif "access plus 1 week"
+    ExpiresByType image/svg+xml "access plus 1 week"
+    ExpiresByType image/webp "access plus 1 week"
     ExpiresByType image/x-icon "access plus 1 year"
 
     # Fonts
@@ -78,6 +78,13 @@ ErrorDocument 404 /404.php
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Pages : toujours revalidées, pour voir la dernière version sans vider le cache
+<IfModule mod_headers.c>
+    <FilesMatch "\.php$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
 </IfModule>
 
 # Sécurité Headers

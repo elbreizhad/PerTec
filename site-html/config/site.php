@@ -88,3 +88,13 @@ function schema_service_metier(string $metier, string $chemin): string {
         'provider' => schema_entreprise(),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 }
+
+/**
+ * URL d'un fichier statique avec sa date de modification (ex. /css/style.css?v=1760280000).
+ * Après chaque déploiement, les navigateurs voient une nouvelle adresse et
+ * rechargent le fichier : plus besoin de vider le cache.
+ */
+function asset(string $chemin): string {
+    $fichier = dirname(__DIR__) . $chemin;
+    return $chemin . (is_file($fichier) ? '?v=' . filemtime($fichier) : '');
+}

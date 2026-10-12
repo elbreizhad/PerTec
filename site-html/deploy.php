@@ -138,6 +138,8 @@ if ($public_path !== $repo_path . '/' . $source_folder) {
         'admin/estimations.json',
         'admin/stats/',
         'admin/config.local.php',
+        // Les données sont désormais hors du site (pertec-data/, voir includes/data.php) ;
+        // ces exclusions protègent les anciennes copies le temps de la migration.
     ];
     $exclude_str = implode(' ', array_map(fn($e) => "--exclude='$e'", $excludes));
     $sync_cmd = "rsync -av --delete $exclude_str $repo_path/$source_folder/ $public_path/";

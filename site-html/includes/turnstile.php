@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/data.php';
 /**
  * Cloudflare Turnstile verification helper
  * https://developers.cloudflare.com/turnstile/
@@ -76,13 +77,7 @@ function get_turnstile_site_key(): ?string {
     static $key = null;
 
     if ($key === null) {
-        $settings_file = __DIR__ . '/../admin/settings.json';
-        if (file_exists($settings_file)) {
-            $settings = json_decode(file_get_contents($settings_file), true) ?: [];
-            $key = $settings['turnstile_site_key'] ?? '';
-        } else {
-            $key = '';
-        }
+        $key = pertec_settings()['turnstile_site_key'] ?? '';
     }
 
     return $key ?: null;
@@ -96,13 +91,7 @@ function get_turnstile_secret_key(): ?string {
     static $key = null;
 
     if ($key === null) {
-        $settings_file = __DIR__ . '/../admin/settings.json';
-        if (file_exists($settings_file)) {
-            $settings = json_decode(file_get_contents($settings_file), true) ?: [];
-            $key = $settings['turnstile_secret_key'] ?? '';
-        } else {
-            $key = '';
-        }
+        $key = pertec_settings()['turnstile_secret_key'] ?? '';
     }
 
     return $key ?: null;

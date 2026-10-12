@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/data.php';
 /**
  * Statistiques de fréquentation - Pertec.fr
  *
@@ -6,13 +7,13 @@
  * seuls des totaux par jour sont enregistrés (pages vues, visites,
  * provenance, demandes de devis et d'estimation). Aucune IP n'est stockée.
  *
- * Fichiers : admin/stats/AAAA-MM.json (bloqués en accès direct par admin/.htaccess)
+ * Fichiers : pertec-data/stats/AAAA-MM.json, hors du dossier public (voir includes/data.php)
  */
 
 const STATS_NOSTATS_COOKIE = 'pertec_nostats';
 
 function stats_dir(): string {
-    return dirname(__DIR__) . '/admin/stats';
+    return pertec_data_subdir('stats');
 }
 
 /**

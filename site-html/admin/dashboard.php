@@ -5,7 +5,7 @@ require_login();
 $settings = get_settings();
 
 // Charger les messages de contact
-$messages_file = __DIR__ . '/messages.json';
+$messages_file = pertec_data_file('messages.json');
 $messages = [];
 if (file_exists($messages_file)) {
     $messages = json_decode(file_get_contents($messages_file), true) ?: [];
@@ -18,7 +18,7 @@ $unread_count = count(array_filter($messages, fn($m) => !($m['read'] ?? false)))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Admin Pertec</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=<?= filemtime(__DIR__ . '/style.css') ?>">
 </head>
 <body>
     <div class="admin-layout">

@@ -11,11 +11,7 @@ require_once __DIR__ . '/admin/mailer.php';
 require_once __DIR__ . '/includes/turnstile.php';
 require_once __DIR__ . '/includes/stats.php';
 
-$settings = [];
-$settings_file = __DIR__ . '/admin/settings.json';
-if (file_exists($settings_file)) {
-    $settings = json_decode(file_get_contents($settings_file), true) ?: [];
-}
+$settings = pertec_settings();
 
 // Headers
 header('Content-Type: application/json; charset=utf-8');
@@ -108,7 +104,7 @@ $new_message = [
 ];
 
 // Sauvegarder dans le fichier JSON
-$messages_file = __DIR__ . '/admin/messages.json';
+$messages_file = pertec_data_file('messages.json');
 $messages = [];
 if (file_exists($messages_file)) {
     $messages = json_decode(file_get_contents($messages_file), true) ?: [];

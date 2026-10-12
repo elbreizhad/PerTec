@@ -6,6 +6,7 @@
 
 session_start();
 require_once __DIR__ . '/includes/turnstile.php';
+require_once __DIR__ . '/config/site.php';
 
 // Générer le token CSRF si nécessaire
 if (empty($_SESSION['csrf_token'])) {
@@ -17,9 +18,8 @@ $tarifs = require __DIR__ . '/config/tarifs.php';
 $config = $tarifs['config'] ?? [];
 
 // Récupérer les paramètres admin si disponibles
-$settings_file = __DIR__ . '/admin/settings.json';
-if (file_exists($settings_file)) {
-    $settings = json_decode(file_get_contents($settings_file), true) ?: [];
+$settings = pertec_settings();
+if ($settings) {
     $config['contact_email'] = $settings['contact_email'] ?? $config['contact_email'];
     $config['contact_tel'] = $settings['contact_phone'] ?? $config['contact_tel'];
 }
@@ -43,10 +43,10 @@ $pageDescription = 'Estimez le prix de votre site internet en 4 questions. Tarif
 $canonicalUrl = '/tarifs';
 $activeMenu = 'tarifs';
 $bodyClass = 'page-tarifs';
-$extraHead = '  <link rel="stylesheet" href="/css/tarifs.css">' . "\n"
+$extraHead = '  <link rel="stylesheet" href="' . asset('/css/tarifs.css') . '">' . "\n"
     . ($turnstileSiteKey ? '  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' . "\n" : '');
 $extraScripts = '  <script>window.PERTEC_TARIFS = ' . json_encode($tarifs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';</script>' . "\n"
-    . '  <script src="/js/tarifs.js"></script>' . "\n";
+    . '  <script src="' . asset('/js/tarifs.js') . '"></script>' . "\n";
 require_once __DIR__ . '/includes/header.php';
 ?>
 

@@ -54,7 +54,7 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
   <link rel="preload" href="/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="<?= asset('/css/style.css') ?>">
 
 <?php if (!empty($schemaJson)): ?>
   <!-- Schema.org -->
@@ -78,7 +78,7 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
     <div class="container">
       <div class="header-inner">
         <a href="/" class="logo">
-          <img src="/images/logo-pertec.svg?v=2" alt="Pertec">
+          <img src="<?= asset('/images/logo-pertec.svg') ?>" alt="Pertec">
         </a>
 
         <nav class="nav">

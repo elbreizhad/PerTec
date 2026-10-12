@@ -4,8 +4,13 @@
  * Ce fichier charge la config personnalisée ou les valeurs par défaut
  */
 
-// Charger la config personnalisée si elle existe
-$config_file = __DIR__ . '/config.local.php';
+require_once dirname(__DIR__) . '/includes/data.php';
+
+// Identifiants : config.local.php dans le dossier de données (hors site), sinon dans admin/
+$config_file = pertec_data_file('config.local.php');
+if (!file_exists($config_file)) {
+    $config_file = __DIR__ . '/config.local.php';
+}
 if (file_exists($config_file)) {
     require_once $config_file;
 } else {
@@ -21,7 +26,7 @@ if (!defined('SITE_NAME')) define('SITE_NAME', 'Pertec');
 if (!defined('SITE_URL')) define('SITE_URL', 'https://pertec.fr');
 
 // Chemin vers le fichier de paramètres
-define('SETTINGS_FILE', __DIR__ . '/settings.json');
+define('SETTINGS_FILE', pertec_data_file('settings.json'));
 define('SETTINGS_EXAMPLE', __DIR__ . '/settings.example.json');
 
 // Démarrer la session

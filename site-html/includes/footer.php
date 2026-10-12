@@ -4,7 +4,7 @@
       <div class="footer-content">
         <div class="footer-brand">
           <a href="/">
-            <img src="/images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;">
+            <img src="<?= asset('/images/logo-pertec.svg') ?>" alt="Pertec" style="height: 40px;">
           </a>
           <p>Création de sites internet clé en main pour artisans et commerces. Basé à Évreux, j'accompagne les entrepreneurs de Normandie.</p>
         </div>
@@ -62,7 +62,7 @@
   </button>
 
   <!-- JavaScript -->
-  <script src="/js/main.js"></script>
+  <script src="<?= asset('/js/main.js') ?>"></script>
 <?= $extraScripts ?? '' ?>
 </body>
 </html>

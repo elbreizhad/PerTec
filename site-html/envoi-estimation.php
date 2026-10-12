@@ -191,8 +191,7 @@ try {
     }
 
     // Charger les paramètres admin
-    $settings_file = __DIR__ . '/admin/settings.json';
-    $settings = file_exists($settings_file) ? json_decode(file_get_contents($settings_file), true) : [];
+    $settings = pertec_settings();
     $adminEmail = $settings['contact_email'] ?? $tarifs['config']['contact_email'] ?? 'contact@pertec.fr';
     $contactTel = $settings['contact_phone'] ?? $tarifs['config']['contact_tel'] ?? '';
     $siteName = $settings['site_name'] ?? 'Pertec';
@@ -428,7 +427,7 @@ TEXT;
     }
 
     // Sauvegarde JSON pour l'admin
-    $jsonFile = __DIR__ . '/admin/estimations.json';
+    $jsonFile = pertec_data_file('estimations.json');
     $estimations = [];
     if (file_exists($jsonFile)) {
         $estimations = json_decode(file_get_contents($jsonFile), true) ?: [];
