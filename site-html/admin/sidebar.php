@@ -9,6 +9,10 @@
             <span class="nav-icon">📊</span>
             Dashboard
         </a>
+        <a href="stats.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'stats.php' ? 'active' : '' ?>">
+            <span class="nav-icon">📈</span>
+            Statistiques
+        </a>
         <a href="messages.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'messages.php' ? 'active' : '' ?>">
             <span class="nav-icon">📧</span>
             Messages

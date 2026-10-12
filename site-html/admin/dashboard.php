@@ -28,7 +28,7 @@ $unread_count = count(array_filter($messages, fn($m) => !($m['read'] ?? false)))
             <header class="admin-header">
                 <h1>Dashboard</h1>
                 <div class="header-actions">
-                    <a href="../index.html" target="_blank" class="btn btn-secondary">Voir le site</a>
+                    <a href="../" target="_blank" class="btn btn-secondary">Voir le site</a>
                 </div>
             </header>
 

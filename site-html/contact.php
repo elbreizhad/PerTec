@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/includes/turnstile.php';
 require_once __DIR__ . '/config/site.php';
+require_once __DIR__ . '/includes/stats.php';
+stats_track_pageview();
 
 // CSRF token
 if (empty($_SESSION['csrf_token'])) {

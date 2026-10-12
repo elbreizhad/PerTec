@@ -1,5 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
+require_once __DIR__ . '/stats.php';
+stats_track_pageview();
 /**
  * Header partagé - Pertec.fr
  * Variables à définir avant inclusion :
@@ -19,6 +21,9 @@ require_once dirname(__DIR__) . '/config/site.php';
   <title><?= htmlspecialchars($pageTitle) ?></title>
   <meta name="description" content="<?= htmlspecialchars($pageDescription) ?>">
   <link rel="canonical" href="https://pertec.fr<?= htmlspecialchars($canonicalUrl) ?>">
+<?php if (GOOGLE_SITE_VERIFICATION !== ''): ?>
+  <meta name="google-site-verification" content="<?= htmlspecialchars(GOOGLE_SITE_VERIFICATION) ?>">
+<?php endif; ?>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">

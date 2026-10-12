@@ -9,6 +9,7 @@ session_start();
 // Charger la config, le mailer et Turnstile
 require_once __DIR__ . '/admin/mailer.php';
 require_once __DIR__ . '/includes/turnstile.php';
+require_once __DIR__ . '/includes/stats.php';
 
 $settings = [];
 $settings_file = __DIR__ . '/admin/settings.json';
@@ -172,6 +173,8 @@ Pour me contacter : $contact_email
 ";
 
 $mailer->send($email, $confirm_subject, $confirm_body);
+
+stats_track_event('devis');
 
 // Réponse
 echo json_encode([

@@ -135,6 +135,8 @@ if ($public_path !== $repo_path . '/' . $source_folder) {
         '.gitignore',
         'admin/settings.json',
         'admin/messages.json',
+        'admin/estimations.json',
+        'admin/stats/',
         'admin/config.local.php',
     ];
     $exclude_str = implode(' ', array_map(fn($e) => "--exclude='$e'", $excludes));

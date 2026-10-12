@@ -108,6 +108,17 @@ function require_login() {
         header('Location: index.php');
         exit;
     }
+
+    // Les visites du propriétaire ne sont pas comptées dans les statistiques
+    if (empty($_COOKIE['pertec_nostats'])) {
+        setcookie('pertec_nostats', '1', [
+            'expires' => time() + 365 * 86400,
+            'path' => '/',
+            'secure' => !empty($_SERVER['HTTPS']),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
 }
 
 /**

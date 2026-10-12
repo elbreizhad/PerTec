@@ -6,6 +6,7 @@
 
 session_start();
 require_once __DIR__ . '/includes/turnstile.php';
+require_once __DIR__ . '/includes/stats.php';
 
 // Headers
 header('Content-Type: application/json; charset=utf-8');
@@ -452,6 +453,7 @@ TEXT;
 
     file_put_contents($jsonFile, json_encode($estimations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
 
+    stats_track_event('estimations');
     $response = ['success' => true];
 
 } catch (Exception $e) {

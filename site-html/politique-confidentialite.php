@@ -98,6 +98,16 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="legal-section glass" data-animate>
+          <h2>Mesure d'audience</h2>
+          <p>
+            Pour savoir quelles pages sont utiles, le site compte ses visites directement sur notre serveur, sans cookie et sans outil tiers.
+          </p>
+          <p>
+            Seuls des totaux par jour sont conservés : nombre de pages vues, page consultée, site de provenance (par exemple « Google ») et nombre de demandes envoyées. Aucune adresse IP ni aucun identifiant permettant de vous reconnaître n'est enregistré, et ces totaux ne sont transmis à personne.
+          </p>
+        </div>
+
+        <div class="legal-section glass" data-animate>
           <h2>Vos droits</h2>
           <p>
             Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :
