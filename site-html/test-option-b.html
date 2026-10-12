@@ -1,0 +1,32 @@
+<?php
+/**
+ * Test Option B - Fichier .html interprété comme PHP
+ * Accéder à : https://pertec.fr/test-option-b.html
+ */
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Option B - Pertec</title>
+    <style>
+        body { font-family: system-ui; max-width: 600px; margin: 50px auto; padding: 20px; background: #0a0a0f; color: #fff; }
+        .success { background: #22c55e; color: #fff; padding: 20px; border-radius: 8px; }
+        .fail { background: #ef4444; color: #fff; padding: 20px; border-radius: 8px; }
+        code { background: #1e1e2e; padding: 2px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <?php if (true): ?>
+    <div class="success">
+        <h1>✅ Option B fonctionne !</h1>
+        <p>Ce fichier <code>.html</code> est interprété comme PHP</p>
+        <p>URL demandée : <code><?= htmlspecialchars($_SERVER['REQUEST_URI']) ?></code></p>
+        <p>Date serveur : <code><?= date('Y-m-d H:i:s') ?></code></p>
+    </div>
+    <?php endif; ?>
+    <p style="margin-top: 20px;">
+        <a href="/" style="color: #8b5cf6;">← Retour à l'accueil</a>
+    </p>
+</body>
+</html>

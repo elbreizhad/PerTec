@@ -15,6 +15,17 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 
+# TEST Option A : .html servi par .php (réécriture interne)
+# Accéder à /test-option-a.html pour tester
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^test-option-a\.html$ test-option-a.php [L]
+
+# TEST Option B : .html interprété comme PHP
+# Accéder à /test-option-b.html pour tester
+AddHandler application/x-httpd-php .html
+# Alternative si la ligne ci-dessus ne fonctionne pas :
+# AddType application/x-httpd-php .html
+
 # Page d'erreur 404
 ErrorDocument 404 /index.html
 
