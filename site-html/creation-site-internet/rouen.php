@@ -165,7 +165,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <a href="/creation-site-internet/le-havre.php" class="ville-tag" style="text-decoration: none;">Le Havre</a>
         <a href="/creation-site-internet/louviers.php" class="ville-tag" style="text-decoration: none;">Louviers</a>
         <a href="/creation-site-internet/vernon.php" class="ville-tag" style="text-decoration: none;">Vernon</a>
-        <a href="/creation-site-internet/dieppe.php" class="ville-tag" style="text-decoration: none;">Dieppe</a>
+        <a href="/creation-site-internet/val-de-reuil.php" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
       </div>
     </div>
   </section>

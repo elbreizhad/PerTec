@@ -63,9 +63,9 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">metiers</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
       <a href="/sites-metiers/electricien.php" class="ville-tag" style="text-decoration: none;">Electricien</a>
-      <a href="/sites-metiers/chauffagiste.html" class="ville-tag" style="text-decoration: none;">Chauffagiste</a>
-      <a href="/sites-metiers/couvreur.html" class="ville-tag" style="text-decoration: none;">Couvreur</a>
-      <a href="/sites-metiers/menuisier.html" class="ville-tag" style="text-decoration: none;">Menuisier</a>
+      <a href="/sites-metiers/coiffeur.php" class="ville-tag" style="text-decoration: none;">Coiffeur</a>
+      <a href="/secteurs/artisan.php" class="ville-tag" style="text-decoration: none;">Artisans du bâtiment</a>
+      <a href="/secteurs/restaurant.php" class="ville-tag" style="text-decoration: none;">Restaurant</a>
     </div>
   </div></section>
 

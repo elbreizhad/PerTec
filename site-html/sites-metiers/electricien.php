@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Creation Site Internet Electricien | Clients Locaux | Pertec";
-$pageDescription = "Site internet pour electricien. Attirez des clients locaux avec un site professionnel et un referencement optimise. Site cle en main a partir de 890€.";
+$pageDescription = "Site internet pour electricien. Attirez des clients locaux avec un site professionnel et un referencement optimise. Site cle en main a partir de 490€.";
 $canonicalUrl = "/sites-metiers/electricien";
 $activeMenu = "services";
 
@@ -15,7 +15,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Certifications mises en avant</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>SEO local</div>
-      <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>A partir de 890€</div>
+      <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>A partir de 490€</div>
     </div>
   </div></div></section>
 
@@ -49,8 +49,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">metiers</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
       <a href="/sites-metiers/plombier.php" class="ville-tag" style="text-decoration: none;">Plombier</a>
-      <a href="/sites-metiers/chauffagiste.html" class="ville-tag" style="text-decoration: none;">Chauffagiste</a>
-      <a href="/sites-metiers/menuisier.html" class="ville-tag" style="text-decoration: none;">Menuisier</a>
+      <a href="/sites-metiers/coiffeur.php" class="ville-tag" style="text-decoration: none;">Coiffeur</a>
+      <a href="/secteurs/artisan.php" class="ville-tag" style="text-decoration: none;">Artisans du bâtiment</a>
     </div>
   </div></section>
 

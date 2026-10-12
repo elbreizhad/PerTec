@@ -50,7 +50,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
       <a href="/creation-site-internet/bernay.php" class="ville-tag" style="text-decoration: none;">Bernay</a>
       <a href="/creation-site-internet/evreux.php" class="ville-tag" style="text-decoration: none;">Evreux</a>
-      <a href="/creation-site-internet/honfleur.php" class="ville-tag" style="text-decoration: none;">Honfleur</a>
+      <a href="/creation-site-internet/le-havre.php" class="ville-tag" style="text-decoration: none;">Le Havre</a>
     </div>
   </div></section>
 

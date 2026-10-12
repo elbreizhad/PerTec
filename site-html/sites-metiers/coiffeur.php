@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Creation Site Internet Coiffeur | Prise de RDV en Ligne | Pertec";
-$pageDescription = "Site internet pour salon de coiffure avec reservation en ligne. Galerie de realisations, tarifs, SEO local. Site cle en main a partir de 890€.";
+$pageDescription = "Site internet pour salon de coiffure avec reservation en ligne. Galerie de realisations, tarifs, SEO local. Site cle en main a partir de 490€.";
 $canonicalUrl = "/sites-metiers/coiffeur";
 $activeMenu = "services";
 
@@ -48,9 +48,9 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">metiers</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-      <a href="/sites-metiers/estheticienne.html" class="ville-tag" style="text-decoration: none;">Estheticienne</a>
-      <a href="/sites-metiers/spa.html" class="ville-tag" style="text-decoration: none;">Spa</a>
-      <a href="/sites-metiers/barbier.html" class="ville-tag" style="text-decoration: none;">Barbier</a>
+      <a href="/sites-metiers/plombier.php" class="ville-tag" style="text-decoration: none;">Plombier</a>
+      <a href="/sites-metiers/electricien.php" class="ville-tag" style="text-decoration: none;">Electricien</a>
+      <a href="/secteurs/restaurant.php" class="ville-tag" style="text-decoration: none;">Restaurant</a>
     </div>
   </div></section>
 
