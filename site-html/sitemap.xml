@@ -7,130 +7,130 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/services.html</loc>
+    <loc>https://pertec.fr/services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/tarifs.php</loc>
+    <loc>https://pertec.fr/tarifs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/realisations.html</loc>
+    <loc>https://pertec.fr/realisations</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/a-propos.html</loc>
+    <loc>https://pertec.fr/a-propos</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/contact.php</loc>
+    <loc>https://pertec.fr/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/zone-intervention.html</loc>
+    <loc>https://pertec.fr/zone-intervention</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Pages villes - Création site internet -->
   <url>
-    <loc>https://pertec.fr/creation-site-internet/evreux.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/evreux</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/louviers.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/louviers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/vernon.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/vernon</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/bernay.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/bernay</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/pont-audemer.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/pont-audemer</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/val-de-reuil.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/val-de-reuil</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/gisors.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/gisors</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/les-andelys.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/les-andelys</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/rouen.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/rouen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/creation-site-internet/le-havre.html</loc>
+    <loc>https://pertec.fr/creation-site-internet/le-havre</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Pages secteurs -->
   <url>
-    <loc>https://pertec.fr/secteurs/artisan.html</loc>
+    <loc>https://pertec.fr/secteurs/artisan</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/secteurs/restaurant.html</loc>
+    <loc>https://pertec.fr/secteurs/restaurant</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pertec.fr/secteurs/securite-privee</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Pages métiers -->
   <url>
-    <loc>https://pertec.fr/sites-metiers/plombier.html</loc>
+    <loc>https://pertec.fr/sites-metiers/plombier</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/sites-metiers/electricien.html</loc>
+    <loc>https://pertec.fr/sites-metiers/electricien</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/sites-metiers/coiffeur.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pertec.fr/sites-metiers/restaurant.html</loc>
+    <loc>https://pertec.fr/sites-metiers/coiffeur</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Pages légales -->
   <url>
-    <loc>https://pertec.fr/mentions-legales.html</loc>
+    <loc>https://pertec.fr/mentions-legales</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://pertec.fr/politique-confidentialite.html</loc>
+    <loc>https://pertec.fr/politique-confidentialite</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
