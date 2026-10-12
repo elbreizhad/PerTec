@@ -289,7 +289,7 @@ require_once __DIR__ . '/includes/header.php';
             <span>+</span>
           </button>
           <div class="faq-answer">
-            <p>En général, comptez 2 à 3 semaines entre la validation du devis et la mise en ligne. Ce délai peut varier selon la complexité du projet et votre réactivité pour les validations.</p>
+            <p>En général, comptez 3 à 4 semaines entre la validation du devis et la mise en ligne. Ce délai peut varier selon la complexité du projet et votre réactivité pour les validations.</p>
           </div>
         </div>
 

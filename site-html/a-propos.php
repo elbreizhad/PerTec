@@ -68,7 +68,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">🎯</div>
           <h3>Le résultat</h3>
-          <p>Un site professionnel livré en 2-3 semaines, prêt à accueillir vos clients et optimisé pour Google. Sans que vous ayez perdu une minute de votre temps.</p>
+          <p>Un site professionnel livré en 3-4 semaines, prêt à accueillir vos clients et optimisé pour Google. Sans que vous ayez perdu une minute de votre temps.</p>
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="value-card glass" data-animate>
           <div class="icon">⚡</div>
           <h3>Réactivité</h3>
-          <p>Réponse sous 24h maximum, livraison en 2-3 semaines. Je m'adapte à vos contraintes et respecte mes engagements.</p>
+          <p>Réponse sous 24h maximum, livraison en 3-4 semaines. Je m'adapte à vos contraintes et respecte mes engagements.</p>
         </div>
 
         <div class="value-card glass" data-animate>

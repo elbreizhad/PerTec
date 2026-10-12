@@ -76,7 +76,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
           </div>
           <div class="trust-item">
             <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Site livré en 2 semaines
+            Site livré en 3-4 semaines
           </div>
           <div class="trust-item">
             <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -265,7 +265,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
           </button>
           <div class="faq-answer">
-            <p>En moyenne 2 à 3 semaines entre notre premier échange et la mise en ligne. Je m'adapte à vos urgences si besoin.</p>
+            <p>En moyenne 3 à 4 semaines entre notre premier échange et la mise en ligne. Je m'adapte à vos urgences si besoin.</p>
           </div>
         </div>
 

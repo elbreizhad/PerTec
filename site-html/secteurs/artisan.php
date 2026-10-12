@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Création Site Internet Artisan | Plombier, Électricien | Pertec.fr';
-$pageDescription = 'Créez votre site internet d\'artisan. Site clé en main pour plombiers, électriciens, maçons, menuisiers. Devis gratuit, livraison 2 semaines.';
+$pageDescription = 'Créez votre site internet d\'artisan. Site clé en main pour plombiers, électriciens, maçons, menuisiers. Devis gratuit, livraison 3-4 semaines.';
 $canonicalUrl = '/secteurs/artisan';
 $activeMenu = '';
 
