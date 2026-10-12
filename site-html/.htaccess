@@ -10,57 +10,19 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 # ===========================================
-# LOT 0 : Réécriture .html vers .php
-# Option A validée - fichiers .php servis via URLs .html
+# Redirections 301 .html vers .php (SEO)
+# Les anciens liens Google redirigent vers les nouvelles URLs
 # ===========================================
 
-# Pages principales (racine)
+# Redirection générique .html → .php (301 permanent)
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^index\.html$ index.php [L]
+RewriteRule ^(.+)\.html$ /$1.php [R=301,L]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^services\.html$ services.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^a-propos\.html$ a-propos.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^realisations\.html$ realisations.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^mentions-legales\.html$ mentions-legales.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^politique-confidentialite\.html$ politique-confidentialite.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^zone-intervention\.html$ zone-intervention.php [L]
-
-# Secteurs
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^secteurs/artisan\.html$ secteurs/artisan.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^secteurs/restaurant\.html$ secteurs/restaurant.php [L]
-
-# Sites-métiers (générique)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^sites-metiers/(.+)\.html$ sites-metiers/$1.php [L]
-
-# Création site internet (pages villes - générique)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^creation-site-internet/(.+)\.html$ creation-site-internet/$1.php [L]
-
-# URLs propres (sans .html) - fallback
+# URLs propres (sans extension) - fallback vers .php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L]
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.*)$ $1.html [L]
 
 # Page d'erreur 404
 ErrorDocument 404 /index.php
