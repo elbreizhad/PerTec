@@ -10,12 +10,12 @@
         </div>
 
         <div class="footer-col">
-          <h4>Services</h4>
+          <h4>Secteurs</h4>
           <ul>
-            <li><a href="/services.php">Site vitrine</a></li>
-            <li><a href="/services.php">Site e-commerce</a></li>
-            <li><a href="/secteurs/artisan.php">Site artisan</a></li>
-            <li><a href="/secteurs/restaurant.php">Site restaurant</a></li>
+            <li><a href="/secteurs/artisan.php">Artisans</a></li>
+            <li><a href="/secteurs/restaurant.php">Restaurants</a></li>
+            <li><a href="/secteurs/securite-privee.php">Sécurité privée</a></li>
+            <li><a href="/services.php">Tous les services</a></li>
           </ul>
         </div>
 
