@@ -86,16 +86,14 @@ require_once __DIR__ . '/includes/header.php';
         <div class="legal-section glass" data-animate>
           <h2>Cookies</h2>
           <p>
-            Notre site utilise des cookies pour améliorer votre expérience de navigation. Un cookie est un petit fichier texte stocké sur votre appareil.
+            Notre site utilise uniquement des cookies strictement nécessaires au fonctionnement du site. Un cookie est un petit fichier texte stocké sur votre appareil.
           </p>
-          <p><strong>Types de cookies utilisés :</strong></p>
+          <p><strong>Cookies utilisés :</strong></p>
           <ul>
-            <li><strong>Cookies essentiels :</strong> nécessaires au fonctionnement du site</li>
-            <li><strong>Cookies de performance :</strong> pour analyser l'utilisation du site (Google Analytics)</li>
-            <li><strong>Cookies de fonctionnalité :</strong> pour mémoriser vos préférences</li>
+            <li><strong>Cookies de session :</strong> nécessaires au fonctionnement des formulaires (protection CSRF, anti-spam Cloudflare Turnstile)</li>
           </ul>
           <p>
-            Vous pouvez à tout moment modifier vos préférences en matière de cookies via les paramètres de votre navigateur. Le refus des cookies peut limiter certaines fonctionnalités du site.
+            Nous n'utilisons pas de cookies de pistage publicitaire ni de cookies d'analyse d'audience. Les cookies de session sont automatiquement supprimés à la fermeture de votre navigateur.
           </p>
         </div>
 
