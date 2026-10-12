@@ -70,7 +70,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">🏛️</div>
           <h3>Marché dynamique</h3>
-          <p>Rouen et son agglomération comptent plus de 500 000 habitants. Un immense bassin de clients potentiels pour votre activité.</p>
+          <p>Rouen et sa métropole comptent près de 500 000 habitants. Un immense bassin de clients potentiels pour votre activité.</p>
         </div>
 
         <div class="feature-card glass" data-animate>
@@ -123,6 +123,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
   </section>
+
+<?php $villeSlug = 'rouen'; require dirname(__DIR__) . '/includes/ville-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

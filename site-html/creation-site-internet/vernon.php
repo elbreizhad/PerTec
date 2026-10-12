@@ -94,6 +94,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+<?php $villeSlug = 'vernon'; require dirname(__DIR__) . '/includes/ville-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>

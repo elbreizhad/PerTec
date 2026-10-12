@@ -40,6 +40,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div><div class="zone-map"><span class="pin">📍</span></div></div></div>
   </div></section>
 
+<?php $villeSlug = 'bernay'; require dirname(__DIR__) . '/includes/ville-details.php'; ?>
+
   <section class="cta-section"><div class="container"><div class="cta-box glass-strong" data-animate>
     <h2 class="section-title">Votre site <span class="gradient-text">à Bernay</span></h2>
     <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h.</p>
