@@ -12,20 +12,21 @@
         <div class="footer-col">
           <h4>Secteurs</h4>
           <ul>
-            <li><a href="/secteurs/artisan.php">Artisans</a></li>
-            <li><a href="/secteurs/restaurant.php">Restaurants</a></li>
-            <li><a href="/secteurs/securite-privee.php">Sécurité privée</a></li>
-            <li><a href="/services.php">Tous les services</a></li>
+            <li><a href="/secteurs/artisan">Artisans</a></li>
+            <li><a href="/secteurs/restaurant">Restaurants</a></li>
+            <li><a href="/secteurs/securite-privee">Sécurité privée</a></li>
+            <li><a href="/services">Tous les services</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
           <h4>Entreprise</h4>
           <ul>
-            <li><a href="/a-propos.php">À propos</a></li>
-            <li><a href="/realisations.php">Réalisations</a></li>
-            <li><a href="/tarifs.php">Tarifs</a></li>
-            <li><a href="/contact.php">Contact</a></li>
+            <li><a href="/a-propos">À propos</a></li>
+            <li><a href="/realisations">Réalisations</a></li>
+            <li><a href="/tarifs">Tarifs</a></li>
+            <li><a href="/zone-intervention">Zone d'intervention</a></li>
+            <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
 
@@ -37,15 +38,15 @@
             <li>🕒 Lun - Ven : 9h - 18h</li>
             <li><a href="<?= GOOGLE_BUSINESS_URL ?>" target="_blank" rel="noopener">⭐ Avis et fiche Google</a></li>
           </ul>
-          <a href="/contact.php" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.875rem;">Demander un devis</a>
+          <a href="/contact" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.875rem;">Demander un devis</a>
         </div>
       </div>
 
       <div class="footer-bottom">
         <p>© <?= date('Y') ?> Pertec.fr - Création de sites internet</p>
         <div class="footer-legal">
-          <a href="/mentions-legales.php">Mentions légales</a>
-          <a href="/politique-confidentialite.php">Confidentialité</a>
+          <a href="/mentions-legales">Mentions légales</a>
+          <a href="/politique-confidentialite">Confidentialité</a>
         </div>
       </div>
     </div>

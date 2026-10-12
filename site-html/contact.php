@@ -238,18 +238,18 @@ $turnstileSiteKey = get_turnstile_site_key();
         <div class="footer-col">
           <h4>Secteurs</h4>
           <ul>
-            <li><a href="/secteurs/artisan.php">Artisans</a></li>
-            <li><a href="/secteurs/restaurant.php">Restaurants</a></li>
-            <li><a href="/secteurs/securite-privee.php">Sécurité privée</a></li>
+            <li><a href="/secteurs/artisan">Artisans</a></li>
+            <li><a href="/secteurs/restaurant">Restaurants</a></li>
+            <li><a href="/secteurs/securite-privee">Sécurité privée</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Entreprise</h4>
           <ul>
-            <li><a href="/a-propos.php">À propos</a></li>
-            <li><a href="/realisations.php">Réalisations</a></li>
-            <li><a href="/tarifs.php">Tarifs</a></li>
-            <li><a href="/contact.php">Contact</a></li>
+            <li><a href="/a-propos">À propos</a></li>
+            <li><a href="/realisations">Réalisations</a></li>
+            <li><a href="/tarifs">Tarifs</a></li>
+            <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -264,8 +264,8 @@ $turnstileSiteKey = get_turnstile_site_key();
       <div class="footer-bottom">
         <p>© <?= date('Y') ?> Pertec.fr - Création de sites internet</p>
         <div class="footer-legal">
-          <a href="/mentions-legales.php">Mentions légales</a>
-          <a href="/politique-confidentialite.php">Confidentialité</a>
+          <a href="/mentions-legales">Mentions légales</a>
+          <a href="/politique-confidentialite">Confidentialité</a>
         </div>
       </div>
     </div>

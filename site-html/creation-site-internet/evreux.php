@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 $pageTitle = 'Création Site Internet Evreux (27) | Devis Gratuit 24h | Pertec';
 $pageDescription = 'Création de site internet à Evreux pour artisans, commerces et PME. Site clé en main à partir de 490€. Devis gratuit sous 24h. Webmaster local dans l\'Eure.';
 $canonicalUrl = '/creation-site-internet/evreux';
@@ -11,35 +12,7 @@ $ogData = [
     'url' => '/creation-site-internet/evreux'
 ];
 
-$schemaJson = '{
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Pertec - Création de sites internet Evreux",
-    "description": "Création de sites internet clé en main à Evreux pour artisans, commerces et PME",
-    "url": "https://pertec.fr/creation-site-internet/evreux",
-    "image": "/images/logo-pertec.svg?v=2",
-    "telephone": "",
-    "email": "contact@pertec.fr",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "",
-      "addressLocality": "Evreux",
-      "postalCode": "27000",
-      "addressRegion": "Normandie",
-      "addressCountry": "FR"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 49.0241,
-      "longitude": 1.1508
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Evreux"
-    },
-    "priceRange": "€€",
-    "openingHours": "Mo-Fr 09:00-18:00"
-  }';
+$schemaJson = schema_service_ville('Évreux', 'evreux');
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -65,8 +38,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </p>
 
         <div class="hero-buttons" data-animate>
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
 
         <div class="hero-trust" data-animate>
@@ -289,8 +262,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Prêt à lancer votre site <span class="gradient-text">à Evreux</span> ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit. Réponse sous 24h, sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>
@@ -305,14 +278,14 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
 
       <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-        <a href="/creation-site-internet/louviers.php" class="ville-tag" style="text-decoration: none;">Louviers</a>
-        <a href="/creation-site-internet/vernon.php" class="ville-tag" style="text-decoration: none;">Vernon</a>
-        <a href="/creation-site-internet/bernay.php" class="ville-tag" style="text-decoration: none;">Bernay</a>
-        <a href="/creation-site-internet/val-de-reuil.php" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
-        <a href="/creation-site-internet/gisors.php" class="ville-tag" style="text-decoration: none;">Gisors</a>
-        <a href="/creation-site-internet/pont-audemer.php" class="ville-tag" style="text-decoration: none;">Pont-Audemer</a>
-        <a href="/creation-site-internet/les-andelys.php" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
-        <a href="/creation-site-internet/rouen.php" class="ville-tag" style="text-decoration: none;">Rouen</a>
+        <a href="/creation-site-internet/louviers" class="ville-tag" style="text-decoration: none;">Louviers</a>
+        <a href="/creation-site-internet/vernon" class="ville-tag" style="text-decoration: none;">Vernon</a>
+        <a href="/creation-site-internet/bernay" class="ville-tag" style="text-decoration: none;">Bernay</a>
+        <a href="/creation-site-internet/val-de-reuil" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
+        <a href="/creation-site-internet/gisors" class="ville-tag" style="text-decoration: none;">Gisors</a>
+        <a href="/creation-site-internet/pont-audemer" class="ville-tag" style="text-decoration: none;">Pont-Audemer</a>
+        <a href="/creation-site-internet/les-andelys" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
+        <a href="/creation-site-internet/rouen" class="ville-tag" style="text-decoration: none;">Rouen</a>
       </div>
     </div>
   </section>

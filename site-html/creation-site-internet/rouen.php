@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 $pageTitle = 'Création Site Internet Rouen (76) | Devis Gratuit 24h | Pertec';
 $pageDescription = 'Création de site internet à Rouen pour artisans, commerces et PME. Site clé en main avec référencement local. Devis gratuit sous 24h. Webmaster Normandie.';
 $canonicalUrl = '/creation-site-internet/rouen';
@@ -11,26 +12,7 @@ $ogData = [
     'url' => '/creation-site-internet/rouen'
 ];
 
-$schemaJson = '{
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Pertec - Création de sites internet Rouen",
-    "description": "Création de sites internet clé en main à Rouen pour artisans, commerces et PME",
-    "url": "https://pertec.fr/creation-site-internet/rouen",
-    "email": "contact@pertec.fr",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Rouen",
-      "postalCode": "76000",
-      "addressRegion": "Normandie",
-      "addressCountry": "FR"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Rouen"
-    },
-    "priceRange": "€€"
-  }';
+$schemaJson = schema_service_ville('Rouen', 'rouen');
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -55,8 +37,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </p>
 
         <div class="hero-buttons" data-animate>
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
 
         <div class="hero-trust" data-animate>
@@ -148,8 +130,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Prêt à lancer votre site <span class="gradient-text">à Rouen</span> ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit. Réponse sous 24h, sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>
@@ -161,11 +143,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title" data-animate>Autres villes <span class="gradient-text">en Normandie</span></h2>
       </div>
       <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-        <a href="/creation-site-internet/evreux.php" class="ville-tag" style="text-decoration: none;">Evreux</a>
-        <a href="/creation-site-internet/le-havre.php" class="ville-tag" style="text-decoration: none;">Le Havre</a>
-        <a href="/creation-site-internet/louviers.php" class="ville-tag" style="text-decoration: none;">Louviers</a>
-        <a href="/creation-site-internet/vernon.php" class="ville-tag" style="text-decoration: none;">Vernon</a>
-        <a href="/creation-site-internet/val-de-reuil.php" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
+        <a href="/creation-site-internet/evreux" class="ville-tag" style="text-decoration: none;">Evreux</a>
+        <a href="/creation-site-internet/le-havre" class="ville-tag" style="text-decoration: none;">Le Havre</a>
+        <a href="/creation-site-internet/louviers" class="ville-tag" style="text-decoration: none;">Louviers</a>
+        <a href="/creation-site-internet/vernon" class="ville-tag" style="text-decoration: none;">Vernon</a>
+        <a href="/creation-site-internet/val-de-reuil" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
       </div>
     </div>
   </section>

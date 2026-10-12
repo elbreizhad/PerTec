@@ -150,8 +150,8 @@ require_once __DIR__ . '/includes/header.php';
         <h2 class="section-title">Travaillons <span class="gradient-text">ensemble</span></h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Vous avez un projet ? Discutons-en ! Premier échange gratuit et sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Prendre contact</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Prendre contact</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>

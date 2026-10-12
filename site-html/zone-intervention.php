@@ -52,37 +52,37 @@ require_once __DIR__ . '/includes/header.php';
       <div class="features-grid" data-animate>
         <div class="feature-card glass">
           <div class="feature-icon">🏛️</div>
-          <h3>Évreux</h3>
+          <h3><a href="/creation-site-internet/evreux" style="color: inherit; text-decoration: none;">Évreux →</a></h3>
           <p>Préfecture de l'Eure, siège de mon activité. Rendez-vous possibles sur place pour discuter de votre projet.</p>
         </div>
 
         <div class="feature-card glass">
           <div class="feature-icon">🏭</div>
-          <h3>Louviers</h3>
-          <p>Deuxième ville du département, bassin économique dynamique. Nombreux artisans et commerces accompagnés.</p>
+          <h3><a href="/creation-site-internet/louviers" style="color: inherit; text-decoration: none;">Louviers →</a></h3>
+          <p>À 20 minutes d'Évreux, au cœur de l'agglomération Seine-Eure. Artisans, commerces et entreprises de services.</p>
         </div>
 
         <div class="feature-card glass">
           <div class="feature-icon">🌉</div>
-          <h3>Vernon</h3>
+          <h3><a href="/creation-site-internet/vernon" style="color: inherit; text-decoration: none;">Vernon →</a></h3>
           <p>Aux portes de l'Île-de-France, ville attractive pour les entrepreneurs. Sites vitrines et e-commerce.</p>
         </div>
 
         <div class="feature-card glass">
           <div class="feature-icon">🏡</div>
-          <h3>Bernay</h3>
-          <p>Cœur du Pays de Bray, dynamisme commercial. Accompagnement des commerces locaux.</p>
+          <h3><a href="/creation-site-internet/bernay" style="color: inherit; text-decoration: none;">Bernay →</a></h3>
+          <p>Ville commerçante de l'ouest de l'Eure. Sites pour commerces, artisans et professions libérales.</p>
         </div>
 
         <div class="feature-card glass">
           <div class="feature-icon">⚓</div>
-          <h3>Pont-Audemer</h3>
+          <h3><a href="/creation-site-internet/pont-audemer" style="color: inherit; text-decoration: none;">Pont-Audemer →</a></h3>
           <p>La Venise normande, secteur touristique. Sites pour restaurants, hôtels et activités de loisirs.</p>
         </div>
 
         <div class="feature-card glass">
           <div class="feature-icon">🏗️</div>
-          <h3>Val-de-Reuil</h3>
+          <h3><a href="/creation-site-internet/val-de-reuil" style="color: inherit; text-decoration: none;">Val-de-Reuil →</a></h3>
           <p>Ville nouvelle, zone d'activités importantes. Sites pour entreprises et artisans du BTP.</p>
         </div>
       </div>
@@ -90,8 +90,8 @@ require_once __DIR__ . '/includes/header.php';
       <div style="margin-top: 3rem;" data-animate>
         <p style="text-align: center; color: var(--gray-400); margin-bottom: 1.5rem;">Et aussi toutes les autres communes de l'Eure :</p>
         <div class="villes-tags" style="justify-content: center;">
-          <span class="ville-tag">Gisors</span>
-          <span class="ville-tag">Les Andelys</span>
+          <a href="/creation-site-internet/gisors" class="ville-tag" style="text-decoration: none;">Gisors</a>
+          <a href="/creation-site-internet/les-andelys" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
           <span class="ville-tag">Gaillon</span>
           <span class="ville-tag">Conches-en-Ouche</span>
           <span class="ville-tag">Brionne</span>
@@ -120,7 +120,7 @@ require_once __DIR__ . '/includes/header.php';
           <div class="secteur-icon">76</div>
           <div>
             <h3>Seine-Maritime</h3>
-            <p>Rouen, Le Havre, Dieppe, Fécamp...</p>
+            <p><a href="/creation-site-internet/rouen" style="color: inherit;">Rouen</a>, <a href="/creation-site-internet/le-havre" style="color: inherit;">Le Havre</a>, Dieppe, Fécamp...</p>
           </div>
         </div>
 
@@ -215,8 +215,8 @@ require_once __DIR__ . '/includes/header.php';
         <h2 class="section-title">Vous êtes dans <span class="gradient-text">la zone</span> ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Que vous soyez à Évreux ou ailleurs dans l'Eure, contactez-moi pour discuter de votre projet !</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Prendre contact</a>
-          <a href="/services.php" class="btn btn-secondary">Voir les services</a>
+          <a href="/contact" class="btn btn-primary">Prendre contact</a>
+          <a href="/services" class="btn btn-secondary">Voir les services</a>
         </div>
       </div>
     </div>

@@ -70,14 +70,14 @@ stats_track_pageview();
         </a>
 
         <nav class="nav">
-          <a href="/services.php" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
-          <a href="/tarifs.php" class="nav-link<?= ($activeMenu === 'tarifs') ? ' active' : '' ?>">Tarifs</a>
-          <a href="/realisations.php" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
-          <a href="/a-propos.php" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
-          <a href="/contact.php" class="nav-link<?= ($activeMenu === 'contact') ? ' active' : '' ?>">Contact</a>
+          <a href="/services" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
+          <a href="/tarifs" class="nav-link<?= ($activeMenu === 'tarifs') ? ' active' : '' ?>">Tarifs</a>
+          <a href="/realisations" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
+          <a href="/a-propos" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
+          <a href="/contact" class="nav-link<?= ($activeMenu === 'contact') ? ' active' : '' ?>">Contact</a>
         </nav>
 
-        <a href="/contact.php" class="btn btn-primary header-cta">Devis gratuit</a>
+        <a href="/contact" class="btn btn-primary header-cta">Devis gratuit</a>
 
         <button class="menu-toggle" aria-label="Menu">
           <span></span>
@@ -90,10 +90,10 @@ stats_track_pageview();
 
   <!-- Mobile Menu -->
   <div class="mobile-menu">
-    <a href="/services.php">Services</a>
-    <a href="/tarifs.php">Tarifs</a>
-    <a href="/realisations.php">Réalisations</a>
-    <a href="/a-propos.php">À propos</a>
-    <a href="/contact.php">Contact</a>
-    <a href="/contact.php" class="btn btn-primary">Devis gratuit</a>
+    <a href="/services">Services</a>
+    <a href="/tarifs">Tarifs</a>
+    <a href="/realisations">Réalisations</a>
+    <a href="/a-propos">À propos</a>
+    <a href="/contact">Contact</a>
+    <a href="/contact" class="btn btn-primary">Devis gratuit</a>
   </div>

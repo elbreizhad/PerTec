@@ -207,8 +207,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Prêt à remplir <span class="gradient-text">vos tables</span> ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit et obtenez un site qui donne faim à vos futurs clients.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>

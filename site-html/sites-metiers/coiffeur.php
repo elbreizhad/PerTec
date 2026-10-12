@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>Site pour coiffeurs</div>
     <h1 data-animate>Site internet pour<br><span class="gradient-text">salon de coiffure</span></h1>
     <p data-animate>Galerie de realisations, tarifs, prise de rendez-vous en ligne. Attirez de nouveaux clients et fidelisez votre clientele.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes realisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations" class="btn btn-secondary">Voir mes realisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Prise de RDV en ligne</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Galerie photos</div>
@@ -42,15 +42,15 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <section class="cta-section"><div class="container"><div class="cta-box glass-strong" data-animate>
     <h2 class="section-title">Votre site <span class="gradient-text">coiffeur</span></h2>
     <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h.</p>
-    <div class="hero-buttons" style="justify-content: center;"><a href="/contact.php" class="btn btn-primary">Demander un devis</a></div>
+    <div class="hero-buttons" style="justify-content: center;"><a href="/contact" class="btn btn-primary">Demander un devis</a></div>
   </div></div></section>
 
   <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">metiers</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-      <a href="/sites-metiers/plombier.php" class="ville-tag" style="text-decoration: none;">Plombier</a>
-      <a href="/sites-metiers/electricien.php" class="ville-tag" style="text-decoration: none;">Electricien</a>
-      <a href="/secteurs/restaurant.php" class="ville-tag" style="text-decoration: none;">Restaurant</a>
+      <a href="/sites-metiers/plombier" class="ville-tag" style="text-decoration: none;">Plombier</a>
+      <a href="/sites-metiers/electricien" class="ville-tag" style="text-decoration: none;">Electricien</a>
+      <a href="/secteurs/restaurant" class="ville-tag" style="text-decoration: none;">Restaurant</a>
     </div>
   </div></section>
 

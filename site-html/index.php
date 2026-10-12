@@ -1,12 +1,6 @@
 <?php
-session_start();
 require_once __DIR__ . '/config/site.php';
-require_once __DIR__ . '/includes/turnstile.php';
-
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-$turnstileSiteKey = get_turnstile_site_key();
+require_once __DIR__ . '/includes/form.php';
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require __DIR__ . '/config/tarifs.php';
@@ -22,32 +16,7 @@ $ogData = [
     'type' => 'website',
     'url' => '/'
 ];
-$schemaJson = '{
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Pertec - Création de sites internet",
-    "description": "Création de sites internet clé en main à Évreux et en Normandie",
-    "url": "https://pertec.fr",
-    "image": "https://pertec.fr/images/logo-pertec.svg",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Évreux",
-      "addressRegion": "Normandie",
-      "postalCode": "27000",
-      "addressCountry": "FR"
-    },
-    "areaServed": {
-      "@type": "GeoCircle",
-      "geoMidpoint": {
-        "@type": "GeoCoordinates",
-        "latitude": 49.0247,
-        "longitude": 1.1508
-      },
-      "geoRadius": "50000"
-    },
-    "serviceType": ["Création site internet", "Site vitrine", "Site artisan", "SEO local"],
-    "sameAs": ["' . GOOGLE_BUSINESS_URL . '"]
-  }';
+$schemaJson = schema_entreprise_json();
 
 require_once __DIR__ . '/includes/header.php';
 ?>
@@ -72,8 +41,8 @@ require_once __DIR__ . '/includes/header.php';
         </p>
 
         <div class="hero-buttons" data-animate>
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/services.php" class="btn btn-secondary">Découvrir les services</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/services" class="btn btn-secondary">Découvrir les services</a>
         </div>
 
         <div class="hero-trust" data-animate>
@@ -155,7 +124,7 @@ require_once __DIR__ . '/includes/header.php';
       <p class="home-pricing-note" data-animate><?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · Boutique en ligne et sur-mesure : sur devis</p>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
-        <a href="/tarifs.php" class="btn btn-primary">Estimer mon projet en 1 minute</a>
+        <a href="/tarifs" class="btn btn-primary">Estimer mon projet en 1 minute</a>
       </div>
     </div>
   </section>
@@ -191,7 +160,7 @@ foreach ($realisations as $r):
       </div>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
-        <a href="/realisations.php" class="btn btn-secondary">Toutes les réalisations</a>
+        <a href="/realisations" class="btn btn-secondary">Toutes les réalisations</a>
       </div>
     </div>
   </section>
@@ -260,7 +229,7 @@ foreach ($realisations as $r):
       </div>
 
       <div class="secteurs-img-grid">
-        <a href="/secteurs/artisan.php" class="secteur-img-card" data-animate>
+        <a href="/secteurs/artisan" class="secteur-img-card" data-animate>
           <img src="/images/artisans/electricien.jpg" alt="Artisan électricien au travail">
           <div class="secteur-img-overlay">
             <h3>Artisans</h3>
@@ -269,7 +238,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/secteurs/restaurant.php" class="secteur-img-card" data-animate>
+        <a href="/secteurs/restaurant" class="secteur-img-card" data-animate>
           <img src="/images/restaurants/restaurant-1.jpg" alt="Intérieur de restaurant moderne">
           <div class="secteur-img-overlay">
             <h3>Restaurants</h3>
@@ -278,7 +247,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services.php" class="secteur-img-card" data-animate>
+        <a href="/services" class="secteur-img-card" data-animate>
           <img src="/images/commerces/boutique.jpg" alt="Devanture de boutique">
           <div class="secteur-img-overlay">
             <h3>Commerces</h3>
@@ -287,7 +256,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services.php" class="secteur-img-card" data-animate>
+        <a href="/services" class="secteur-img-card" data-animate>
           <img src="/images/professions/bureau.jpg" alt="Bureau professionnel">
           <div class="secteur-img-overlay">
             <h3>Professions libérales</h3>
@@ -296,7 +265,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services.php" class="secteur-img-card" data-animate>
+        <a href="/sites-metiers/coiffeur" class="secteur-img-card" data-animate>
           <img src="/images/beaute/coiffeur.jpg" alt="Salon de coiffure">
           <div class="secteur-img-overlay">
             <h3>Beauté & Bien-être</h3>
@@ -305,7 +274,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services.php" class="secteur-img-card" data-animate>
+        <a href="/services" class="secteur-img-card" data-animate>
           <img src="/images/hero/hero-workspace.jpg" alt="Espace de travail moderne">
           <div class="secteur-img-overlay">
             <h3>TPE / PME</h3>
@@ -316,7 +285,7 @@ foreach ($realisations as $r):
       </div>
 
       <div style="text-align: center; margin-top: 3rem;" data-animate>
-        <a href="/services.php" class="btn btn-secondary">Voir tous les services</a>
+        <a href="/services" class="btn btn-secondary">Voir tous les services</a>
       </div>
     </div>
   </section>
@@ -333,15 +302,15 @@ foreach ($realisations as $r):
             </p>
 
             <div class="villes-tags">
-              <span class="ville-tag">Évreux</span>
-              <span class="ville-tag">Louviers</span>
-              <span class="ville-tag">Vernon</span>
-              <span class="ville-tag">Bernay</span>
-              <span class="ville-tag">Les Andelys</span>
+              <a href="/creation-site-internet/evreux" class="ville-tag" style="text-decoration: none;">Évreux</a>
+              <a href="/creation-site-internet/louviers" class="ville-tag" style="text-decoration: none;">Louviers</a>
+              <a href="/creation-site-internet/vernon" class="ville-tag" style="text-decoration: none;">Vernon</a>
+              <a href="/creation-site-internet/bernay" class="ville-tag" style="text-decoration: none;">Bernay</a>
+              <a href="/creation-site-internet/les-andelys" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
             </div>
 
             <p style="color: var(--gray-500); font-size: 0.9rem;">
-              <a href="/zone-intervention.php" style="color: inherit; text-decoration: underline;">Voir toutes les villes →</a>
+              <a href="/zone-intervention" style="color: inherit; text-decoration: underline;">Voir toutes les villes →</a>
             </p>
           </div>
 
@@ -361,8 +330,7 @@ foreach ($realisations as $r):
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit sans engagement. Je vous réponds sous 24h.</p>
 
         <form id="contact-form" action="/contact-handler.php" method="POST" class="form-grid" style="max-width: 600px; margin: 0 auto;">
-          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+          <?= form_hidden_fields() ?>
 
           <div class="form-group">
             <label for="nom">Nom <span>*</span></label>
@@ -394,11 +362,7 @@ foreach ($realisations as $r):
             <label for="consent">J'accepte d'être recontacté concernant ma demande <span>*</span></label>
           </div>
 
-<?php if ($turnstileSiteKey): ?>
-          <div class="form-group full">
-            <div class="cf-turnstile" data-sitekey="<?= htmlspecialchars($turnstileSiteKey) ?>" data-theme="dark"></div>
-          </div>
-<?php endif; ?>
+          <?= form_turnstile() ?>
 
           <div class="form-group full">
             <button type="submit" class="btn btn-primary form-submit">Envoyer ma demande</button>
@@ -415,7 +379,4 @@ foreach ($realisations as $r):
     </div>
   </section>
 
-<?php if ($turnstileSiteKey): ?>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<?php endif; ?>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

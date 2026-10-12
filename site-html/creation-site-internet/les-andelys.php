@@ -1,10 +1,11 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 $pageTitle = 'Création Site Internet Les Andelys (27) | Château Gaillard | Pertec';
 $pageDescription = 'Création de site internet aux Andelys, cité du Château Gaillard. Site clé en main pour artisans, commerces et restaurants. Devis gratuit 24h.';
 $canonicalUrl = '/creation-site-internet/les-andelys';
 $activeMenu = '';
 
-$schemaJson = '{"@context":"https://schema.org","@type":"LocalBusiness","name":"Pertec - Création de sites internet Les Andelys","url":"https://pertec.fr/creation-site-internet/les-andelys","email":"contact@pertec.fr","address":{"@type":"PostalAddress","addressLocality":"Les Andelys","postalCode":"27700","addressRegion":"Normandie","addressCountry":"FR"}}';
+$schemaJson = schema_service_ville('Les Andelys', 'les-andelys');
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -13,7 +14,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>Château Gaillard</div>
     <h1 data-animate>Création de site internet<br><span class="gradient-text">aux Andelys</span></h1>
     <p data-animate>Les Andelys, cité du Château Gaillard dominant la Seine. Profitez de l'attrait touristique avec un site professionnel bien référencé.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Site touristique</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Site en 3-4 semaines</div>
@@ -42,16 +43,16 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <section class="cta-section"><div class="container"><div class="cta-box glass-strong" data-animate>
     <h2 class="section-title">Votre site <span class="gradient-text">aux Andelys</span></h2>
     <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h.</p>
-    <div class="hero-buttons" style="justify-content: center;"><a href="/contact.php" class="btn btn-primary">Demander un devis</a></div>
+    <div class="hero-buttons" style="justify-content: center;"><a href="/contact" class="btn btn-primary">Demander un devis</a></div>
   </div></div></section>
 
   <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Villes <span class="gradient-text">proches</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-      <a href="/creation-site-internet/vernon.php" class="ville-tag" style="text-decoration: none;">Vernon</a>
-      <a href="/creation-site-internet/gisors.php" class="ville-tag" style="text-decoration: none;">Gisors</a>
-      <a href="/creation-site-internet/evreux.php" class="ville-tag" style="text-decoration: none;">Evreux</a>
-      <a href="/creation-site-internet/rouen.php" class="ville-tag" style="text-decoration: none;">Rouen</a>
+      <a href="/creation-site-internet/vernon" class="ville-tag" style="text-decoration: none;">Vernon</a>
+      <a href="/creation-site-internet/gisors" class="ville-tag" style="text-decoration: none;">Gisors</a>
+      <a href="/creation-site-internet/evreux" class="ville-tag" style="text-decoration: none;">Evreux</a>
+      <a href="/creation-site-internet/rouen" class="ville-tag" style="text-decoration: none;">Rouen</a>
     </div>
   </div></section>
 

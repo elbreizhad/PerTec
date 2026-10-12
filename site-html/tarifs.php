@@ -284,7 +284,7 @@ function formatPrix($prix) {
                     </p>
                     <p class="tarifs-mentions" style="margin-top: 12px;">
                         Votre e-mail sert uniquement à vous envoyer l'estimation et à vous recontacter.
-                        <a href="/politique-confidentialite.php">Politique de confidentialité</a>
+                        <a href="/politique-confidentialite">Politique de confidentialité</a>
                     </p>
                 </aside>
             </div>

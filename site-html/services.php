@@ -193,7 +193,7 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
-        <a href="/tarifs.php" class="btn btn-primary">Estimer mon projet</a>
+        <a href="/tarifs" class="btn btn-primary">Estimer mon projet</a>
       </div>
     </div>
   </section>
@@ -343,8 +343,8 @@ require_once __DIR__ . '/includes/header.php';
         <h2 class="section-title">Prêt à <span class="gradient-text">démarrer</span> ?</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit et sans engagement. Je vous réponds sous 24h.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>

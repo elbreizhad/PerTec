@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 $pageTitle = 'Création Site Internet Louviers (27) | Devis Gratuit 24h | Pertec';
 $pageDescription = 'Création de site internet à Louviers pour artisans, commerces et PME de l\'Eure. Site clé en main avec SEO local. Devis gratuit sous 24h. Webmaster local.';
 $canonicalUrl = '/creation-site-internet/louviers';
@@ -11,22 +12,7 @@ $ogData = [
     'url' => '/creation-site-internet/louviers'
 ];
 
-$schemaJson = '{
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Pertec - Création de sites internet Louviers",
-    "description": "Création de sites internet clé en main à Louviers",
-    "url": "https://pertec.fr/creation-site-internet/louviers",
-    "email": "contact@pertec.fr",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Louviers",
-      "postalCode": "27400",
-      "addressRegion": "Normandie",
-      "addressCountry": "FR"
-    },
-    "areaServed": {"@type": "City", "name": "Louviers"}
-  }';
+$schemaJson = schema_service_ville('Louviers', 'louviers');
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -41,8 +27,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
           Développez votre visibilité locale avec un site internet moderne et optimisé pour Google.
         </p>
         <div class="hero-buttons" data-animate>
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
         <div class="hero-trust" data-animate>
           <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>À 20 min d'Evreux</div>
@@ -114,7 +100,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Votre site <span class="gradient-text">à Louviers</span></h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h, sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis</a>
         </div>
       </div>
     </div>
@@ -124,10 +110,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="container">
       <div class="section-header"><h2 class="section-title" data-animate>Villes <span class="gradient-text">proches</span></h2></div>
       <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-        <a href="/creation-site-internet/evreux.php" class="ville-tag" style="text-decoration: none;">Evreux</a>
-        <a href="/creation-site-internet/val-de-reuil.php" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
-        <a href="/creation-site-internet/rouen.php" class="ville-tag" style="text-decoration: none;">Rouen</a>
-        <a href="/creation-site-internet/vernon.php" class="ville-tag" style="text-decoration: none;">Vernon</a>
+        <a href="/creation-site-internet/evreux" class="ville-tag" style="text-decoration: none;">Evreux</a>
+        <a href="/creation-site-internet/val-de-reuil" class="ville-tag" style="text-decoration: none;">Val-de-Reuil</a>
+        <a href="/creation-site-internet/rouen" class="ville-tag" style="text-decoration: none;">Rouen</a>
+        <a href="/creation-site-internet/vernon" class="ville-tag" style="text-decoration: none;">Vernon</a>
       </div>
     </div>
   </section>

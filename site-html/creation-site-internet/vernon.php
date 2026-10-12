@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 $pageTitle = 'Création Site Internet Vernon (27) | Devis Gratuit 24h | Pertec';
 $pageDescription = 'Création de site internet à Vernon pour artisans, commerces et PME. Site clé en main avec référencement local. Devis gratuit sous 24h. Webmaster Eure.';
 $canonicalUrl = '/creation-site-internet/vernon';
@@ -11,16 +12,7 @@ $ogData = [
     'url' => '/creation-site-internet/vernon'
 ];
 
-$schemaJson = '{
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Pertec - Création de sites internet Vernon",
-    "description": "Création de sites internet clé en main à Vernon, porte de Giverny",
-    "url": "https://pertec.fr/creation-site-internet/vernon",
-    "email": "contact@pertec.fr",
-    "address": {"@type": "PostalAddress", "addressLocality": "Vernon", "postalCode": "27200", "addressRegion": "Normandie", "addressCountry": "FR"},
-    "areaServed": {"@type": "City", "name": "Vernon"}
-  }';
+$schemaJson = schema_service_ville('Vernon', 'vernon');
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -35,8 +27,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
           avec un site internet professionnel optimisé pour le référencement local.
         </p>
         <div class="hero-buttons" data-animate>
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
         <div class="hero-trust" data-animate>
           <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Proche Giverny</div>
@@ -108,7 +100,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Lancez votre site <span class="gradient-text">à Vernon</span></h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h, sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis</a>
         </div>
       </div>
     </div>
@@ -118,10 +110,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="container">
       <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">villes</span></h2></div>
       <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-        <a href="/creation-site-internet/evreux.php" class="ville-tag" style="text-decoration: none;">Evreux</a>
-        <a href="/creation-site-internet/les-andelys.php" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
-        <a href="/creation-site-internet/gisors.php" class="ville-tag" style="text-decoration: none;">Gisors</a>
-        <a href="/creation-site-internet/rouen.php" class="ville-tag" style="text-decoration: none;">Rouen</a>
+        <a href="/creation-site-internet/evreux" class="ville-tag" style="text-decoration: none;">Evreux</a>
+        <a href="/creation-site-internet/les-andelys" class="ville-tag" style="text-decoration: none;">Les Andelys</a>
+        <a href="/creation-site-internet/gisors" class="ville-tag" style="text-decoration: none;">Gisors</a>
+        <a href="/creation-site-internet/rouen" class="ville-tag" style="text-decoration: none;">Rouen</a>
       </div>
     </div>
   </section>

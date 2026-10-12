@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>Site pour electriciens</div>
     <h1 data-animate>Site internet pour<br><span class="gradient-text">electricien</span></h1>
     <p data-animate>Installations, depannages, domotique : montrez votre expertise et attirez des clients qualifies. Votre site travaille pour vous 24h/24.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes realisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations" class="btn btn-secondary">Voir mes realisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Certifications mises en avant</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>SEO local</div>
@@ -42,15 +42,15 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <section class="cta-section"><div class="container"><div class="cta-box glass-strong" data-animate>
     <h2 class="section-title">Votre site <span class="gradient-text">electricien</span></h2>
     <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h.</p>
-    <div class="hero-buttons" style="justify-content: center;"><a href="/contact.php" class="btn btn-primary">Demander un devis</a></div>
+    <div class="hero-buttons" style="justify-content: center;"><a href="/contact" class="btn btn-primary">Demander un devis</a></div>
   </div></div></section>
 
   <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Autres <span class="gradient-text">metiers</span></h2></div>
     <div class="villes-tags" style="justify-content: center; max-width: 800px; margin: 0 auto;" data-animate>
-      <a href="/sites-metiers/plombier.php" class="ville-tag" style="text-decoration: none;">Plombier</a>
-      <a href="/sites-metiers/coiffeur.php" class="ville-tag" style="text-decoration: none;">Coiffeur</a>
-      <a href="/secteurs/artisan.php" class="ville-tag" style="text-decoration: none;">Artisans du bâtiment</a>
+      <a href="/sites-metiers/plombier" class="ville-tag" style="text-decoration: none;">Plombier</a>
+      <a href="/sites-metiers/coiffeur" class="ville-tag" style="text-decoration: none;">Coiffeur</a>
+      <a href="/secteurs/artisan" class="ville-tag" style="text-decoration: none;">Artisans du bâtiment</a>
     </div>
   </div></section>
 

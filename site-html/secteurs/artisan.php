@@ -4,6 +4,7 @@ $pageDescription = 'Créez votre site internet d\'artisan. Site clé en main pou
 $canonicalUrl = '/secteurs/artisan';
 $activeMenu = '';
 
+require_once dirname(__DIR__) . '/includes/form.php';
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 
@@ -122,11 +123,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <div class="advantages" data-animate>
         <div class="advantage-item glass">
           <span>🔧</span>
-          <div><strong>Plombiers</strong></div>
+          <div><strong><a href="/sites-metiers/plombier" style="color: inherit; text-decoration: none;">Plombiers →</a></strong></div>
         </div>
         <div class="advantage-item glass">
           <span>⚡</span>
-          <div><strong>Électriciens</strong></div>
+          <div><strong><a href="/sites-metiers/electricien" style="color: inherit; text-decoration: none;">Électriciens →</a></strong></div>
         </div>
         <div class="advantage-item glass">
           <span>🧱</span>
@@ -232,7 +233,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2 class="section-title">Demandez votre <span class="gradient-text">devis gratuit</span></h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Décrivez votre activité, je vous réponds sous 24h avec une proposition adaptée.</p>
 
-        <form id="contact-form" action="https://formspree.io/f/your-form-id" method="POST" class="form-grid" style="max-width: 600px; margin: 0 auto;">
+        <form id="contact-form" action="/contact-handler.php" method="POST" class="form-grid" style="max-width: 600px; margin: 0 auto;">
+          <?= form_hidden_fields() ?>
           <div class="form-group">
             <label for="nom">Nom <span>*</span></label>
             <input type="text" id="nom" name="nom" placeholder="Jean Dupont" required>
@@ -250,7 +252,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
           <div class="form-group">
             <label for="metier">Votre métier <span>*</span></label>
-            <input type="text" id="metier" name="metier" placeholder="Plombier, Électricien..." required>
+            <input type="text" id="metier" name="entreprise" placeholder="Plombier, Électricien..." required>
           </div>
 
           <div class="form-group full">
@@ -267,6 +269,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <input type="checkbox" id="consent" name="consent" required>
             <label for="consent">J'accepte d'être recontacté concernant ma demande <span>*</span></label>
           </div>
+
+          <?= form_turnstile() ?>
 
           <div class="form-group full">
             <button type="submit" class="btn btn-primary form-submit">Recevoir mon devis gratuit</button>

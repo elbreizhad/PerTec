@@ -113,8 +113,8 @@ require_once __DIR__ . '/includes/header.php';
         <h2 class="section-title">Votre projet <span class="gradient-text">vous attend</span></h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Vous aussi, obtenez un site professionnel qui vous ressemble. Devis gratuit sous 24h.</p>
         <div class="hero-buttons" style="justify-content: center;">
-          <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/services.php" class="btn btn-secondary">Découvrir les services</a>
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/services" class="btn btn-secondary">Découvrir les services</a>
         </div>
       </div>
     </div>

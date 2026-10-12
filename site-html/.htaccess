@@ -14,14 +14,30 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # Les anciens liens Google redirigent vers les nouvelles URLs
 # ===========================================
 
+# Une seule adresse par page : l'URL sans extension (/services).
+# Les formulaires, l'admin et le déploiement gardent leurs URLs .php.
+
 # Redirection sites-metiers/restaurant vers secteurs/restaurant (doublon supprimé)
-RewriteRule ^sites-metiers/restaurant\.?(html|php)?$ /secteurs/restaurant.php [R=301,L]
+RewriteRule ^sites-metiers/restaurant(\.html|\.php)?$ /secteurs/restaurant [R=301,L]
 
-# Redirection générique .html → .php (301 permanent)
+# /index, /index.php et /index.html → / (hors admin, visites uniquement)
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{REQUEST_URI} !^/admin/
+RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index(\.php|\.html)?[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Anciennes URLs .html → URL propre
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)\.html$ /$1.php [R=301,L]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
 
-# URLs propres (sans extension) - fallback vers .php
+# /page.php → /page (uniquement les visites, pas les envois de formulaire)
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{REQUEST_URI} !^/admin/
+RewriteCond %{REQUEST_URI} !^/(contact-handler|envoi-estimation|deploy)\.php
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php[\s?]
+RewriteRule ^ /%1 [R=301,L]
+
+# URLs propres (sans extension) - servies par le fichier .php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
