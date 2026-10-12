@@ -28,10 +28,14 @@ for ($d = $debut; $d <= $fin; $d = $d->modify('+1 day')) {
     foreach ($jour['sources'] ?? [] as $k => $v) $sources[$k] = ($sources[$k] ?? 0) + $v;
     foreach ($jour['pages'] ?? [] as $k => $v) $pages[$k] = ($pages[$k] ?? 0) + $v;
     foreach ($jour['entrees'] ?? [] as $k => $v) $entrees[$k] = ($entrees[$k] ?? 0) + $v;
+    $sourcesJour = $jour['sources'] ?? [];
+    arsort($sourcesJour);
     $serie[] = [
         'date' => $d,
         'visites' => $jour['visites'] ?? 0,
+        'vues' => $jour['vues'] ?? 0,
         'demandes' => ($jour['devis'] ?? 0) + ($jour['estimations'] ?? 0),
+        'source' => array_key_first($sourcesJour),
     ];
 }
 arsort($sources);
@@ -42,13 +46,39 @@ $demandes = $totaux['devis'] + $totaux['estimations'];
 $taux = $totaux['visites'] > 0 ? $demandes / $totaux['visites'] * 100 : null;
 $maxVisites = max(1, max(array_column($serie, 'visites')));
 
-// Graduation de l'axe : un pas « rond » qui couvre le maximum
+// Graduation de l'axe : 4 intervalles « ronds » qui couvrent le maximum
 $pas = 1;
-foreach ([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000] as $p) {
+foreach ([1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000] as $p) {
     $pas = $p;
     if ($maxVisites / $p <= 4) break;
 }
-$axeMax = (int) (ceil($maxVisites / $pas) * $pas);
+$axeMax = $pas * 4;
+$graduations = [$axeMax, $pas * 3, $pas * 2, $pas, 0];
+
+// Période précédente de même durée, pour la comparaison
+$finPrec = $debut->modify('-1 day');
+$debutPrec = $finPrec->modify('-' . ($jours - 1) . ' days');
+$visitesPrec = array_sum(array_map(fn($j) => $j['visites'] ?? 0, stats_load($debutPrec, $finPrec)));
+$evolution = $visitesPrec > 0 ? ($totaux['visites'] - $visitesPrec) / $visitesPrec * 100 : null;
+$moyenne = $totaux['visites'] / $jours;
+$meilleurJour = null;
+foreach ($serie as $j) {
+    if ($meilleurJour === null || $j['visites'] > $meilleurJour['visites']) $meilleurJour = $j;
+}
+
+// Courbe : chaque point est centré sur sa colonne (repère 0-1000)
+$nbPoints = count($serie);
+$points = [];
+foreach ($serie as $i => $j) {
+    $points[] = [
+        'x' => ($i + 0.5) / $nbPoints * 1000,
+        'y' => 1000 - $j['visites'] / $axeMax * 1000,
+    ];
+}
+$ligne = 'M' . implode(' L', array_map(fn($pt) => round($pt['x'], 1) . ',' . round($pt['y'], 1), $points));
+$aire = $ligne . ' L' . round(end($points)['x'], 1) . ',1000 L' . round($points[0]['x'], 1) . ',1000 Z';
+$joursFr = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+$joursFrMaj = ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'];
 
 $moisFr = ['', 'janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
 function date_fr(DateTimeImmutable $d, array $mois): string {
@@ -112,37 +142,101 @@ function pourcent(int $part, int $total): string {
                 </div>
             </div>
 
-            <div class="card">
-                <h2>Visites par jour</h2>
+            <div class="card trend-card">
+                <div class="trend-head">
+                    <div>
+                        <h2>Visites par jour</h2>
+                        <p class="trend-sub">Moyenne <?= number_format($moyenne, 1, ',', ' ') ?> par jour<?php if ($meilleurJour && $meilleurJour['visites'] > 0): ?> · record <?= $meilleurJour['visites'] ?> le <?= date_fr($meilleurJour['date'], $moisFr) ?><?php endif; ?></p>
+                    </div>
+                    <div class="trend-total">
+                        <span class="trend-total-value"><?= nombre($totaux['visites']) ?></span>
+                        <?php if ($evolution !== null): ?>
+                            <span class="trend-delta <?= $evolution >= 0 ? 'up' : 'down' ?>"><?= $evolution >= 0 ? '▲ +' : '▼ ' ?><?= number_format($evolution, 0, ',', ' ') ?> % <span>vs <?= $jours ?> jours précédents</span></span>
+                        <?php else: ?>
+                            <span class="trend-delta neutral">visites sur <?= $jours ?> jours</span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
                 <?php if ($totaux['visites'] === 0): ?>
-                    <p class="empty-state">Aucune visite enregistrée sur cette période. Les visites s'affichent ici dès qu'un visiteur arrive sur le site.</p>
+                    <p class="empty-state">Aucune visite enregistrée sur cette période. La courbe apparaîtra dès qu'un visiteur arrivera sur le site.</p>
                 <?php else: ?>
-                    <div class="chart" role="img" aria-label="Visites par jour, maximum <?= $maxVisites ?> sur la période">
-                        <div class="chart-axis" aria-hidden="true">
-                            <span><?= $axeMax ?></span>
-                            <span><?= $axeMax / 2 == (int) ($axeMax / 2) ? $axeMax / 2 : '' ?></span>
-                            <span>0</span>
+                    <div class="trend" role="img" aria-label="Courbe des visites par jour du <?= date_fr($debut, $moisFr) ?> au <?= date_fr($fin, $moisFr) ?>, maximum <?= $maxVisites ?>">
+                        <div class="trend-axis" aria-hidden="true">
+                            <?php foreach ($graduations as $g): ?><span style="bottom: <?= $g / $axeMax * 100 ?>%"><?= $g ?></span><?php endforeach; ?>
                         </div>
-                        <div class="chart-plot">
-                            <div class="chart-grid" aria-hidden="true"><span></span><span></span><span></span></div>
-                            <div class="chart-bars" style="--n: <?= count($serie) ?>">
-                                <?php foreach ($serie as $j): ?>
-                                    <div class="chart-col" tabindex="0">
-                                        <div class="chart-bar" style="height: <?= round($j['visites'] / $axeMax * 100, 2) ?>%"></div>
-                                        <?php if ($j['demandes'] > 0): ?><span class="chart-mark" title="Demande reçue"></span><?php endif; ?>
-                                        <div class="chart-tip"><strong><?= date_fr($j['date'], $moisFr) ?></strong><br><?= $j['visites'] ?> visite<?= $j['visites'] > 1 ? 's' : '' ?><?php if ($j['demandes'] > 0): ?><br><?= $j['demandes'] ?> demande<?= $j['demandes'] > 1 ? 's' : '' ?><?php endif; ?></div>
+                        <div class="trend-plot">
+                            <?php foreach ($graduations as $g): ?><div class="trend-gridline<?= $g === 0 ? ' base' : '' ?>" style="bottom: <?= $g / $axeMax * 100 ?>%"></div><?php endforeach; ?>
+                            <svg class="trend-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#7c83f5" stop-opacity="0.35"/>
+                                        <stop offset="100%" stop-color="#7c83f5" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="<?= $aire ?>" fill="url(#trendFill)"/>
+                                <path d="<?= $ligne ?>" fill="none" stroke="#7c83f5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                            </svg>
+                            <?php $dernier = end($points); ?>
+                            <span class="trend-end" style="left: <?= $dernier['x'] / 10 ?>%; bottom: <?= 100 - $dernier['y'] / 10 ?>%"></span>
+                            <div class="trend-cols" style="--n: <?= $nbPoints ?>">
+                                <?php foreach ($serie as $i => $j): $pt = $points[$i]; ?>
+                                    <div class="trend-col<?= $i < $nbPoints / 2 ? ' left' : ' right' ?>" tabindex="0">
+                                        <?php if ($j['demandes'] > 0): ?><span class="trend-lead" style="bottom: <?= 100 - $pt['y'] / 10 ?>%"></span><?php endif; ?>
+                                        <span class="trend-dot" style="bottom: <?= 100 - $pt['y'] / 10 ?>%"></span>
+                                        <div class="trend-tip">
+                                            <span class="trend-tip-date"><?= $joursFrMaj[(int) $j['date']->format('w')] ?> <?= date_fr($j['date'], $moisFr) ?></span>
+                                            <span class="trend-tip-row"><b><?= $j['visites'] ?></b> visite<?= $j['visites'] > 1 ? 's' : '' ?> · <?= $j['vues'] ?> page<?= $j['vues'] > 1 ? 's' : '' ?> vue<?= $j['vues'] > 1 ? 's' : '' ?></span>
+                                            <?php if ($j['demandes'] > 0): ?><span class="trend-tip-row lead"><?= $j['demandes'] ?> demande<?= $j['demandes'] > 1 ? 's' : '' ?> reçue<?= $j['demandes'] > 1 ? 's' : '' ?></span><?php endif; ?>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
-                            <div class="chart-dates" aria-hidden="true">
-                                <span><?= date_fr($debut, $moisFr) ?></span>
-                                <span><?= date_fr($fin, $moisFr) ?></span>
-                            </div>
+                        </div>
+                        <div></div>
+                        <div class="trend-dates" aria-hidden="true">
+                            <?php
+                            $etiquettes = $jours <= 7 ? range(0, $nbPoints - 1) : [0, (int) round(($nbPoints - 1) / 3), (int) round(($nbPoints - 1) * 2 / 3), $nbPoints - 1];
+                            foreach ($etiquettes as $i): ?>
+                                <span style="left: <?= $points[$i]['x'] / 10 ?>%"><?= $jours <= 7 ? $joursFr[(int) $serie[$i]['date']->format('w')] . ' ' . $serie[$i]['date']->format('j') : date_fr($serie[$i]['date'], $moisFr) ?></span>
+                            <?php endforeach; ?>
                         </div>
                     </div>
-                    <p class="chart-legend"><span class="chart-mark chart-mark-legend"></span> jour avec au moins une demande de devis ou d'estimation</p>
+                    <p class="trend-legend"><span class="trend-legend-item"><span class="trend-legend-line"></span> Visites</span><span class="trend-legend-item"><span class="trend-legend-lead"></span> Jour avec une demande de devis ou d'estimation</span></p>
                 <?php endif; ?>
             </div>
+
+            <?php if ($totaux['visites'] > 0 || $demandes > 0): ?>
+            <div class="card">
+                <h2>Détail jour par jour</h2>
+                <div class="day-table-wrap">
+                    <table class="data-table day-table">
+                        <thead>
+                            <tr><th>Jour</th><th>Visites</th><th class="num">Pages vues</th><th class="num">Demandes</th><th>Provenance principale</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach (array_reverse($serie) as $j): $weekend = in_array($j['date']->format('w'), ['0', '6'], true); ?>
+                                <tr class="<?= $j['visites'] === 0 && $j['demandes'] === 0 ? 'is-empty' : '' ?><?= $weekend ? ' is-weekend' : '' ?>">
+                                    <td class="day-date"><span><?= $joursFrMaj[(int) $j['date']->format('w')] ?></span> <?= date_fr($j['date'], $moisFr) ?></td>
+                                    <td class="day-visits">
+                                        <div class="day-visits-inner">
+                                            <span class="day-bar"><span style="width: <?= round($j['visites'] / $maxVisites * 100) ?>%"></span></span>
+                                            <b><?= $j['visites'] ?></b>
+                                        </div>
+                                    </td>
+                                    <td class="num"><?= $j['vues'] ?></td>
+                                    <td class="num"><?php if ($j['demandes'] > 0): ?><span class="day-lead"><?= $j['demandes'] ?></span><?php else: ?><span class="day-zero">-</span><?php endif; ?></td>
+                                    <td class="day-source"><?= $j['source'] !== null ? e($j['source']) : '<span class="day-zero">-</span>' ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr><td>Total</td><td><b><?= nombre($totaux['visites']) ?></b></td><td class="num"><?= nombre($totaux['vues']) ?></td><td class="num"><?= nombre($demandes) ?></td><td></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
 
             <div class="stats-columns">
                 <div class="card">

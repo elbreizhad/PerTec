@@ -383,6 +383,15 @@ a:hover { text-decoration: underline; }
 
 /* Responsive */
 @media (max-width: 768px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-main {
+        min-width: 0;
+        padding: 1.25rem 1rem;
+    }
+
     .admin-sidebar {
         width: 100%;
         height: auto;
@@ -410,21 +419,73 @@ a:hover { text-decoration: underline; }
 .stats-columns .card { min-width: 0; }
 .data-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.chart { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem; margin-top: 1rem; }
-.chart-axis { display: flex; flex-direction: column; justify-content: space-between; height: 200px; font-size: 0.75rem; color: var(--gray-400); text-align: right; font-variant-numeric: tabular-nums; transform: translateY(-0.5em); }
-.chart-plot { position: relative; min-width: 0; }
-.chart-grid { position: absolute; inset: 0 0 auto 0; height: 200px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
-.chart-grid span { border-top: 1px solid rgba(255,255,255,0.08); }
-.chart-grid span:last-child { border-top-color: rgba(255,255,255,0.25); }
-.chart-bars { position: relative; height: 200px; display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 2px; align-items: end; }
-.chart-col { position: relative; height: 100%; display: flex; align-items: flex-end; outline: none; }
-.chart-col:hover, .chart-col:focus-visible { background: rgba(255,255,255,0.05); }
-.chart-bar { width: 100%; max-width: 24px; margin: 0 auto; background: #7c83f5; border-radius: 4px 4px 0 0; min-height: 0; }
-.chart-mark { position: absolute; left: 50%; bottom: -12px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--success); }
-.chart-mark-legend { position: static; display: inline-block; margin: 0 0.35rem 0 0; vertical-align: middle; }
-.chart-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--dark); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.8rem; white-space: nowrap; z-index: 2; pointer-events: none; }
-.chart-col:hover .chart-tip, .chart-col:focus-visible .chart-tip { display: block; }
-.chart-col:first-child .chart-tip { left: 0; transform: none; }
-.chart-col:last-child .chart-tip { left: auto; right: 0; transform: none; }
-.chart-dates { display: flex; justify-content: space-between; margin-top: 18px; font-size: 0.75rem; color: var(--gray-400); }
-.chart-legend { margin-top: 0.75rem; font-size: 0.8rem; color: var(--gray-400); }
+/* Courbe des visites */
+.trend-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.trend-head h2 { margin-bottom: 0.25rem; }
+.trend-sub { color: var(--gray-400); font-size: 0.85rem; }
+.trend-total { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+.trend-total-value { font-size: 2rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.trend-delta { font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 999px; }
+.trend-delta span { font-weight: 400; opacity: 0.8; }
+.trend-delta.up { color: #4ade80; background: rgba(34,197,94,0.12); }
+.trend-delta.down { color: #f87171; background: rgba(239,68,68,0.12); }
+.trend-delta.neutral { color: var(--gray-400); padding: 0; }
+
+.trend { display: grid; grid-template-columns: 2.25rem 1fr; column-gap: 0.75rem; }
+.trend-axis { position: relative; height: 240px; font-size: 0.72rem; color: var(--gray-400); font-variant-numeric: tabular-nums; }
+.trend-axis span { position: absolute; right: 0; transform: translateY(50%); }
+.trend-plot { position: relative; height: 240px; min-width: 0; }
+.trend-gridline { position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(255,255,255,0.07); }
+.trend-gridline.base { border-top: 1px solid rgba(255,255,255,0.2); }
+.trend-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.trend-end { position: absolute; width: 10px; height: 10px; margin: 0 0 -5px -5px; border-radius: 50%; background: #7c83f5; box-shadow: 0 0 0 3px var(--dark-light), 0 0 0 7px rgba(124,131,245,0.25); }
+
+.trend-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--n), 1fr); }
+.trend-col { position: relative; outline: none; cursor: crosshair; }
+.trend-col::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1px solid rgba(255,255,255,0.25); opacity: 0; }
+.trend-dot, .trend-lead { position: absolute; left: 50%; border-radius: 50%; }
+.trend-dot { width: 10px; height: 10px; margin: 0 0 -5px -5px; background: #7c83f5; box-shadow: 0 0 0 2px var(--dark-light); opacity: 0; }
+.trend-lead { width: 10px; height: 10px; margin: 0 0 -5px -5px; background: var(--success); box-shadow: 0 0 0 2px var(--dark-light); z-index: 1; }
+.trend-col:hover::before, .trend-col:focus-visible::before, .trend-col:hover .trend-dot, .trend-col:focus-visible .trend-dot { opacity: 1; }
+.trend-col:hover .trend-dot, .trend-col:focus-visible .trend-dot { z-index: 2; }
+
+.trend-tip { display: none; position: absolute; top: 0; z-index: 3; min-width: 9.5rem; padding: 0.55rem 0.75rem; background: #1c1c24; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.45); font-size: 0.8rem; pointer-events: none; white-space: nowrap; }
+.trend-col.left .trend-tip { left: calc(50% + 10px); }
+.trend-col.right .trend-tip { right: calc(50% + 10px); }
+.trend-col:hover .trend-tip, .trend-col:focus-visible .trend-tip { display: flex; flex-direction: column; gap: 0.15rem; }
+.trend-tip-date { color: var(--gray-400); font-size: 0.72rem; }
+.trend-tip-row b { font-size: 1rem; }
+.trend-tip-row.lead { color: #4ade80; }
+
+.trend-dates { position: relative; height: 1.5rem; margin-top: 0.6rem; font-size: 0.72rem; color: var(--gray-400); }
+.trend-dates span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.trend-dates span:first-child { transform: none; }
+.trend-dates span:last-child { transform: translateX(-100%); }
+.trend-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.5rem; margin-top: 0.75rem; font-size: 0.8rem; color: var(--gray-400); }
+.trend-legend-line { width: 16px; height: 2px; background: #7c83f5; border-radius: 2px; }
+.trend-legend { column-gap: 1.25rem; }
+.trend-legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+.trend-legend-lead { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--success); }
+
+/* Détail jour par jour */
+.day-table-wrap { max-height: 440px; overflow: auto; margin-top: 0.5rem; border-radius: 8px; }
+.day-table { min-width: 560px; }
+.day-table thead th { position: sticky; top: 0; background: var(--dark-light); z-index: 1; }
+.day-table td { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+.day-date { white-space: nowrap; }
+.day-date span { display: inline-block; width: 2.4rem; color: var(--gray-400); }
+.day-visits { min-width: 11rem; }
+.day-visits-inner { display: flex; align-items: center; gap: 0.75rem; }
+.day-visits b { min-width: 2ch; text-align: right; font-variant-numeric: tabular-nums; }
+.day-bar { flex: 1; max-width: 160px; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.day-bar span { display: block; height: 100%; background: #7c83f5; border-radius: 4px; }
+.day-lead { display: inline-block; min-width: 1.6rem; padding: 0.05rem 0.45rem; border-radius: 999px; background: rgba(34,197,94,0.15); color: #4ade80; font-weight: 600; text-align: center; }
+.day-zero { color: var(--gray-600); }
+.day-source { color: var(--gray-400); }
+.day-table tr.is-weekend td { background: rgba(255,255,255,0.015); }
+.day-table tr.is-empty td { color: var(--gray-600); }
+.day-table tfoot td { position: sticky; bottom: 0; background: var(--dark-light); font-weight: 600; border-top: 1px solid rgba(255,255,255,0.15); }
+@media (max-width: 600px) {
+  .trend-total { align-items: flex-start; }
+  .trend-axis, .trend-plot { height: 180px; }
+}
