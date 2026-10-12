@@ -1867,3 +1867,64 @@ button:focus-visible {
 .home-avis blockquote { margin: 0 0 1rem; color: var(--gray-100); font-style: italic; }
 .home-avis figcaption { color: var(--gray-400); font-size: 0.9rem; }
 .section-header .section-subtitle { margin-left: auto; margin-right: auto; }
+
+/* ===== Rubrique Conseils ===== */
+.articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 1.5rem; }
+.article-card { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.3s ease; }
+.article-card:hover { transform: translateY(-4px); }
+.article-card-image { position: relative; aspect-ratio: 16 / 9; background-size: cover; background-position: center; }
+.article-card-content { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+.article-card-content time { color: var(--gray-500); font-size: 0.85rem; }
+.article-card-content h2 { font-size: 1.25rem; line-height: 1.35; }
+.article-card-content p { color: var(--gray-400); font-size: 0.95rem; }
+.article-card-content .btn-link { margin-top: auto; color: var(--primary-light); font-weight: 600; }
+
+.article-header { padding-bottom: 2.5rem; }
+.article-header h1 { max-width: 900px; margin: 0 auto; }
+.article-breadcrumb { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1.5rem; }
+.article-breadcrumb a { color: var(--gray-400); text-decoration: none; }
+.article-breadcrumb a:hover { color: var(--white); }
+.article-meta { color: var(--gray-500); font-size: 0.95rem; margin-top: 1.25rem; }
+.article-meta a { color: var(--gray-400); }
+
+.article-prose { max-width: 760px; margin: 0 auto; padding-bottom: 4rem; font-size: 1.075rem; line-height: 1.75; }
+.article-prose > p, .article-prose li { color: var(--gray-400); }
+.article-prose > p { margin-bottom: 1.25rem; }
+.article-prose strong { color: var(--white); }
+.article-prose a { color: var(--primary-light); }
+.article-prose h2 { font-size: 1.75rem; line-height: 1.25; margin: 3rem 0 1rem; text-wrap: balance; }
+.article-prose h3 { font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+.article-prose ul, .article-prose ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.article-prose ul li { list-style: disc; margin-bottom: 0.75rem; }
+.article-prose ol li { list-style: decimal; margin-bottom: 0.75rem; }
+
+.article-answer { padding: 1.5rem 1.75rem; border-left: 3px solid var(--primary); border-radius: 12px; margin-bottom: 1rem; }
+.article-answer p { color: var(--gray-100); margin-bottom: 0.75rem; }
+.article-answer p:last-child { margin-bottom: 0; }
+.article-answer .article-answer-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary-light); }
+
+.article-table-wrap { overflow-x: auto; margin: 1.5rem 0 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+.article-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; }
+.article-table th { text-align: left; font-weight: 600; color: var(--gray-400); background: rgba(255,255,255,0.04); padding: 0.75rem 0.75rem; }
+.article-table td { padding: 0.75rem 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); color: var(--gray-400); vertical-align: top; }
+.article-table td:nth-child(2), .article-table td:nth-child(4) { white-space: nowrap; }
+.article-table td { font-variant-numeric: tabular-nums; }
+
+.article-prices { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.article-price { padding: 1.25rem; border-radius: 12px; display: flex; flex-direction: column; gap: 0.3rem; }
+.article-price span { color: var(--gray-400); font-size: 0.9rem; }
+.article-price strong { font-size: 1.75rem; color: var(--primary-light); font-variant-numeric: tabular-nums; }
+.article-price small { color: var(--gray-500); font-size: 0.8rem; line-height: 1.4; }
+
+.article-faq { margin: 1rem 0 2.5rem; }
+.article-cta { padding: 2rem; border-radius: 16px; text-align: center; margin-top: 3rem; }
+.article-cta h2 { margin: 0 0 0.5rem; }
+.article-cta p { color: var(--gray-400); margin-bottom: 1.5rem; }
+.article-cta .hero-buttons { justify-content: center; }
+.article-related { margin-top: 2rem; font-size: 0.95rem; }
+
+@media (max-width: 600px) {
+  .article-prose { font-size: 1rem; }
+  .article-prose h2 { font-size: 1.45rem; }
+  .article-answer, .article-cta { padding: 1.25rem; }
+}

@@ -121,7 +121,7 @@ require_once __DIR__ . '/includes/header.php';
 <?php endforeach; ?>
       </div>
 
-      <p class="home-pricing-note" data-animate><?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · Boutique en ligne et sur-mesure : sur devis</p>
+      <p class="home-pricing-note" data-animate><?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · Boutique en ligne et sur-mesure : sur devis · <a href="/conseils/prix-site-internet-artisan" style="color: var(--primary-light);">Combien coûte un site ailleurs ?</a></p>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
         <a href="/tarifs" class="btn btn-primary">Estimer mon projet en 1 minute</a>

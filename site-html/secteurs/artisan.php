@@ -228,6 +228,12 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+  <section>
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--gray-400);" data-animate>Vous comparez les offres ? Lisez <a href="/conseils/prix-site-internet-artisan" style="color: var(--primary-light);">combien coûte un site internet pour un artisan</a>.</p>
+    </div>
+  </section>
+
   <!-- Formulaire -->
   <section class="cta-section">
     <div class="container">

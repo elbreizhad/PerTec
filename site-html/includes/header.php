@@ -85,6 +85,7 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
           <a href="/services" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
           <a href="/tarifs" class="nav-link<?= ($activeMenu === 'tarifs') ? ' active' : '' ?>">Tarifs</a>
           <a href="/realisations" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
+          <a href="/conseils/" class="nav-link<?= ($activeMenu === 'conseils') ? ' active' : '' ?>">Conseils</a>
           <a href="/a-propos" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
           <a href="/contact" class="nav-link<?= ($activeMenu === 'contact') ? ' active' : '' ?>">Contact</a>
         </nav>
@@ -105,6 +106,7 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
     <a href="/services">Services</a>
     <a href="/tarifs">Tarifs</a>
     <a href="/realisations">Réalisations</a>
+    <a href="/conseils/">Conseils</a>
     <a href="/a-propos">À propos</a>
     <a href="/contact">Contact</a>
     <a href="/contact" class="btn btn-primary">Devis gratuit</a>
