@@ -50,7 +50,7 @@ $meuble = $l['lease_type'] === 'meuble';
     <tr><td>Provision mensuelle pour charges</td><td class="num"><?= euros($l['charges_amount']) ?></td></tr>
     <tr class="total"><td>Loyer mensuel charges comprises</td><td class="num"><?= euros($total) ?></td></tr>
 </table>
-<p class="article">Le loyer est payable d'avance, le <strong><?= (int)$l['payment_day'] ?></strong> de chaque mois,
+<?= render_template('partials/charges_detail', ['lease' => $l, 'doc' => true]) ?><p class="article">Le loyer est payable d'avance, le <strong><?= (int)$l['payment_day'] ?></strong> de chaque mois,
 au domicile du bailleur ou par tout moyen convenu entre les parties.</p>
 
 <h2>Article 4 — Dépôt de garantie</h2>

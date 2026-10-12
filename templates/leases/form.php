@@ -84,6 +84,57 @@ $action = $isEdit ? url('/baux/'.$l['id']) : url('/baux');
         </div>
     </fieldset>
 
+    <?php $chRows = Lease::chargesDetail($l ?? []); if (!$chRows) $chRows = [['nature' => 'eau', 'label' => '', 'amount' => '']]; ?>
+    <fieldset>
+        <legend>Détail des charges</legend>
+        <p class="hint">Facultatif mais recommandé : la nature et le montant mensuel de chaque charge figurent dans le bail.
+            Le total remplit automatiquement la provision (ou le forfait) de charges.</p>
+        <div class="table-wrap"><table id="charges-detail">
+            <thead><tr><th>Nature</th><th>Précision (facultatif)</th><th class="num">Montant / mois (€)</th><th></th></tr></thead>
+            <tbody>
+            <?php foreach ($chRows as $r): ?>
+                <tr>
+                    <td><select name="charge_nature[]">
+                        <?php foreach (Lease::CHARGE_NATURES as $k => $lbl): ?><option value="<?= $k ?>" <?= ($r['nature'] ?? '') === $k ? 'selected' : '' ?>><?= e($lbl) ?></option><?php endforeach; ?>
+                    </select></td>
+                    <td><input name="charge_label[]" value="<?= e($r['label'] ?? '') ?>" placeholder="ex. selon relevé du compteur"></td>
+                    <td><input name="charge_amount[]" class="ch-amount" inputmode="decimal" value="<?= e((string) ($r['amount'] ?? '')) ?>" style="text-align:right"></td>
+                    <td><button type="button" class="btn btn-sm btn-danger ch-del" title="Retirer">×</button></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+            <tfoot><tr class="total"><td colspan="2"><button type="button" class="btn btn-sm" id="ch-add">+ Ajouter une charge</button></td>
+                <td class="num"><strong id="ch-total"></strong></td><td></td></tr></tfoot>
+        </table></div>
+    </fieldset>
+    <script>
+    (function () {
+        var tbody = document.querySelector('#charges-detail tbody'), total = document.getElementById('ch-total'),
+            target = document.querySelector('input[name="charges_amount"]');
+        var num = function (v) { return parseFloat(String(v).replace(/\s/g, '').replace(',', '.')) || 0; };
+        function update() {
+            var sum = 0, any = false;
+            tbody.querySelectorAll('.ch-amount').forEach(function (i) { if (i.value.trim() !== '') { any = true; sum += num(i.value); } });
+            total.textContent = any ? sum.toFixed(2).replace('.', ',') + ' €' : '';
+            if (any && target) target.value = sum.toFixed(2);
+        }
+        document.getElementById('ch-add').addEventListener('click', function () {
+            var row = tbody.rows[0].cloneNode(true);
+            row.querySelectorAll('input').forEach(function (i) { i.value = ''; });
+            row.querySelector('select').value = 'autre';
+            tbody.appendChild(row);
+        });
+        tbody.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('ch-del')) return;
+            if (tbody.rows.length > 1) e.target.closest('tr').remove();
+            else e.target.closest('tr').querySelectorAll('input').forEach(function (i) { i.value = ''; });
+            update();
+        });
+        tbody.addEventListener('input', update);
+        update();
+    })();
+    </script>
+
     <?php
     // Type de garantie : valeur enregistrée, sinon « garant » si un garant est déjà saisi.
     $gType = $l['guarantee_type'] ?? (!empty($l['guarantor_name']) ? 'garant' : 'aucune');

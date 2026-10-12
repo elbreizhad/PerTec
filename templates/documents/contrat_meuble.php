@@ -104,7 +104,7 @@ Le présent bail prend effet le <strong><?= fdate($l['start_date']) ?></strong><
     <tr><td><?= $forfait ? 'Forfait mensuel de charges' : 'Provision mensuelle pour charges' ?></td><td class="num"><?= euros($l['charges_amount']) ?></td></tr>
     <tr class="total"><td>Loyer mensuel charges comprises</td><td class="num"><?= euros($loyerCC) ?></td></tr>
 </table>
-<p class="article">Le loyer est payable d'avance, le <strong><?= (int)$l['payment_day'] ?></strong> de chaque mois.
+<?= render_template('partials/charges_detail', ['lease' => $l, 'doc' => true]) ?><p class="article">Le loyer est payable d'avance, le <strong><?= (int)$l['payment_day'] ?></strong> de chaque mois.
 <?php if ($forfait): ?>
 Les charges récupérables sont réglées sous forme d'un <strong>forfait mensuel</strong> ajouté au loyer, non soumis à
 régularisation ni à complément, conformément à l'article 25-9 de la loi du 6 juillet 1989 applicable à la location meublée.

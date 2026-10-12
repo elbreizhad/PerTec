@@ -43,6 +43,10 @@ class Lease
     public static function fromRequest(): array
     {
         $data = self::requestData();
+        // Détail des charges : s'il est renseigné, la provision / le forfait mensuel en est la somme.
+        $detail = self::chargesDetailFromRequest();
+        $data['charges_detail'] = $detail ? json_encode($detail, JSON_UNESCAPED_UNICODE) : null;
+        if ($detail) $data['charges_amount'] = round(array_sum(array_column($detail, 'amount')), 2);
         // Champs Visale conservés uniquement si Visale est le type de garantie choisi.
         if ($data['guarantee_type'] !== 'visale') {
             foreach (['visale_visa_number', 'visale_visa_expiry', 'visale_contract_number', 'visale_max_rent'] as $k) $data[$k] = null;
@@ -109,6 +113,55 @@ class Lease
     public static function delete(int $id): void
     {
         Database::query('DELETE FROM leases WHERE id = ?', [$id]);
+    }
+
+    /** Natures de charges récupérables (décret n° 87-713 du 26 août 1987) et usuelles en meublé. */
+    public const CHARGE_NATURES = [
+        'eau'              => 'Eau froide et eau chaude (consommation)',
+        'chauffage'        => 'Chauffage collectif / production d\'eau chaude',
+        'parties_communes' => 'Entretien et électricité des parties communes',
+        'nettoyage'        => 'Nettoyage des parties communes',
+        'ascenseur'        => 'Ascenseur',
+        'espaces_verts'    => 'Espaces verts',
+        'teom'             => 'Taxe d\'enlèvement des ordures ménagères (TEOM)',
+        'gardiennage'      => 'Gardiennage / loge',
+        'electricite'      => 'Électricité du logement (meublé, forfait)',
+        'internet'         => 'Internet (meublé, forfait)',
+        'autre'            => 'Autre',
+    ];
+
+    /** Détail des charges : [['nature','label','amount'], …] (vide si non renseigné). */
+    public static function chargesDetail(array $l): array
+    {
+        $d = json_decode((string) ($l['charges_detail'] ?? ''), true);
+        if (!is_array($d)) return [];
+        return array_values(array_filter($d, fn($r) => is_array($r) && (float) ($r['amount'] ?? 0) != 0.0));
+    }
+
+    public static function chargeLabel(array $row): string
+    {
+        $base = self::CHARGE_NATURES[$row['nature'] ?? 'autre'] ?? 'Autre';
+        $lbl = trim((string) ($row['label'] ?? ''));
+        return ($row['nature'] ?? 'autre') === 'autre' ? ($lbl ?: 'Autre') : ($lbl ? "$base — $lbl" : $base);
+    }
+
+    /** Lignes de détail envoyées par le formulaire. */
+    private static function chargesDetailFromRequest(): array
+    {
+        $out = [];
+        $natures = (array) post('charge_nature', []);
+        $labels = (array) post('charge_label', []);
+        $amounts = (array) post('charge_amount', []);
+        foreach ($natures as $i => $n) {
+            $amount = round(num($amounts[$i] ?? ''), 2);
+            if ($amount == 0.0) continue;
+            $out[] = [
+                'nature' => isset(self::CHARGE_NATURES[$n]) ? $n : 'autre',
+                'label'  => trim(mb_substr((string) ($labels[$i] ?? ''), 0, 120)),
+                'amount' => $amount,
+            ];
+        }
+        return $out;
     }
 
     /**

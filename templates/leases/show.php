@@ -70,6 +70,9 @@ $tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l
     <div class="stat"><div class="label">Dépôt garantie</div><div class="value"><?= euros($l['deposit_amount']) ?></div></div>
 </div>
 
+<?php if (Lease::chargesDetail($l)): ?>
+<div class="card mb"><h3>Détail des charges</h3><?= render_template('partials/charges_detail', ['lease' => $l]) ?></div>
+<?php endif; ?>
 <?php $depDue = Lease::depositDue($l); $termEnd = Lease::currentTermEnd($l); ?>
 <div class="grid grid-2col mb">
     <div class="card">

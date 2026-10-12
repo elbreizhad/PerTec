@@ -61,6 +61,10 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
             <div class="stat"><div class="label">Total mensuel</div><div class="value"><?= euros((float) $l['rent_amount'] + (float) $l['charges_amount']) ?></div></div>
             <div class="stat"><div class="label">Situation</div><div class="value <?= $late ? 'neg' : 'pos' ?>" style="font-size:1.05rem"><?= $late ? count($late) . ' échéance(s) en retard' : 'À jour' ?></div></div>
         </div>
+        <?php if (Lease::chargesDetail($l)): ?>
+            <details class="mb"><summary><strong>Détail de mes charges</strong></summary>
+                <?= render_template('partials/charges_detail', ['lease' => $l]) ?></details>
+        <?php endif; ?>
         <?php if ((float) $l['deposit_amount'] > 0): $dd = Lease::depositDue($l); ?>
             <p><strong>Dépôt de garantie : <?= euros($l['deposit_amount']) ?></strong> —
                 <?php if (!empty($l['deposit_paid_date'])): ?><span class="badge badge-paid">Reçu le <?= fdate($l['deposit_paid_date']) ?></span>
