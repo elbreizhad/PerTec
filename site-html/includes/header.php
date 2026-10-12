@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/site.php';
 /**
  * Header partagé - Pertec.fr
  * Variables à définir avant inclusion :

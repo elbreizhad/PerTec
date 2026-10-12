@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config/site.php';
 $pageTitle = 'Création Site Internet | Clé en Main | Pertec.fr';
 $pageDescription = 'Création de sites internet à Évreux et en Normandie. Formule clé en main pour artisans, commerces et restaurants. Devis gratuit sous 24h.';
 $canonicalUrl = '/';
@@ -32,7 +33,8 @@ $schemaJson = '{
       },
       "geoRadius": "50000"
     },
-    "serviceType": ["Création site internet", "Site vitrine", "Site artisan", "SEO local"]
+    "serviceType": ["Création site internet", "Site vitrine", "Site artisan", "SEO local"],
+    "sameAs": ["' . GOOGLE_BUSINESS_URL . '"]
   }';
 
 require_once __DIR__ . '/includes/header.php';

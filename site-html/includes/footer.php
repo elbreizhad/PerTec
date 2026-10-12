@@ -35,6 +35,7 @@
             <li>📍 Évreux, Normandie</li>
             <li>📧 contact@pertec.fr</li>
             <li>🕒 Lun - Ven : 9h - 18h</li>
+            <li><a href="<?= GOOGLE_BUSINESS_URL ?>" target="_blank" rel="noopener">⭐ Avis et fiche Google</a></li>
           </ul>
           <a href="/contact.php" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.875rem;">Demander un devis</a>
         </div>

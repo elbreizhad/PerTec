@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/includes/turnstile.php';
+require_once __DIR__ . '/config/site.php';
 
 // CSRF token
 if (empty($_SESSION['csrf_token'])) {
@@ -98,6 +99,14 @@ $turnstileSiteKey = get_turnstile_site_key();
               <p style="font-weight: 600;">Évreux, Normandie</p>
             </div>
           </div>
+
+          <a href="<?= GOOGLE_BUSINESS_URL ?>" target="_blank" rel="noopener" class="contact-item glass" data-animate>
+            <div class="contact-icon">⭐</div>
+            <div>
+              <p style="color: var(--gray-400); font-size: 0.875rem; margin-bottom: 0.25rem;">Google</p>
+              <p style="font-weight: 600;">Voir la fiche et les avis</p>
+            </div>
+          </a>
 
           <div class="contact-item glass" data-animate>
             <div class="contact-icon">🕒</div>
@@ -246,6 +255,7 @@ $turnstileSiteKey = get_turnstile_site_key();
           <ul>
             <li>📍 Évreux, Normandie</li>
             <li>📧 contact@pertec.fr</li>
+            <li><a href="<?= GOOGLE_BUSINESS_URL ?>" target="_blank" rel="noopener">⭐ Avis et fiche Google</a></li>
           </ul>
         </div>
       </div>
