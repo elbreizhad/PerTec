@@ -14,6 +14,8 @@
           <ul>
             <li><a href="/secteurs/artisan">Artisans</a></li>
             <li><a href="/secteurs/restaurant">Restaurants</a></li>
+            <li><a href="/secteurs/commerces">Commerces</a></li>
+            <li><a href="/secteurs/professions-liberales">Professions libérales</a></li>
             <li><a href="/secteurs/securite-privee">Sécurité privée</a></li>
             <li><a href="/services">Tous les services</a></li>
           </ul>

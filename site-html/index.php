@@ -247,7 +247,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services" class="secteur-img-card" data-animate>
+        <a href="/secteurs/commerces" class="secteur-img-card" data-animate>
           <img src="/images/commerces/boutique.jpg" alt="Devanture de boutique">
           <div class="secteur-img-overlay">
             <h3>Commerces</h3>
@@ -256,7 +256,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/services" class="secteur-img-card" data-animate>
+        <a href="/secteurs/professions-liberales" class="secteur-img-card" data-animate>
           <img src="/images/professions/bureau.jpg" alt="Bureau professionnel">
           <div class="secteur-img-overlay">
             <h3>Professions libérales</h3>

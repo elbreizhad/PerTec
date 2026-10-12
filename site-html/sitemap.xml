@@ -101,6 +101,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://pertec.fr/secteurs/commerces</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pertec.fr/secteurs/professions-liberales</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://pertec.fr/secteurs/securite-privee</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
