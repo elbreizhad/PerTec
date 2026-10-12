@@ -344,7 +344,7 @@ require_once __DIR__ . '/includes/header.php';
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Demandez votre devis gratuit et sans engagement. Je vous réponds sous 24h.</p>
         <div class="hero-buttons" style="justify-content: center;">
           <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/realisations.html" class="btn btn-secondary">Voir mes réalisations</a>
+          <a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a>
         </div>
       </div>
     </div>

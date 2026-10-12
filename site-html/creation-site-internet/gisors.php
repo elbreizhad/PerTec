@@ -13,7 +13,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>Vexin Normand</div>
     <h1 data-animate>Création de site internet<br><span class="gradient-text">à Gisors</span></h1>
     <p data-animate>Gisors, capitale du Vexin Normand à la frontière de l'Île-de-France. Captez une clientèle locale et francilienne avec un site professionnel.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.html" class="btn btn-secondary">Voir mes réalisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Proche Paris</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Site en 2 semaines</div>

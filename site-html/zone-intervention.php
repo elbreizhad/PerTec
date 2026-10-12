@@ -216,7 +216,7 @@ require_once __DIR__ . '/includes/header.php';
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Que vous soyez à Évreux ou ailleurs dans l'Eure, contactez-moi pour discuter de votre projet !</p>
         <div class="hero-buttons" style="justify-content: center;">
           <a href="/contact.php" class="btn btn-primary">Prendre contact</a>
-          <a href="/services.html" class="btn btn-secondary">Voir les services</a>
+          <a href="/services.php" class="btn btn-secondary">Voir les services</a>
         </div>
       </div>
     </div>

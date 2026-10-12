@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>Site pour restaurants</div>
     <h1 data-animate>Site internet pour<br><span class="gradient-text">restaurant</span></h1>
     <p data-animate>Menu digital, photos appetissantes, reservation en ligne. Donnez envie de pousser votre porte avant meme d'avoir goute vos plats.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.html" class="btn btn-secondary">Voir mes realisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes realisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Menu digital</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Reservation en ligne</div>

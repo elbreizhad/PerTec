@@ -44,7 +44,7 @@ require_once __DIR__ . '/includes/header.php';
 
         <div class="hero-buttons" data-animate>
           <a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/services.html" class="btn btn-secondary">Découvrir les services</a>
+          <a href="/services.php" class="btn btn-secondary">Découvrir les services</a>
         </div>
 
         <div class="hero-trust" data-animate>
@@ -146,7 +146,7 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <div class="secteurs-img-grid">
-        <a href="/secteurs/artisan.html" class="secteur-img-card" data-animate>
+        <a href="/secteurs/artisan.php" class="secteur-img-card" data-animate>
           <img src="/images/artisans/electricien.jpg" alt="Artisan électricien au travail">
           <div class="secteur-img-overlay">
             <h3>Artisans</h3>
@@ -155,7 +155,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </a>
 
-        <a href="/secteurs/restaurant.html" class="secteur-img-card" data-animate>
+        <a href="/secteurs/restaurant.php" class="secteur-img-card" data-animate>
           <img src="/images/restaurants/restaurant-1.jpg" alt="Intérieur de restaurant moderne">
           <div class="secteur-img-overlay">
             <h3>Restaurants</h3>
@@ -164,7 +164,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </a>
 
-        <a href="/services.html" class="secteur-img-card" data-animate>
+        <a href="/services.php" class="secteur-img-card" data-animate>
           <img src="/images/commerces/boutique.jpg" alt="Devanture de boutique">
           <div class="secteur-img-overlay">
             <h3>Commerces</h3>
@@ -173,7 +173,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </a>
 
-        <a href="/services.html" class="secteur-img-card" data-animate>
+        <a href="/services.php" class="secteur-img-card" data-animate>
           <img src="/images/professions/bureau.jpg" alt="Bureau professionnel">
           <div class="secteur-img-overlay">
             <h3>Professions libérales</h3>
@@ -182,7 +182,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </a>
 
-        <a href="/services.html" class="secteur-img-card" data-animate>
+        <a href="/services.php" class="secteur-img-card" data-animate>
           <img src="/images/beaute/coiffeur.jpg" alt="Salon de coiffure">
           <div class="secteur-img-overlay">
             <h3>Beauté & Bien-être</h3>
@@ -191,7 +191,7 @@ require_once __DIR__ . '/includes/header.php';
           </div>
         </a>
 
-        <a href="/services.html" class="secteur-img-card" data-animate>
+        <a href="/services.php" class="secteur-img-card" data-animate>
           <img src="/images/hero/hero-workspace.jpg" alt="Espace de travail moderne">
           <div class="secteur-img-overlay">
             <h3>TPE / PME</h3>
@@ -202,7 +202,7 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <div style="text-align: center; margin-top: 3rem;" data-animate>
-        <a href="/services.html" class="btn btn-secondary">Voir tous les services</a>
+        <a href="/services.php" class="btn btn-secondary">Voir tous les services</a>
       </div>
     </div>
   </section>

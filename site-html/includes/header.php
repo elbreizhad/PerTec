@@ -64,10 +64,10 @@
         </a>
 
         <nav class="nav">
-          <a href="/services.html" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
+          <a href="/services.php" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
           <a href="/tarifs.php" class="nav-link<?= ($activeMenu === 'tarifs') ? ' active' : '' ?>">Tarifs</a>
-          <a href="/realisations.html" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
-          <a href="/a-propos.html" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
+          <a href="/realisations.php" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
+          <a href="/a-propos.php" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
           <a href="/contact.php" class="nav-link<?= ($activeMenu === 'contact') ? ' active' : '' ?>">Contact</a>
         </nav>
 
@@ -84,10 +84,10 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu">
-    <a href="/services.html">Services</a>
+    <a href="/services.php">Services</a>
     <a href="/tarifs.php">Tarifs</a>
-    <a href="/realisations.html">Réalisations</a>
-    <a href="/a-propos.html">À propos</a>
+    <a href="/realisations.php">Réalisations</a>
+    <a href="/a-propos.php">À propos</a>
     <a href="/contact.php">Contact</a>
     <a href="/contact.php" class="btn btn-primary">Devis gratuit</a>
   </div>

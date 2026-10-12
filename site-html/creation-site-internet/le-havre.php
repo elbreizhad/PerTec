@@ -13,7 +13,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-badge glass" data-animate><span class="dot"></span>UNESCO</div>
     <h1 data-animate>Création de site internet<br><span class="gradient-text">au Havre</span></h1>
     <p data-animate>Le Havre, 2ème ville de Normandie et patrimoine UNESCO. Captez une clientèle locale massive avec un site internet professionnel et optimisé.</p>
-    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.html" class="btn btn-secondary">Voir mes réalisations</a></div>
+    <div class="hero-buttons" data-animate><a href="/contact.php" class="btn btn-primary">Demander un devis gratuit</a><a href="/realisations.php" class="btn btn-secondary">Voir mes réalisations</a></div>
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>170 000 habitants</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Site en 2 semaines</div>

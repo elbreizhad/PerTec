@@ -12,18 +12,18 @@
         <div class="footer-col">
           <h4>Services</h4>
           <ul>
-            <li><a href="/services.html">Site vitrine</a></li>
-            <li><a href="/services.html">Site e-commerce</a></li>
-            <li><a href="/secteurs/artisan.html">Site artisan</a></li>
-            <li><a href="/secteurs/restaurant.html">Site restaurant</a></li>
+            <li><a href="/services.php">Site vitrine</a></li>
+            <li><a href="/services.php">Site e-commerce</a></li>
+            <li><a href="/secteurs/artisan.php">Site artisan</a></li>
+            <li><a href="/secteurs/restaurant.php">Site restaurant</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
           <h4>Entreprise</h4>
           <ul>
-            <li><a href="/a-propos.html">À propos</a></li>
-            <li><a href="/realisations.html">Réalisations</a></li>
+            <li><a href="/a-propos.php">À propos</a></li>
+            <li><a href="/realisations.php">Réalisations</a></li>
             <li><a href="/tarifs.php">Tarifs</a></li>
             <li><a href="/contact.php">Contact</a></li>
           </ul>
@@ -43,8 +43,8 @@
       <div class="footer-bottom">
         <p>© <?= date('Y') ?> Pertec.fr - Création de sites internet</p>
         <div class="footer-legal">
-          <a href="/mentions-legales.html">Mentions légales</a>
-          <a href="/politique-confidentialite.html">Confidentialité</a>
+          <a href="/mentions-legales.php">Mentions légales</a>
+          <a href="/politique-confidentialite.php">Confidentialité</a>
         </div>
       </div>
     </div>
