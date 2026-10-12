@@ -27,7 +27,7 @@ require_once __DIR__ . '/includes/header.php';
           <div>
             <h2 class="section-title" style="font-size: 2rem;">Qui suis-je ?</h2>
             <p style="color: var(--gray-400); margin-bottom: 1.5rem;">
-              Je suis un développeur web indépendant, spécialisé dans la création de sites internet pour les artisans, commerçants et petites entreprises partout en France.
+              Je suis <strong style="color: white;">Fabien Perrin</strong>, développeur web indépendant basé à Évreux. Je crée des sites internet pour les artisans, commerçants et petites entreprises.
             </p>
             <p style="color: var(--gray-400); margin-bottom: 1.5rem;">
               Après plusieurs années d'expérience dans le digital, j'ai décidé de mettre mes compétences au service des entrepreneurs locaux qui méritent une présence en ligne professionnelle sans se ruiner ni perdre du temps.

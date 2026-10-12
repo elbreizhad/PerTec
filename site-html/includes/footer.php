@@ -7,14 +7,6 @@
             <img src="/images/logo-pertec.svg?v=2" alt="Pertec" style="height: 40px;">
           </a>
           <p>Création de sites internet clé en main, 100% en ligne. Design moderne, SEO optimisé, accompagnement personnalisé.</p>
-          <div class="footer-social">
-            <a href="#" aria-label="LinkedIn">
-              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="#" aria-label="Facebook">
-              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-            </a>
-          </div>
         </div>
 
         <div class="footer-col">

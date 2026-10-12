@@ -33,12 +33,12 @@ require_once __DIR__ . '/includes/header.php';
             Email : contact@pertec.fr
           </p>
           <p>
-            <strong>Statut juridique :</strong> [À compléter - Micro-entreprise / SARL / etc.]<br>
-            <strong>SIRET :</strong> [À compléter]<br>
-            <strong>Numéro de TVA :</strong> [À compléter ou "Non assujetti"]
+            <strong>Statut juridique :</strong> Micro-entreprise<br>
+            <strong>SIRET :</strong> 831 395 736 00018<br>
+            <strong>Numéro de TVA :</strong> Non assujetti (article 293 B du CGI)
           </p>
           <p>
-            <strong>Directeur de la publication :</strong> [Nom du responsable]
+            <strong>Directeur de la publication :</strong> Fabien Perrin
           </p>
         </div>
 
@@ -46,10 +46,9 @@ require_once __DIR__ . '/includes/header.php';
           <h2>Hébergement</h2>
           <p>Le site pertec.fr est hébergé par :</p>
           <p>
-            <strong>[Nom de l'hébergeur]</strong><br>
-            Adresse : [Adresse complète de l'hébergeur]<br>
-            Téléphone : [Numéro de téléphone]<br>
-            Site web : [URL du site de l'hébergeur]
+            <strong>PlanetHoster</strong><br>
+            Adresse : 4416 Louis B. Mayer, Laval, Québec H7P 0G1, Canada<br>
+            Site web : <a href="https://www.planethoster.com" target="_blank" rel="noopener">www.planethoster.com</a>
           </p>
         </div>
 
