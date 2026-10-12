@@ -31,7 +31,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <div class="zone-content">
           <div>
             <p style="color: var(--gray-400); margin-bottom: 1.5rem; font-size: 1.1rem;">
-              <strong style="color: white;">90% des clients</strong> consultent le site ou les avis d'un restaurant avant de s'y rendre. Votre présence en ligne influence directement vos réservations.
+              <strong style="color: white;">La majorité des clients</strong> consultent le site ou les avis d'un restaurant avant de s'y rendre. Votre présence en ligne influence directement vos réservations.
             </p>
             <p style="color: var(--gray-400); margin-bottom: 1.5rem;">
               Un site de restaurant réussi, c'est :

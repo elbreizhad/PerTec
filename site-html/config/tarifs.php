@@ -125,7 +125,7 @@ return [
     // Configuration
     'config' => [
         'contact_email' => 'contact@pertec.fr',
-        'contact_tel' => '06 00 00 00 00', // À remplacer
+        'contact_tel' => '', // Pas de téléphone
         'tva_mention' => 'Prix HT / TVA non applicable, art. 293 B du CGI',
     ],
 ];

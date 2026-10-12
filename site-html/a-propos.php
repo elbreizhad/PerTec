@@ -118,75 +118,26 @@ require_once __DIR__ . '/includes/header.php';
         <p class="section-subtitle" data-animate>Les technologies et expertises que je mets à votre service.</p>
       </div>
 
-      <div class="skills-grid" data-animate>
-        <div>
-          <div class="skill-bar">
-            <div class="skill-bar-header">
-              <span>Design & UX</span>
-              <span>95%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" style="width: 95%;"></div>
-            </div>
-          </div>
-
-          <div class="skill-bar">
-            <div class="skill-bar-header">
-              <span>Développement Web</span>
-              <span>90%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" style="width: 90%;"></div>
-            </div>
-          </div>
-
-          <div class="skill-bar">
-            <div class="skill-bar-header">
-              <span>SEO & Référencement</span>
-              <span>85%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" style="width: 85%;"></div>
-            </div>
-          </div>
-
-          <div class="skill-bar">
-            <div class="skill-bar-header">
-              <span>Rédaction Web</span>
-              <span>88%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" style="width: 88%;"></div>
-            </div>
-          </div>
-
-          <div class="skill-bar">
-            <div class="skill-bar-header">
-              <span>WordPress / CMS</span>
-              <span>92%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" style="width: 92%;"></div>
-            </div>
-          </div>
+      <div class="features-grid" data-animate>
+        <div class="feature-card glass">
+          <div class="feature-icon">🎨</div>
+          <h3>Design & UX</h3>
+          <p>Création d'interfaces modernes et intuitives, adaptées à tous les écrans.</p>
         </div>
-
-        <div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem;">Technologies maîtrisées</h3>
-          <div class="tech-tags">
-            <span class="glass">HTML5</span>
-            <span class="glass">CSS3</span>
-            <span class="glass">JavaScript</span>
-            <span class="glass">WordPress</span>
-            <span class="glass">Elementor</span>
-            <span class="glass">PHP</span>
-            <span class="glass">MySQL</span>
-            <span class="glass">Git</span>
-            <span class="glass">Figma</span>
-            <span class="glass">Photoshop</span>
-            <span class="glass">Google Analytics</span>
-            <span class="glass">Search Console</span>
-          </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">💻</div>
+          <h3>Développement Web</h3>
+          <p>Sites performants en HTML, CSS, JavaScript, PHP. WordPress ou sur-mesure.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">🔍</div>
+          <h3>SEO & Référencement</h3>
+          <p>Optimisation pour Google, Search Console, référencement local.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">✍️</div>
+          <h3>Rédaction Web</h3>
+          <p>Textes optimisés pour le référencement et la conversion.</p>
         </div>
       </div>
     </div>

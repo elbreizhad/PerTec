@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Creation Site Internet Plombier | Devis Clients Automatiques | Pertec";
-$pageDescription = "Site internet pour plombier chauffagiste. Recevez des demandes de devis automatiquement. SEO local optimise. Site cle en main a partir de 890€.";
+$pageDescription = "Site internet pour plombier chauffagiste. Recevez des demandes de devis automatiquement. SEO local optimisé. Site clé en main à partir de 490€.";
 $canonicalUrl = "/sites-metiers/plombier";
 $activeMenu = "services";
 
@@ -17,12 +17,12 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="hero-trust" data-animate>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Devis automatiques</div>
       <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>SEO local</div>
-      <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>A partir de 890€</div>
+      <div class="trust-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>À partir de 490€</div>
     </div>
   </div></div></section>
 
   <section><div class="container">
-    <div class="section-header"><h2 class="section-title" data-animate>Pourquoi un site internet <span class="gradient-text">pour plombier</span> ?</h2><p class="section-subtitle" data-animate>En 2024, 90% des clients cherchent "plombier + ville" sur Google avant d'appeler.</p></div>
+    <div class="section-header"><h2 class="section-title" data-animate>Pourquoi un site internet <span class="gradient-text">pour plombier</span> ?</h2><p class="section-subtitle" data-animate>La majorité des clients cherchent "plombier + ville" sur Google avant d'appeler.</p></div>
     <div class="features-grid">
       <div class="feature-card glass" data-animate><div class="feature-icon">🔍</div><h3>Etre trouve sur Google</h3><p>"Plombier Evreux", "fuite d'eau urgence Rouen"... Soyez en premiere page quand vos clients vous cherchent.</p></div>
       <div class="feature-card glass" data-animate><div class="feature-icon">📱</div><h3>Appels directs</h3><p>Bouton "Appeler" cliquable sur mobile. Le client en urgence vous contacte en un clic.</p></div>
@@ -43,19 +43,19 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
   <section><div class="container">
     <div class="zone-card glass-strong" data-animate><div class="zone-content"><div>
-      <h2 class="section-title">Exemple de <span class="gradient-text">resultats</span></h2>
-      <p style="color: var(--gray-400); margin-bottom: 1rem;">Un plombier de Louviers a recu ses premiers appels la semaine suivant la mise en ligne.</p>
+      <h2 class="section-title">Ce que vous <span class="gradient-text">obtenez</span></h2>
+      <p style="color: var(--gray-400); margin-bottom: 1rem;">Un site professionnel qui travaille pour vous 24h/24.</p>
       <div class="advantages" style="margin-top: 1.5rem;">
-        <div class="advantage-item glass"><span>📈</span><div><strong>+15 demandes/mois</strong> de devis via le site</div></div>
+        <div class="advantage-item glass"><span>📝</span><div><strong>Demandes de devis</strong> reçues par email</div></div>
         <div class="advantage-item glass"><span>📞</span><div><strong>Appels directs</strong> depuis mobile</div></div>
-        <div class="advantage-item glass"><span>🥇</span><div><strong>1ere page Google</strong> "plombier Louviers"</div></div>
+        <div class="advantage-item glass"><span>🔍</span><div><strong>Référencement local</strong> sur votre zone</div></div>
       </div>
     </div><div class="zone-map"><span class="pin" style="font-size: 4rem;">🔧</span></div></div></div>
   </div></section>
 
   <section class="cta-section"><div class="container"><div class="cta-box glass-strong" data-animate>
     <h2 class="section-title">Votre site <span class="gradient-text">plombier</span></h2>
-    <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h. A partir de 890€ tout inclus.</p>
+    <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h. À partir de 490€ tout inclus.</p>
     <div class="hero-buttons" style="justify-content: center;"><a href="/contact.php" class="btn btn-primary">Demander un devis</a></div>
   </div></div></section>
 

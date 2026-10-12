@@ -270,9 +270,11 @@ function formatPrix($prix) {
                         <button type="submit" class="tarifs-form-btn">Recevoir mon estimation</button>
                     </form>
 
-                    <a href="tel:<?= e(str_replace(' ', '', $config['contact_tel'] ?? '')) ?>" class="tarifs-rappel">
-                        Ou être rappelé : <?= e($config['contact_tel'] ?? '06 00 00 00 00') ?>
+                    <?php if (!empty($config['contact_tel'])): ?>
+                    <a href="tel:<?= e(str_replace(' ', '', $config['contact_tel'])) ?>" class="tarifs-rappel">
+                        Ou être rappelé : <?= e($config['contact_tel']) ?>
                     </a>
+                    <?php endif; ?>
 
                     <p class="tarifs-mentions">
                         Estimation indicative, sans valeur de devis. Le devis définitif est établi après un échange.<br>
@@ -280,7 +282,7 @@ function formatPrix($prix) {
                     </p>
                     <p class="tarifs-mentions" style="margin-top: 12px;">
                         Votre e-mail sert uniquement à vous envoyer l'estimation et à vous recontacter.
-                        <a href="politique-confidentialite.html">Politique de confidentialité</a>
+                        <a href="/politique-confidentialite.php">Politique de confidentialité</a>
                     </p>
                 </aside>
             </div>
