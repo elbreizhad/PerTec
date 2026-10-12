@@ -4,6 +4,8 @@ $pageDescription = 'Créez votre site internet de restaurant. Menu digital, rés
 $canonicalUrl = '/secteurs/restaurant';
 $activeMenu = '';
 
+require_once dirname(__DIR__) . '/config/site.php';
+$schemaJson = schema_service_metier('restaurants', '/secteurs/restaurant');
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 

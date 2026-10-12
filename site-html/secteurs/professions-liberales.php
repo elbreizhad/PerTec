@@ -29,6 +29,8 @@ $faq = [
     ['Je n\'ai pas de temps à y consacrer.', 'Un échange de 30 minutes suffit pour que je comprenne votre activité. Je rédige les textes, vous relisez, je mets en ligne. Les modifications ensuite se font par simple e-mail.'],
 ];
 
+require_once dirname(__DIR__) . '/config/site.php';
+$schemaJson = schema_service_metier('professions libérales', '/secteurs/professions-liberales');
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 
@@ -58,7 +60,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
               Un site à votre nom présente votre cabinet tel que vous le souhaitez, répond aux questions répétitives et oriente directement vers la prise de rendez-vous.
             </p>
           </div>
-          <div class="zone-map" style="background: url('/images/professions/bureau.jpg') center/cover; border-radius: 16px;"></div>
+          <div class="zone-map" style="background: url('/images/professions/bureau.webp') center/cover; border-radius: 16px;"></div>
         </div>
       </div>
     </div>

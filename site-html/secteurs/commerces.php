@@ -29,6 +29,8 @@ $faq = [
     ['Combien ça coûte ?', 'À partir de 490 € pour une page unique complète, 990 € pour un site de 5 pages, puis 39 €/mois tout compris. Le configurateur de tarifs vous donne une estimation en une minute.'],
 ];
 
+require_once dirname(__DIR__) . '/config/site.php';
+$schemaJson = schema_service_metier('commerces', '/secteurs/commerces');
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 
@@ -58,7 +60,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
               Un site de commerce répond à ces questions en quelques secondes, montre vos produits et donne envie de pousser la porte.
             </p>
           </div>
-          <div class="zone-map" style="background: url('/images/commerces/fleuriste.jpg') center/cover; border-radius: 16px;"></div>
+          <div class="zone-map" style="background: url('/images/commerces/fleuriste.webp') center/cover; border-radius: 16px;"></div>
         </div>
       </div>
     </div>

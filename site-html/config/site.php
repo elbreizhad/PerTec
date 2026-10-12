@@ -72,3 +72,19 @@ function schema_service_ville(string $ville, string $slug): string {
         'provider' => schema_entreprise(),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 }
+
+/**
+ * JSON-LD d'une page métier ou secteur : le service proposé à ce métier.
+ */
+function schema_service_metier(string $metier, string $chemin): string {
+    return json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Service',
+        'name' => 'Création de site internet pour ' . $metier,
+        'serviceType' => 'Création de site internet',
+        'url' => 'https://pertec.fr' . $chemin,
+        'areaServed' => ['@type' => 'AdministrativeArea', 'name' => 'Normandie'],
+        'offers' => ['@type' => 'Offer', 'price' => '490', 'priceCurrency' => 'EUR', 'description' => 'Site clé en main à partir de 490 €'],
+        'provider' => schema_entreprise(),
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+}

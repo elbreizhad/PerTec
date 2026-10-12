@@ -6,8 +6,6 @@
 
 session_start();
 require_once __DIR__ . '/includes/turnstile.php';
-require_once __DIR__ . '/includes/stats.php';
-stats_track_pageview();
 
 // Générer le token CSRF si nécessaire
 if (empty($_SESSION['csrf_token'])) {
@@ -39,73 +37,18 @@ function formatPrix($prix) {
     if ($prix === null) return 'Sur devis';
     return number_format($prix, 0, ',', ' ') . ' €';
 }
+
+$pageTitle = 'Tarifs Création Site Internet | Devis en Ligne | Pertec.fr';
+$pageDescription = 'Estimez le prix de votre site internet en 4 questions. Tarifs transparents pour artisans, commerces et PME. À partir de 490 €. Devis gratuit.';
+$canonicalUrl = '/tarifs';
+$activeMenu = 'tarifs';
+$bodyClass = 'page-tarifs';
+$extraHead = '  <link rel="stylesheet" href="/css/tarifs.css">' . "\n"
+    . ($turnstileSiteKey ? '  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' . "\n" : '');
+$extraScripts = '  <script>window.PERTEC_TARIFS = ' . json_encode($tarifs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';</script>' . "\n"
+    . '  <script src="/js/tarifs.js"></script>' . "\n";
+require_once __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarifs Création Site Internet | Devis en Ligne | Pertec.fr</title>
-    <meta name="description" content="Estimez le prix de votre site internet en 4 questions. Tarifs transparents pour artisans, commerces et PME. À partir de 490 €. Devis gratuit.">
-    <link rel="canonical" href="https://pertec.fr/tarifs">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- CSS principal du site -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- CSS spécifique tarifs -->
-    <link rel="stylesheet" href="css/tarifs.css">
-    <?php if ($turnstileSiteKey): ?>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <?php endif; ?>
-</head>
-<body class="page-tarifs">
-
-    <!-- Background Effects -->
-    <div class="bg-effects">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="grid-pattern"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-inner">
-                <a href="/" class="logo">
-                    <img src="images/logo-pertec.svg?v=2" alt="Pertec">
-                </a>
-                <nav class="nav">
-                    <a href="services.html" class="nav-link">Services</a>
-                    <a href="tarifs.php" class="nav-link active">Tarifs</a>
-                    <a href="realisations.html" class="nav-link">Réalisations</a>
-                    <a href="a-propos.html" class="nav-link">À propos</a>
-                    <a href="contact.php" class="nav-link">Contact</a>
-                </nav>
-                <a href="contact.php" class="btn btn-primary header-cta">Devis gratuit</a>
-                <button class="menu-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu">
-        <a href="services.html">Services</a>
-        <a href="tarifs.php">Tarifs</a>
-        <a href="realisations.html">Réalisations</a>
-        <a href="a-propos.html">À propos</a>
-        <a href="contact.php">Contact</a>
-        <a href="contact.php" class="btn btn-primary">Devis gratuit</a>
-    </div>
 
     <main>
         <div class="tarifs-container">
@@ -308,25 +251,4 @@ function formatPrix($prix) {
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>© 2025 Pertec.fr - Création de sites internet</p>
-                <div class="footer-legal">
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <a href="politique-confidentialite.html">Confidentialité</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script src="js/main.js"></script>
-    <script>
-        // Injection de la grille tarifaire pour le JS
-        window.PERTEC_TARIFS = <?= json_encode($tarifs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
-    </script>
-    <script src="js/tarifs.js"></script>
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

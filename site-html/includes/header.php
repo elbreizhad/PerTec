@@ -10,8 +10,13 @@ stats_track_pageview();
  * - $canonicalUrl : URL canonique (chemin relatif, ex: "/services")
  * - $activeMenu : menu actif (services, tarifs, realisations, apropos, contact)
  * - $schemaJson : (optionnel) JSON-LD Schema.org
- * - $ogData : (optionnel) tableau Open Graph ['title', 'description', 'type', 'url']
+ * - $ogData : (optionnel) surcharge Open Graph ['title', 'description', 'type', 'url', 'image']
+ * - $extraHead : (optionnel) HTML ajouté en fin de <head> (scripts, CSS spécifiques)
+ * - $bodyClass : (optionnel) classe CSS du <body>
+ * - $noindex : (optionnel) true pour une page à ne pas indexer (ex. 404)
  */
+$ogData = $ogData ?? [];
+$ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,7 +25,11 @@ stats_track_pageview();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($pageTitle) ?></title>
   <meta name="description" content="<?= htmlspecialchars($pageDescription) ?>">
+<?php if (!empty($noindex)): ?>
+  <meta name="robots" content="noindex">
+<?php else: ?>
   <link rel="canonical" href="https://pertec.fr<?= htmlspecialchars($canonicalUrl) ?>">
+<?php endif; ?>
 <?php if (GOOGLE_SITE_VERIFICATION !== ''): ?>
   <meta name="google-site-verification" content="<?= htmlspecialchars(GOOGLE_SITE_VERIFICATION) ?>">
 <?php endif; ?>
@@ -28,19 +37,21 @@ stats_track_pageview();
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-<?php if (!empty($ogData)): ?>
-  <!-- Open Graph -->
+  <!-- Partage (Open Graph) -->
+  <meta property="og:site_name" content="Pertec">
   <meta property="og:title" content="<?= htmlspecialchars($ogData['title'] ?? $pageTitle) ?>">
   <meta property="og:description" content="<?= htmlspecialchars($ogData['description'] ?? $pageDescription) ?>">
   <meta property="og:type" content="<?= htmlspecialchars($ogData['type'] ?? 'website') ?>">
   <meta property="og:url" content="https://pertec.fr<?= htmlspecialchars($ogData['url'] ?? $canonicalUrl) ?>">
+  <meta property="og:image" content="https://pertec.fr<?= htmlspecialchars($ogImage) ?>">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
 
-<?php endif; ?>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Police hébergée sur le site (pas d'appel à Google Fonts) -->
+  <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/css/style.css">
@@ -51,8 +62,9 @@ stats_track_pageview();
   <?= $schemaJson ?>
   </script>
 <?php endif; ?>
+<?= $extraHead ?? '' ?>
 </head>
-<body>
+<body<?= !empty($bodyClass) ? ' class="' . htmlspecialchars($bodyClass) . '"' : '' ?>>
   <!-- Background Effects -->
   <div class="bg-effects">
     <div class="orb orb-1"></div>

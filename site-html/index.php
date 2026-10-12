@@ -140,9 +140,9 @@ require_once __DIR__ . '/includes/header.php';
       <div class="portfolio-grid">
 <?php
 $realisations = [
-    ['nom' => 'CFSSIS', 'image' => 'cfssis.jpg', 'categorie' => 'Formation', 'url' => 'https://cfssis.fr', 'texte' => 'Site vitrine complet pour un centre de formation en sécurité incendie et sûreté.'],
-    ['nom' => 'Il Manque 1', 'image' => 'ilmanque1.jpg', 'categorie' => 'E-commerce', 'url' => 'https://ilmanque1.fr', 'texte' => 'Boutique en ligne avec catalogue produits, panier et commande en ligne.'],
-    ['nom' => 'Solution Sécurité', 'image' => 'solution-securite.jpg', 'categorie' => 'Sécurité privée', 'url' => 'https://solution-securite.fr', 'texte' => 'Site professionnel pour une entreprise de gardiennage et de surveillance.'],
+    ['nom' => 'CFSSIS', 'image' => 'cfssis.webp', 'categorie' => 'Formation', 'url' => 'https://cfssis.fr', 'texte' => 'Site vitrine complet pour un centre de formation en sécurité incendie et sûreté.'],
+    ['nom' => 'Il Manque 1', 'image' => 'ilmanque1.webp', 'categorie' => 'E-commerce', 'url' => 'https://ilmanque1.fr', 'texte' => 'Boutique en ligne avec catalogue produits, panier et commande en ligne.'],
+    ['nom' => 'Solution Sécurité', 'image' => 'solution-securite.webp', 'categorie' => 'Sécurité privée', 'url' => 'https://solution-securite.fr', 'texte' => 'Site professionnel pour une entreprise de gardiennage et de surveillance.'],
 ];
 foreach ($realisations as $r):
 ?>
@@ -230,7 +230,7 @@ foreach ($realisations as $r):
 
       <div class="secteurs-img-grid">
         <a href="/secteurs/artisan" class="secteur-img-card" data-animate>
-          <img src="/images/artisans/electricien.jpg" alt="Artisan électricien au travail">
+          <img src="/images/artisans/electricien.webp" loading="lazy" decoding="async" width="800" height="534" alt="Artisan électricien au travail">
           <div class="secteur-img-overlay">
             <h3>Artisans</h3>
             <p>Plombiers, électriciens, maçons, menuisiers...</p>
@@ -239,7 +239,7 @@ foreach ($realisations as $r):
         </a>
 
         <a href="/secteurs/restaurant" class="secteur-img-card" data-animate>
-          <img src="/images/restaurants/restaurant-1.jpg" alt="Intérieur de restaurant moderne">
+          <img src="/images/restaurants/restaurant-1.webp" loading="lazy" decoding="async" width="800" height="534" alt="Intérieur de restaurant moderne">
           <div class="secteur-img-overlay">
             <h3>Restaurants</h3>
             <p>Bistrots, brasseries, cafés, traiteurs...</p>
@@ -248,7 +248,7 @@ foreach ($realisations as $r):
         </a>
 
         <a href="/secteurs/commerces" class="secteur-img-card" data-animate>
-          <img src="/images/commerces/boutique.jpg" alt="Devanture de boutique">
+          <img src="/images/commerces/boutique.webp" loading="lazy" decoding="async" width="800" height="534" alt="Devanture de boutique">
           <div class="secteur-img-overlay">
             <h3>Commerces</h3>
             <p>Boutiques, fleuristes, magasins...</p>
@@ -257,7 +257,7 @@ foreach ($realisations as $r):
         </a>
 
         <a href="/secteurs/professions-liberales" class="secteur-img-card" data-animate>
-          <img src="/images/professions/bureau.jpg" alt="Bureau professionnel">
+          <img src="/images/professions/bureau.webp" loading="lazy" decoding="async" width="800" height="534" alt="Bureau professionnel">
           <div class="secteur-img-overlay">
             <h3>Professions libérales</h3>
             <p>Avocats, comptables, kinés...</p>
@@ -266,7 +266,7 @@ foreach ($realisations as $r):
         </a>
 
         <a href="/sites-metiers/coiffeur" class="secteur-img-card" data-animate>
-          <img src="/images/beaute/coiffeur.jpg" alt="Salon de coiffure">
+          <img src="/images/beaute/coiffeur.webp" loading="lazy" decoding="async" width="800" height="534" alt="Salon de coiffure">
           <div class="secteur-img-overlay">
             <h3>Beauté & Bien-être</h3>
             <p>Coiffeurs, esthéticiennes, spas...</p>
@@ -275,7 +275,7 @@ foreach ($realisations as $r):
         </a>
 
         <a href="/services" class="secteur-img-card" data-animate>
-          <img src="/images/hero/hero-workspace.jpg" alt="Espace de travail moderne">
+          <img src="/images/hero/hero-workspace.webp" loading="lazy" decoding="async" width="800" height="534" alt="Espace de travail moderne">
           <div class="secteur-img-overlay">
             <h3>TPE / PME</h3>
             <p>Toutes entreprises locales</p>

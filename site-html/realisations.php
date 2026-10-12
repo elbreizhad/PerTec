@@ -24,7 +24,7 @@ require_once __DIR__ . '/includes/header.php';
     <div class="container">
       <div class="portfolio-grid">
         <div class="portfolio-card glass portfolio-featured" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/cfssis.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/cfssis.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">Sécurité</span>
           </div>
           <div class="portfolio-content">
@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="portfolio-card glass portfolio-featured" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/ilmanque1.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/ilmanque1.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">E-commerce</span>
           </div>
           <div class="portfolio-content">
@@ -56,7 +56,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="portfolio-card glass" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/solution-securite.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/solution-securite.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">Sécurité</span>
           </div>
           <div class="portfolio-content">
@@ -72,7 +72,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="portfolio-card glass" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/sts-securite.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/sts-securite.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">Sécurité</span>
           </div>
           <div class="portfolio-content">
@@ -88,7 +88,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="portfolio-card glass" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/vigiprestance.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/vigiprestance.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">Sécurité</span>
           </div>
           <div class="portfolio-content">

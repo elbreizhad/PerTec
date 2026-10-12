@@ -44,7 +44,7 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L]
 
 # Page d'erreur 404
-ErrorDocument 404 /index.php
+ErrorDocument 404 /404.php
 
 # Cache navigateur (performances)
 <IfModule mod_expires.c>

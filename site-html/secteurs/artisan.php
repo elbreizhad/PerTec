@@ -5,6 +5,8 @@ $canonicalUrl = '/secteurs/artisan';
 $activeMenu = '';
 
 require_once dirname(__DIR__) . '/includes/form.php';
+require_once dirname(__DIR__) . '/config/site.php';
+$schemaJson = schema_service_metier('artisans', '/secteurs/artisan');
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 

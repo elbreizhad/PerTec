@@ -4,6 +4,8 @@ $pageDescription = 'Créez votre site internet de sécurité privée. Site profe
 $canonicalUrl = '/secteurs/securite-privee';
 $activeMenu = '';
 
+require_once dirname(__DIR__) . '/config/site.php';
+$schemaJson = schema_service_metier('entreprises de sécurité privée', '/secteurs/securite-privee');
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 
