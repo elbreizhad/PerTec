@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config/site.php';
 require_once __DIR__ . '/includes/form.php';
+$extraHead = '  <link rel="preload" href="/images/hero/bureau-droite.webp" as="image">' . "\n";
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require __DIR__ . '/config/tarifs.php';
@@ -22,7 +23,7 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero hero-photo">
     <div class="container">
       <div class="hero-content">
         <div class="hero-badge glass" data-animate>
