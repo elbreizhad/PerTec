@@ -68,6 +68,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p>Enfin, votre site a souvent un deuxième public : <strong>les agents de sécurité que vous voulez recruter</strong>. Dans un secteur où trouver du personnel qualifié est un enjeu permanent, une bonne page recrutement fait partie du travail.</p>
 
         <h2>Ce que doit contenir le site d'une société d'agents de sécurité</h2>
+        <figure class="article-figure">
+          <img src="/images/conseils/site-securite-point-par-point.webp" width="1400" height="976" loading="lazy" decoding="async" alt="Maquette annotée du site d'une société de sécurité fictive : mentions CNAPS, prestations, zone d'intervention, formulaire de devis, références, recrutement et téléphone">
+          <figcaption>Les sept éléments détaillés ci-dessous, sur la page d'accueil d'une société de sécurité fictive.</figcaption>
+        </figure>
 
         <h3>1. Les mentions liées à votre autorisation CNAPS</h3>
         <p>Le Code de la sécurité intérieure impose de faire figurer sur les documents de l'entreprise, y compris ses supports commerciaux, le numéro de l'autorisation d'exercice délivrée par le CNAPS ainsi qu'une mention rappelant que cette autorisation ne confère aucun caractère officiel à l'entreprise. Sur un site, on les place dans le pied de page et dans les mentions légales, pour qu'elles soient visibles sur toutes les pages.</p>

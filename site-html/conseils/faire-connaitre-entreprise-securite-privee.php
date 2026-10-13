@@ -90,6 +90,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
         <p>Ces leviers se complètent, mais ils ont un point commun : tous finissent par envoyer le prospect sur votre site. Le partenaire qui vous recommande, l'acheteur qui lit votre dossier, le décideur qui voit votre publication LinkedIn : chacun va taper votre nom dans Google. Le site est l'endroit où se décide la confiance.</p>
 
+        <figure class="article-figure">
+          <img src="/images/conseils/securite-tous-les-chemins.webp" width="1400" height="720" loading="lazy" decoding="async" alt="Schéma : recherche Google, fiche Google, recommandation, appel d'offres, partenaires et LinkedIn mènent tous au site internet, puis à la demande de devis">
+          <figcaption>Quel que soit le levier, le prospect passe par votre site avant de demander un devis.</figcaption>
+        </figure>
+
         <h2>Pourquoi le site internet est le socle</h2>
         <h3>Il vous fait trouver par des clients qui ne vous connaissent pas</h3>
         <p>Le réseau et les recommandations vous apportent des clients qui ont déjà entendu parler de vous. Le référencement sur Google vous amène tous les autres : le gestionnaire d'entrepôt qui vient d'arriver dans la région, l'organisateur d'un salon qui cherche une équipe pour le mois prochain, le commerçant qui a subi des vols. C'est la seule façon de toucher ces clients sans démarchage.</p>

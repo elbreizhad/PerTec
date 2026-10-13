@@ -24,7 +24,7 @@ return [
         'resume' => 'Site internet, référencement local, fiche Google, réseau, appels d\'offres : les leviers pour trouver de nouveaux clients quand on dirige une entreprise de sécurité.',
         'categorie' => 'Sécurité privée',
         'date' => '2026-10-06',
-        'image' => '/images/portfolio/solution-securite.webp',
+        'image' => '/images/conseils/securite-tous-les-chemins.webp',
     ],
     'site-internet-entreprise-securite-privee' => [
         'titre' => 'Site internet pour une entreprise de sécurité privée : ce qui rassure vos clients',
@@ -42,6 +42,6 @@ return [
         'categorie' => 'Prix',
         'date' => '2026-09-15',
         'modifie' => '2026-10-13',
-        'image' => '/images/artisans/electricien.webp',
+        'image' => '/images/conseils/prix-site-artisan.webp',
     ],
 ];

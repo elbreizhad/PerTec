@@ -51,6 +51,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="container">
       <div class="article-prose">
 
+        <figure class="article-figure">
+          <img src="/images/conseils/prix-site-artisan.webp" width="800" height="534" decoding="async" alt="Artisan électricien au travail sur un tableau électrique">
+          <figcaption>Pour un artisan, le bon site est celui qui rapporte des demandes de devis, pas forcément le moins cher.</figcaption>
+        </figure>
+
         <div class="article-answer glass">
           <p class="article-answer-label">La réponse courte</p>
           <p>Pour un site vitrine d'artisan fait par un professionnel, comptez généralement <strong>entre 500 € et 2 500 €</strong> à la création, puis <strong>de 0 à 50 € par mois</strong> pour l'hébergement, le nom de domaine et la maintenance. Moins cher, c'est vous qui faites le travail. Plus cher, c'est une agence ou un site très sur-mesure.</p>
@@ -73,6 +78,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </tbody>
           </table>
         </div>
+
+        <figure class="article-figure">
+          <img src="/images/conseils/prix-site-cout-3-ans.webp" width="1400" height="610" loading="lazy" decoding="async" alt="Graphique du coût d'un site vitrine sur 3 ans : créateur de site 550 à 1 300 €, indépendant 800 à 4 000 €, location 3 000 à 7 000 €, agence 4 000 à 13 000 €">
+          <figcaption>Sur 3 ans, la location avec engagement coûte souvent plus cher qu'un site créé par un indépendant, sans que le site vous appartienne.</figcaption>
+        </figure>
 
         <h3>Le créateur de site : pas cher, mais pas gratuit</h3>
         <p>Les outils comme Wix ou Jimdo sont faciles à prendre en main et conviennent si vous aimez faire les choses vous-même. Le coût caché, c'est votre temps : rédiger les textes, choisir les photos, régler le référencement et tout mettre à jour prend souvent plusieurs dizaines d'heures, le soir après les chantiers. Et un site fait rapidement ressort rarement bien sur Google face à des concurrents mieux préparés.</p>
