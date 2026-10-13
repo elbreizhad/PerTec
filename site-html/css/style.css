@@ -1939,3 +1939,5 @@ button:focus-visible {
 .article-ref-body strong { font-size: 1.1rem; }
 .article-ref-body .article-ref-type { color: var(--primary-light); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 .article-ref-body .article-ref-link { color: var(--primary-light); font-weight: 600; margin-top: 0.25rem; }
+/* Les boutons gardent leur couleur dans le texte des articles */
+.article-prose a.btn { color: var(--white); text-decoration: none; }
