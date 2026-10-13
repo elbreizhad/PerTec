@@ -75,6 +75,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p>Le résultat : du temps perdu, des erreurs (un créneau oublié, deux personnes le même matin) et, surtout, des discussions sur l'équité. Qui a fait le plus de week-ends cette année ? Personne ne sait vraiment.</p>
 
         <h2>Ce que fait l'outil</h2>
+        <figure class="article-figure">
+          <img src="/images/conseils/planning-infirmier-calendrier.webp" width="1400" height="956" loading="lazy" decoding="async" alt="Outil de planning de cabinet infirmier : vue du mois de janvier, avec pour chaque jour les infirmières du matin (M) et du soir (S) en couleur">
+          <figcaption>La vue mensuelle : chaque couleur est une infirmière, M pour la tournée du matin, S pour celle du soir. Les week-ends et jours fériés sont signalés. Équipe fictive.</figcaption>
+        </figure>
         <div class="article-features">
 <?php foreach ($fonctions as [$titre, $texte]): ?>
           <div class="article-feature glass">
@@ -85,6 +89,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
 
         <h2>Ce que ça change au quotidien</h2>
+        <figure class="article-figure">
+          <img src="/images/conseils/planning-infirmier-equilibre.webp" width="1400" height="714" loading="lazy" decoding="async" alt="Tableau d'équilibre entre associés : nombre de demi-journées, week-ends et jours fériés de chaque infirmière, avec l'écart à la moyenne">
+          <figcaption>L'équilibre entre associés : demi-journées, week-ends et fériés de chacun, avec l'écart à la moyenne. La remplaçante est comptée à part. Équipe fictive.</figcaption>
+        </figure>
         <ul>
           <li><strong>Moins de temps passé</strong> : le planning de plusieurs semaines est généré en quelques secondes, puis ajusté si besoin.</li>
           <li><strong>Plus de débat sur l'équité</strong> : les compteurs sont visibles par tous. Si un associé a fait plus de week-ends, ça se voit, et l'outil le compense.</li>

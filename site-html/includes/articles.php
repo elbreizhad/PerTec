@@ -15,7 +15,7 @@ return [
         'resume' => 'Génération automatique des tournées, équité entre associés, remplaçantes, agenda du téléphone : un outil de planning pour cabinets infirmiers et équipes de soignants.',
         'categorie' => 'Outils sur mesure',
         'date' => '2026-10-13',
-        'image' => '/images/hero/hero-workspace.webp',
+        'image' => '/images/conseils/planning-infirmier-calendrier.webp',
     ],
     'site-internet-entreprise-securite-privee' => [
         'titre' => 'Site internet pour une entreprise de sécurité privée : ce qui rassure vos clients',
