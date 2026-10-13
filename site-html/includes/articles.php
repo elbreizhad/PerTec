@@ -19,7 +19,7 @@ return [
     ],
     'site-internet-entreprise-securite-privee' => [
         'titre' => 'Site internet pour une entreprise de sécurité privée : ce qui rassure vos clients',
-        'description' => 'Site internet pour entreprise de sécurité privée ou centre de formation sécurité : mentions CNAPS, prestations, zone, devis, recrutement, Qualiopi. Conseils et exemples réalisés.',
+        'description' => 'Ce que doit contenir le site d\'une société de sécurité ou d\'agents de sécurité : CNAPS, prestations, zone, devis, recrutement. Avec des exemples réalisés.',
         'resume' => 'Autorisation CNAPS, prestations, zone d\'intervention, recrutement, formation : ce que doit contenir le site d\'une société de sécurité ou d\'un centre de formation, avec des exemples réalisés.',
         'categorie' => 'Sécurité privée',
         'date' => '2026-10-13',

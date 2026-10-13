@@ -16,6 +16,7 @@ require_once __DIR__ . '/includes/header.php';
       </div>
       <h1 data-animate>Mes <span class="gradient-text">réalisations</span></h1>
       <p data-animate>Découvrez quelques exemples de sites internet créés pour des entrepreneurs de Normandie et de l'Eure.</p>
+      <p data-animate style="font-size: 1rem;">Sécurité privée : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce que j'ai appris en créant ces sites</a></p>
     </div>
   </section>
 

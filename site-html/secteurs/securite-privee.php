@@ -1,6 +1,16 @@
 <?php
-$pageTitle = 'Création Site Internet Sécurité Privée | Agent, Gardiennage | Pertec.fr';
-$pageDescription = 'Créez votre site internet de sécurité privée. Site professionnel pour entreprises de gardiennage, surveillance, agents de sécurité. Devis gratuit.';
+$pageTitle = 'Création de site pour société de sécurité | Pertec';
+$pageDescription = 'Création de site internet pour société de sécurité, de gardiennage ou centre de formation. Déjà 4 sites réalisés dans le secteur. Dès 990 €, devis en 24h.';
+
+$tarifs = require dirname(__DIR__) . '/config/tarifs.php';
+$offres = $tarifs['type_site']['options'];
+$mensuel = $tarifs['suivi']['inclus']['mensuel'];
+$realisations = [
+    ['nom' => 'STS Sécurité', 'url' => 'https://sts-securite.fr', 'image' => 'sts-securite.webp', 'type' => 'Entreprise de sécurité privée', 'texte' => 'Présentation de l\'équipe et des services, demande de devis en ligne.'],
+    ['nom' => 'Vigiprestance', 'url' => 'https://vigiprestance.fr', 'image' => 'vigiprestance.webp', 'type' => 'Surveillance et gardiennage', 'texte' => 'Prestations et zone d\'intervention claires, formulaire de contact.'],
+    ['nom' => 'Solution Sécurité', 'url' => 'https://solution-securite.fr', 'image' => 'solution-securite.webp', 'type' => 'Gardiennage et protection', 'texte' => 'Gardiennage, surveillance et protection, référencement local.'],
+    ['nom' => 'CFSSIS', 'url' => 'https://cfssis.fr', 'image' => 'cfssis.webp', 'type' => 'Centre de formation sécurité', 'texte' => 'Formations en sécurité incendie et sûreté, demandes d\'inscription.'],
+];
 $canonicalUrl = '/secteurs/securite-privee';
 $activeMenu = '';
 
@@ -16,8 +26,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <span class="dot"></span>
         Site pour la sécurité privée
       </div>
-      <h1 data-animate>Création de site internet <span class="gradient-text">sécurité privée</span></h1>
-      <p data-animate>Gardiennage, surveillance, agents de sécurité... Un site professionnel qui inspire confiance.</p>
+      <h1 data-animate>Création de site internet <span class="gradient-text">pour société de sécurité</span></h1>
+      <p data-animate>Gardiennage, surveillance, agents de sécurité, centres de formation : j'ai déjà créé 4 sites dans le secteur. Un site qui inspire confiance aux donneurs d'ordre.</p>
     </div>
   </section>
 
@@ -158,10 +168,50 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- Réalisations -->
   <section>
-    <div class="container" style="text-align: center;">
-      <p style="color: var(--gray-400); max-width: 700px; margin: 0 auto;" data-animate>J'ai créé les sites de STS Sécurité, Vigiprestance, Solution Sécurité et du centre de formation CFSSIS. Ce que j'en ai retenu : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce qui rassure les clients d'une entreprise de sécurité</a>.</p>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Déjà <span class="gradient-text">4 sites</span> dans la sécurité</h2>
+        <p class="section-subtitle" data-animate>Entreprises d'agents de sécurité, de gardiennage et centre de formation : ces sites sont en ligne.</p>
+      </div>
+      <div class="article-refs article-refs-2">
+<?php foreach ($realisations as $r): ?>
+        <a href="<?= $r['url'] ?>" target="_blank" rel="noopener" class="article-ref glass" data-animate>
+          <img class="article-ref-img" src="/images/portfolio/<?= $r['image'] ?>" width="640" height="360" loading="lazy" decoding="async" alt="Site internet de <?= htmlspecialchars($r['nom']) ?> (<?= htmlspecialchars(mb_strtolower($r['type'])) ?>) réalisé par Pertec">
+          <span class="article-ref-body">
+            <span class="article-ref-type"><?= htmlspecialchars($r['type']) ?></span>
+            <strong><?= htmlspecialchars($r['nom']) ?></strong>
+            <span><?= htmlspecialchars($r['texte']) ?></span>
+            <span class="article-ref-link">Voir le site →</span>
+          </span>
+        </a>
+<?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tarifs -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Combien coûte un site <span class="gradient-text">pour une société de sécurité</span> ?</h2>
+        <p class="section-subtitle" data-animate>Une page par prestation, une zone d'intervention claire, une page recrutement : la plupart des sociétés de sécurité partent sur 5 à 10 pages.</p>
+      </div>
+      <div class="features-grid home-pricing">
+        <div class="feature-card glass" data-animate>
+          <h3><?= htmlspecialchars($offres['vitrine5']['label']) ?></h3>
+          <p class="home-price"><?= number_format($offres['vitrine5']['creation'], 0, ',', ' ') ?> €</p>
+          <p>Accueil, prestations, zone d'intervention, recrutement, contact.</p>
+        </div>
+        <div class="feature-card glass portfolio-featured" data-animate>
+          <h3><?= htmlspecialchars($offres['vitrine10']['label']) ?></h3>
+          <p class="home-price"><?= number_format($offres['vitrine10']['creation'], 0, ',', ' ') ?> €</p>
+          <p>Une page par prestation (gardiennage, rondes, SSIAP, événementiel…) ou par secteur.</p>
+        </div>
+      </div>
+      <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, nom de domaine, mises à jour et modifications sous 48 h, sans engagement. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
+      <p style="color: var(--gray-400); text-align: center; max-width: 700px; margin: 2rem auto 0;" data-animate>Avant de vous lancer : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce que doit contenir le site d'une entreprise de sécurité</a> (mentions CNAPS, devis, recrutement).</p>
     </div>
   </section>
 

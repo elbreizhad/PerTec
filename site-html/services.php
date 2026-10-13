@@ -166,7 +166,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">🏠</div>
           <h3>Site vitrine</h3>
-          <p>Présentez votre activité, vos services et vos coordonnées. Idéal pour artisans, professions libérales et PME.</p>
+          <p>Présentez votre activité, vos services et vos coordonnées. Idéal pour artisans, professions libérales et PME, ou <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">entreprises de sécurité</a>.</p>
           <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 490 €</p>
         </div>
 

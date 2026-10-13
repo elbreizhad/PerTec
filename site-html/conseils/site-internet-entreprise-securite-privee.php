@@ -19,7 +19,7 @@ $realisations = [
     ['nom' => 'CFSSIS', 'url' => 'https://cfssis.fr', 'image' => 'cfssis.webp', 'type' => 'Centre de formation sécurité incendie et sûreté', 'texte' => 'Site multi-pages pour présenter les formations et recevoir les demandes d\'inscription.'],
 ];
 
-$pageTitle = 'Site internet pour entreprise de sécurité privée et centre de formation | Pertec';
+$pageTitle = 'Site internet pour entreprise de sécurité privée | Pertec';
 $pageDescription = $article['description'];
 $canonicalUrl = '/conseils/' . $slug;
 $activeMenu = 'conseils';
@@ -55,7 +55,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="container">
       <div class="article-prose">
 
-        <p>J'ai créé les sites de plusieurs structures de la sécurité privée : trois entreprises de gardiennage et de surveillance, <strong>STS Sécurité</strong>, <strong>Vigiprestance</strong> et <strong>Solution Sécurité</strong>, et un centre de formation en sécurité incendie et sûreté, <strong>CFSSIS</strong>. Ce secteur a ses propres règles, ses propres clients et ses propres questions. Voici ce que j'en ai retenu, et ce qu'un site doit faire pour une société de sécurité ou un organisme de formation.</p>
+        <p>J'ai créé les sites de plusieurs structures de la sécurité privée : trois entreprises d'agents de sécurité, de gardiennage et de surveillance, <strong>STS Sécurité</strong>, <strong>Vigiprestance</strong> et <strong>Solution Sécurité</strong>, et un centre de formation en sécurité incendie et sûreté, <strong>CFSSIS</strong>. Ce secteur a ses propres règles, ses propres clients et ses propres questions. Voici ce que j'en ai retenu, et ce qu'un site doit faire pour une société de sécurité ou un organisme de formation.</p>
 
         <div class="article-answer glass">
           <p class="article-answer-label">L'essentiel</p>
@@ -65,16 +65,16 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h2>Pourquoi la sécurité privée est un secteur à part</h2>
         <p>La plupart de vos clients sont des professionnels : syndics, gestionnaires d'entrepôts, commerces, organisateurs d'événements, chantiers, parfois des acheteurs publics. Ils comparent plusieurs prestataires, souvent par écrit, et ils ont une responsabilité : confier un site à une entreprise qui ne serait pas en règle leur poserait problème.</p>
         <p>Le métier est aussi encadré. Les entreprises, leurs dirigeants et leurs agents doivent être autorisés par le CNAPS, le Conseil national des activités privées de sécurité. Un site qui ignore cet aspect paraît amateur aux yeux d'un client averti. Un site qui le met en avant rassure tout de suite.</p>
-        <p>Enfin, votre site a souvent un deuxième public : <strong>les agents que vous voulez recruter</strong>. Dans un secteur où trouver du personnel qualifié est un enjeu permanent, une bonne page recrutement fait partie du travail.</p>
+        <p>Enfin, votre site a souvent un deuxième public : <strong>les agents de sécurité que vous voulez recruter</strong>. Dans un secteur où trouver du personnel qualifié est un enjeu permanent, une bonne page recrutement fait partie du travail.</p>
 
-        <h2>Ce que doit contenir le site d'une société de sécurité</h2>
+        <h2>Ce que doit contenir le site d'une société d'agents de sécurité</h2>
 
         <h3>1. Les mentions liées à votre autorisation CNAPS</h3>
         <p>Le Code de la sécurité intérieure impose de faire figurer sur les documents de l'entreprise, y compris ses supports commerciaux, le numéro de l'autorisation d'exercice délivrée par le CNAPS ainsi qu'une mention rappelant que cette autorisation ne confère aucun caractère officiel à l'entreprise. Sur un site, on les place dans le pied de page et dans les mentions légales, pour qu'elles soient visibles sur toutes les pages.</p>
         <p>C'est aussi un argument commercial : un prospect qui voit le numéro d'autorisation sait qu'il a affaire à une entreprise en règle. Je l'intègre sur chaque site du secteur. Pour la formulation exacte, référez-vous aux textes en vigueur ou au CNAPS.</p>
 
         <h3>2. Une page par prestation</h3>
-        <p>Gardiennage, rondes et intervention sur alarme, sécurité événementielle, sécurité incendie (SSIAP), maître-chien, accueil et filtrage, protection de chantiers… Chaque prestation correspond à des recherches différentes sur Google et à des clients différents. Une page dédiée par prestation explique ce que vous faites, pour qui, avec quels agents et quelles qualifications. C'est meilleur pour le référencement et plus clair pour le client.</p>
+        <p>Gardiennage, rondes et intervention sur alarme, sécurité événementielle, sécurité incendie (SSIAP), maître-chien, accueil et filtrage, protection de chantiers… Chaque prestation correspond à des recherches différentes sur Google et à des clients différents. Une page dédiée par prestation explique ce que vous faites, pour qui, avec quels agents de sécurité et quelles qualifications. C'est meilleur pour le référencement et plus clair pour le client.</p>
 
         <h3>3. Une zone d'intervention précise</h3>
         <p>« Nous intervenons partout » ne rassure personne. Un client veut savoir si vous couvrez sa ville et en combien de temps vous pouvez être sur place. Listez les départements et les principales villes couvertes, et créez des pages locales pour les secteurs où vous voulez vous développer.</p>
@@ -117,7 +117,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <div class="article-refs">
 <?php foreach ($realisations as $r): ?>
           <a href="<?= $r['url'] ?>" target="_blank" rel="noopener" class="article-ref glass">
-            <span class="article-ref-image" style="background-image: url('/images/portfolio/<?= $r['image'] ?>');"></span>
+            <img class="article-ref-img" src="/images/portfolio/<?= $r['image'] ?>" width="640" height="360" loading="lazy" decoding="async" alt="Site internet de <?= htmlspecialchars($r['nom']) ?> (<?= htmlspecialchars(mb_strtolower($r['type'])) ?>) réalisé par Pertec">
             <span class="article-ref-body">
               <span class="article-ref-type"><?= htmlspecialchars($r['type']) ?></span>
               <strong><?= htmlspecialchars($r['nom']) ?></strong>
