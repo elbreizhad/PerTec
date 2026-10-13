@@ -9,6 +9,14 @@
  */
 
 return [
+    'planning-cabinet-infirmier' => [
+        'titre' => 'Planning de cabinet infirmier : fini les heures sur le tableau',
+        'description' => 'Outil web qui génère le planning d\'un cabinet infirmier : équité entre associés, week-ends, fériés, remplaçantes, agenda et PDF. Sur devis.',
+        'resume' => 'Génération automatique des tournées, équité entre associés, remplaçantes, agenda du téléphone : un outil de planning pour cabinets infirmiers et équipes de soignants.',
+        'categorie' => 'Outils sur mesure',
+        'date' => '2026-10-13',
+        'image' => '/images/hero/hero-workspace.webp',
+    ],
     'site-internet-entreprise-securite-privee' => [
         'titre' => 'Site internet pour une entreprise de sécurité privée : ce qui rassure vos clients',
         'description' => 'Site internet pour entreprise de sécurité privée ou centre de formation sécurité : mentions CNAPS, prestations, zone, devis, recrutement, Qualiopi. Conseils et exemples réalisés.',

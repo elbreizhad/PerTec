@@ -187,7 +187,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">⚙️</div>
           <h3>Application sur-mesure</h3>
-          <p>Espace client, outil métier, tableau de bord... Une solution développée selon vos besoins spécifiques.</p>
+          <p>Espace client, outil métier, tableau de bord... Une solution développée selon vos besoins spécifiques. Exemple : <a href="/conseils/planning-cabinet-infirmier" style="color: var(--primary-light);">un planning de cabinet infirmier</a>.</p>
           <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">Sur devis</p>
         </div>
       </div>

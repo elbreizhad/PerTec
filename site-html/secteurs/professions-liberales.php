@@ -130,6 +130,12 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+  <section>
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--gray-400); max-width: 700px; margin: 0 auto;" data-animate>Besoin d'un outil pour organiser votre équipe ? Découvrez <a href="/conseils/planning-cabinet-infirmier" style="color: var(--primary-light);">l'outil de planning créé pour un cabinet infirmier</a>.</p>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta-section">
     <div class="container">

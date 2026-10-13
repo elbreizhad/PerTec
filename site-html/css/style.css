@@ -1963,3 +1963,9 @@ button:focus-visible {
 }
 .hero-photo h1, .hero-photo p { text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6); }
 .hero-photo p { color: #d1d5db; }
+
+.article-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+.article-feature { padding: 1.25rem; border-radius: 12px; }
+.article-prose .article-feature h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.article-feature p { color: var(--gray-400); font-size: 0.92rem; line-height: 1.55; margin: 0; }
+.article-features-compact .article-feature { padding: 1rem 1.25rem; }
