@@ -211,7 +211,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
       <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, nom de domaine, mises à jour et modifications sous 48 h, sans engagement. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
-      <p style="color: var(--gray-400); text-align: center; max-width: 700px; margin: 2rem auto 0;" data-animate>Avant de vous lancer : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce que doit contenir le site d'une entreprise de sécurité</a> (mentions CNAPS, devis, recrutement).</p>
+      <p style="color: var(--gray-400); text-align: center; max-width: 700px; margin: 2rem auto 0;" data-animate>Avant de vous lancer : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce que doit contenir le site d'une entreprise de sécurité</a> (mentions CNAPS, devis, recrutement), et <a href="/conseils/faire-connaitre-entreprise-securite-privee" style="color: var(--primary-light);">comment faire connaître son entreprise de sécurité</a>.</p>
     </div>
   </section>
 

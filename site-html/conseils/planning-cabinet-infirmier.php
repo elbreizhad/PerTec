@@ -2,8 +2,8 @@
 require_once dirname(__DIR__) . '/config/site.php';
 
 $slug = 'planning-cabinet-infirmier';
-$articles = require dirname(__DIR__) . '/includes/articles.php';
-$article = $articles[$slug];
+require_once dirname(__DIR__) . '/includes/conseils.php';
+$article = conseil($slug);
 
 $pageTitle = 'Planning de cabinet infirmier : un outil sur mesure | Pertec';
 $pageDescription = $article['description'];
@@ -17,7 +17,7 @@ $schemaJson = json_encode([
     'headline' => $article['titre'],
     'description' => $article['description'],
     'datePublished' => $article['date'],
-    'dateModified' => $article['date'],
+    'dateModified' => $article['modifie'],
     'inLanguage' => 'fr-FR',
     'mainEntityOfPage' => 'https://pertec.fr' . $canonicalUrl,
     'image' => 'https://pertec.fr/images/og-pertec.jpg',
@@ -55,7 +55,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <div class="container">
         <nav class="article-breadcrumb" aria-label="Fil d'Ariane"><a href="/">Accueil</a> › <a href="/conseils/">Conseils</a> › <span><?= htmlspecialchars($article['categorie']) ?></span></nav>
         <h1 data-animate>Planning de cabinet infirmier : <span class="gradient-text">fini les heures sur le tableau</span></h1>
-        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites et d'outils web à Évreux · <time datetime="<?= $article['date'] ?>">13 octobre 2026</time> · 6 min de lecture</p>
+        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites et d'outils web à Évreux · <time datetime="<?= $article['date'] ?>"><?= date_longue_fr($article['date']) ?></time> · 6 min de lecture</p>
       </div>
     </header>
 

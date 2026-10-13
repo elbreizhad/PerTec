@@ -1,12 +1,12 @@
 <?php
-$articles = require dirname(__DIR__) . '/includes/articles.php';
+require_once dirname(__DIR__) . '/includes/conseils.php';
+$articles = conseils_publies();
 
 $pageTitle = 'Conseils site internet pour artisans et commerces | Pertec.fr';
 $pageDescription = 'Prix, visibilité sur Google, avis clients, obligations légales : des conseils clairs pour les artisans, commerçants et indépendants qui veulent un site internet.';
 $canonicalUrl = '/conseils/';
 $activeMenu = 'conseils';
 
-$moisFr = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
 require_once dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -25,14 +25,13 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <section>
     <div class="container">
       <div class="articles-grid">
-<?php foreach ($articles as $slug => $a):
-    $date = new DateTimeImmutable($a['date']); ?>
+<?php foreach ($articles as $slug => $a): ?>
         <a href="/conseils/<?= $slug ?>" class="article-card glass" data-animate>
           <div class="article-card-image" style="background-image: url('<?= htmlspecialchars($a['image']) ?>');">
             <span class="portfolio-category glass"><?= htmlspecialchars($a['categorie']) ?></span>
           </div>
           <div class="article-card-content">
-            <time datetime="<?= $a['date'] ?>"><?= $date->format('j') ?> <?= $moisFr[(int) $date->format('n')] ?> <?= $date->format('Y') ?></time>
+            <time datetime="<?= $a['date'] ?>"><?= date_longue_fr($a['date']) ?></time>
             <h2><?= htmlspecialchars($a['titre']) ?></h2>
             <p><?= htmlspecialchars($a['resume']) ?></p>
             <span class="btn-link">Lire l'article →</span>

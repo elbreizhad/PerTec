@@ -2,8 +2,8 @@
 require_once dirname(__DIR__) . '/config/site.php';
 
 $slug = 'site-internet-entreprise-securite-privee';
-$articles = require dirname(__DIR__) . '/includes/articles.php';
-$article = $articles[$slug];
+require_once dirname(__DIR__) . '/includes/conseils.php';
+$article = conseil($slug);
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -31,7 +31,7 @@ $schemaJson = json_encode([
     'headline' => $article['titre'],
     'description' => $article['description'],
     'datePublished' => $article['date'],
-    'dateModified' => $article['date'],
+    'dateModified' => $article['modifie'],
     'inLanguage' => 'fr-FR',
     'mainEntityOfPage' => 'https://pertec.fr' . $canonicalUrl,
     'image' => 'https://pertec.fr/images/og-pertec.jpg',
@@ -48,7 +48,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <div class="container">
         <nav class="article-breadcrumb" aria-label="Fil d'Ariane"><a href="/">Accueil</a> › <a href="/conseils/">Conseils</a> › <span><?= htmlspecialchars($article['categorie']) ?></span></nav>
         <h1 data-animate>Site internet pour une entreprise <span class="gradient-text">de sécurité privée</span> : ce qui rassure vos clients</h1>
-        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites à Évreux · <time datetime="<?= $article['date'] ?>">13 octobre 2026</time> · 8 min de lecture</p>
+        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites à Évreux · <time datetime="<?= $article['date'] ?>"><?= date_longue_fr($article['date']) ?></time> · 8 min de lecture</p>
       </div>
     </header>
 
@@ -158,7 +158,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
           </div>
         </div>
 
-        <p class="article-related">À lire aussi : <a href="/conseils/prix-site-internet-artisan">Combien coûte un site internet ?</a> · <a href="/realisations">Toutes mes réalisations</a></p>
+        <p class="article-related">À lire aussi : <a href="/conseils/faire-connaitre-entreprise-securite-privee">Comment faire connaître son entreprise de sécurité privée</a> · <a href="/conseils/prix-site-internet-artisan">Combien coûte un site internet ?</a> · <a href="/realisations">Toutes mes réalisations</a></p>
       </div>
     </div>
   </article>

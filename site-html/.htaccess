@@ -17,6 +17,9 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # Une seule adresse par page : l'URL sans extension (/services).
 # Les formulaires, l'admin et le déploiement gardent leurs URLs .php.
 
+# Sitemap généré automatiquement (sitemap.php)
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
 # Redirection sites-metiers/restaurant vers secteurs/restaurant (doublon supprimé)
 RewriteRule ^sites-metiers/restaurant(\.html|\.php)?$ /secteurs/restaurant [R=301,L]
 

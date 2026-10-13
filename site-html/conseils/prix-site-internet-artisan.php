@@ -2,8 +2,8 @@
 require_once dirname(__DIR__) . '/config/site.php';
 
 $slug = 'prix-site-internet-artisan';
-$articles = require dirname(__DIR__) . '/includes/articles.php';
-$article = $articles[$slug];
+require_once dirname(__DIR__) . '/includes/conseils.php';
+$article = conseil($slug);
 
 // Prix Pertec lus depuis la grille tarifaire (source unique)
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -28,7 +28,7 @@ $schemaJson = json_encode([
     'headline' => $article['titre'],
     'description' => $article['description'],
     'datePublished' => $article['date'],
-    'dateModified' => $article['date'],
+    'dateModified' => $article['modifie'],
     'inLanguage' => 'fr-FR',
     'mainEntityOfPage' => 'https://pertec.fr' . $canonicalUrl,
     'image' => 'https://pertec.fr/images/og-pertec.jpg',
@@ -44,7 +44,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <div class="container">
         <nav class="article-breadcrumb" aria-label="Fil d'Ariane"><a href="/">Accueil</a> › <a href="/conseils/">Conseils</a> › <span><?= htmlspecialchars($article['categorie']) ?></span></nav>
         <h1 data-animate>Combien coûte un site internet <span class="gradient-text">pour un artisan</span> en 2026 ?</h1>
-        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites à Évreux · <time datetime="<?= $article['date'] ?>">12 octobre 2026</time> · 7 min de lecture</p>
+        <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites à Évreux · <time datetime="<?= $article['date'] ?>"><?= date_longue_fr($article['date']) ?></time> · 7 min de lecture</p>
       </div>
     </header>
 
@@ -61,7 +61,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p>Les montants ci-dessous sont des ordres de grandeur couramment pratiqués en France. Chaque prestataire a ses tarifs, mais ces fourchettes permettent de savoir si un devis est dans la norme.</p>
 
         <div class="article-table-wrap">
-          <table class="article-table">
+          <table class="article-table article-table-prix">
             <thead>
               <tr><th>Solution</th><th>À la création</th><th>Ensuite</th><th>Sur 3 ans (environ)</th><th>Qui fait le travail ?</th></tr>
             </thead>
