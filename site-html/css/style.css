@@ -1928,3 +1928,14 @@ button:focus-visible {
   .article-prose h2 { font-size: 1.45rem; }
   .article-answer, .article-cta { padding: 1.25rem; }
 }
+
+.article-refs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.article-ref { display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; text-decoration: none; transition: transform 0.3s ease; }
+.article-prose .article-ref { color: inherit; }
+.article-ref:hover { transform: translateY(-3px); }
+.article-ref-image { display: block; aspect-ratio: 16 / 9; background-size: cover; background-position: top center; }
+.article-ref-body { display: flex; flex-direction: column; gap: 0.3rem; padding: 1rem 1.25rem 1.25rem; font-size: 0.95rem; line-height: 1.5; }
+.article-ref-body > span { color: var(--gray-400); }
+.article-ref-body strong { font-size: 1.1rem; }
+.article-ref-body .article-ref-type { color: var(--primary-light); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.article-ref-body .article-ref-link { color: var(--primary-light); font-weight: 600; margin-top: 0.25rem; }

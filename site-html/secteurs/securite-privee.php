@@ -77,7 +77,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">🏅</div>
           <h3>Autorisations affichées</h3>
-          <p>Mettez en avant vos agréments CNAPS, certifications et accréditations pour rassurer vos prospects.</p>
+          <p>Numéro d'autorisation d'exercice CNAPS, certifications et assurances bien visibles pour rassurer vos prospects.</p>
         </div>
 
         <div class="feature-card glass" data-animate>
@@ -159,6 +159,12 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- CTA -->
+  <section>
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--gray-400); max-width: 700px; margin: 0 auto;" data-animate>J'ai créé les sites de STS Sécurité, Vigiprestance, Solution Sécurité et du centre de formation CFSSIS. Ce que j'en ai retenu : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce qui rassure les clients d'une entreprise de sécurité</a>.</p>
+    </div>
+  </section>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>
