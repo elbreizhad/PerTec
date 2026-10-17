@@ -18,13 +18,21 @@ $seg = function (string $name, string $current) use ($states, $ro): string {
     }
     return $h . '<label><input type="radio" name="' . e($name) . '" value=""' . ($current === '' ? ' checked' : '') . " $ro><span>—</span></label></div>";
 };
+$canEdit = !$locked;                 // ajout de lignes
+$canDelete = !$locked && !$tenantMode;  // suppression des lignes existantes (bailleur)
+/** Bouton de suppression d'une ligne existante (marquée, annulable jusqu'à l'enregistrement). */
+$delBtn = fn(string $name) => $canDelete
+    ? '<input type="hidden" name="' . e($name) . '[_del]" value="" data-del-flag><button type="button" class="row-del" data-del title="Supprimer la ligne" aria-label="Supprimer la ligne">✕</button>'
+    : '';
+/** Bouton de retrait d'une ligne ajoutée (pas encore enregistrée). */
+$rmBtn = '<button type="button" class="row-del" data-remove title="Retirer la ligne" aria-label="Retirer la ligne">✕</button>';
 $stateSelect = function (string $name, string $current, string $attr = '') use ($ro): string {
     $h = '<select name="' . e($name) . "\" $ro $attr><option value=\"\">—</option>";
     foreach (Inspection::STATES as $k => $lbl) $h .= '<option value="' . $k . '"' . ($current === $k ? ' selected' : '') . '>' . e($lbl) . '</option>';
     return $h . '</select>';
 };
 ?>
-<form method="post" action="<?= e($action) ?>">
+<form method="post" action="<?= e($action) ?>" class="edl-form" data-edl-form>
     <?= csrf_field() ?>
     <?php if (!$tenantMode || $sortie): ?>
     <fieldset <?= $ro ?>>
@@ -77,58 +85,69 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
     <fieldset <?= $ro ?>>
         <legend>Clés et accès</legend>
         <div class="table-wrap"><table class="edl-inv">
-            <thead><tr><th>Élément</th><th>Remis à l'entrée</th><?php if ($sortie): ?><th>Restitué</th><?php endif; ?><th>Observations</th></tr></thead>
-            <tbody>
+            <thead><tr><th>Élément</th><th>Remis à l'entrée</th><?php if ($sortie): ?><th>Restitué</th><?php endif; ?><th>Observations</th><th></th></tr></thead>
+            <tbody data-rows>
             <?php foreach ($d['keys'] as $i => $k): ?>
-                <tr><td><?= e($k['label']) ?></td>
+                <tr data-row><td><?= e($k['label']) ?></td>
                     <td><input class="qty" name="keys[<?= $i ?>][in]" value="<?= e($k['in']) ?>" inputmode="numeric" <?= $inRo ?>></td>
                     <?php if ($sortie): ?><td><input class="qty" name="keys[<?= $i ?>][out]" value="<?= e($k['out']) ?>" inputmode="numeric"></td><?php endif; ?>
-                    <td><input name="keys[<?= $i ?>][notes]" value="<?= e($k['notes']) ?>"></td></tr>
+                    <td><input name="keys[<?= $i ?>][notes]" value="<?= e($k['notes']) ?>"></td>
+                    <td class="row-act"><?= $delBtn("keys[$i]") ?></td></tr>
             <?php endforeach; ?>
-            <?php for ($j = 0; $j < Inspection::FREE_ROWS; $j++): ?>
-                <tr><td><input name="keys[new][<?= $j ?>][label]" placeholder="+ Autre (à préciser)"></td>
-                    <td><input class="qty" name="keys[new][<?= $j ?>][in]" inputmode="numeric"></td>
-                    <?php if ($sortie): ?><td><input class="qty" name="keys[new][<?= $j ?>][out]" inputmode="numeric"></td><?php endif; ?>
-                    <td><input name="keys[new][<?= $j ?>][notes]"></td></tr>
-            <?php endfor; ?>
             </tbody>
         </table></div>
+        <?php if ($canEdit): ?>
+            <template><tr data-row><td><input name="keys[new][__N__][label]" placeholder="Élément (ex. badge garage)" data-focus></td>
+                <td><input class="qty" name="keys[new][__N__][in]" inputmode="numeric" <?= $inRo ?>></td>
+                <?php if ($sortie): ?><td><input class="qty" name="keys[new][__N__][out]" inputmode="numeric"></td><?php endif; ?>
+                <td><input name="keys[new][__N__][notes]"></td><td class="row-act"><?= $rmBtn ?></td></tr></template>
+            <button type="button" class="btn btn-sm row-add" data-add>+ Ajouter une ligne</button>
+        <?php endif; ?>
     </fieldset>
 
     <fieldset <?= $ro ?>>
         <legend>État détaillé par pièce</legend>
         <p class="hint"><?= $sortie ? "Indiquez l'état constaté à la sortie et décrivez toute différence avec l'entrée (trace, rayure, tache, casse, manque…)."
                                     : "Indiquez l'état de chaque élément à l'entrée et précisez tout défaut en observation." ?></p>
+        <div data-rooms>
         <?php foreach ($d['rooms'] as $ri => $r): ?>
-            <div class="edl-room">
-                <h3><?= e($r['name']) ?></h3>
+            <div class="edl-room" data-row>
+                <h3><span><?= e($r['name']) ?></span><?php if ($canDelete): ?><span class="room-del"><?= $delBtn("rooms[$ri]") ?></span><?php endif; ?></h3>
+                <div data-rows>
                 <?php foreach ($r['items'] as $ii => $it): $nm = "rooms[$ri][items][$ii]"; ?>
-                    <div class="edl-item">
+                    <div class="edl-item" data-row>
                         <div class="edl-label"><?= e($it['label']) ?>
                             <?php if ($sortie && ($it['in_state'] !== '' || $it['in_notes'] !== '')): ?>
                                 <span class="muted">Entrée : <?= e(implode(' — ', array_filter([Inspection::stateLabel($it['in_state']), $it['in_notes']], 'strlen'))) ?></span>
                             <?php endif; ?></div>
                         <?= $seg($nm . '[state]', $it[$col . '_state']) ?>
-                        <input type="text" name="<?= $nm ?>[notes]" value="<?= e($it[$col . '_notes']) ?>" placeholder="Observations">
+                        <div class="edl-notes"><input type="text" name="<?= $nm ?>[notes]" value="<?= e($it[$col . '_notes']) ?>" placeholder="Observations"><?= $delBtn($nm) ?></div>
                     </div>
                 <?php endforeach; ?>
-                <?php for ($j = 0; $j < Inspection::FREE_ROWS; $j++): $nm = "rooms[$ri][items][new][$j]"; ?>
-                    <div class="edl-item">
-                        <input type="text" name="<?= $nm ?>[label]" placeholder="+ Autre élément">
+                </div>
+                <?php if ($canEdit): $nm = "rooms[$ri][items][new][__N__]"; ?>
+                    <template><div class="edl-item" data-row>
+                        <input type="text" name="<?= $nm ?>[label]" placeholder="Élément (ex. placard)" data-focus>
                         <?= $seg($nm . '[state]', '') ?>
-                        <input type="text" name="<?= $nm ?>[notes]" placeholder="Observations">
-                    </div>
-                <?php endfor; ?>
+                        <div class="edl-notes"><input type="text" name="<?= $nm ?>[notes]" placeholder="Observations"><?= $rmBtn ?></div>
+                    </div></template>
+                    <div class="room-foot"><button type="button" class="btn btn-sm row-add" data-add>+ Ajouter une ligne</button></div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
-        <?php if (!$locked && !$tenantMode): ?>
-        <details>
-            <summary class="small" style="cursor:pointer;font-weight:600">+ Ajouter une pièce</summary>
-            <div class="form-grid mt">
-                <div class="field"><label>Nom de la pièce</label><input name="new_room[name]" placeholder="Chambre 2"></div>
-                <div class="field"><label>Éléments (un par ligne)</label><textarea name="new_room[items]" rows="4" placeholder="Sol&#10;Murs / peinture&#10;Plafond"></textarea></div>
-            </div>
-        </details>
+        </div>
+        <?php if ($canDelete): $nm = 'new_rooms[__R__][items][__N__]'; ?>
+            <template id="room-tpl"><div class="edl-room" data-row>
+                <h3><input type="text" name="new_rooms[__R__][name]" placeholder="Nom de la pièce (ex. Chambre 2)" data-focus style="max-width:320px"><span class="room-del"><?= $rmBtn ?></span></h3>
+                <div data-rows></div>
+                <template><div class="edl-item" data-row>
+                    <input type="text" name="<?= $nm ?>[label]" placeholder="Élément (ex. Sol)" data-focus>
+                    <?= $seg($nm . '[state]', '') ?>
+                    <div class="edl-notes"><input type="text" name="<?= $nm ?>[notes]" placeholder="Observations"><?= $rmBtn ?></div>
+                </div></template>
+                <div class="room-foot"><button type="button" class="btn btn-sm row-add" data-add>+ Ajouter une ligne</button></div>
+            </div></template>
+            <button type="button" class="btn btn-sm" data-add-room>+ Ajouter une pièce</button>
         <?php endif; ?>
         <div class="field mt">
             <label>Propreté générale <?= $sortie ? 'à la sortie' : "à l'entrée" ?></label>
@@ -150,27 +169,30 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
         <?php foreach ($d['inventory'] as $gi => $g): ?>
             <div class="table-wrap mb"><table class="edl-inv">
                 <thead><tr><th><?= e($g['name']) ?></th><th>Qté<?= $sortie ? ' entrée' : '' ?></th><th>État<?= $sortie ? ' entrée' : '' ?></th>
-                    <?php if ($sortie): ?><th>Qté sortie</th><th>État sortie</th><?php endif; ?><th>Observations</th></tr></thead>
-                <tbody>
+                    <?php if ($sortie): ?><th>Qté sortie</th><th>État sortie</th><?php endif; ?><th>Observations</th><th></th></tr></thead>
+                <tbody data-rows>
                 <?php foreach ($g['items'] as $ii => $it): $nm = "inventory[$gi][items][$ii]"; ?>
-                    <tr><td><?= e($it['label']) ?></td>
+                    <tr data-row><td><?= e($it['label']) ?></td>
                         <td><input class="qty" name="<?= $nm ?>[in_qty]" value="<?= e($it['in_qty']) ?>" <?= $inRo ?>></td>
                         <td><?= $stateSelect($nm . '[in_state]', $it['in_state'], $inRo) ?></td>
                         <?php if ($sortie): ?>
                             <td><input class="qty" name="<?= $nm ?>[out_qty]" value="<?= e($it['out_qty']) ?>"></td>
                             <td><?= $stateSelect($nm . '[out_state]', $it['out_state']) ?></td>
                         <?php endif; ?>
-                        <td><input name="<?= $nm ?>[notes]" value="<?= e($it['notes']) ?>"></td></tr>
+                        <td><input name="<?= $nm ?>[notes]" value="<?= e($it['notes']) ?>"></td>
+                        <td class="row-act"><?= $delBtn($nm) ?></td></tr>
                 <?php endforeach; ?>
-                <?php for ($j = 0; $j < Inspection::FREE_ROWS; $j++): $nm = "inventory[$gi][items][new][$j]"; ?>
-                    <tr><td><input name="<?= $nm ?>[label]" placeholder="+ Autre élément"></td>
-                        <td><input class="qty" name="<?= $nm ?>[in_qty]"></td>
-                        <td><?= $stateSelect($nm . '[in_state]', '') ?></td>
-                        <?php if ($sortie): ?><td><input class="qty" name="<?= $nm ?>[out_qty]"></td><td><?= $stateSelect($nm . '[out_state]', '') ?></td><?php endif; ?>
-                        <td><input name="<?= $nm ?>[notes]"></td></tr>
-                <?php endfor; ?>
                 </tbody>
-            </table></div>
+            </table>
+            <?php if ($canEdit): $nm = "inventory[$gi][items][new][__N__]"; ?>
+                <template><tr data-row><td><input name="<?= $nm ?>[label]" placeholder="Élément" data-focus></td>
+                    <td><input class="qty" name="<?= $nm ?>[in_qty]"></td>
+                    <td><?= $stateSelect($nm . '[in_state]', '') ?></td>
+                    <?php if ($sortie): ?><td><input class="qty" name="<?= $nm ?>[out_qty]"></td><td><?= $stateSelect($nm . '[out_state]', '') ?></td><?php endif; ?>
+                    <td><input name="<?= $nm ?>[notes]"></td><td class="row-act"><?= $rmBtn ?></td></tr></template>
+                <button type="button" class="btn btn-sm row-add" data-add>+ Ajouter une ligne</button>
+            <?php endif; ?>
+            </div>
         <?php endforeach; ?>
         <?php if ($sortie && $d['inventory'] && !$locked): ?>
             <button type="button" class="btn btn-sm" onclick="this.form.querySelectorAll('input[name$=&quot;[out_qty]&quot;]').forEach(function(o){var i=o.closest('tr').querySelector('input[name$=&quot;[in_qty]&quot;]');if(!o.value&&i)o.value=i.value});this.form.querySelectorAll('select[name$=&quot;[out_state]&quot;]').forEach(function(o){var i=o.closest('tr').querySelector('select[name$=&quot;[in_state]&quot;]');if(!o.value&&i)o.value=i.value})">
@@ -212,3 +234,67 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
     </div>
     <?php endif; ?>
 </form>
+<script>
+(function () {
+    var form = document.currentScript.previousElementSibling;
+    var seq = 0;
+    // Ajouter une ligne : copie du modèle <template> du bloc, avec un numéro unique.
+    function addRow(btn) {
+        var box = btn.closest('.edl-room, .table-wrap, fieldset');
+        var tpl = box.querySelector(':scope > template, :scope > .table-wrap > template') || box.querySelector('template');
+        var rows = box.querySelector('[data-rows]');
+        var html = tpl.innerHTML.replace(/__N__/g, 'n' + Date.now() + (seq++));
+        var holder = document.createElement(rows.tagName === 'TBODY' ? 'tbody' : 'div');
+        holder.innerHTML = html;
+        var row = holder.firstElementChild;
+        rows.appendChild(row);
+        var f = row.querySelector('[data-focus]');
+        if (f) f.focus();
+    }
+    form.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b || !form.contains(b)) return;
+        if (b.hasAttribute('data-add')) { addRow(b); return; }
+        if (b.hasAttribute('data-add-room')) {
+            var t = document.getElementById('room-tpl');
+            var div = document.createElement('div');
+            div.innerHTML = t.innerHTML.replace(/__R__/g, 'r' + Date.now() + (seq++));
+            var room = div.firstElementChild;
+            form.querySelector('[data-rooms]').appendChild(room);
+            addRow(room.querySelector('[data-add]'));
+            room.querySelector('h3 [data-focus]').focus();
+            return;
+        }
+        if (b.hasAttribute('data-remove')) { b.closest('[data-row]').remove(); return; }
+        if (b.hasAttribute('data-del')) {
+            // Ligne existante : marquée « supprimée » jusqu'à l'enregistrement, annulable.
+            var row = b.closest('[data-row]');
+            var flag = b.parentNode.querySelector('[data-del-flag]');
+            var del = !row.classList.contains('is-deleted');
+            row.classList.toggle('is-deleted', del);
+            flag.value = del ? '1' : '';
+            b.textContent = del ? '↺' : '✕';
+            b.title = del ? 'Rétablir' : 'Supprimer la ligne';
+        }
+    });
+    // Après l'enregistrement : retour au même endroit de la page.
+    var key = 'edl-scroll:' + location.pathname;
+    form.addEventListener('submit', function () {
+        try { sessionStorage.setItem(key, String(window.scrollY)); } catch (e) {}
+    });
+    try {
+        var y = sessionStorage.getItem(key);
+        if (y !== null) {
+            sessionStorage.removeItem(key);
+            window.scrollTo(0, parseInt(y, 10) || 0);
+            var flash = document.querySelector('.flash');
+            if (flash) {
+                var toast = flash.cloneNode(true);
+                toast.className += ' edl-toast';
+                document.body.appendChild(toast);
+                setTimeout(function () { toast.remove(); }, 3500);
+            }
+        }
+    } catch (e) {}
+})();
+</script>

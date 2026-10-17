@@ -577,6 +577,7 @@ TXT;
         $keys = [];
         foreach ($d['keys'] as $i => $k) {
             $p = (array) ($pk[$i] ?? []);
+            if (!empty($p['_del'])) continue;   // ligne supprimée
             $keys[] = ['label' => $k['label'], 'in' => $txt($p['in'] ?? $k['in'], 20),
                        'out' => $sortie ? $txt($p['out'] ?? '', 20) : $k['out'], 'notes' => $txt($p['notes'] ?? '')];
         }
@@ -589,9 +590,11 @@ TXT;
         // Pièces
         $pr = (array) ($post['rooms'] ?? []);
         foreach ($d['rooms'] as $ri => &$room) {
+            if (!empty($pr[$ri]['_del'])) { $room = null; continue; }   // pièce supprimée
             $items = (array) ($pr[$ri]['items'] ?? []);
             foreach ($room['items'] as $ii => &$it) {
                 $p = (array) ($items[$ii] ?? []);
+                if (!empty($p['_del'])) { $it = null; continue; }   // ligne supprimée
                 if ($sortie) {
                     $it['out_state'] = $state($p['state'] ?? '');
                     $it['out_notes'] = $txt($p['notes'] ?? '');
@@ -601,6 +604,7 @@ TXT;
                 }
             }
             unset($it);
+            $room['items'] = array_values(array_filter($room['items']));
             foreach ((array) ($items['new'] ?? []) as $p) {
                 if (($label = $txt($p['label'] ?? '', 200)) === '') continue;
                 $room['items'][] = ['label' => $label, 'in_state' => $sortie ? '' : $state($p['state'] ?? ''), 'in_notes' => $sortie ? '' : $txt($p['notes'] ?? ''),
@@ -608,6 +612,20 @@ TXT;
             }
         }
         unset($room);
+        $d['rooms'] = array_values(array_filter($d['rooms']));
+        // Pièces ajoutées sur la page (nom + lignes)
+        foreach ((array) ($post['new_rooms'] ?? []) as $nr) {
+            if (($name = $txt($nr['name'] ?? '', 100)) === '') continue;
+            $items = [];
+            foreach ((array) ($nr['items'] ?? []) as $p) {
+                if (($label = $txt($p['label'] ?? '', 200)) === '') continue;
+                $st = $state($p['state'] ?? '');
+                $nt = $txt($p['notes'] ?? '');
+                $items[] = ['label' => $label, 'in_state' => $sortie ? '' : $st, 'in_notes' => $sortie ? '' : $nt,
+                            'out_state' => $sortie ? $st : '', 'out_notes' => $sortie ? $nt : ''];
+            }
+            $d['rooms'][] = ['name' => $name, 'items' => $items];
+        }
         if (($name = $txt($post['new_room']['name'] ?? '', 100)) !== '') {
             $items = array_filter(array_map(fn($l) => $txt($l, 200), preg_split('/\R/', (string) ($post['new_room']['items'] ?? ''))));
             $d['rooms'][] = ['name' => $name, 'items' => array_values(array_map(fn($l) => [
@@ -621,6 +639,7 @@ TXT;
             $items = (array) ($pi[$gi]['items'] ?? []);
             foreach ($g['items'] as $ii => &$it) {
                 $p = (array) ($items[$ii] ?? []);
+                if (!empty($p['_del'])) { $it = null; continue; }   // ligne supprimée
                 $it['in_qty']   = $txt($p['in_qty'] ?? $it['in_qty'], 20);
                 $it['in_state'] = $state($p['in_state'] ?? $it['in_state']);
                 if ($sortie) {
@@ -630,6 +649,7 @@ TXT;
                 $it['notes'] = $txt($p['notes'] ?? '');
             }
             unset($it);
+            $g['items'] = array_values(array_filter($g['items']));
             foreach ((array) ($items['new'] ?? []) as $p) {
                 if (($label = $txt($p['label'] ?? '', 200)) === '') continue;
                 $g['items'][] = ['label' => $label, 'in_qty' => $txt($p['in_qty'] ?? '', 20), 'in_state' => $state($p['in_state'] ?? ''),
@@ -691,7 +711,13 @@ TXT;
                 }
             }
         }
-        self::saveAdmin($insp, $allowed);
+        // Le locataire ajoute des lignes mais ne supprime pas celles du bailleur.
+        $strip = function ($v) use (&$strip) {
+            if (!is_array($v)) return $v;
+            unset($v['_del']);
+            return array_map($strip, $v);
+        };
+        self::saveAdmin($insp, $strip($allowed));
     }
 
     /** Ce que le locataire complète lui-même : nouvelle adresse, IBAN (sortie) et ses réserves. */
