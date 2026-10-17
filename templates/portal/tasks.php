@@ -20,6 +20,8 @@ $done = count(array_filter($all, fn($t) => $t['done']));
                         <button class="btn btn-sm btn-primary" <?= $preview ? 'disabled title="Désactivé dans l\'aperçu"' : '' ?>><?= e($t['button']) ?></button></form>
                 <?php elseif (!$t['done'] && !empty($t['url'])): ?>
                     <a class="btn btn-sm btn-primary" href="<?= str_starts_with($t['url'], 'mailto:') ? e($t['url']) : $link($t['url']) ?>"><?= e($t['button']) ?></a>
+                <?php elseif ($t['done'] && !empty($t['view'])): ?>
+                    <a class="btn btn-sm" href="<?= $link($t['view']) ?>"<?= !empty($t['blank']) ? ' target="_blank"' : '' ?>>📄 <?= e($t['viewLabel'] ?? 'Voir') ?></a>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>

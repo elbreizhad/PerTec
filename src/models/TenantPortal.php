@@ -123,7 +123,8 @@ class TenantPortal
         $blocked = $lease['lease_type'] === 'meuble' && Lease::contractIssues($lease, $settings)['blocking'];
         $before[] = ['label' => 'Signer le bail', 'done' => $leaseSigned,
             'hint' => $leaseSigned ? 'Votre signature est enregistrée.' : ($blocked ? 'Le bail est en cours de préparation par votre bailleur.' : 'Lisez le contrat et signez-le en ligne.'),
-            'url' => !$leaseSigned && !$blocked ? '/locataire/bail/' . $lease['id'] . '/signer' : null, 'button' => 'Signer mon bail'];
+            'url' => !$leaseSigned && !$blocked ? '/locataire/bail/' . $lease['id'] . '/signer' : null, 'button' => 'Signer mon bail',
+            'view' => $leaseSigned ? '/locataire/bail/' . $lease['id'] : null, 'viewLabel' => 'Voir mon bail', 'blank' => true];
 
         if ((float) $lease['deposit_amount'] > 0) {
             $paid = !empty($lease['deposit_paid_date']);
@@ -152,7 +153,8 @@ class TenantPortal
             'hint' => $inDone ? 'Signé.' : ($in && $in['shared_at'] ? 'Vérifiez chaque pièce, complétez si besoin, puis signez.' : 'Faites le tour du logement pièce par pièce et notez l\'état de chaque élément.'),
             'url' => !$inDone && $in && $in['shared_at'] ? '/locataire/edl/' . $in['id'] : null,
             'post' => !$inDone && (!$in || !$in['shared_at']) ? '/locataire/bail/' . $lease['id'] . '/edl' : null,
-            'button' => $in && $in['shared_at'] && !$inDone ? "Faire l'état des lieux" : "Commencer l'état des lieux"];
+            'button' => $in && $in['shared_at'] && !$inDone ? "Faire l'état des lieux" : "Commencer l'état des lieux",
+            'view' => $inDone ? '/locataire/edl/' . $in['id'] : null, 'viewLabel' => "Voir l'état des lieux signé"];
 
         $groups = ["Avant l'entrée dans le logement" => $before];
 
@@ -174,7 +176,8 @@ class TenantPortal
                  'url' => !$hasInfo ? '/locataire/edl/' . $out['id'] : null, 'button' => 'Compléter'],
                 ['label' => "Faire et signer l'état des lieux de sortie", 'done' => $outDone,
                  'hint' => $outDone ? 'Signé.' : 'Vérifiez chaque pièce, complétez si besoin, puis signez.',
-                 'url' => !$outDone ? '/locataire/edl/' . $out['id'] : null, 'button' => "Faire l'état des lieux"],
+                 'url' => !$outDone ? '/locataire/edl/' . $out['id'] : null, 'button' => "Faire l'état des lieux",
+                 'view' => $outDone ? '/locataire/edl/' . $out['id'] : null, 'viewLabel' => "Voir l'état des lieux signé"],
             ];
         }
         return $groups;

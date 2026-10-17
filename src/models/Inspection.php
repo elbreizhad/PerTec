@@ -899,7 +899,10 @@ TXT;
             'user_agent'    => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
             'doc_hash'      => self::hash($insp, $lease, $settings, $role),
         ]);
+        // Signé par le locataire (souvent sur place, sur l'appareil du bailleur) : visible dans son espace.
+        if ($role === 'locataire' && empty($insp['shared_at'])) self::setShared((int) $insp['id'], true);
         if (!self::isComplete($insp, $lease, $settings)) return false;
+        if (empty($insp['shared_at'])) self::setShared((int) $insp['id'], true);
 
         if (Pdf::available()) {
             $pdf = Pdf::renderDocument('documents/etat_des_lieux', self::docData($insp, $lease, $settings), self::footer($insp, $lease));
