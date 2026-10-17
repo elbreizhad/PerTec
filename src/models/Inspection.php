@@ -243,6 +243,26 @@ Poubelles (tri sélectif) | 2 | Bon
 Rideaux / voilages | 3 | Bon
 TXT;
 
+    /** En-tête de l'exemple (champs remplis seulement s'ils sont vides dans le modèle du logement). */
+    public const EXAMPLE_HEADER = [
+        'designation' => 'Appartement meublé — 1er étage — 23,23 m² (loi Carrez)',
+        'annexe'      => 'Emplacement de stationnement (sous-sol)',
+        'heating'     => "Individuels électriques — Tout-à-l'égout",
+    ];
+
+    /**
+     * Remplace les pièces, clés et inventaire du modèle d'un logement par l'exemple complet ;
+     * la résidence, la désignation, l'annexe et le chauffage déjà saisis sont conservés.
+     */
+    public static function applyExampleTemplate(array $property): void
+    {
+        $saved = json_decode((string) ($property['inspection_template'] ?? ''), true) ?: [];
+        $t = ['residence' => (string) ($saved['residence'] ?? '')];
+        foreach (self::EXAMPLE_HEADER as $k => $v) $t[$k] = trim((string) ($saved[$k] ?? '')) !== '' ? $saved[$k] : $v;
+        $t += ['rooms' => self::EXAMPLE_ROOMS, 'keys' => self::EXAMPLE_KEYS, 'inventory' => self::EXAMPLE_INVENTORY];
+        self::saveTemplate((int) $property['id'], $t);
+    }
+
     /** Modèle d'un logement : saisi sur la fiche du bien, sinon valeurs par défaut. */
     public static function template(array $property): array
     {
@@ -368,6 +388,77 @@ TXT;
             'inspected_at' => $kind === 'entree' && $lease['start_date'] >= date('Y-m-d') ? $lease['start_date'] . ' 10:00:00' : null,
             'data'         => json_encode($data, JSON_UNESCAPED_UNICODE),
         ]);
+    }
+
+    /**
+     * Met à jour un état des lieux non signé depuis le modèle du logement (ou, pour la sortie,
+     * depuis l'état des lieux d'entrée) sans rien perdre de la saisie : états, observations,
+     * quantités et index déjà renseignés sont reportés ; les lignes ajoutées à la main et
+     * absentes du modèle sont conservées (pas les lignes vides).
+     * $replaceInventory : l'inventaire du modèle remplace l'ancien ; une ancienne ligne absente
+     * du modèle n'est gardée que si elle porte une saisie de sortie ou une observation
+     * (les quantités / états d'entrée préremplis par un ancien modèle ne comptent pas).
+     */
+    public static function rebuild(array $insp, array $lease, bool $replaceInventory = false): void
+    {
+        if (self::signatures((int) $insp['id'])) throw new RuntimeException('état des lieux déjà signé : annulez d\'abord les signatures.');
+        $property = Property::find((int) $lease['property_id']) ?? [];
+        $entry = $insp['kind'] === 'sortie' ? (self::forLease((int) $lease['id'])['entree'] ?? null) : null;
+        $new = $entry ? self::fromEntry($entry['data']) : self::fromTemplate(self::template($property), $lease['lease_type'] === 'meuble');
+        $old = $insp['data'];
+        $norm = fn(string $v) => preg_replace('/\s+/u', ' ', mb_strtolower(trim($v)));
+        $filled = fn(array $row, array $keys) => (bool) array_filter(array_intersect_key($row, array_flip($keys)), fn($v) => $v !== '');
+
+        foreach (['residence', 'designation', 'annexe', 'heating'] as $k) if ($old[$k] !== '') $new[$k] = $old[$k];
+        foreach ($old['meters'] as $k => $v) if ($v !== '') $new['meters'][$k] = $v;
+        $new['meters']['elec_number'] = $new['meters']['elec_number'] ?: (string) ($property['enedis_pdl'] ?? '');
+        $new['meters']['water_number'] = $new['meters']['water_number'] ?: (string) ($property['water_meter'] ?? '');
+        foreach (['cleanliness', 'cleanliness_notes', 'observations', 'tenant', 'deposit'] as $k) $new[$k] = $old[$k];
+
+        // Groupes (pièces, catégories d'inventaire) : report par nom de groupe + libellé.
+        $mergeGroups = function (array $newGroups, array $oldGroups, array $fields, array $significant) use ($norm, $filled): array {
+            $idx = [];
+            foreach ($newGroups as $gi => $g) {
+                $idx[$norm($g['name'])]['gi'] = $gi;
+                foreach ($g['items'] as $ii => $it) $idx[$norm($g['name'])]['items'][$norm($it['label'])] = $ii;
+            }
+            foreach ($oldGroups as $og) {
+                $gk = $norm($og['name']);
+                foreach ($og['items'] as $it) {
+                    if (isset($idx[$gk]['items'][$norm($it['label'])])) {
+                        $ref = &$newGroups[$idx[$gk]['gi']]['items'][$idx[$gk]['items'][$norm($it['label'])]];
+                        foreach ($fields as $f) if ($it[$f] !== '') $ref[$f] = $it[$f];
+                        unset($ref);
+                        continue;
+                    }
+                    if (!$filled($it, $significant)) continue;   // ligne vide ou seulement préremplie : abandonnée
+                    if (!isset($idx[$gk])) {   // pièce / catégorie absente du modèle : conservée
+                        $newGroups[] = ['name' => $og['name'], 'items' => []];
+                        $idx[$gk] = ['gi' => count($newGroups) - 1, 'items' => []];
+                    }
+                    $newGroups[$idx[$gk]['gi']]['items'][] = $it;
+                    $idx[$gk]['items'][$norm($it['label'])] = count($newGroups[$idx[$gk]['gi']]['items']) - 1;
+                }
+            }
+            return array_values(array_filter($newGroups, fn($g) => $g['items']));
+        };
+        $roomFields = ['in_state', 'in_notes', 'out_state', 'out_notes'];
+        $invFields = ['in_qty', 'in_state', 'out_qty', 'out_state', 'notes'];
+        $new['rooms'] = $mergeGroups($new['rooms'], $old['rooms'], $roomFields, $roomFields);
+        $new['inventory'] = $mergeGroups($new['inventory'], $old['inventory'], $invFields,
+            $replaceInventory ? ['out_qty', 'out_state', 'notes'] : $invFields);
+
+        $keyIdx = [];
+        foreach ($new['keys'] as $i => $k) $keyIdx[$norm($k['label'])] = $i;
+        foreach ($old['keys'] as $k) {
+            if (isset($keyIdx[$norm($k['label'])])) {
+                foreach (['in', 'out', 'notes'] as $f) if ($k[$f] !== '') $new['keys'][$keyIdx[$norm($k['label'])]][$f] = $k[$f];
+            } elseif ($k['out'] !== '' || $k['notes'] !== '' || (!$replaceInventory && $k['in'] !== '')) {
+                $new['keys'][] = $k;
+            }
+        }
+
+        Database::update('inspections', ['data' => json_encode(self::normalize($new), JSON_UNESCAPED_UNICODE)], 'id = :id', ['id' => (int) $insp['id']]);
     }
 
     /** Données d'un nouvel état des lieux à partir du modèle du logement. */

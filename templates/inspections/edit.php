@@ -66,6 +66,26 @@ $locked = count($sigValid) === count(Inspection::ROLES);
     </div>
 </div>
 
+<?php if (!$sigAll):
+    $prop = Property::find((int) $l['property_id']) ?? [];
+    $tplInfo = Inspection::template($prop);
+    $invCount = array_sum(array_map(fn($g) => count($g['items']), $insp['data']['inventory'])); ?>
+<div class="card">
+    <h3>Contenu de l'état des lieux</h3>
+    <p class="small muted" style="margin-top:0">Pièces, clés et inventaire viennent du
+        <a href="<?= url('/biens/' . $l['property_id'] . '#edl') ?>">modèle d'état des lieux du logement</a>
+        (<?= $tplInfo['custom'] ? 'personnalisé' : 'modèle générique par défaut' ?>)<?= $insp['kind'] === 'sortie' ? ", ou de l'état des lieux d'entrée" : '' ?>.
+        <?= $meuble ? $invCount . ' élément(s) d\'inventaire.' : '' ?> Mettre à jour conserve tout ce qui est déjà saisi.</p>
+    <form method="post" action="<?= url('/edl/' . $id . '/modele') ?>" class="actions">
+        <?= csrf_field() ?>
+        <button class="btn btn-sm btn-primary" name="action" value="example"
+            onclick="return confirm('Remplacer les pièces, les clés et l\'inventaire du modèle de ce logement par le modèle complet (studio meublé : 5 pièces, 58 éléments d\'inventaire), puis mettre à jour cet état des lieux ? Ce qui est déjà saisi est conservé.')">
+            📋 Charger le modèle complet (studio meublé, PDF)</button>
+        <button class="btn btn-sm" name="action" value="reload">🔄 Mettre à jour depuis le modèle du logement</button>
+    </form>
+</div>
+<?php endif; ?>
+
 <?php if ($locked): ?>
     <div class="flash flash-success">État des lieux signé par les deux parties : il n'est plus modifiable. Annulez les signatures pour le corriger.</div>
 <?php endif; ?>

@@ -1221,6 +1221,10 @@ App::post('/baux/{id}/edl/{kind}', function ($params) {
 App::get('/edl/{id}', function ($params) use ($edlLoad) {
     Auth::requireLogin();
     [$insp, $lease] = $edlLoad((int) $params['id']);
+    // N° de compteurs renseignés sur la fiche du bien après la création : proposés dans le formulaire.
+    $prop = Property::find((int) $lease['property_id']) ?? [];
+    $insp['data']['meters']['elec_number'] = $insp['data']['meters']['elec_number'] ?: (string) ($prop['enedis_pdl'] ?? '');
+    $insp['data']['meters']['water_number'] = $insp['data']['meters']['water_number'] ?: (string) ($prop['water_meter'] ?? '');
     view('inspections/edit', ['insp' => $insp, 'lease' => $lease, 'settings' => Setting::all()]);
 });
 
@@ -1291,6 +1295,25 @@ App::post('/edl/{id}/signer/{role}', function ($params) use ($edlLoad) {
     } catch (Throwable $e) {
         flash('Signature non enregistrée : ' . $e->getMessage(), 'error');
         redirect('/edl/' . (int) $insp['id'] . '/signer/' . $role);
+    }
+    redirect('/edl/' . (int) $insp['id']);
+});
+
+// Mettre à jour un état des lieux non signé depuis le modèle du logement (ou charger le modèle complet d'exemple)
+App::post('/edl/{id}/modele', function ($params) use ($edlLoad) {
+    Auth::requireLogin();
+    csrf_check();
+    [$insp, $lease] = $edlLoad((int) $params['id']);
+    try {
+        $example = post('action') === 'example';
+        if ($example) {
+            Inspection::applyExampleTemplate(Property::find((int) $lease['property_id']) ?? []);
+        }
+        Inspection::rebuild($insp, $lease, $example);
+        flash($example ? "Modèle complet chargé pour ce logement (pièces, clés, inventaire) et état des lieux mis à jour ; votre saisie est conservée."
+                       : "État des lieux mis à jour depuis le modèle du logement ; votre saisie est conservée.");
+    } catch (Throwable $e) {
+        flash('Mise à jour impossible : ' . $e->getMessage(), 'error');
     }
     redirect('/edl/' . (int) $insp['id']);
 });
