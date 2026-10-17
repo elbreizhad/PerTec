@@ -171,6 +171,8 @@ class Lease
      */
     public static function billingEnd(array $l): ?string
     {
+        // Fin de bail enregistrée : on facture jusqu'à cette date (prorata du dernier mois).
+        if (!empty($l['termination_date'])) return substr($l['termination_date'], 0, 10);
         if (!empty($l['auto_renew']) && ($l['status'] ?? 'active') === 'active') return null;
         return !empty($l['end_date']) ? substr($l['end_date'], 0, 10) : null;
     }
@@ -186,6 +188,119 @@ class Lease
         return $end;
     }
 
+    /** Motifs de fin de bail. */
+    public const TERMINATION_REASONS = [
+        'conge_locataire' => 'Congé donné par le locataire',
+        'conge_bailleur'  => 'Congé donné par le bailleur (vente, reprise, motif légitime)',
+        'accord'          => "Résiliation d'un commun accord",
+        'autre'           => 'Autre motif',
+    ];
+
+    /**
+     * Préavis légal en mois (art. 15 et 25-8 de la loi n° 89-462) :
+     * congé du locataire : 1 mois en meublé, 3 mois en vide (1 mois en zone tendue) ;
+     * congé du bailleur : 3 mois avant l'échéance en meublé, 6 mois en vide.
+     */
+    public static function noticeMonths(array $l, string $reason): ?int
+    {
+        $meuble = $l['lease_type'] === 'meuble';
+        return match ($reason) {
+            'conge_locataire' => $meuble ? 1 : 3,
+            'conge_bailleur'  => $meuble ? 3 : 6,
+            default           => null,
+        };
+    }
+
+    /**
+     * Échéances successives du bail à partir de la période en cours (sans date de fin saisie :
+     * 1 an en meublé, 3 ans en vide à compter de la date d'effet).
+     */
+    public static function termEnds(array $l, int $count = 6): array
+    {
+        $step = $l['lease_type'] === 'meuble' ? '+1 year' : '+3 years';
+        $end = !empty($l['end_date']) ? substr($l['end_date'], 0, 10)
+             : (!empty($l['start_date']) ? date('Y-m-d', strtotime(substr($l['start_date'], 0, 10) . ' ' . $step . ' -1 day')) : null);
+        if (!$end) return [];
+        for ($i = 0; $end < date('Y-m-d') && $i < 50; $i++) $end = date('Y-m-d', strtotime($end . ' +1 day ' . $step . ' -1 day'));
+        $out = [];
+        for ($i = 0; $i < $count; $i++) {
+            $out[] = $end;
+            $end = date('Y-m-d', strtotime($end . ' +1 day ' . $step . ' -1 day'));
+        }
+        return $out;
+    }
+
+    /** Date de fin proposée selon le motif et la date de réception du congé (null si libre). */
+    public static function suggestedEnd(array $l, string $reason, ?string $noticeDate): ?string
+    {
+        $notice = $noticeDate ?: date('Y-m-d');
+        if ($reason === 'conge_locataire') {
+            return date('Y-m-d', strtotime($notice . ' +' . self::noticeMonths($l, $reason) . ' months -1 day'));
+        }
+        if ($reason === 'conge_bailleur') {
+            // Le congé du bailleur prend effet à l'échéance du bail (période en cours, sinon la suivante).
+            $limit = date('Y-m-d', strtotime($notice . ' +' . self::noticeMonths($l, $reason) . ' months'));
+            foreach (self::termEnds($l, 20) as $term) if ($term >= $limit) return $term;
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Enregistre la fin du bail : supprime les échéances non payées après la date de fin,
+     * recalcule au prorata celle du dernier mois si elle n'est pas payée.
+     * @return array{removed:int, paidAfter:int} échéances supprimées, échéances déjà payées après la fin
+     */
+    public static function terminate(int $id, string $date, string $reason, ?string $noticeDate, ?string $notes): array
+    {
+        $data = [
+            'termination_date'   => $date,
+            'termination_reason' => isset(self::TERMINATION_REASONS[$reason]) ? $reason : 'autre',
+            'notice_date'        => $noticeDate ?: null,
+            'termination_notes'  => $notes !== null && trim($notes) !== '' ? trim(mb_substr($notes, 0, 255)) : null,
+            'status'             => $date < date('Y-m-d') ? 'terminated' : 'active',
+        ];
+        Database::update('leases', $data, 'id = :id', ['id' => $id]);
+        $l = self::find($id);
+        $y = (int) substr($date, 0, 4);
+        $m = (int) substr($date, 5, 2);
+        $after = Database::all('SELECT * FROM rent_payments WHERE lease_id = ? AND (period_year > ? OR (period_year = ? AND period_month > ?))', [$id, $y, $y, $m]);
+        $removed = $paidAfter = 0;
+        foreach ($after as $p) {
+            if ($p['status'] === 'paid') { $paidAfter++; continue; }
+            Database::query('DELETE FROM rent_payments WHERE id = ?', [(int) $p['id']]);
+            $removed++;
+        }
+        $last = Database::one('SELECT * FROM rent_payments WHERE lease_id = ? AND period_year = ? AND period_month = ?', [$id, $y, $m]);
+        if ($last && $last['status'] !== 'paid') {
+            $pro = Payment::prorata($l, $y, $m);
+            Database::update('rent_payments', ['amount_rent' => $pro['rent'], 'amount_charges' => $pro['charges'], 'notes' => $pro['note']],
+                'id = :id', ['id' => (int) $last['id']]);
+        }
+        return ['removed' => $removed, 'paidAfter' => $paidAfter];
+    }
+
+    /** Annule une fin de bail enregistrée (le bail redevient actif ; les échéances se régénèrent). */
+    public static function cancelTermination(int $id): void
+    {
+        Database::update('leases', ['termination_date' => null, 'termination_reason' => null, 'notice_date' => null,
+            'termination_notes' => null, 'status' => 'active'], 'id = :id', ['id' => $id]);
+        $l = self::find($id);
+        // Échéance du dernier mois calculée au prorata (non payée) : montant recalculé.
+        foreach (Database::all("SELECT * FROM rent_payments WHERE lease_id = ? AND status <> 'paid' AND notes LIKE 'Prorata%'", [$id]) as $p) {
+            $pro = Payment::prorata($l, (int) $p['period_year'], (int) $p['period_month']);
+            Database::update('rent_payments', ['amount_rent' => $pro['rent'], 'amount_charges' => $pro['charges'], 'notes' => $pro['note']],
+                'id = :id', ['id' => (int) $p['id']]);
+        }
+    }
+
+    /** Date limite de restitution du dépôt : 1 mois après la remise des clés (2 mois si l'état de sortie diffère). */
+    public static function depositRefundDue(array $l, bool $differs = false): ?string
+    {
+        if (empty($l['termination_date'])) return null;
+        return date('Y-m-d', strtotime(substr($l['termination_date'], 0, 10) . ($differs ? ' +2 months' : ' +1 month')));
+    }
+
     /** Date limite de versement du dépôt de garantie : au plus tard le jour de prise d'effet du bail. */
     public static function depositDue(array $l): ?string
     {
@@ -198,7 +313,16 @@ class Lease
      */
     public static function phase(array $l): array
     {
-        if (($l['status'] ?? 'active') !== 'active') return ['key' => 'termine', 'label' => 'Terminé', 'badge' => 'terminated'];
+        if (($l['status'] ?? 'active') !== 'active') {
+            return ['key' => 'termine', 'label' => !empty($l['termination_date']) ? 'Terminé le ' . fdate($l['termination_date']) : 'Terminé', 'badge' => 'terminated'];
+        }
+        if (!empty($l['termination_date'])) {
+            $end = substr($l['termination_date'], 0, 10);
+            if ($end < date('Y-m-d')) return ['key' => 'termine', 'label' => 'Terminé le ' . fdate($end), 'badge' => 'terminated'];
+            if (empty($l['start_date']) || substr($l['start_date'], 0, 10) <= date('Y-m-d')) {
+                return ['key' => 'en_cours', 'label' => 'En préavis — fin le ' . fdate($end), 'badge' => 'pending'];
+            }
+        }
         if (!empty($l['start_date']) && substr($l['start_date'], 0, 10) > date('Y-m-d')) {
             return ['key' => 'a_venir', 'label' => 'À venir — débute le ' . fdate($l['start_date']), 'badge' => 'pending'];
         }

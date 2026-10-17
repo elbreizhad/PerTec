@@ -1139,6 +1139,37 @@ App::post('/locataires/{id}/invitation', function ($params) {
     redirect('/locataires');
 });
 
+// Fin de bail : enregistrer (motif, congé, date de fin) ou annuler
+App::post('/baux/{id}/fin', function ($params) {
+    Auth::requireLogin();
+    csrf_check();
+    $id = (int) $params['id'];
+    $lease = Lease::find($id);
+    if (!$lease) redirect('/baux');
+    if (post('action') === 'cancel') {
+        Lease::cancelTermination($id);
+        flash('Fin de bail annulée : le bail est de nouveau en cours.');
+        redirect('/baux/' . $id . '#apercu');
+    }
+    $isDate = fn($v) => is_string($v) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $v);
+    $date = (string) post('termination_date');
+    $notice = (string) post('notice_date');
+    if (!$isDate($date)) {
+        flash('Indiquez la date de fin du bail.', 'error');
+        redirect('/baux/' . $id . '#apercu');
+    }
+    if ($date < substr((string) $lease['start_date'], 0, 10)) {
+        flash('La date de fin ne peut pas précéder le début du bail.', 'error');
+        redirect('/baux/' . $id . '#apercu');
+    }
+    $r = Lease::terminate($id, $date, (string) post('termination_reason'), $isDate($notice) ? $notice : null, post('termination_notes'));
+    $msg = 'Fin du bail enregistrée au ' . fdate($date) . '.';
+    if ($r['removed']) $msg .= ' ' . $r['removed'] . ' échéance(s) non payée(s) après cette date supprimée(s) ; le dernier mois est calculé au prorata.';
+    if ($r['paidAfter']) $msg .= ' Attention : ' . $r['paidAfter'] . ' échéance(s) déjà payée(s) après la date de fin — à rembourser au locataire.';
+    flash($msg, $r['paidAfter'] ? 'error' : 'success');
+    redirect('/baux/' . $id . '#apercu');
+});
+
 // Dépôt de garantie : marquer encaissé (coche aussi la checklist) ou annuler
 App::post('/baux/{id}/depot', function ($params) {
     Auth::requireLogin();

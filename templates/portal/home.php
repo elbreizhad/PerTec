@@ -22,20 +22,21 @@ $t0 = $tenants[0] ?? ['first_name' => '', 'last_name' => ''];
     $signed = count(LeaseSignature::valid($l, $s)) === count(LeaseSignature::ROLES);
     $adresse = trim(($l['address'] ?? '') . ', ' . ($l['postal_code'] ?? '') . ' ' . ($l['city'] ?? ''), ', ');
     $late = array_filter($payments, fn($p) => $p['status'] !== 'paid' && $p['due_date'] && $p['due_date'] < $today);
-    $active = $l['status'] === 'active';
+    $ph = Lease::phase($l);
+    $active = $ph['key'] !== 'termine';
     $prop = Property::find((int) $l['property_id']) ?? [];
     $tpl = Inspection::template($prop);
     $tasks = $active ? TenantPortal::tasks($l, $s, $payments) : [];
     $todo = count(array_filter(array_merge([], ...array_values($tasks)), fn($t) => !$t['done']));
     $edls = array_filter(Inspection::forLease($lid), fn($i) => !empty($i['shared_at']));
-    $ph = Lease::phase($l);
 ?>
 <section class="card portal-lease">
     <div class="page-head" style="margin-bottom:.4rem">
         <div>
             <h2 style="margin:0"><?= e($adresse ?: $l['property_label']) ?></h2>
             <p class="muted small" style="margin:.2rem 0 0"><?= $l['lease_type'] === 'meuble' ? 'Location meublée' : 'Location vide' ?>
-                · <span class="badge badge-<?= ['en_cours' => 'paid', 'a_venir' => 'pending', 'termine' => 'pending'][$ph['key']] ?>"><?= e(['en_cours' => 'Bail en cours', 'a_venir' => 'Bail à venir — débute le ' . fdate($l['start_date']), 'termine' => 'Bail terminé'][$ph['key']]) ?></span></p>
+                · <span class="badge badge-<?= ['en_cours' => 'paid', 'a_venir' => 'pending', 'termine' => 'pending'][$ph['key']] ?>"><?= e(['en_cours' => 'Bail en cours', 'a_venir' => 'Bail à venir — débute le ' . fdate($l['start_date']), 'termine' => 'Bail terminé'][$ph['key']]) ?></span>
+                <?php if (!empty($l['termination_date'])): ?><span class="badge badge-late"><?= $l['termination_date'] < $today ? 'Terminé le ' : 'Fin du bail le ' ?><?= fdate($l['termination_date']) ?></span><?php endif; ?></p>
         </div>
     </div>
 

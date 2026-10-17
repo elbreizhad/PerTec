@@ -167,6 +167,12 @@ class TenantPortal
 
         // --- Départ ---
         $out = $edls['sortie'] ?? null;
+        if (!empty($lease['termination_date']) && !($out && $out['shared_at'])) {
+            $groups['Départ du logement'] = [
+                ['label' => "Faire et signer l'état des lieux de sortie", 'done' => false,
+                 'hint' => 'Fin du bail le ' . fdate($lease['termination_date']) . ' : votre bailleur vous proposera un rendez-vous pour l\'état des lieux de sortie.'],
+            ];
+        }
         if ($out && $out['shared_at']) {
             $outDone = $tenantSigned($out);
             $hasInfo = $out['data']['tenant']['new_address'] !== '' && $out['data']['tenant']['iban'] !== '';

@@ -86,6 +86,91 @@ $tabInv = $l['lease_type'] === 'meuble' ? Inventory::progress(Inventory::rows($l
         <?php else: ?>
             <span class="badge badge-pending">Bail terminé</span>
         <?php endif; ?></p>
+
+        <?php if (!empty($l['termination_date'])):
+            $edlOut = Inspection::forLease((int) $l['id'])['sortie'] ?? null;
+            $endPast = $l['termination_date'] < date('Y-m-d'); ?>
+            <div class="flash <?= $endPast ? 'flash-error' : '' ?>" style="<?= $endPast ? '' : 'background:#fffbeb;color:#92400e;border:1px solid #fde68a' ?>">
+                <strong><?= $endPast ? 'Bail terminé le ' : 'Fin du bail le ' ?><?= fdate($l['termination_date']) ?></strong>
+                — <?= e(Lease::TERMINATION_REASONS[$l['termination_reason']] ?? 'Autre motif') ?>
+                <?= $l['notice_date'] ? '<br><span class="small">Congé reçu le ' . fdate($l['notice_date']) . '</span>' : '' ?>
+                <?= $l['termination_notes'] ? '<br><span class="small">' . e($l['termination_notes']) . '</span>' : '' ?>
+            </div>
+            <p class="small"><strong>Étapes de sortie :</strong></p>
+            <ul class="small" style="margin-top:0">
+                <li>État des lieux de sortie :
+                    <?php if ($edlOut): ?><a href="<?= url('/edl/' . $edlOut['id']) ?>">ouvrir</a>
+                    <?php else: ?><form method="post" action="<?= url('/baux/' . $l['id'] . '/edl/sortie') ?>" class="inline-form"><?= csrf_field() ?>
+                        <button class="btn btn-sm btn-primary">+ Commencer l'état des lieux de sortie</button></form><?php endif; ?></li>
+                <?php if ((float) $l['deposit_amount'] > 0): ?>
+                    <li>Restitution du dépôt (<?= euros($l['deposit_amount']) ?>) au plus tard le <strong><?= fdate(Lease::depositRefundDue($l)) ?></strong>
+                        si l'état de sortie est conforme à l'entrée, sinon le <?= fdate(Lease::depositRefundDue($l, true)) ?>.</li>
+                <?php endif; ?>
+                <li>Dernier loyer calculé au prorata jusqu'au <?= fdate($l['termination_date']) ?> (onglet Loyers).</li>
+            </ul>
+            <form method="post" action="<?= url('/baux/' . $l['id'] . '/fin') ?>" class="inline-form" onsubmit="return confirm('Annuler la fin du bail ? Le bail redevient en cours.')">
+                <?= csrf_field() ?><button class="btn btn-sm" name="action" value="cancel">Annuler la fin du bail</button></form>
+        <?php endif; ?>
+
+        <details class="mt" <?= !empty($l['termination_date']) ? '' : '' ?>>
+            <summary class="btn btn-sm <?= empty($l['termination_date']) ? 'btn-danger' : '' ?>" style="list-style:none;display:inline-flex">
+                <?= empty($l['termination_date']) ? '⏹ Mettre fin au bail' : '✏️ Modifier la fin du bail' ?></summary>
+            <?php
+            $termEnds = Lease::termEnds($l);
+            $reason0 = $l['termination_reason'] ?: 'conge_locataire';
+            ?>
+            <form method="post" action="<?= url('/baux/' . $l['id'] . '/fin') ?>" class="mt" id="fin-bail"
+                  data-meuble="<?= $l['lease_type'] === 'meuble' ? 1 : 0 ?>" data-terms="<?= e(json_encode($termEnds)) ?>">
+                <?= csrf_field() ?>
+                <div class="field"><label>Motif</label>
+                    <select name="termination_reason">
+                        <?php foreach (Lease::TERMINATION_REASONS as $k => $lbl): ?>
+                            <option value="<?= $k ?>" <?= $reason0 === $k ? 'selected' : '' ?>><?= e($lbl) ?></option>
+                        <?php endforeach; ?>
+                    </select></div>
+                <div class="form-grid">
+                    <div class="field"><label>Congé reçu / envoyé le</label><input type="date" name="notice_date" value="<?= e($l['notice_date'] ?: date('Y-m-d')) ?>"></div>
+                    <div class="field"><label>Date de fin du bail</label><input type="date" name="termination_date" value="<?= e($l['termination_date'] ?? '') ?>" required>
+                        <span class="hint" data-hint></span></div>
+                </div>
+                <div class="field"><label>Remarque (facultatif)</label><input name="termination_notes" value="<?= e($l['termination_notes'] ?? '') ?>" maxlength="255" placeholder="Ex. : préavis réduit — mutation professionnelle"></div>
+                <p class="small muted">Les échéances non payées après la date de fin sont supprimées et le dernier mois est calculé au prorata.
+                    Le contrat signé n'est pas modifié.</p>
+                <button class="btn btn-danger" onclick="return confirm('Enregistrer la fin du bail ?')">Enregistrer la fin du bail</button>
+            </form>
+            <script>
+            (function () {
+                var f = document.getElementById('fin-bail');
+                var meuble = f.dataset.meuble === '1', terms = JSON.parse(f.dataset.terms || '[]');
+                var reason = f.elements.termination_reason, notice = f.elements.notice_date, end = f.elements.termination_date, hint = f.querySelector('[data-hint]');
+                function iso(d) { return d.toISOString().slice(0, 10); }
+                function addMonths(s, n, minusDay) {
+                    var d = new Date(s + 'T12:00:00'); d.setMonth(d.getMonth() + n); if (minusDay) d.setDate(d.getDate() - 1); return iso(d);
+                }
+                function fr(s) { return s.split('-').reverse().join('/'); }
+                function suggest(force) {
+                    var r = reason.value, n = notice.value || iso(new Date()), s = null, h = '';
+                    if (r === 'conge_locataire') {
+                        var m = meuble ? 1 : 3;
+                        s = addMonths(n, m, true);
+                        h = 'Préavis du locataire : ' + m + ' mois' + (meuble ? '' : ' (1 mois en zone tendue ou cas prévus par la loi)') + ' → fin le ' + fr(s) + '.';
+                    } else if (r === 'conge_bailleur') {
+                        var lim = addMonths(n, meuble ? 3 : 6, false);
+                        s = terms.filter(function (t) { return t >= lim; })[0] || null;
+                        h = 'Congé du bailleur : au moins ' + (meuble ? 3 : 6) + ' mois avant l\'échéance du bail' + (s ? ' → fin à l\'échéance du ' + fr(s) + '.' : ' — indiquez la date d\'échéance.');
+                    if (!s && force) end.value = '';
+                    } else {
+                        h = 'Date libre (accord des deux parties).';
+                    }
+                    hint.textContent = h;
+                    if (s && (force || !end.value)) end.value = s;
+                }
+                reason.addEventListener('change', function () { suggest(true); });
+                notice.addEventListener('change', function () { suggest(true); });
+                suggest(false);
+            })();
+            </script>
+        </details>
     </div>
     <div class="card" id="depot">
         <h3>Dépôt de garantie — <?= euros($l['deposit_amount']) ?></h3>
