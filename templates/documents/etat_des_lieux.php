@@ -96,7 +96,7 @@ $mDate = $m['date'] !== '' ? fdate($m['date']) : ($insp['inspected_at'] ? date('
 <p class="small">Établi conformément au décret n° 2015-981 du 31 juillet 2015.<?= $sortie ? ' Les colonnes « Entrée » reprennent l\'état des lieux d\'entrée ; renseigner les colonnes « Sortie ».' : '' ?></p>
 <?php foreach ($d['inventory'] as $g): ?>
     <table class="doc-amounts small inventory">
-        <thead><tr><th style="width:38%"><?= e($g['name']) ?></th><th class="center" style="width:8%">Qté<?= $sortie ? '<br>entrée' : '' ?></th><th class="center" style="width:10%">État<?= $sortie ? '<br>entrée' : '' ?></th>
+        <thead><tr><th style="width:38%"><?= e($g['name']) ?></th><th class="center" style="width:8%">Qté<br>entrée</th><th class="center" style="width:10%">État<br>entrée</th>
             <?php if ($sortie): ?><th class="center" style="width:8%">Qté<br>sortie</th><th class="center" style="width:10%">État<br>sortie</th><?php endif; ?>
             <th>Observations</th></tr></thead>
         <?php foreach ($g['items'] as $it): ?>

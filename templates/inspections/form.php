@@ -26,6 +26,11 @@ $delBtn = fn(string $name) => $canDelete
     : '';
 /** Bouton de retrait d'une ligne ajoutée (pas encore enregistrée). */
 $rmBtn = '<button type="button" class="row-del" data-remove title="Retirer la ligne" aria-label="Retirer la ligne">✕</button>';
+$generic = !$locked && !$tenantMode && !empty($insp['id']) ? Inspection::looksGeneric($insp) : ['rooms' => false, 'inventory' => false];
+/** Alerte « liste générique » avec le bouton pour charger le modèle complet (formulaire séparé, attribut form=). */
+$genericAlert = fn(string $what) => '<div class="flash flash-error" style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">'
+    . '<span style="flex:1;min-width:220px">⚠ ' . $what . ' est encore la <strong>liste générique</strong>, pas celle de votre logement.</span>'
+    . '<button type="submit" form="edl-load-example" class="btn btn-sm btn-primary" name="action" value="example">📋 Charger le modèle complet (PDF)</button></div>';
 $stateSelect = function (string $name, string $current, string $attr = '') use ($ro): string {
     $h = '<select name="' . e($name) . "\" $ro $attr><option value=\"\">—</option>";
     foreach (Inspection::STATES as $k => $lbl) $h .= '<option value="' . $k . '"' . ($current === $k ? ' selected' : '') . '>' . e($lbl) . '</option>';
@@ -107,6 +112,7 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
 
     <fieldset <?= $ro ?>>
         <legend>État détaillé par pièce</legend>
+        <?php if ($generic['rooms']): ?><?= $genericAlert('La liste des pièces et éléments') ?><?php endif; ?>
         <p class="hint"><?= $sortie ? "Indiquez l'état constaté à la sortie et décrivez toute différence avec l'entrée (trace, rayure, tache, casse, manque…)."
                                     : "Indiquez l'état de chaque élément à l'entrée et précisez tout défaut en observation." ?></p>
         <div data-rooms>
@@ -163,12 +169,13 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
     <?php if ($meuble): ?>
     <fieldset <?= $ro ?>>
         <legend>Inventaire du mobilier et des équipements</legend>
+        <?php if ($generic['inventory']): ?><?= $genericAlert("L'inventaire") ?><?php endif; ?>
         <?php if (!$d['inventory']): ?>
             <p class="muted small"><?= $tenantMode ? 'Aucun inventaire.' : "Aucun inventaire : renseignez-le dans le modèle d'état des lieux du logement (fiche du bien) avant de créer l'état des lieux." ?></p>
         <?php endif; ?>
         <?php foreach ($d['inventory'] as $gi => $g): ?>
             <div class="table-wrap mb"><table class="edl-inv">
-                <thead><tr><th><?= e($g['name']) ?></th><th>Qté<?= $sortie ? ' entrée' : '' ?></th><th>État<?= $sortie ? ' entrée' : '' ?></th>
+                <thead><tr><th><?= e($g['name']) ?></th><th>Qté entrée</th><th>État entrée</th>
                     <?php if ($sortie): ?><th>Qté sortie</th><th>État sortie</th><?php endif; ?><th>Observations</th><th></th></tr></thead>
                 <tbody data-rows>
                 <?php foreach ($g['items'] as $ii => $it): $nm = "inventory[$gi][items][$ii]"; ?>
@@ -234,6 +241,11 @@ $stateSelect = function (string $name, string $current, string $attr = '') use (
     </div>
     <?php endif; ?>
 </form>
+<?php if ($generic['rooms'] || $generic['inventory']): ?>
+<form method="post" action="<?= url('/edl/' . (int) $insp['id'] . '/modele') ?>" id="edl-load-example"
+      onsubmit="return confirm('Charger le modèle complet (pièces détaillées, clés, 58 éléments d\'inventaire) ? Ce qui est déjà saisi est conservé ; les modifications non enregistrées de cette page seront perdues.')">
+    <?= csrf_field() ?></form>
+<?php endif; ?>
 <script>
 (function () {
     var form = document.currentScript.previousElementSibling;

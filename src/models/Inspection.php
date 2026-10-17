@@ -263,6 +263,31 @@ TXT;
         self::saveTemplate((int) $property['id'], $t);
     }
 
+    /**
+     * L'état des lieux reprend-il encore la liste générique par défaut (et non celle du logement) ?
+     * @return array{rooms:bool, inventory:bool}
+     */
+    public static function looksGeneric(array $insp): array
+    {
+        $norm = fn($v) => mb_strtolower(trim((string) $v));
+        $defaults = function (string $text) use ($norm): array {
+            $out = [];
+            foreach (self::parseGroups($text) as $g) foreach ($g['items'] as $it) $out[$norm($it['label'])] = true;
+            return $out;
+        };
+        $check = function (array $groups, array $def) use ($norm): bool {
+            $labels = [];
+            foreach ($groups as $g) foreach ($g['items'] as $it) $labels[] = $norm($it['label']);
+            if (!$labels) return false;
+            $generic = count(array_filter($labels, fn($l) => isset($def[$l])));
+            return $generic / count($labels) >= 0.7;   // l'essentiel des lignes vient du modèle générique
+        };
+        return [
+            'rooms'     => $check($insp['data']['rooms'], $defaults(self::DEFAULT_ROOMS)),
+            'inventory' => $check($insp['data']['inventory'], $defaults(self::DEFAULT_INVENTORY)),
+        ];
+    }
+
     /** Modèle d'un logement : saisi sur la fiche du bien, sinon valeurs par défaut. */
     public static function template(array $property): array
     {
