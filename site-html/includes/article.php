@@ -17,7 +17,7 @@ require_once __DIR__ . '/conseils.php';
  * $h1 est du HTML de confiance (écrit dans le fichier de l'article).
  */
 function article_debut(string $slug, string $titreGoogle, string $h1, int $minutes): array {
-    global $pageTitle, $pageDescription, $canonicalUrl, $activeMenu, $ogData, $schemaJson;
+    global $pageTitle, $pageDescription, $canonicalUrl, $activeMenu, $ogData, $schemaJson, $noindex;
 
     $article = conseil($slug);
 
@@ -46,6 +46,9 @@ function article_debut(string $slug, string $titreGoogle, string $h1, int $minut
   <article class="article">
     <header class="page-header article-header">
       <div class="container">
+<?php if ($article['apercu']): ?>
+        <p class="article-apercu">Aperçu : article programmé, visible par tous le <?= date_longue_fr($article['date']) ?>.</p>
+<?php endif; ?>
         <nav class="article-breadcrumb" aria-label="Fil d'Ariane"><a href="/">Accueil</a> › <a href="/conseils/">Conseils</a> › <span><?= htmlspecialchars($article['categorie']) ?></span></nav>
         <h1 data-animate><?= $h1 ?></h1>
         <p class="article-meta" data-animate>Par <a href="/a-propos">Fabien Perrin</a>, créateur de sites à Évreux · <time datetime="<?= $article['date'] ?>"><?= date_longue_fr($article['date']) ?></time> · <?= $minutes ?> min de lecture</p>

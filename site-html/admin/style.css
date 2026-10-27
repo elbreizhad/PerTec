@@ -493,3 +493,17 @@ a:hover { text-decoration: underline; }
   .trend-total { align-items: flex-start; }
   .trend-axis, .trend-plot { height: 180px; }
 }
+
+/* Articles */
+.articles-table-wrap { overflow-x: auto; }
+.articles-table { min-width: 760px; }
+.articles-table td { vertical-align: top; }
+.article-cell strong { display: block; font-weight: 600; line-height: 1.35; }
+.article-cell span { display: block; margin-top: 0.25rem; color: var(--gray-400); font-size: 0.8rem; }
+.articles-table .nowrap { white-space: nowrap; }
+.articles-table .muted { color: var(--gray-600); }
+.articles-table tr.is-scheduled td { background: rgba(245,158,11,0.03); }
+.status { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+.status-live { color: #4ade80; background: rgba(34,197,94,0.12); }
+.status-scheduled { color: #fcd34d; background: rgba(245,158,11,0.12); }
+.status-sub { display: block; margin-top: 0.3rem; color: var(--gray-400); font-size: 0.78rem; white-space: nowrap; }

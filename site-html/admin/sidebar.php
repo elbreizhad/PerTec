@@ -13,6 +13,10 @@
             <span class="nav-icon">📈</span>
             Statistiques
         </a>
+        <a href="articles.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'articles.php' ? 'active' : '' ?>">
+            <span class="nav-icon">📝</span>
+            Articles
+        </a>
         <a href="messages.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'messages.php' ? 'active' : '' ?>">
             <span class="nav-icon">📧</span>
             Messages

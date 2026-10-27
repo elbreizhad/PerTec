@@ -29,14 +29,33 @@ function conseils_publies(): array {
 }
 
 /**
+ * L'administrateur est-il connecté ? (sans ouvrir de session pour les visiteurs)
+ */
+function conseil_admin_connecte(): bool {
+    if (session_status() === PHP_SESSION_NONE) {
+        if (empty($_COOKIE[session_name()])) return false;
+        session_start();
+    }
+    return ($_SESSION['admin_logged_in'] ?? false) === true;
+}
+
+/**
  * Article demandé par une page ; page 404 s'il n'existe pas ou n'est pas encore publié.
+ * Un article programmé reste visible en aperçu (non indexé) pour l'administrateur connecté.
  */
 function conseil(string $slug): array {
+    global $noindex;
     $article = conseils_tous()[$slug] ?? null;
-    if ($article === null || !conseil_est_publie($article)) {
+    $apercu = $article !== null && !conseil_est_publie($article) && conseil_admin_connecte();
+    if ($article === null || (!conseil_est_publie($article) && !$apercu)) {
         require dirname(__DIR__) . '/404.php';
         exit;
     }
+    if ($apercu) {
+        $noindex = true;
+        header('X-Robots-Tag: noindex');
+    }
+    $article['apercu'] = $apercu;
     $article['modifie'] = $article['modifie'] ?? $article['date'];
     return $article;
 }

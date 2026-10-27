@@ -1883,6 +1883,7 @@ button:focus-visible {
 .article-header h1 { max-width: 900px; margin: 0 auto; }
 .article-breadcrumb { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1.5rem; }
 .article-breadcrumb a { color: var(--gray-400); text-decoration: none; }
+.page-header .article-apercu { display: inline-block; max-width: none; margin: 0 auto 1rem; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; line-height: 1.4; font-weight: 600; color: #fcd34d; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); }
 .article-breadcrumb a:hover { color: var(--white); }
 .article-meta { color: var(--gray-500); font-size: 0.95rem; margin-top: 1.25rem; }
 .article-meta a { color: var(--gray-400); }
