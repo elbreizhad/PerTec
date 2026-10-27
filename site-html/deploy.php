@@ -153,7 +153,10 @@ run_command("git fetch --prune origin +refs/heads/$branch:refs/remotes/origin/$b
 run_command("git checkout -f $b", "Changement de branche", true);
 run_command("git reset --hard " . escapeshellarg("origin/$branch"), "Reset sur la branche distante", true);
 
-$commit = trim(shell_exec('git log -1 --format="%h · %ad · %s" --date=format:"%d/%m/%Y %H:%M" 2>/dev/null') ?? '');
+// exec() et non shell_exec() : shell_exec est souvent désactivé chez les hébergeurs
+$log = [];
+exec('git log -1 --format="%h · %ad · %s" --date=format:"%d/%m/%Y %H:%M" 2>&1', $log);
+$commit = trim($log[0] ?? '');
 echo "📌 Version déployée : $commit\n\n";
 
 // Synchroniser les fichiers vers public_html
