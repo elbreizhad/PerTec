@@ -10,6 +10,46 @@
  */
 
 return [
+    'obtenir-avis-google' => [
+        'titre' => 'Comment obtenir des avis Google quand on est artisan ou commerçant',
+        'description' => 'Obtenir des avis Google quand on est artisan ou commerçant : lien direct, bon moment, réponses aux avis négatifs et pratiques interdites à éviter.',
+        'resume' => 'Lien direct, bon moment pour demander, réponses aux avis négatifs, pratiques interdites : la méthode pour obtenir des avis Google régulièrement, sans tricher.',
+        'categorie' => 'Visibilité',
+        'date' => '2026-12-01',
+        'image' => '/images/conseils/avis-google-commerce.webp',
+    ],
+    'site-internet-centre-formation-securite' => [
+        'titre' => 'Site internet pour un centre de formation en sécurité : SSIAP, CPF et Qualiopi',
+        'description' => 'Site internet pour centre de formation sécurité : pages SSIAP et APS, sessions à jour, financement CPF, informations Qualiopi, autorisation CNAPS.',
+        'resume' => 'Une page par formation, des sessions à jour, le financement expliqué simplement, les informations attendues par Qualiopi : ce que doit faire le site d\'un centre de formation en sécurité.',
+        'categorie' => 'Sécurité privée',
+        'date' => '2026-11-24',
+        'image' => '/images/portfolio/cfssis.webp',
+    ],
+    'location-ou-achat-site-internet' => [
+        'titre' => 'Acheter ou louer son site internet ? Les pièges de la location',
+        'description' => 'Location ou achat de site internet : coût réel sur 4 ans, engagement, nom de domaine, tacite reconduction. Les 5 pièges à vérifier avant de signer.',
+        'resume' => 'Coût réel sur 4 ans, durée d\'engagement, propriété du nom de domaine, location financière : les points à vérifier avant de signer un contrat de location de site.',
+        'categorie' => 'Prix',
+        'date' => '2026-11-17',
+        'image' => '/images/conseils/location-achat-cout-cumule.webp',
+    ],
+    'site-vitrine-catalogue-ecommerce' => [
+        'titre' => 'Site vitrine, catalogue, e-commerce ou institutionnel : lequel choisir ?',
+        'description' => 'Site vitrine, catalogue, e-commerce ou institutionnel : à quoi sert chaque type de site, pour qui, à quel prix, et comment choisir selon votre activité.',
+        'resume' => 'Artisan, commerce, PME ou association : les quatre grands types de sites, à quoi ils servent et comment choisir sans payer pour des fonctions inutiles.',
+        'categorie' => 'Choisir son site',
+        'date' => '2026-11-10',
+        'image' => '/images/commerces/boutique.webp',
+    ],
+    'referencement-local-eure-normandie' => [
+        'titre' => 'Référencement local : apparaître sur Google à Vernon, Évreux ou Rouen',
+        'description' => 'Référencement local dans l\'Eure et en Normandie : fiche Google, avis, pages par service et par ville, informations cohérentes. Méthode et exemple réel.',
+        'resume' => 'Fiche Google, avis, une page par service et par ville, informations identiques partout : les trois piliers pour apparaître sur les recherches locales, avec un exemple réel.',
+        'categorie' => 'Visibilité',
+        'date' => '2026-11-03',
+        'image' => '/images/conseils/referencement-local-3-piliers.webp',
+    ],
     'planning-cabinet-infirmier' => [
         'titre' => 'Planning de cabinet infirmier : fini les heures sur le tableau',
         'description' => 'Outil web qui génère le planning d\'un cabinet infirmier : équité entre associés, week-ends, fériés, remplaçantes, agenda et PDF. Sur devis.',
