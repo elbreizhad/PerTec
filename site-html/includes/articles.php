@@ -26,13 +26,13 @@ return [
         'date' => '2026-11-24',
         'image' => '/images/portfolio/cfssis.webp',
     ],
-    'location-ou-achat-site-internet' => [
-        'titre' => 'Acheter ou louer son site internet ? Les pièges de la location',
-        'description' => 'Location ou achat de site internet : coût réel sur 4 ans, engagement, nom de domaine, tacite reconduction. Les 5 pièges à vérifier avant de signer.',
-        'resume' => 'Coût réel sur 4 ans, durée d\'engagement, propriété du nom de domaine, location financière : les points à vérifier avant de signer un contrat de location de site.',
+    'location-site-internet' => [
+        'titre' => 'Location de site internet : bien choisir sa formule',
+        'description' => 'Location de site internet : ce que doit comprendre une bonne formule mensuelle, les points à vérifier avant de signer et le coût réel sur 4 ans.',
+        'resume' => 'Hébergement, sécurité, modifications incluses, nom de domaine à votre nom, engagement : comment choisir une bonne formule de site au mois.',
         'categorie' => 'Prix',
         'date' => '2026-11-17',
-        'image' => '/images/conseils/location-achat-cout-cumule.webp',
+        'image' => '/images/conseils/location-site-cout-4-ans.webp',
     ],
     'site-vitrine-catalogue-ecommerce' => [
         'titre' => 'Site vitrine, catalogue, e-commerce ou institutionnel : lequel choisir ?',
