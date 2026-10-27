@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Vernon (27) | Devis Gratuit 24h | Pertec';
-$pageDescription = 'Création de site internet à Vernon pour artisans, commerces et PME. Site clé en main avec référencement local. Devis gratuit sous 24h. Webmaster Eure.';
+$pageTitle = 'Création de site internet à Vernon (27) | Pertec';
+$pageDescription = 'Création de site internet à Vernon : site vitrine, e-commerce, catalogue ou institutionnel, avec référencement local. Dès 490 €, devis gratuit en 24h.';
 $canonicalUrl = '/creation-site-internet/vernon';
 $activeMenu = '';
 

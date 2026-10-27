@@ -16,6 +16,7 @@ return [
         'resume' => 'Génération automatique des tournées, équité entre associés, remplaçantes, agenda du téléphone : un outil de planning pour cabinets infirmiers et équipes de soignants.',
         'categorie' => 'Outils sur mesure',
         'date' => '2026-10-13',
+        'modifie' => '2026-10-27',
         'image' => '/images/conseils/planning-infirmier-calendrier.webp',
     ],
     'faire-connaitre-entreprise-securite-privee' => [
@@ -37,11 +38,11 @@ return [
     ],
     'prix-site-internet-artisan' => [
         'titre' => 'Combien coûte un site internet pour un artisan en 2026 ?',
-        'description' => 'Prix d\'un site internet pour artisan en 2026 : créateur de site, location, indépendant ou agence. Ce qui fait varier le prix, les coûts cachés et les pièges à éviter.',
+        'description' => 'Prix d\'un site internet pour artisan en 2026 : créateur de site, location, indépendant ou agence, prix par métier, coûts cachés et pièges à éviter.',
         'resume' => 'Créateur de site, location, indépendant ou agence : les vrais prix, ce qui les fait varier et les pièges à éviter avant de signer.',
         'categorie' => 'Prix',
         'date' => '2026-09-15',
-        'modifie' => '2026-10-13',
+        'modifie' => '2026-10-27',
         'image' => '/images/conseils/prix-site-artisan.webp',
     ],
 ];

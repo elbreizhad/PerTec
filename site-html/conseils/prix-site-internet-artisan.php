@@ -13,10 +13,11 @@ $prixPage = $offres['page_unique']['creation'];
 $prix5 = $offres['vitrine5']['creation'];
 $prix10 = $offres['vitrine10']['creation'];
 $redaction = $tarifs['options']['options']['redaction']['creation'];
+$rdv = $tarifs['options']['options']['rdv_ligne']['creation'];
 $total3ans = fn(int $creation) => number_format($creation + $mensuel * 36, 0, ',', ' ');
 $euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
 
-$pageTitle = 'Combien coûte un site internet pour un artisan ? (prix 2026) | Pertec';
+$pageTitle = 'Prix d\'un site internet pour artisan en 2026 | Pertec';
 $pageDescription = $article['description'];
 $canonicalUrl = '/conseils/' . $slug;
 $activeMenu = 'conseils';
@@ -95,6 +96,24 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
         <h3>L'agence : utile pour les projets plus lourds</h3>
         <p>Une agence se justifie pour un site avec beaucoup de pages, une boutique en ligne importante, ou une entreprise avec plusieurs services et un vrai budget marketing. Pour un artisan qui veut être trouvé dans sa ville et recevoir des demandes de devis, c'est souvent plus que nécessaire.</p>
+
+        <h2>Prix d'un site internet selon votre métier</h2>
+        <p>Le métier change surtout ce que le site doit faire, donc le nombre de pages et les options utiles. Voici ce qui convient le plus souvent, avec mes tarifs :</p>
+        <div class="article-table-wrap">
+          <table class="article-table">
+            <thead>
+              <tr><th>Métier</th><th>Ce qui compte sur le site</th><th>Formule adaptée</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Plombier, chauffagiste</strong></td><td>Dépannage, zone d'intervention, numéro cliquable, demande de devis</td><td>Page unique (<?= $euros($prixPage) ?>) ou 5 pages (<?= $euros($prix5) ?>) avec une page par service</td></tr>
+              <tr><td><strong>Électricien</strong></td><td>Services (rénovation, mise aux normes, dépannage), qualifications</td><td>5 pages (<?= $euros($prix5) ?>)</td></tr>
+              <tr><td><strong>Menuisier, maçon, couvreur</strong></td><td>Photos de réalisations, types de travaux, zone</td><td>5 pages (<?= $euros($prix5) ?>) avec galerie de chantiers</td></tr>
+              <tr><td><strong>Coiffeur, esthéticienne</strong></td><td>Prestations et tarifs, prise de rendez-vous en ligne</td><td>Page unique ou 5 pages, + rendez-vous en ligne (<?= $euros($rdv) ?>)</td></tr>
+              <tr><td><strong>Artisan multi-services ou multi-sites</strong></td><td>Une page par service ou par ville pour être trouvé partout</td><td>10 pages (<?= $euros($prix10) ?>)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Dans tous les cas, ajoutez <?= $mensuel ?> € par mois pour l'hébergement, le nom de domaine, les mises à jour et vos modifications. Les fourchettes du marché vues plus haut restent valables quel que soit le métier : c'est le contenu et le nombre de pages qui font la différence, pas la profession.</p>
 
         <h2>Ce qui fait varier le prix</h2>
         <p>Deux sites « vitrine » peuvent avoir des prix très différents. Voici ce qui pèse vraiment :</p>

@@ -62,7 +62,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <div class="container">
       <div class="article-prose">
 
-        <p>Dans un cabinet infirmier, le planning est rarement simple. Il faut couvrir chaque matin et chaque soir, partager équitablement les week-ends et les jours fériés entre associés, intégrer les remplaçantes, tenir compte des indisponibilités de chacun… et tout refaire dès qu'un congé tombe. Beaucoup de cabinets y passent des soirées, sur un tableur ou une feuille papier, avec toujours le sentiment que quelqu'un est lésé.</p>
+        <p>Dans un cabinet d'infirmiers libéraux (IDEL), le planning est rarement simple. Il faut couvrir chaque matin et chaque soir, partager équitablement les week-ends et les jours fériés entre associés, intégrer les remplaçantes, tenir compte des indisponibilités de chacun… et tout refaire dès qu'un congé tombe. Beaucoup de cabinets y passent des soirées, sur un tableur ou une feuille papier, avec toujours le sentiment que quelqu'un est lésé.</p>
         <p>J'ai développé pour un cabinet infirmier un outil de planning qui fait ce travail automatiquement. Voici ce qu'il fait, et pourquoi il peut servir à d'autres équipes de soignants.</p>
 
         <div class="article-answer glass">
@@ -74,7 +74,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p>Un planning de cabinet, ce n'est pas qu'un calendrier. Ce sont des règles, souvent implicites : la même personne fait le samedi et le dimanche, celui qui fait la tournée du soir enchaîne celle du lendemain matin, personne ne travaille trop de jours d'affilée, les fériés tournent. Ajoutez les vacances, les remplaçantes et les imprévus, et la moindre modification oblige à tout revérifier à la main.</p>
         <p>Le résultat : du temps perdu, des erreurs (un créneau oublié, deux personnes le même matin) et, surtout, des discussions sur l'équité. Qui a fait le plus de week-ends cette année ? Personne ne sait vraiment.</p>
 
-        <h2>Ce que fait l'outil</h2>
+        <h2>Ce que fait l'outil : un calendrier de rotation automatique</h2>
         <figure class="article-figure">
           <img src="/images/conseils/planning-infirmier-calendrier.webp" width="1400" height="956" loading="lazy" decoding="async" alt="Outil de planning de cabinet infirmier : vue du mois de janvier, avec pour chaque jour les infirmières du matin (M) et du soir (S) en couleur">
           <figcaption>La vue mensuelle : chaque couleur est une infirmière, M pour la tournée du matin, S pour celle du soir. Les week-ends et jours fériés sont signalés. Équipe fictive.</figcaption>
@@ -95,7 +95,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </figure>
         <ul>
           <li><strong>Moins de temps passé</strong> : le planning de plusieurs semaines est généré en quelques secondes, puis ajusté si besoin.</li>
-          <li><strong>Plus de débat sur l'équité</strong> : les compteurs sont visibles par tous. Si un associé a fait plus de week-ends, ça se voit, et l'outil le compense.</li>
+          <li><strong>Plus de débat sur l'équité</strong> : la rotation des week-ends et des fériés est calculée, et les compteurs sont visibles par tous. Si un associé a fait plus de week-ends, ça se voit, et l'outil le compense.</li>
           <li><strong>Moins d'erreurs</strong> : chaque créneau est couvert, les indisponibilités sont respectées, les règles du cabinet sont appliquées à chaque fois.</li>
           <li><strong>Tout le monde à jour</strong> : chacun voit son planning dans l'agenda de son téléphone, sans recopier, et les changements s'y reportent.</li>
         </ul>
@@ -136,6 +136,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
           <div class="faq-item glass">
             <button class="faq-question"><span>Peut-on modifier le planning à la main ?</span><span>+</span></button>
             <div class="faq-answer"><p>Oui. La génération automatique propose un planning, que vous pouvez ensuite ajuster. Pour un imprévu, la fonction « Combler les trous » complète seulement les créneaux vides, sans refaire tout le planning.</p></div>
+          </div>
+          <div class="faq-item glass">
+            <button class="faq-question"><span>Existe-t-il un planning infirmier gratuit ?</span><span>+</span></button>
+            <div class="faq-answer"><p>Oui : un tableur ou un modèle de calendrier partagé peut suffire pour un petit cabinet. Mais il faut tout remplir et vérifier à la main (équité des week-ends, indisponibilités, remplaçantes). Cet outil automatise ces calculs ; il est adapté à chaque cabinet, donc proposé sur devis.</p></div>
           </div>
           <div class="faq-item glass">
             <button class="faq-question"><span>Est-ce un logiciel de facturation ou de dossier patient ?</span><span>+</span></button>

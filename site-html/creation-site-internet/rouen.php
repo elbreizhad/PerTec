@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Rouen (76) | Devis Gratuit 24h | Pertec';
-$pageDescription = 'Création de site internet à Rouen pour artisans, commerces et PME. Site clé en main avec référencement local. Devis gratuit sous 24h. Webmaster Normandie.';
+$pageTitle = 'Création de site internet à Rouen | Devis 24h | Pertec';
+$pageDescription = 'Création de site professionnel à Rouen pour artisans et PME : site vitrine, e-commerce, référencement local. Dès 490 €, devis gratuit en 24h.';
 $canonicalUrl = '/creation-site-internet/rouen';
 $activeMenu = '';
 

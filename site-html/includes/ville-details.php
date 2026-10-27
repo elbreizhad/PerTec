@@ -147,6 +147,16 @@ $faqVille = [
   </div></section>
 
   <section><div class="container">
+    <div class="section-header"><h2 class="section-title" data-animate>Quel site pour votre entreprise <span class="gradient-text"><?= htmlspecialchars($v['a']) ?></span> ?</h2><p class="section-subtitle" data-animate>Création et référencement, tout est inclus. Les prix sont les mêmes partout.</p></div>
+    <div class="features-grid features-grid-4">
+      <div class="feature-card glass" data-animate><div class="feature-icon">🏠</div><h3>Site vitrine</h3><p>Présenter votre activité, vos services et vos coordonnées, et recevoir des demandes de devis. Une page unique dès <?= $offresVille['page_unique']['creation'] ?> €, 5 pages pour <?= $offresVille['vitrine5']['creation'] ?> €.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🛒</div><h3>Site e-commerce ou catalogue</h3><p>Montrer vos produits, avec ou sans vente en ligne : catalogue consultable, click &amp; collect ou boutique complète. Sur devis.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🏛️</div><h3>Site institutionnel</h3><p>Pour une PME, une association ou une structure qui doit présenter son organisation, ses équipes et ses actualités. <?= $offresVille['vitrine10']['label'] ?> : <?= number_format($offresVille['vitrine10']['creation'], 0, ',', ' ') ?> €.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🔍</div><h3>Référencement local</h3><p>Pages pensées pour « votre métier <?= htmlspecialchars($v['a']) ?> », fiche Google reliée au site, suivi des recherches qui vous amènent des visites. Inclus dans chaque site.</p></div>
+    </div>
+  </div></section>
+
+  <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Comment <span class="gradient-text">ça se passe</span></h2><p class="section-subtitle" data-animate>Un site en ligne en 3 à 4 semaines, sans que vous ayez à vous en occuper.</p></div>
     <div class="features-grid">
       <div class="feature-card glass" data-animate><div class="feature-icon">1</div><h3>On échange</h3><p>30 minutes pour comprendre votre activité, vos clients et votre secteur autour <?= htmlspecialchars($v['de']) ?>.</p></div>
