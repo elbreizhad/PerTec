@@ -19,4 +19,9 @@ return [
     'REPO_PATH'     => '/home/pertecfr/repo',
     'PUBLIC_PATH'   => '/home/pertecfr/public_html',
     'SOURCE_FOLDER' => 'site-html',
+
+    // Dossiers ou fichiers de public_html à ne jamais écraser ni supprimer,
+    // en plus de ceux déjà protégés par deploy.php (/old site/, /.well-known/…).
+    // Chemin relatif à public_html, commençant par « / ». Exemple : '/archives/'
+    'PROTECT'       => [],
 ];
