@@ -30,6 +30,7 @@ $pages = [
     ['/secteurs/commerces', 'monthly', '0.8'],
     ['/secteurs/professions-liberales', 'monthly', '0.8'],
     ['/secteurs/securite-privee', 'monthly', '0.8'],
+    ['/secteurs/eglise', 'monthly', '0.8'],
     ['/sites-metiers/plombier', 'monthly', '0.7'],
     ['/sites-metiers/electricien', 'monthly', '0.7'],
     ['/sites-metiers/coiffeur', 'monthly', '0.7'],

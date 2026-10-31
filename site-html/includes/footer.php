@@ -17,6 +17,7 @@
             <li><a href="/secteurs/commerces">Commerces</a></li>
             <li><a href="/secteurs/professions-liberales">Professions libérales</a></li>
             <li><a href="/secteurs/securite-privee">Sécurité privée</a></li>
+            <li><a href="/secteurs/eglise">Églises</a></li>
             <li><a href="/services">Tous les services</a></li>
           </ul>
         </div>
