@@ -103,6 +103,22 @@ require_once __DIR__ . '/includes/header.php';
             <a href="https://vigiprestance.fr" target="_blank" rel="noopener" class="btn btn-secondary portfolio-btn">Voir le site →</a>
           </div>
         </div>
+
+        <div class="portfolio-card glass" data-animate>
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/manoubolomik.jpg'); background-size: cover; background-position: top center;">
+            <span class="portfolio-category glass">Artiste</span>
+          </div>
+          <div class="portfolio-content">
+            <h3>Manou Bolomik</h3>
+            <p>Site vitrine et boutique pour un artiste de rap chrétien. Présentation de l'artiste, discographie, actualités et vente d'albums en ligne.</p>
+            <div class="portfolio-tags">
+              <span>Musique</span>
+              <span>E-commerce</span>
+              <span>Artiste</span>
+            </div>
+            <a href="https://www.manoubolomik.com" target="_blank" rel="noopener" class="btn btn-secondary portfolio-btn">Voir le site →</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
