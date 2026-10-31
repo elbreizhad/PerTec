@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#312e81" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="house" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="transparent"/>
+  <ellipse cx="200" cy="290" rx="150" ry="20" fill="#22c55e" opacity="0.3"/>
+  <circle cx="50" cy="50" r="3" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="100" cy="30" r="2" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="350" cy="40" r="2" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="320" cy="70" r="3" fill="#fbbf24" opacity="0.6"/>
+  <path d="M200 80 L120 150 L120 260 L280 260 L280 150 Z" fill="#2a2a3e" stroke="#6366f1" stroke-width="2"/>
+  <path d="M200 80 L100 165 L300 165 Z" fill="url(#house)"/>
+  <rect x="175" y="190" width="50" height="70" rx="3" fill="#1e1e2e" stroke="#6366f1" stroke-width="1"/>
+  <circle cx="215" cy="230" r="4" fill="#fbbf24"/>
+  <rect x="135" y="170" width="30" height="30" fill="#1e1e2e" stroke="#6366f1" stroke-width="1"/>
+  <line x1="150" y1="170" x2="150" y2="200" stroke="#6366f1" stroke-width="1"/>
+  <line x1="135" y1="185" x2="165" y2="185" stroke="#6366f1" stroke-width="1"/>
+  <rect x="235" y="170" width="30" height="30" fill="#fbbf24" opacity="0.3" stroke="#6366f1" stroke-width="1"/>
+  <line x1="250" y1="170" x2="250" y2="200" stroke="#6366f1" stroke-width="1"/>
+  <line x1="235" y1="185" x2="265" y2="185" stroke="#6366f1" stroke-width="1"/>
+  <ellipse cx="80" cy="230" rx="30" ry="40" fill="#22c55e" opacity="0.4"/>
+  <ellipse cx="320" cy="240" rx="25" ry="35" fill="#22c55e" opacity="0.4"/>
+  <path d="M80 190 L80 260" stroke="#4ade80" stroke-width="3"/>
+  <path d="M320 205 L320 260" stroke="#4ade80" stroke-width="3"/>
+</svg>

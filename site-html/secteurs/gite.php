@@ -58,7 +58,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </ul>
           </div>
           <div class="zone-map">
-            <span class="pin" style="font-size: 5rem;">🏡</span>
+            <img src="<?= asset('/images/secteurs/gite.svg') ?>" alt="Illustration site gîte chambre d'hôtes" style="max-width: 280px; height: auto;">
           </div>
         </div>
       </div>

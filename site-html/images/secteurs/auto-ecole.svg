@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <defs>
+    <linearGradient id="road" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#374151"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+    <linearGradient id="car" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="transparent"/>
+  <path d="M0 200 Q100 180 200 200 Q300 220 400 200 L400 300 L0 300 Z" fill="url(#road)"/>
+  <path d="M180 210 L220 210" stroke="#fbbf24" stroke-width="4" stroke-dasharray="20 15"/>
+  <rect x="130" y="150" width="140" height="55" rx="10" fill="url(#car)"/>
+  <path d="M145 150 Q155 120 195 120 Q235 120 255 150" fill="#4f46e5"/>
+  <rect x="155" y="125" width="35" height="25" rx="3" fill="#93c5fd" opacity="0.6"/>
+  <rect x="200" y="125" width="45" height="25" rx="3" fill="#93c5fd" opacity="0.6"/>
+  <circle cx="160" cy="205" r="18" fill="#1f2937" stroke="#6366f1" stroke-width="2"/>
+  <circle cx="160" cy="205" r="8" fill="#374151"/>
+  <circle cx="240" cy="205" r="18" fill="#1f2937" stroke="#6366f1" stroke-width="2"/>
+  <circle cx="240" cy="205" r="8" fill="#374151"/>
+  <rect x="250" y="165" width="15" height="8" rx="2" fill="#fbbf24"/>
+  <rect x="135" y="165" width="15" height="8" rx="2" fill="#fbbf24"/>
+  <text x="175" y="180" font-family="Arial" font-size="14" font-weight="bold" fill="white">AUTO</text>
+  <circle cx="320" cy="100" r="25" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
+  <rect x="315" cy="85" width="10" height="20" rx="2" fill="white"/>
+  <rect x="310" cy="95" width="20" height="10" rx="2" fill="white"/>
+</svg>

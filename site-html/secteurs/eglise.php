@@ -63,7 +63,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </ul>
           </div>
           <div class="zone-map">
-            <span class="pin" style="font-size: 5rem;">⛪</span>
+            <img src="<?= asset('/images/secteurs/eglise.svg') ?>" alt="Illustration site église paroisse" style="max-width: 280px; height: auto;">
           </div>
         </div>
       </div>

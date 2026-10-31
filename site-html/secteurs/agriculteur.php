@@ -58,7 +58,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </ul>
           </div>
           <div class="zone-map">
-            <span class="pin" style="font-size: 5rem;">🌾</span>
+            <img src="<?= asset('/images/secteurs/agriculteur.svg') ?>" alt="Illustration site agriculteur producteur local" style="max-width: 280px; height: auto;">
           </div>
         </div>
       </div>
