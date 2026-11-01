@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Démo Site Gîte | Pertec.fr</title>
+<meta name="description" content="Exemple de site internet pour gîte et chambre d'hôtes créé par Pertec.">
+<link rel="canonical" href="https://pertec.fr/demos/gite">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #faf8f5;
+  --bg-card: #ffffff;
+  --fg: #2d3436;
+  --fg-muted: #636e72;
+  --primary: #27ae60;
+  --primary-dark: #219a52;
+  --accent: #f39c12;
+  --pertec: #6366f1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'Source Sans 3', system-ui, sans-serif; line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.serif { font-family: 'Libre Baskerville', Georgia, serif; }
+
+/* Pertec banner */
+.pertec-banner { background: linear-gradient(135deg, var(--pertec), #8b5cf6); padding: 0.75rem; text-align: center; font-size: 0.9rem; color: white; position: sticky; top: 0; z-index: 200; }
+.pertec-banner a { color: white; font-weight: 600; }
+
+/* Header */
+header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 1rem 0; }
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; color: var(--primary); }
+nav { display: flex; gap: 2rem; }
+nav a { color: var(--fg-muted); text-decoration: none; font-size: 0.95rem; }
+.btn { background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 5rem 0; align-items: center; }
+.hero h1 { font-family: 'Libre Baskerville', serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin-bottom: 1.5rem; }
+.hero p { color: var(--fg-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+.hero-rating { display: flex; align-items: center; gap: 1rem; margin-top: 2rem; }
+.hero-rating .stars { color: var(--accent); font-size: 1.25rem; }
+.hero-visual { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; }
+.hero-visual svg { width: 100%; height: 100%; }
+
+/* Features */
+.features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: -2rem 0 3rem; position: relative; z-index: 2; }
+.feature-card { background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.feature-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.feature-label { font-weight: 600; }
+.feature-detail { color: var(--fg-muted); font-size: 0.85rem; }
+
+/* Section */
+section { padding: 4rem 0; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 2rem; text-align: center; margin-bottom: 0.5rem; }
+.section-subtitle { text-align: center; color: var(--fg-muted); margin-bottom: 2.5rem; }
+
+/* Gallery */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.gallery-item { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; }
+.gallery-item svg { width: 100%; height: 100%; }
+
+/* Tarifs */
+.tarifs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.tarif-card { background: white; border-radius: 12px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.tarif-info h3 { margin-bottom: 0.25rem; }
+.tarif-info p { color: var(--fg-muted); font-size: 0.9rem; }
+.tarif-prix { text-align: right; }
+.tarif-montant { font-size: 2rem; font-weight: 700; color: var(--primary); }
+.tarif-periode { color: var(--fg-muted); font-size: 0.85rem; }
+
+/* Calendrier */
+.calendrier { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; }
+.cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center; }
+.cal-day { padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; }
+.cal-day.header { color: var(--fg-muted); font-size: 0.75rem; text-transform: uppercase; }
+.cal-day.available { background: rgba(39,174,96,0.15); cursor: pointer; }
+.cal-day.booked { background: rgba(0,0,0,0.05); color: var(--fg-muted); text-decoration: line-through; }
+
+/* CTA */
+.cta { background: var(--primary); color: white; border-radius: 16px; padding: 4rem; text-align: center; }
+.cta h2 { font-family: 'Libre Baskerville', serif; font-size: 2.5rem; margin-bottom: 1rem; }
+.cta p { opacity: 0.9; margin-bottom: 2rem; }
+.cta .btn { background: white; color: var(--primary); }
+
+/* Footer */
+footer { padding: 3rem 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); }
+footer p { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.footer-pertec { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); }
+.footer-pertec a { color: var(--pertec); font-weight: 600; text-decoration: none; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .features { grid-template-columns: repeat(2, 1fr); }
+  .gallery { grid-template-columns: 1fr 1fr; }
+  .tarifs-grid { grid-template-columns: 1fr; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pertec-banner">
+  🎨 Ceci est une démo créée par <a href="https://pertec.fr/secteurs/gite">Pertec</a> · <a href="https://pertec.fr/contact">Demander un devis</a>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">Le Clos Normand</div>
+    <nav>
+      <a href="#hebergement">Hébergement</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#disponibilites">Disponibilités</a>
+    </nav>
+    <a href="#reservation" class="btn">Réserver</a>
+  </div>
+</header>
+
+<section class="hero container">
+  <div>
+    <h1 class="serif">Votre escapade normande</h1>
+    <p>Gîte de charme au cœur du Pays d'Ouche. 4 personnes, jardin clos, à 10 min d'Évreux.</p>
+    <a href="#reservation" class="btn">Vérifier les disponibilités</a>
+    <div class="hero-rating">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <span>4.9/5 sur Gîtes de France</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect fill="#e8f5e9" width="400" height="300"/>
+      <rect x="100" y="100" width="200" height="150" fill="#8d6e63"/>
+      <polygon points="100,100 200,30 300,100" fill="#5d4037"/>
+      <rect x="170" y="170" width="60" height="80" fill="#3e2723"/>
+      <rect x="120" y="130" width="40" height="40" fill="#81d4fa"/>
+      <rect x="240" y="130" width="40" height="40" fill="#81d4fa"/>
+      <ellipse cx="80" cy="200" rx="40" ry="60" fill="#66bb6a"/>
+      <ellipse cx="320" cy="200" rx="40" ry="60" fill="#66bb6a"/>
+    </svg>
+  </div>
+</section>
+
+<div class="features container">
+  <div class="feature-card">
+    <div class="feature-icon">👥</div>
+    <div class="feature-label">4 personnes</div>
+    <div class="feature-detail">2 chambres</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🌳</div>
+    <div class="feature-label">Jardin clos</div>
+    <div class="feature-detail">800 m²</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📶</div>
+    <div class="feature-label">WiFi fibre</div>
+    <div class="feature-detail">Inclus</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🐕</div>
+    <div class="feature-label">Animaux</div>
+    <div class="feature-detail">Acceptés</div>
+  </div>
+</div>
+
+<section id="hebergement" class="container">
+  <h2 class="section-title serif">Le gîte</h2>
+  <p class="section-subtitle">Maison en colombages entièrement rénovée</p>
+
+  <div class="gallery">
+    <div class="gallery-item"><svg viewBox="0 0 400 300"><rect fill="#e3f2fd" width="400" height="300"/><rect x="50" y="100" width="300" height="150" fill="#90caf9"/><rect x="100" y="120" width="80" height="60" fill="#42a5f5"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 400 300"><rect fill="#fff3e0" width="400" height="300"/><rect x="100" y="150" width="200" height="100" fill="#ffcc80"/><ellipse cx="200" cy="130" rx="60" ry="30" fill="#ffe0b2"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 400 300"><rect fill="#e8f5e9" width="400" height="300"/><circle cx="200" cy="150" r="80" fill="#81c784"/><rect x="180" y="200" width="40" height="60" fill="#5d4037"/></svg></div>
+  </div>
+</section>
+
+<section id="tarifs" class="container">
+  <h2 class="section-title serif">Tarifs</h2>
+  <p class="section-subtitle">Ménage et linge de maison inclus</p>
+
+  <div class="tarifs-grid">
+    <div class="tarif-card">
+      <div class="tarif-info"><h3>Basse saison</h3><p>Novembre à Mars</p></div>
+      <div class="tarif-prix"><div class="tarif-montant">350 €</div><div class="tarif-periode">/ semaine</div></div>
+    </div>
+    <div class="tarif-card">
+      <div class="tarif-info"><h3>Moyenne saison</h3><p>Avril à Juin, Sept-Oct</p></div>
+      <div class="tarif-prix"><div class="tarif-montant">450 €</div><div class="tarif-periode">/ semaine</div></div>
+    </div>
+    <div class="tarif-card">
+      <div class="tarif-info"><h3>Haute saison</h3><p>Juillet, Août</p></div>
+      <div class="tarif-prix"><div class="tarif-montant">590 €</div><div class="tarif-periode">/ semaine</div></div>
+    </div>
+    <div class="tarif-card">
+      <div class="tarif-info"><h3>Week-end</h3><p>2 nuits minimum</p></div>
+      <div class="tarif-prix"><div class="tarif-montant">180 €</div><div class="tarif-periode">/ 2 nuits</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="disponibilites" class="container">
+  <h2 class="section-title serif">Disponibilités</h2>
+
+  <div class="calendrier">
+    <div class="cal-header">
+      <h3>Novembre 2024</h3>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-day header">Lun</div>
+      <div class="cal-day header">Mar</div>
+      <div class="cal-day header">Mer</div>
+      <div class="cal-day header">Jeu</div>
+      <div class="cal-day header">Ven</div>
+      <div class="cal-day header">Sam</div>
+      <div class="cal-day header">Dim</div>
+      <div class="cal-day"></div>
+      <div class="cal-day"></div>
+      <div class="cal-day"></div>
+      <div class="cal-day"></div>
+      <div class="cal-day available">1</div>
+      <div class="cal-day available">2</div>
+      <div class="cal-day available">3</div>
+      <div class="cal-day available">4</div>
+      <div class="cal-day available">5</div>
+      <div class="cal-day available">6</div>
+      <div class="cal-day available">7</div>
+      <div class="cal-day booked">8</div>
+      <div class="cal-day booked">9</div>
+      <div class="cal-day booked">10</div>
+      <div class="cal-day available">11</div>
+      <div class="cal-day available">12</div>
+      <div class="cal-day available">13</div>
+      <div class="cal-day available">14</div>
+    </div>
+  </div>
+</section>
+
+<section id="reservation" class="container">
+  <div class="cta">
+    <h2 class="serif">Envie de vous évader ?</h2>
+    <p>Réservation simple et sécurisée. Réponse sous 24h.</p>
+    <a href="#" class="btn">Demander une réservation</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>Le Clos Normand</strong> · Gîte 3 épis · Pays d'Ouche (27)</p>
+    <p>📞 06 XX XX XX XX · 📧 contact@closnormand.fr</p>
+    <div class="footer-pertec">
+      <p>Site créé par <a href="https://pertec.fr">Pertec.fr</a> · <a href="https://pertec.fr/contact">Obtenir un site similaire</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

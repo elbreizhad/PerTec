@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Démo Site Auto-École | Pertec.fr</title>
+<meta name="description" content="Exemple de site internet pour auto-école créé par Pertec.">
+<link rel="canonical" href="https://pertec.fr/demos/auto-ecole">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+<style>
+:root {
+  --bg: #f5f7fa;
+  --bg-card: #ffffff;
+  --fg: #1a1a2e;
+  --fg-muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-light: #eef2ff;
+  --success: #10b981;
+  --pertec: #6366f1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'Poppins', system-ui, sans-serif; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Pertec banner */
+.pertec-banner { background: linear-gradient(135deg, var(--pertec), #8b5cf6); padding: 0.75rem; text-align: center; font-size: 0.9rem; color: white; position: sticky; top: 0; z-index: 200; }
+.pertec-banner a { color: white; font-weight: 600; }
+
+/* Header */
+header { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 0; }
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.25rem; }
+.logo-icon { background: var(--primary); color: white; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+nav { display: flex; gap: 2rem; }
+nav a { color: var(--fg-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+.btn { background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; border-radius: 24px; padding: 4rem; margin: 2rem 0; display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+.hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 1rem; }
+.hero p { opacity: 0.9; margin-bottom: 2rem; font-size: 1.1rem; }
+.hero .btn { background: white; color: var(--primary); }
+.hero-stats { display: flex; gap: 2.5rem; margin-top: 2.5rem; }
+.stat { text-align: center; background: rgba(255,255,255,0.15); padding: 1rem 1.5rem; border-radius: 12px; }
+.stat-number { font-size: 2rem; font-weight: 700; }
+.stat-label { font-size: 0.85rem; opacity: 0.9; }
+.hero-img { font-size: 8rem; }
+
+/* Section */
+section { padding: 4rem 0; }
+.section-title { font-size: 1.75rem; text-align: center; margin-bottom: 0.5rem; }
+.section-subtitle { text-align: center; color: var(--fg-muted); margin-bottom: 2.5rem; }
+
+/* Formations */
+.formations-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.formation-card { background: var(--bg-card); border-radius: 16px; padding: 2rem; border: 2px solid transparent; transition: all 0.3s; position: relative; overflow: hidden; }
+.formation-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+.formation-card.popular::before { content: "Populaire"; position: absolute; top: 1rem; right: -2rem; background: var(--primary); color: white; padding: 0.25rem 2rem; font-size: 0.7rem; font-weight: 600; transform: rotate(45deg); }
+.formation-icon { font-size: 3rem; margin-bottom: 1rem; }
+.formation-card h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+.formation-card p { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+.formation-price { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+.formation-price span { font-size: 0.9rem; font-weight: 400; color: var(--fg-muted); }
+
+/* Taux réussite */
+.taux { background: var(--primary-light); border-radius: 24px; padding: 3rem; text-align: center; }
+.taux-grid { display: flex; justify-content: center; gap: 4rem; margin-top: 2rem; flex-wrap: wrap; }
+.taux-item { text-align: center; }
+.taux-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--success) calc(var(--pct) * 1%), var(--bg-card) 0); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; position: relative; }
+.taux-circle::before { content: ""; width: 90px; height: 90px; background: var(--primary-light); border-radius: 50%; position: absolute; }
+.taux-value { position: relative; font-size: 1.5rem; font-weight: 700; color: var(--success); }
+.taux-label { font-size: 0.9rem; color: var(--fg-muted); }
+
+/* Équipe */
+.equipe-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.moniteur-card { background: var(--bg-card); border-radius: 16px; padding: 1.5rem; text-align: center; }
+.moniteur-avatar { width: 80px; height: 80px; background: var(--primary-light); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+.moniteur-card h4 { margin-bottom: 0.25rem; }
+.moniteur-card p { color: var(--fg-muted); font-size: 0.85rem; }
+
+/* CTA */
+.cta { background: var(--primary); color: white; border-radius: 24px; padding: 4rem; text-align: center; }
+.cta h2 { font-size: 2rem; margin-bottom: 1rem; }
+.cta p { opacity: 0.9; margin-bottom: 2rem; }
+.cta .btn { background: white; color: var(--primary); }
+
+/* Footer */
+footer { padding: 3rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; border-top: 1px solid rgba(0,0,0,0.1); }
+footer h4 { margin-bottom: 1rem; color: var(--primary); }
+footer p, footer a { color: var(--fg-muted); font-size: 0.9rem; text-decoration: none; display: block; margin-bottom: 0.5rem; }
+.footer-pertec { grid-column: span 3; text-align: center; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); }
+.footer-pertec a { color: var(--pertec); font-weight: 600; display: inline; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; text-align: center; }
+  .hero-img { display: none; }
+  .hero-stats { justify-content: center; flex-wrap: wrap; }
+  .formations-grid { grid-template-columns: 1fr; }
+  .equipe-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { grid-template-columns: 1fr; }
+  .footer-pertec { grid-column: span 1; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pertec-banner">
+  🎨 Ceci est une démo créée par <a href="https://pertec.fr/secteurs/auto-ecole">Pertec</a> · <a href="https://pertec.fr/contact">Demander un devis</a>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">
+      <div class="logo-icon">🚗</div>
+      Auto-École Normandie
+    </div>
+    <nav>
+      <a href="#formations">Formations</a>
+      <a href="#resultats">Résultats</a>
+      <a href="#equipe">Équipe</a>
+    </nav>
+    <a href="#inscription" class="btn">S'inscrire</a>
+  </div>
+</header>
+
+<div class="container">
+  <section class="hero">
+    <div>
+      <h1>Passez votre permis à Évreux</h1>
+      <p>Formation de qualité, moniteurs expérimentés, taux de réussite au-dessus de la moyenne nationale.</p>
+      <a href="#inscription" class="btn">Je m'inscris</a>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-number">87%</div><div class="stat-label">Taux réussite</div></div>
+        <div class="stat"><div class="stat-number">1 500+</div><div class="stat-label">Élèves formés</div></div>
+        <div class="stat"><div class="stat-number">15</div><div class="stat-label">Ans d'exp.</div></div>
+      </div>
+    </div>
+    <div class="hero-img">🚙</div>
+  </section>
+</div>
+
+<section id="formations" class="container">
+  <h2 class="section-title">Nos formations</h2>
+  <p class="section-subtitle">Du code à la conduite, nous vous accompagnons</p>
+
+  <div class="formations-grid">
+    <div class="formation-card popular">
+      <div class="formation-icon">🚗</div>
+      <h3>Permis B</h3>
+      <p>Formation classique au permis voiture. 20h de conduite minimum.</p>
+      <div class="formation-price">1 290 € <span>forfait 20h</span></div>
+    </div>
+    <div class="formation-card">
+      <div class="formation-icon">👨‍👩‍👦</div>
+      <h3>Conduite accompagnée</h3>
+      <p>Dès 15 ans. Formule AAC avec 3 000 km de pratique.</p>
+      <div class="formation-price">1 190 € <span>forfait complet</span></div>
+    </div>
+    <div class="formation-card">
+      <div class="formation-icon">⚡</div>
+      <h3>Stage accéléré</h3>
+      <p>Permis en 2 semaines. Code + conduite intensive.</p>
+      <div class="formation-price">1 590 € <span>tout compris</span></div>
+    </div>
+    <div class="formation-card">
+      <div class="formation-icon">🏍️</div>
+      <h3>Permis moto</h3>
+      <p>A1, A2 ou passerelle. Formation sur piste privée.</p>
+      <div class="formation-price">790 € <span>forfait A2</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="resultats" class="container">
+  <div class="taux">
+    <h2 class="section-title">Nos résultats</h2>
+    <p style="color: var(--fg-muted);">Des taux supérieurs à la moyenne nationale</p>
+    <div class="taux-grid">
+      <div class="taux-item">
+        <div class="taux-circle" style="--pct: 92"><span class="taux-value">92%</span></div>
+        <div class="taux-label">Code de la route</div>
+      </div>
+      <div class="taux-item">
+        <div class="taux-circle" style="--pct: 87"><span class="taux-value">87%</span></div>
+        <div class="taux-label">Permis B</div>
+      </div>
+      <div class="taux-item">
+        <div class="taux-circle" style="--pct: 94"><span class="taux-value">94%</span></div>
+        <div class="taux-label">Permis moto</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="equipe" class="container">
+  <h2 class="section-title">Notre équipe</h2>
+  <p class="section-subtitle">Des moniteurs diplômés et expérimentés</p>
+
+  <div class="equipe-grid">
+    <div class="moniteur-card">
+      <div class="moniteur-avatar">👨‍🏫</div>
+      <h4>Thomas</h4>
+      <p>Moniteur · 12 ans exp.</p>
+    </div>
+    <div class="moniteur-card">
+      <div class="moniteur-avatar">👩‍🏫</div>
+      <h4>Marie</h4>
+      <p>Monitrice · 8 ans exp.</p>
+    </div>
+    <div class="moniteur-card">
+      <div class="moniteur-avatar">👨‍🏫</div>
+      <h4>Lucas</h4>
+      <p>Moniteur moto · 10 ans exp.</p>
+    </div>
+    <div class="moniteur-card">
+      <div class="moniteur-avatar">👩‍💼</div>
+      <h4>Sophie</h4>
+      <p>Accueil & inscription</p>
+    </div>
+  </div>
+</section>
+
+<section id="inscription" class="container">
+  <div class="cta">
+    <h2>Prêt à démarrer ?</h2>
+    <p>Inscrivez-vous en ligne ou passez nous voir à l'agence.</p>
+    <a href="#" class="btn">Je m'inscris en ligne</a>
+    <p style="margin-top: 1.5rem;">📞 02 32 XX XX XX · 📍 45 rue du Commerce, 27000 Évreux</p>
+  </div>
+</section>
+
+<footer class="container">
+  <div>
+    <h4>Auto-École Normandie</h4>
+    <p>Agrément préfectoral n° E12 027 0001 0</p>
+    <p>Label Qualité Formation</p>
+  </div>
+  <div>
+    <h4>Horaires</h4>
+    <p>Lun - Ven : 9h - 19h</p>
+    <p>Samedi : 9h - 12h</p>
+  </div>
+  <div>
+    <h4>Contact</h4>
+    <p>📍 45 rue du Commerce, 27000 Évreux</p>
+    <p>📞 02 32 XX XX XX</p>
+    <p>📧 contact@ae-normandie.fr</p>
+  </div>
+  <div class="footer-pertec">
+    <p>Site créé par <a href="https://pertec.fr">Pertec.fr</a> · <a href="https://pertec.fr/contact">Obtenir un site similaire</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Démo Site Coiffeur | Pertec.fr</title>
+<meta name="description" content="Exemple de site internet pour salon de coiffure créé par Pertec.">
+<link rel="canonical" href="https://pertec.fr/demos/coiffeur">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #faf9f7;
+  --bg-dark: #1a1a1a;
+  --bg-card: #ffffff;
+  --fg: #1a1a1a;
+  --fg-muted: #666;
+  --primary: #c9a86c;
+  --primary-dark: #b8956a;
+  --pertec: #6366f1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'Montserrat', system-ui, sans-serif; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+/* Pertec banner */
+.pertec-banner { background: linear-gradient(135deg, var(--pertec), #8b5cf6); padding: 0.75rem; text-align: center; font-size: 0.9rem; color: white; position: sticky; top: 0; z-index: 200; }
+.pertec-banner a { color: white; font-weight: 600; }
+
+/* Header */
+header { padding: 1.5rem 0; border-bottom: 1px solid var(--primary); }
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--primary); letter-spacing: 0.15em; text-transform: uppercase; }
+nav { display: flex; gap: 2.5rem; }
+nav a { color: var(--fg-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.btn { background: var(--bg-dark); color: white; padding: 0.875rem 2rem; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+.btn-gold { background: var(--primary); color: var(--bg-dark); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; margin: 2rem 0; }
+.hero-content { display: flex; flex-direction: column; justify-content: center; padding-right: 4rem; }
+.hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: 0.02em; }
+.hero p { color: var(--fg-muted); margin-bottom: 2rem; font-size: 1rem; }
+.hero-visual { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; border-radius: 0; }
+.hero-visual svg { width: 60%; max-width: 250px; }
+
+/* Section */
+section { padding: 4rem 0; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem; }
+.section-subtitle { text-align: center; color: var(--fg-muted); margin-bottom: 3rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* Services */
+.services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--primary); border: 1px solid var(--primary); }
+.service-item { background: var(--bg-card); padding: 2rem; display: flex; justify-content: space-between; align-items: center; }
+.service-name { font-weight: 500; }
+.service-desc { color: var(--fg-muted); font-size: 0.85rem; }
+.service-price { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--primary-dark); }
+
+/* Équipe */
+.equipe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.coiffeur-card { text-align: center; }
+.coiffeur-photo { width: 180px; height: 180px; background: var(--primary); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.coiffeur-photo svg { width: 100%; height: 100%; }
+.coiffeur-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.25rem; }
+.coiffeur-card p { color: var(--fg-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* Horaires */
+.horaires { background: var(--bg-dark); color: white; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.horaires h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 1.5rem; }
+.horaires-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.horaire-row { display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.horaire-row span:first-child { opacity: 0.7; }
+.horaires-cta { text-align: center; }
+
+/* Footer */
+footer { padding: 3rem 0; text-align: center; border-top: 1px solid var(--primary); }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 1rem; color: var(--primary); }
+footer p { color: var(--fg-muted); font-size: 0.85rem; }
+.footer-pertec { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); }
+.footer-pertec a { color: var(--pertec); font-weight: 600; text-decoration: none; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-content { padding-right: 0; text-align: center; }
+  .hero-visual { min-height: 300px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .equipe-grid { grid-template-columns: 1fr; }
+  .horaires { grid-template-columns: 1fr; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pertec-banner">
+  🎨 Ceci est une démo créée par <a href="https://pertec.fr/secteurs/coiffeur">Pertec</a> · <a href="https://pertec.fr/contact">Demander un devis</a>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">Élégance</div>
+    <nav>
+      <a href="#prestations">Prestations</a>
+      <a href="#equipe">Équipe</a>
+      <a href="#horaires">Horaires</a>
+    </nav>
+    <a href="#rdv" class="btn">Prendre RDV</a>
+  </div>
+</header>
+
+<section class="hero container">
+  <div class="hero-content">
+    <h1 class="serif">L'art de sublimer votre beauté</h1>
+    <p>Salon de coiffure au cœur d'Évreux. Coupes, couleurs, soins. Une équipe passionnée à votre service depuis 2015.</p>
+    <div>
+      <a href="#rdv" class="btn">Réserver en ligne</a>
+      <a href="#prestations" class="btn btn-gold" style="margin-left: 1rem;">Nos prestations</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.1)"/>
+      <path d="M60 100 L80 60 L85 100 L80 140 Z" fill="rgba(255,255,255,0.8)"/>
+      <path d="M140 100 L120 60 L115 100 L120 140 Z" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="100" cy="100" r="15" fill="rgba(255,255,255,0.9)"/>
+    </svg>
+  </div>
+</section>
+
+<section id="prestations">
+  <div class="container">
+    <h2 class="section-title serif">Nos prestations</h2>
+    <p class="section-subtitle">Femmes · Hommes · Enfants</p>
+
+    <div class="services-grid">
+      <div class="service-item">
+        <div><div class="service-name">Coupe femme</div><div class="service-desc">Shampoing, coupe, brushing</div></div>
+        <div class="service-price">45 €</div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Coupe homme</div><div class="service-desc">Shampoing, coupe, coiffage</div></div>
+        <div class="service-price">25 €</div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Couleur</div><div class="service-desc">Coloration ton sur ton</div></div>
+        <div class="service-price">55 €</div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Balayage</div><div class="service-desc">Effet naturel et lumineux</div></div>
+        <div class="service-price">75 €</div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Mèches</div><div class="service-desc">Pose de mèches ou highlights</div></div>
+        <div class="service-price">65 €</div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Soin profond</div><div class="service-desc">Kératine, botox capillaire</div></div>
+        <div class="service-price">35 €</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="equipe">
+  <div class="container">
+    <h2 class="section-title serif">Notre équipe</h2>
+    <p class="section-subtitle">Des experts passionnés</p>
+
+    <div class="equipe-grid">
+      <div class="coiffeur-card">
+        <div class="coiffeur-photo">
+          <svg viewBox="0 0 180 180"><rect fill="#d4b896" width="180" height="180"/><circle cx="90" cy="70" r="35" fill="#b8956a"/><ellipse cx="90" cy="150" rx="50" ry="40" fill="#b8956a"/></svg>
+        </div>
+        <h3 class="serif">Marie</h3>
+        <p>Directrice · Coloriste</p>
+      </div>
+      <div class="coiffeur-card">
+        <div class="coiffeur-photo">
+          <svg viewBox="0 0 180 180"><rect fill="#e8d4c0" width="180" height="180"/><circle cx="90" cy="70" r="35" fill="#c9a86c"/><ellipse cx="90" cy="150" rx="50" ry="40" fill="#c9a86c"/></svg>
+        </div>
+        <h3 class="serif">Julie</h3>
+        <p>Coiffeuse · Styliste</p>
+      </div>
+      <div class="coiffeur-card">
+        <div class="coiffeur-photo">
+          <svg viewBox="0 0 180 180"><rect fill="#d4c4b0" width="180" height="180"/><circle cx="90" cy="70" r="35" fill="#a08050"/><ellipse cx="90" cy="150" rx="50" ry="40" fill="#a08050"/></svg>
+        </div>
+        <h3 class="serif">Thomas</h3>
+        <p>Barbier</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="horaires" class="horaires">
+  <div>
+    <h2 class="serif">Horaires d'ouverture</h2>
+    <div class="horaires-list">
+      <div class="horaire-row"><span>Lundi</span><span>Fermé</span></div>
+      <div class="horaire-row"><span>Mardi - Vendredi</span><span>9h - 19h</span></div>
+      <div class="horaire-row"><span>Samedi</span><span>9h - 17h</span></div>
+    </div>
+  </div>
+  <div class="horaires-cta">
+    <p style="font-size: 1.25rem;">Réservez votre créneau</p>
+    <p style="opacity: 0.7; margin-top: 0.5rem;">📞 02 32 XX XX XX</p>
+    <a href="#" class="btn btn-gold" style="margin-top: 1rem; display: inline-block;">Réserver en ligne</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">ÉLÉGANCE</div>
+    <p>18 rue de Paris · 27000 Évreux</p>
+    <p>📞 02 32 XX XX XX · 📧 contact@salon-elegance.fr</p>
+    <div class="footer-pertec">
+      <p>Site créé par <a href="https://pertec.fr">Pertec.fr</a> · <a href="https://pertec.fr/contact">Obtenir un site similaire</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

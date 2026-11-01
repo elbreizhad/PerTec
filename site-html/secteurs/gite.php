@@ -149,6 +149,47 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+  <!-- Aperçu démo -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Aperçu d'un <span class="gradient-text">site de gîte</span></h2>
+        <p class="section-subtitle" data-animate>Voici à quoi pourrait ressembler votre futur site.</p>
+      </div>
+
+      <div class="demo-preview glass-strong" data-animate style="border-radius: 1rem; overflow: hidden; position: relative;">
+        <div style="background: linear-gradient(135deg, #27ae60, #219a52); padding: 0.5rem; text-align: center; font-size: 0.85rem; color: white;">
+          <strong>Le Clos Normand</strong> — Exemple de site gîte
+        </div>
+        <div style="background: #faf8f5; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+          <div>
+            <p style="color: #27ae60; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Gîte de charme</p>
+            <h3 style="font-size: 1.75rem; color: #2d3436; margin-bottom: 1rem; font-weight: 700; font-family: 'Libre Baskerville', Georgia, serif;">Votre escapade <span style="color: #27ae60;">normande</span></h3>
+            <p style="color: #636e72; margin-bottom: 1.5rem;">4 personnes, jardin clos, calendrier de disponibilités, réservation directe...</p>
+            <a href="/demos/gite" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+              Voir la démo complète
+            </a>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-size: 1.5rem;">👥</div>
+              <span style="color: #2d3436;">4 personnes · 2 chambres</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-size: 1.5rem;">📅</div>
+              <span style="color: #2d3436;">Calendrier disponibilités</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="font-size: 1.5rem;">⭐</div>
+              <span style="color: #2d3436;">4.9/5 sur Gîtes de France</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>

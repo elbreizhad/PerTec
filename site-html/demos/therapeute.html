@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Démo Site Thérapeute | Pertec.fr</title>
+<meta name="description" content="Exemple de site internet pour thérapeute et sophrologue créé par Pertec.">
+<link rel="canonical" href="https://pertec.fr/demos/therapeute">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;1,400&family=Raleway:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #faf9f7;
+  --bg-card: #ffffff;
+  --fg: #3d3d3d;
+  --fg-muted: #7a7a7a;
+  --primary: #7c9885;
+  --primary-light: #e8f0eb;
+  --primary-dark: #5f8a6d;
+  --sand: #e8e0d5;
+  --pertec: #6366f1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'Raleway', system-ui, sans-serif; line-height: 1.8; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.serif { font-family: 'Libre Baskerville', Georgia, serif; }
+
+/* Pertec banner */
+.pertec-banner { background: linear-gradient(135deg, var(--pertec), #8b5cf6); padding: 0.75rem; text-align: center; font-size: 0.9rem; color: white; position: sticky; top: 0; z-index: 200; }
+.pertec-banner a { color: white; font-weight: 600; }
+
+/* Header */
+header { padding: 2rem 0; }
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Libre Baskerville', serif; font-size: 1.25rem; color: var(--primary); }
+nav { display: flex; gap: 2rem; }
+nav a { color: var(--fg-muted); text-decoration: none; font-size: 0.9rem; }
+.btn { background: var(--primary); color: white; padding: 0.875rem 1.75rem; border-radius: 2rem; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 4rem 0; align-items: center; }
+.hero h1 { font-family: 'Libre Baskerville', serif; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.3; margin-bottom: 1.5rem; font-weight: 400; }
+.hero h1 span { color: var(--primary); }
+.hero p { color: var(--fg-muted); margin-bottom: 2rem; font-size: 1.05rem; }
+.hero-visual { aspect-ratio: 1; background: linear-gradient(135deg, var(--primary-light), var(--sand)); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
+.hero-visual::before { content: ""; position: absolute; inset: -15px; border: 1px solid var(--primary); border-radius: 50%; opacity: 0.3; }
+.hero-visual svg { width: 50%; height: 50%; }
+
+/* Section */
+section { padding: 4rem 0; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 2rem; text-align: center; margin-bottom: 0.75rem; font-weight: 400; }
+.section-subtitle { text-align: center; color: var(--fg-muted); margin-bottom: 3rem; }
+
+/* Approche */
+.approche { background: var(--sand); border-radius: 24px; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.approche h2 { font-family: 'Libre Baskerville', serif; font-size: 1.75rem; margin-bottom: 1.5rem; font-weight: 400; }
+.approche p { color: var(--fg-muted); margin-bottom: 1rem; }
+.approche-visual { text-align: center; font-size: 6rem; opacity: 0.6; }
+
+/* Prestations */
+.prestations-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.prestation-card { background: var(--bg-card); border-radius: 16px; padding: 2rem; border: 1px solid var(--sand); transition: all 0.3s; }
+.prestation-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+.prestation-icon { font-size: 2.5rem; margin-bottom: 1.25rem; }
+.prestation-card h3 { font-family: 'Libre Baskerville', serif; font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 400; }
+.prestation-card p { color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+.prestation-price { color: var(--primary); font-weight: 600; }
+
+/* Tarifs */
+.tarifs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+.tarif-card { background: var(--bg-card); border-radius: 16px; padding: 2rem; text-align: center; border: 1px solid var(--sand); }
+.tarif-card.featured { background: var(--primary); color: white; border: none; transform: scale(1.05); }
+.tarif-card h3 { font-family: 'Libre Baskerville', serif; margin-bottom: 0.5rem; }
+.tarif-duree { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+.tarif-card.featured .tarif-duree { color: rgba(255,255,255,0.8); }
+.tarif-prix { font-size: 2.5rem; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem; }
+.tarif-card.featured .tarif-prix { color: white; }
+.tarif-note { font-size: 0.85rem; color: var(--fg-muted); }
+.tarif-card.featured .tarif-note { color: rgba(255,255,255,0.8); }
+
+/* Infos */
+.infos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; margin-top: 3rem; }
+.info-item h4 { margin-bottom: 0.5rem; }
+.info-item p { color: var(--fg-muted); font-size: 0.95rem; }
+
+/* CTA */
+.cta { background: var(--primary); color: white; border-radius: 24px; padding: 3rem; text-align: center; }
+.cta h2 { font-family: 'Libre Baskerville', serif; font-size: 2rem; margin-bottom: 1rem; font-weight: 400; }
+.cta p { opacity: 0.9; margin-bottom: 2rem; }
+.cta .btn { background: white; color: var(--primary); }
+
+/* Footer */
+footer { padding: 3rem 0; text-align: center; color: var(--fg-muted); border-top: 1px solid var(--sand); }
+.footer-pertec { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--sand); }
+.footer-pertec a { color: var(--pertec); font-weight: 600; text-decoration: none; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero, .approche { grid-template-columns: 1fr; text-align: center; }
+  .hero-visual { max-width: 250px; margin: 0 auto; order: -1; }
+  .prestations-grid { grid-template-columns: 1fr; }
+  .tarifs-grid { grid-template-columns: 1fr; }
+  .tarif-card.featured { transform: scale(1); }
+  .infos { grid-template-columns: 1fr; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pertec-banner">
+  🎨 Ceci est une démo créée par <a href="https://pertec.fr/secteurs/therapeute">Pertec</a> · <a href="https://pertec.fr/contact">Demander un devis</a>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">Sophie Martin</div>
+    <nav>
+      <a href="#approche">Mon approche</a>
+      <a href="#prestations">Prestations</a>
+      <a href="#tarifs">Tarifs</a>
+    </nav>
+    <a href="#rdv" class="btn">Prendre RDV</a>
+  </div>
+</header>
+
+<section class="hero container">
+  <div>
+    <h1 class="serif">Sophrologue à <span>Évreux</span></h1>
+    <p>Je vous accompagne vers un mieux-être durable. Gestion du stress, confiance en soi, préparation mentale. Séances individuelles ou en groupe.</p>
+    <a href="#rdv" class="btn">Prendre rendez-vous</a>
+  </div>
+  <div class="hero-visual">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(124,152,133,0.3)" stroke-width="1"/>
+      <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(124,152,133,0.4)" stroke-width="1"/>
+      <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(124,152,133,0.5)" stroke-width="1"/>
+      <circle cx="50" cy="35" r="8" fill="rgba(124,152,133,0.6)"/>
+      <path d="M35 55 Q50 75 65 55" fill="none" stroke="rgba(124,152,133,0.6)" stroke-width="2"/>
+    </svg>
+  </div>
+</section>
+
+<section id="approche" class="container">
+  <div class="approche">
+    <div>
+      <h2 class="serif">Mon approche</h2>
+      <p>La sophrologie est une méthode douce qui associe respiration, relaxation et visualisation positive. Elle vous aide à retrouver un équilibre entre corps et esprit.</p>
+      <p>Diplômée de l'Institut de Formation à la Sophrologie de Paris, je vous accueille dans un cadre bienveillant pour des séances personnalisées selon vos besoins.</p>
+    </div>
+    <div class="approche-visual">🌿</div>
+  </div>
+</section>
+
+<section id="prestations" class="container">
+  <h2 class="section-title serif">Mes accompagnements</h2>
+  <p class="section-subtitle">Des séances adaptées à vos objectifs</p>
+
+  <div class="prestations-grid">
+    <div class="prestation-card">
+      <div class="prestation-icon">😌</div>
+      <h3>Gestion du stress</h3>
+      <p>Apprenez à relâcher les tensions, retrouver le calme et mieux gérer les situations stressantes du quotidien.</p>
+      <div class="prestation-price">60 € / séance</div>
+    </div>
+    <div class="prestation-card">
+      <div class="prestation-icon">💪</div>
+      <h3>Confiance en soi</h3>
+      <p>Renforcez votre estime personnelle, dépassez vos blocages et osez prendre votre place.</p>
+      <div class="prestation-price">60 € / séance</div>
+    </div>
+    <div class="prestation-card">
+      <div class="prestation-icon">😴</div>
+      <h3>Troubles du sommeil</h3>
+      <p>Retrouvez un sommeil réparateur grâce à des techniques de relaxation et de lâcher-prise.</p>
+      <div class="prestation-price">60 € / séance</div>
+    </div>
+    <div class="prestation-card">
+      <div class="prestation-icon">🎯</div>
+      <h3>Préparation mentale</h3>
+      <p>Examens, compétitions, entretiens... Préparez-vous mentalement à relever vos défis.</p>
+      <div class="prestation-price">60 € / séance</div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs" class="container">
+  <h2 class="section-title serif">Tarifs</h2>
+  <p class="section-subtitle">Première séance découverte à tarif réduit</p>
+
+  <div class="tarifs-grid">
+    <div class="tarif-card">
+      <h3>Séance découverte</h3>
+      <div class="tarif-duree">1h · Bilan + 1ère séance</div>
+      <div class="tarif-prix">45 €</div>
+      <div class="tarif-note">Pour découvrir la sophrologie</div>
+    </div>
+    <div class="tarif-card featured">
+      <h3>Séance individuelle</h3>
+      <div class="tarif-duree">1h</div>
+      <div class="tarif-prix">60 €</div>
+      <div class="tarif-note">Forfait 5 séances : 250 €</div>
+    </div>
+    <div class="tarif-card">
+      <h3>Séance en groupe</h3>
+      <div class="tarif-duree">1h30 · 6 à 10 personnes</div>
+      <div class="tarif-prix">15 €</div>
+      <div class="tarif-note">Tous les mardis à 19h</div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 2rem; color: var(--fg-muted);">
+    💡 Certaines mutuelles remboursent les séances de sophrologie
+  </p>
+</section>
+
+<div class="infos container">
+  <div class="info-item">
+    <h4>📍 Cabinet</h4>
+    <p>12 rue de la Paix<br>27000 Évreux</p>
+  </div>
+  <div class="info-item">
+    <h4>🕐 Horaires</h4>
+    <p>Lun - Ven : 9h - 19h<br>Samedi : 9h - 13h</p>
+  </div>
+  <div class="info-item">
+    <h4>🚗 Accès</h4>
+    <p>Parking gratuit<br>Bus ligne 2, arrêt Mairie</p>
+  </div>
+</div>
+
+<section id="rdv" class="container">
+  <div class="cta">
+    <h2 class="serif">Prenez soin de vous</h2>
+    <p>Choisissez le créneau qui vous convient. Première séance découverte à 45 €.</p>
+    <a href="#" class="btn">Réserver en ligne</a>
+    <p style="margin-top: 1.5rem;">📞 06 XX XX XX XX · 📧 sophie@sophrologie-evreux.fr</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>Sophie Martin</strong> · Sophrologue certifiée RNCP</p>
+    <p>© 2024 · Mentions légales · Politique de confidentialité</p>
+    <div class="footer-pertec">
+      <p>Site créé par <a href="https://pertec.fr">Pertec.fr</a> · <a href="https://pertec.fr/contact">Obtenir un site similaire</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

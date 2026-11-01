@@ -41,6 +41,7 @@ $pages = [
     ['/secteurs/traiteur', 'monthly', '0.8'],
     ['/secteurs/assistante-maternelle', 'monthly', '0.8'],
     ['/secteurs/plombier', 'monthly', '0.8'],
+    ['/secteurs/coiffeur', 'monthly', '0.8'],
     ['/sites-metiers/plombier', 'monthly', '0.7'],
     ['/sites-metiers/electricien', 'monthly', '0.7'],
     ['/sites-metiers/coiffeur', 'monthly', '0.7'],
