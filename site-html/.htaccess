@@ -29,7 +29,14 @@ RewriteCond %{REQUEST_URI} !^/admin/
 RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index(\.php|\.html)?[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# Anciennes URLs .html → URL propre
+# Demos : servir directement les fichiers HTML (pas de redirection)
+RewriteCond %{REQUEST_URI} ^/demos/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# Anciennes URLs .html → URL propre (sauf demos)
+RewriteCond %{REQUEST_URI} !^/demos/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)\.html$ /$1 [R=301,L]
 
