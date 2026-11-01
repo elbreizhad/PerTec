@@ -362,22 +362,29 @@ h1, h2, h3, h4, h5, h6 {
 .mobile-menu-section {
   border-top: 1px solid #2d2d44;
   border-bottom: 1px solid #2d2d44;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
   margin: 0.5rem 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem 1rem;
+  width: 100%;
+  max-width: 320px;
 }
 
 .mobile-menu-title {
-  display: block;
+  grid-column: 1 / -1;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #6b7280;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 0;
+  text-align: center;
 }
 
 .mobile-menu-section a {
-  font-size: 0.9rem;
-  padding: 0.6rem 1.5rem 0.6rem 2rem;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  text-align: center;
 }
 
 .header-cta {
