@@ -5,8 +5,7 @@ $extraHead = '  <link rel="preload" href="/images/hero/bureau-droite.webp" as="i
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require __DIR__ . '/config/tarifs.php';
-$typesSite = $tarifs['type_site']['options'];
-$suiviMensuel = $tarifs['suivi']['inclus']['mensuel'];
+$formules = $tarifs['formule']['options'];
 $pageTitle = 'Création Site Internet | Clé en Main | Pertec.fr';
 $pageDescription = 'Création de sites internet à Évreux et en Normandie. Formule clé en main pour artisans, commerces et restaurants. Devis gratuit sous 24h.';
 $canonicalUrl = '/';
@@ -108,21 +107,21 @@ require_once __DIR__ . '/includes/header.php';
   <section>
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title" data-animate>Des prix <span class="gradient-text">affichés</span></h2>
-        <p class="section-subtitle" data-animate>Création payée une fois, puis <?= $suiviMensuel ?> €/mois pour l'hébergement, le nom de domaine, les mises à jour et vos modifications.</p>
+        <h2 class="section-title" data-animate>Des prix <span class="gradient-text">clairs</span></h2>
+        <p class="section-subtitle" data-animate>Abonnement 24 mois tout inclus : création, hébergement, domaine, modifications illimitées.</p>
       </div>
 
       <div class="features-grid home-pricing">
-<?php foreach (['page_unique', 'vitrine5', 'vitrine10'] as $i => $cle): $offre = $typesSite[$cle]; ?>
-        <div class="feature-card glass<?= $i === 1 ? ' portfolio-featured' : '' ?>" data-animate>
-          <h3><?= htmlspecialchars($offre['label']) ?></h3>
-          <p class="home-price"><?= number_format($offre['creation'], 0, ',', ' ') ?> €</p>
-          <p><?= htmlspecialchars($offre['description']) ?></p>
+<?php foreach ($formules as $id => $formule): ?>
+        <div class="feature-card glass<?= $formule['badge'] ? ' portfolio-featured' : '' ?>" data-animate>
+          <h3><?= htmlspecialchars($formule['label']) ?></h3>
+          <p class="home-price"><?= $formule['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
+          <p><?= htmlspecialchars($formule['description']) ?></p>
         </div>
 <?php endforeach; ?>
       </div>
 
-      <p class="home-pricing-note" data-animate><?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · Boutique en ligne et sur-mesure : sur devis · <a href="/conseils/prix-site-internet-artisan" style="color: var(--primary-light);">Combien coûte un site ailleurs ?</a></p>
+      <p class="home-pricing-note" data-animate>Engagement 24 mois, puis <?= $tarifs['maintenance']['mensuel'] ?>€/mois maintenance. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · <a href="/tarifs" style="color: var(--primary-light);">Voir tous les tarifs →</a></p>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
         <a href="/tarifs" class="btn btn-primary">Estimer mon projet en 1 minute</a>
