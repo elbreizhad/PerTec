@@ -20,8 +20,9 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # Sitemap généré automatiquement (sitemap.php)
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
-# Redirection sites-metiers/restaurant vers secteurs/restaurant (doublon supprimé)
+# Redirections sites-metiers vers secteurs (doublons supprimés)
 RewriteRule ^sites-metiers/restaurant(\.html|\.php)?$ /secteurs/restaurant [R=301,L]
+RewriteRule ^sites-metiers/coiffeur(\.html|\.php)?$ /secteurs/coiffeur [R=301,L]
 
 # /index, /index.php et /index.html → / (hors admin, visites uniquement)
 RewriteCond %{REQUEST_METHOD} =GET

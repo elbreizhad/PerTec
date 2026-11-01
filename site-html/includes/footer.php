@@ -15,10 +15,11 @@
             <li><a href="/secteurs/artisan">Artisans</a></li>
             <li><a href="/secteurs/restaurant">Restaurants</a></li>
             <li><a href="/secteurs/commerces">Commerces</a></li>
-            <li><a href="/secteurs/professions-liberales">Professions libérales</a></li>
-            <li><a href="/secteurs/securite-privee">Sécurité privée</a></li>
-            <li><a href="/secteurs/eglise">Églises</a></li>
-            <li><a href="/services">Tous les services</a></li>
+            <li><a href="/secteurs/coiffeur">Coiffeurs</a></li>
+            <li><a href="/secteurs/therapeute">Thérapeutes</a></li>
+            <li><a href="/secteurs/gite">Gîtes</a></li>
+            <li><a href="/secteurs/auto-ecole">Auto-écoles</a></li>
+            <li><a href="/secteurs/plombier">Plombiers</a></li>
           </ul>
         </div>
 

@@ -266,7 +266,7 @@ foreach ($realisations as $r):
           </div>
         </a>
 
-        <a href="/sites-metiers/coiffeur" class="secteur-img-card" data-animate>
+        <a href="/secteurs/coiffeur" class="secteur-img-card" data-animate>
           <img src="/images/beaute/coiffeur.webp" loading="lazy" decoding="async" width="800" height="534" alt="Salon de coiffure">
           <div class="secteur-img-overlay">
             <h3>Beauté & Bien-être</h3>

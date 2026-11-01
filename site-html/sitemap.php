@@ -44,7 +44,7 @@ $pages = [
     ['/secteurs/coiffeur', 'monthly', '0.8'],
     ['/sites-metiers/plombier', 'monthly', '0.7'],
     ['/sites-metiers/electricien', 'monthly', '0.7'],
-    ['/sites-metiers/coiffeur', 'monthly', '0.7'],
+    // ['/sites-metiers/coiffeur', 'monthly', '0.7'], // redirigé vers /secteurs/coiffeur
     ['/mentions-legales', 'yearly', '0.3'],
     ['/politique-confidentialite', 'yearly', '0.3'],
     ['/conseils/', 'weekly', '0.7'],
