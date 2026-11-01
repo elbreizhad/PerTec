@@ -265,11 +265,21 @@ require_once __DIR__ . '/includes/header.php';
 
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
+            <span>Qui héberge mon site ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Votre site est hébergé par mes soins sur une infrastructure performante et sécurisée. Vous n'avez rien à gérer : sauvegardes, mises à jour et sécurité sont inclus.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
             <span>Le site m'appartient-il ?</span>
             <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
-            <p>Oui. Après les 24 mois, vous êtes propriétaire du site. Vous pouvez continuer en maintenance avec moi ou récupérer les fichiers pour les héberger ailleurs.</p>
+            <p>Oui. Après les 24 mois d'engagement, vous êtes propriétaire de votre site. Vous pouvez continuer en maintenance avec moi, ou récupérer l'intégralité des fichiers pour les transférer chez l'hébergeur de votre choix.</p>
           </div>
         </div>
       </div>

@@ -170,7 +170,7 @@ return [
     // Ce qui est inclus dans toutes les formules (résumé)
     'inclus' => [
         'Nom de domaine (.fr ou .com)',
-        'Hébergement haute performance',
+        'Hébergement géré par Pertec',
         'Certificat SSL (HTTPS)',
         'Design sur-mesure responsive',
         'Conformité RGPD',
@@ -179,6 +179,7 @@ return [
         'Statistiques de visite',
         'Modifications illimitées',
         'Support par email',
+        'Site transférable en fin de contrat',
     ],
 
     // Configuration
