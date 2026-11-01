@@ -202,6 +202,45 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+  <!-- Aperçu démo -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Aperçu d'un <span class="gradient-text">site restaurant</span></h2>
+        <p class="section-subtitle" data-animate>Voici à quoi pourrait ressembler votre futur site.</p>
+      </div>
+
+      <div class="demo-preview glass-strong" data-animate style="border-radius: 1rem; overflow: hidden; position: relative;">
+        <div style="background: linear-gradient(135deg, #d4a574, #b8956a); padding: 0.5rem; text-align: center; font-size: 0.85rem; color: #0c0c0c;">
+          <strong>La Table Normande</strong> — Exemple de site restaurant
+        </div>
+        <div style="background: #0c0c0c; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+          <div>
+            <p style="color: #d4a574; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Restaurant gastronomique</p>
+            <h3 style="font-size: 2rem; color: white; margin-bottom: 1rem; font-weight: 500;">Cuisine <span style="color: #d4a574;">normande</span> réinventée</h3>
+            <p style="color: #888; margin-bottom: 1.5rem;">Produits du terroir, techniques modernes. Menu digital, réservation en ligne, galerie photos...</p>
+            <a href="/demos/restaurant" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+              Voir la démo complète
+            </a>
+          </div>
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <div style="background: #161616; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; width: 140px; transform: rotate(3deg);">
+              <div style="background: linear-gradient(135deg, #f5d6a3, #d4a574); height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
+              <p style="color: white; font-size: 0.9rem; margin-bottom: 0.25rem;">Camembert rôti</p>
+              <p style="color: #d4a574; font-weight: 700;">14 €</p>
+            </div>
+            <div style="background: #161616; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; width: 140px; transform: rotate(-2deg) translateY(20px);">
+              <div style="background: linear-gradient(135deg, #87ceeb, #5f9ea0); height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
+              <p style="color: white; font-size: 0.9rem; margin-bottom: 0.25rem;">Bar au cidre</p>
+              <p style="color: #d4a574; font-weight: 700;">28 €</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta-section">
     <div class="container">

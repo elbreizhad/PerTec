@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Démo Site Restaurant | Pertec.fr</title>
+<meta name="description" content="Exemple de site internet pour restaurant créé par Pertec. Découvrez ce que nous pouvons réaliser pour votre établissement.">
+<link rel="canonical" href="https://pertec.fr/demos/restaurant">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #0c0c0c;
+  --bg-card: #161616;
+  --fg: #f5f5f5;
+  --fg-muted: #888;
+  --primary: #d4a574;
+  --primary-dark: #b8956a;
+  --pertec-primary: #6366f1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'DM Sans', system-ui, sans-serif; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.serif { font-family: 'Playfair Display', Georgia, serif; }
+
+/* Pertec banner */
+.pertec-banner {
+  background: linear-gradient(135deg, var(--pertec-primary), #8b5cf6);
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.pertec-banner a { color: white; font-weight: 600; text-decoration: underline; }
+
+/* Header */
+header { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); }
+nav { display: flex; gap: 2.5rem; }
+nav a { color: var(--fg-muted); text-decoration: none; font-size: 0.9rem; }
+.btn { background: var(--primary); color: var(--bg); padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 5rem 0; align-items: center; }
+.hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; }
+.hero-content h1 span { color: var(--primary); }
+.hero-content p { color: var(--fg-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+.hero-ctas { display: flex; gap: 1rem; }
+.btn-outline { background: transparent; border: 1px solid var(--fg-muted); color: var(--fg); padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; }
+.hero-visual { position: relative; height: 450px; }
+.hero-card { position: absolute; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; width: 240px; transition: transform 0.3s; }
+.hero-card:hover { transform: scale(1.05) rotate(0deg) !important; }
+.hero-card:nth-child(1) { top: 0; right: 0; transform: rotate(3deg); z-index: 3; }
+.hero-card:nth-child(2) { top: 100px; right: 90px; transform: rotate(-2deg); z-index: 2; }
+.hero-card:nth-child(3) { top: 200px; right: 20px; transform: rotate(1deg); z-index: 1; }
+.card-img { width: 100%; height: 120px; border-radius: 12px; margin-bottom: 1rem; overflow: hidden; }
+.card-img svg { width: 100%; height: 100%; }
+.hero-card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+.hero-card .price { color: var(--primary); font-weight: 700; font-size: 1.1rem; }
+
+/* Section */
+section { padding: 5rem 0; }
+.section-header { text-align: center; margin-bottom: 3rem; }
+.section-label { color: var(--primary); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; }
+
+/* Menu */
+.menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.menu-card { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
+.menu-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.menu-card-img { height: 180px; overflow: hidden; }
+.menu-card-img svg { width: 100%; height: 100%; }
+.menu-card-content { padding: 1.5rem; }
+.menu-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 0.5rem; }
+.menu-card p { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+.menu-card .price { color: var(--primary); font-size: 1.25rem; font-weight: 700; }
+
+/* Gallery */
+.gallery { background: var(--bg-card); padding: 4rem 0; overflow: hidden; }
+.gallery-track { display: flex; gap: 1.5rem; animation: scroll 25s linear infinite; }
+@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.gallery-item { flex: 0 0 300px; height: 200px; border-radius: 12px; overflow: hidden; }
+.gallery-item svg { width: 100%; height: 100%; }
+
+/* Horaires */
+.horaires { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.horaires-content h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 2rem; }
+.horaires-list { display: flex; flex-direction: column; gap: 1rem; }
+.horaire-row { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.horaire-row.ferme { opacity: 0.5; }
+.horaires-visual { height: 350px; border-radius: 16px; overflow: hidden; background: var(--bg-card); display: flex; align-items: center; justify-content: center; }
+.horaires-visual svg { width: 60%; height: 60%; }
+
+/* CTA */
+.reservation { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 20px; padding: 5rem; text-align: center; }
+.reservation h2 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 1rem; color: var(--bg); }
+.reservation p { color: rgba(0,0,0,0.7); margin-bottom: 2rem; font-size: 1.1rem; }
+.reservation .btn { background: var(--bg); color: var(--primary); padding: 1rem 2.5rem; font-size: 1rem; }
+.reservation-tel { margin-top: 2rem; font-size: 2rem; font-weight: 700; color: var(--bg); }
+
+/* Footer */
+footer { padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; }
+footer p { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.footer-pertec { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); }
+.footer-pertec a { color: var(--pertec-primary); font-weight: 600; text-decoration: none; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  nav { display: none; }
+  .hero { grid-template-columns: 1fr; text-align: center; }
+  .hero-visual { display: none; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .horaires { grid-template-columns: 1fr; }
+  .horaires-visual { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pertec-banner">
+  🎨 Ceci est une démo créée par <a href="https://pertec.fr/secteurs/restaurant">Pertec</a> · <a href="https://pertec.fr/contact">Demander un devis</a>
+</div>
+
+<header>
+  <div class="container">
+    <div class="logo">La Table Normande</div>
+    <nav>
+      <a href="#carte">La Carte</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#horaires">Horaires</a>
+    </nav>
+    <a href="#reservation" class="btn">Réserver</a>
+  </div>
+</header>
+
+<section class="hero container">
+  <div class="hero-content">
+    <h1 class="serif">Cuisine <span>normande</span> réinventée</h1>
+    <p>Produits du terroir, techniques modernes. Une expérience gastronomique au cœur d'Évreux depuis 2018.</p>
+    <div class="hero-ctas">
+      <a href="#reservation" class="btn">Réserver une table</a>
+      <a href="#carte" class="btn-outline">Découvrir la carte</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="card-img">
+        <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="c1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f5d6a3"/><stop offset="100%" stop-color="#d4a574"/></linearGradient></defs>
+          <rect fill="#1a1a1a" width="200" height="120"/>
+          <circle cx="100" cy="60" r="40" fill="url(#c1)"/>
+          <ellipse cx="85" cy="55" rx="8" ry="6" fill="#c9956a"/>
+          <ellipse cx="115" cy="65" rx="6" ry="5" fill="#c9956a"/>
+        </svg>
+      </div>
+      <h3>Camembert rôti</h3>
+      <span class="price">14 €</span>
+    </div>
+    <div class="hero-card">
+      <div class="card-img">
+        <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="c2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#87ceeb"/><stop offset="100%" stop-color="#5f9ea0"/></linearGradient></defs>
+          <rect fill="#1a1a1a" width="200" height="120"/>
+          <ellipse cx="100" cy="60" rx="55" ry="22" fill="url(#c2)"/>
+          <polygon points="155,60 175,48 175,72" fill="url(#c2)"/>
+        </svg>
+      </div>
+      <h3>Bar au cidre</h3>
+      <span class="price">28 €</span>
+    </div>
+    <div class="hero-card">
+      <div class="card-img">
+        <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="c3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#cd853f"/><stop offset="100%" stop-color="#8b4513"/></linearGradient></defs>
+          <rect fill="#1a1a1a" width="200" height="120"/>
+          <ellipse cx="100" cy="70" rx="50" ry="18" fill="#deb887"/>
+          <ellipse cx="100" cy="60" rx="45" ry="22" fill="url(#c3)"/>
+          <circle cx="85" cy="55" r="10" fill="#8b0000"/>
+          <circle cx="105" cy="62" r="8" fill="#8b0000"/>
+          <circle cx="118" cy="52" r="9" fill="#8b0000"/>
+        </svg>
+      </div>
+      <h3>Tarte Tatin</h3>
+      <span class="price">9 €</span>
+    </div>
+  </div>
+</section>
+
+<section id="carte" class="container">
+  <div class="section-header">
+    <span class="section-label">Notre carte</span>
+    <h2 class="section-title serif">Saveurs normandes</h2>
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card">
+      <div class="menu-card-img">
+        <svg viewBox="0 0 400 180" preserveAspectRatio="xMidYMid slice">
+          <rect fill="#1e1e1e" width="400" height="180"/>
+          <circle cx="200" cy="90" r="55" fill="#f5d6a3" opacity="0.3"/>
+          <circle cx="200" cy="90" r="40" fill="#d4a574" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="menu-card-content">
+        <h3>Camembert rôti</h3>
+        <p>Au miel et aux noix, salade de saison</p>
+        <span class="price">14 €</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <div class="menu-card-img">
+        <svg viewBox="0 0 400 180" preserveAspectRatio="xMidYMid slice">
+          <rect fill="#1e1e1e" width="400" height="180"/>
+          <ellipse cx="200" cy="90" rx="75" ry="32" fill="#87ceeb" opacity="0.3"/>
+          <ellipse cx="200" cy="90" rx="60" ry="25" fill="#5f9ea0" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="menu-card-content">
+        <h3>Bar au cidre</h3>
+        <p>Échalotes confites, légumes de saison</p>
+        <span class="price">28 €</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <div class="menu-card-img">
+        <svg viewBox="0 0 400 180" preserveAspectRatio="xMidYMid slice">
+          <rect fill="#1e1e1e" width="400" height="180"/>
+          <ellipse cx="200" cy="100" rx="65" ry="28" fill="#cd853f" opacity="0.4"/>
+          <circle cx="175" cy="90" r="14" fill="#8b0000" opacity="0.6"/>
+          <circle cx="205" cy="95" r="11" fill="#8b0000" opacity="0.6"/>
+          <circle cx="225" cy="85" r="13" fill="#8b0000" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="menu-card-content">
+        <h3>Tarte Tatin</h3>
+        <p>Pommes caramélisées, crème fraîche</p>
+        <span class="price">9 €</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="galerie" class="gallery">
+  <div class="container section-header">
+    <span class="section-label">Galerie</span>
+    <h2 class="section-title serif">Notre univers</h2>
+  </div>
+  <div class="gallery-track">
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#252525" width="300" height="200"/><circle cx="100" cy="100" r="30" fill="#d4a574" opacity="0.3"/><circle cx="180" cy="100" r="35" fill="#d4a574" opacity="0.4"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#2a2a20" width="300" height="200"/><rect x="60" y="60" width="180" height="80" rx="8" fill="#d4a574" opacity="0.2"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#1e1e1e" width="300" height="200"/><ellipse cx="150" cy="100" rx="80" ry="50" fill="#d4a574" opacity="0.15"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#252520" width="300" height="200"/><circle cx="150" cy="100" r="60" fill="#b8956a" opacity="0.2"/><circle cx="150" cy="100" r="40" fill="#d4a574" opacity="0.3"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#252525" width="300" height="200"/><circle cx="100" cy="100" r="30" fill="#d4a574" opacity="0.3"/><circle cx="180" cy="100" r="35" fill="#d4a574" opacity="0.4"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#2a2a20" width="300" height="200"/><rect x="60" y="60" width="180" height="80" rx="8" fill="#d4a574" opacity="0.2"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#1e1e1e" width="300" height="200"/><ellipse cx="150" cy="100" rx="80" ry="50" fill="#d4a574" opacity="0.15"/></svg></div>
+    <div class="gallery-item"><svg viewBox="0 0 300 200"><rect fill="#252520" width="300" height="200"/><circle cx="150" cy="100" r="60" fill="#b8956a" opacity="0.2"/><circle cx="150" cy="100" r="40" fill="#d4a574" opacity="0.3"/></svg></div>
+  </div>
+</section>
+
+<section id="horaires" class="container">
+  <div class="horaires">
+    <div class="horaires-content">
+      <span class="section-label">Horaires</span>
+      <h2 class="serif">Quand nous retrouver</h2>
+      <div class="horaires-list">
+        <div class="horaire-row ferme"><span>Lundi</span><span>Fermé</span></div>
+        <div class="horaire-row"><span>Mardi - Jeudi</span><span>12h-14h · 19h-22h</span></div>
+        <div class="horaire-row"><span>Vendredi - Samedi</span><span>12h-14h · 19h-23h</span></div>
+        <div class="horaire-row"><span>Dimanche</span><span>12h-15h</span></div>
+      </div>
+    </div>
+    <div class="horaires-visual">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(212,165,116,0.2)" stroke-width="2"/>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(212,165,116,0.3)" stroke-width="2"/>
+        <line x1="100" y1="100" x2="100" y2="50" stroke="#d4a574" stroke-width="4" stroke-linecap="round"/>
+        <line x1="100" y1="100" x2="140" y2="100" stroke="#d4a574" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="6" fill="#d4a574"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="reservation" class="container">
+  <div class="reservation">
+    <h2 class="serif">Réservez votre table</h2>
+    <p>Pour les groupes de plus de 8 personnes, contactez-nous directement.</p>
+    <a href="#" class="btn">Réserver en ligne</a>
+    <div class="reservation-tel">02 32 XX XX XX</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>La Table Normande</strong></p>
+    <p>12 rue de la République · 27000 Évreux</p>
+    <p>02 32 XX XX XX · contact@tablenormande.fr</p>
+    <div class="footer-pertec">
+      <p>Site créé par <a href="https://pertec.fr">Pertec.fr</a> · <a href="https://pertec.fr/contact">Obtenir un site similaire</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
