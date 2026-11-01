@@ -1,254 +1,220 @@
 <?php
 /**
  * Pertec - Page Tarifs
- * Configurateur de prix interactif
+ * Modèle abonnement 24 mois
  */
 
-session_start();
-require_once __DIR__ . '/includes/turnstile.php';
-require_once __DIR__ . '/config/site.php';
-
-// Générer le token CSRF si nécessaire
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-// Charger la grille tarifaire
 $tarifs = require __DIR__ . '/config/tarifs.php';
-$config = $tarifs['config'] ?? [];
 
-// Récupérer les paramètres admin si disponibles
-$settings = pertec_settings();
-if ($settings) {
-    $config['contact_email'] = $settings['contact_email'] ?? $config['contact_email'];
-    $config['contact_tel'] = $settings['contact_phone'] ?? $config['contact_tel'];
-}
-
-// Turnstile
-$turnstileSiteKey = get_turnstile_site_key();
-
-// Fonction pour échapper HTML
-function e($str) {
-    return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
-}
-
-// Format prix
-function formatPrix($prix) {
-    if ($prix === null) return 'Sur devis';
-    return number_format($prix, 0, ',', ' ') . ' €';
-}
-
-$pageTitle = 'Tarifs Création Site Internet | Devis en Ligne | Pertec.fr';
-$pageDescription = 'Estimez le prix de votre site internet en 4 questions. Tarifs transparents pour artisans, commerces et PME. À partir de 490 €. Devis gratuit.';
+$pageTitle = 'Tarifs Création Site Internet | À partir de 59€/mois | Pertec.fr';
+$pageDescription = 'Créez votre site internet à partir de 59€/mois sur 24 mois. Site vitrine, site complet ou e-commerce. Tout inclus : design, hébergement, maintenance.';
 $canonicalUrl = '/tarifs';
 $activeMenu = 'tarifs';
-$bodyClass = 'page-tarifs';
-$extraHead = '  <link rel="stylesheet" href="' . asset('/css/tarifs.css') . '">' . "\n"
-    . ($turnstileSiteKey ? '  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' . "\n" : '');
-$extraScripts = '  <script>window.PERTEC_TARIFS = ' . json_encode($tarifs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';</script>' . "\n"
-    . '  <script src="' . asset('/js/tarifs.js') . '"></script>' . "\n";
+
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-    <main>
-        <div class="tarifs-container">
-            <!-- Header -->
-            <header class="tarifs-header tarifs-section">
-                <p class="tarifs-surtitre">TARIFS</p>
-                <h1 class="tarifs-h1">Estimez votre site en 4 questions</h1>
-                <p class="tarifs-intro">Cochez ce dont vous avez besoin, le prix se met à jour tout de suite. Pas de surprise, pas d'engagement.</p>
-            </header>
-
-            <!-- Layout principal -->
-            <div class="tarifs-layout">
-                <!-- Colonne questions -->
-                <div class="tarifs-questions">
-
-                    <!-- Question 1 : Type de site -->
-                    <section class="tarifs-section">
-                        <h2 class="tarifs-h2">1. <?= e($tarifs['type_site']['label']) ?></h2>
-                        <div class="tarifs-options" role="radiogroup" aria-label="Type de site">
-                            <?php foreach ($tarifs['type_site']['options'] as $id => $opt): ?>
-                            <label class="tarifs-option <?= $id === $tarifs['type_site']['default'] ? 'selected' : '' ?>">
-                                <input type="radio" name="type_site" value="<?= e($id) ?>" <?= $id === $tarifs['type_site']['default'] ? 'checked' : '' ?>>
-                                <span class="tarifs-puce tarifs-puce--radio"></span>
-                                <div class="tarifs-option-content">
-                                    <p class="tarifs-option-label"><?= e($opt['label']) ?></p>
-                                    <p class="tarifs-option-desc"><?= e($opt['description']) ?></p>
-                                </div>
-                                <span class="tarifs-option-prix"><?= formatPrix($opt['creation']) ?></span>
-                            </label>
-                            <?php endforeach; ?>
-                        </div>
-                    </section>
-
-                    <!-- Question 2 : Options -->
-                    <section class="tarifs-section">
-                        <h2 class="tarifs-h2">2. <?= e($tarifs['options']['label']) ?></h2>
-                        <div class="tarifs-options" role="group" aria-label="Options supplémentaires">
-                            <?php foreach ($tarifs['options']['options'] as $id => $opt): ?>
-                            <label class="tarifs-option">
-                                <input type="checkbox" name="options[]" value="<?= e($id) ?>">
-                                <span class="tarifs-puce tarifs-puce--checkbox"></span>
-                                <div class="tarifs-option-content">
-                                    <p class="tarifs-option-label"><?= e($opt['label']) ?></p>
-                                    <p class="tarifs-option-desc"><?= e($opt['description']) ?></p>
-                                </div>
-                                <span class="tarifs-option-prix">
-                                    + <?= formatPrix($opt['creation']) ?>
-                                    <?php if ($opt['mensuel'] > 0): ?>
-                                    <span class="tarifs-option-prix-mensuel">+ <?= $opt['mensuel'] ?> €/mois</span>
-                                    <?php endif; ?>
-                                </span>
-                            </label>
-                            <?php endforeach; ?>
-                        </div>
-                    </section>
-
-                    <!-- Question 3 : Suivi -->
-                    <section class="tarifs-section">
-                        <h2 class="tarifs-h2">3. <?= e($tarifs['suivi']['label']) ?></h2>
-
-                        <!-- Bloc inclus -->
-                        <div class="tarifs-inclus">
-                            <div class="tarifs-inclus-header">
-                                <div>
-                                    <p class="tarifs-inclus-label"><?= e($tarifs['suivi']['inclus']['label']) ?></p>
-                                    <p class="tarifs-inclus-desc"><?= e($tarifs['suivi']['inclus']['description']) ?></p>
-                                </div>
-                                <span class="tarifs-inclus-prix"><?= $tarifs['suivi']['inclus']['mensuel'] ?> €/mois</span>
-                            </div>
-                        </div>
-
-                        <div class="tarifs-options" role="group" aria-label="Options de suivi">
-                            <?php foreach ($tarifs['suivi']['options'] as $id => $opt): ?>
-                            <label class="tarifs-option">
-                                <input type="checkbox" name="suivi[]" value="<?= e($id) ?>">
-                                <span class="tarifs-puce tarifs-puce--checkbox"></span>
-                                <div class="tarifs-option-content">
-                                    <p class="tarifs-option-label"><?= e($opt['label']) ?></p>
-                                    <p class="tarifs-option-desc"><?= e($opt['description']) ?></p>
-                                </div>
-                                <span class="tarifs-option-prix">+ <?= $opt['mensuel'] ?> €/mois</span>
-                            </label>
-                            <?php endforeach; ?>
-                        </div>
-                    </section>
-
-                    <!-- Question 4 : Délai -->
-                    <section class="tarifs-section">
-                        <h2 class="tarifs-h2">4. <?= e($tarifs['delai']['label']) ?></h2>
-                        <div class="tarifs-options" role="radiogroup" aria-label="Délai">
-                            <?php foreach ($tarifs['delai']['options'] as $id => $opt): ?>
-                            <label class="tarifs-option <?= $id === $tarifs['delai']['default'] ? 'selected' : '' ?>">
-                                <input type="radio" name="delai" value="<?= e($id) ?>" <?= $id === $tarifs['delai']['default'] ? 'checked' : '' ?>>
-                                <span class="tarifs-puce tarifs-puce--radio"></span>
-                                <div class="tarifs-option-content">
-                                    <p class="tarifs-option-label"><?= e($opt['label']) ?></p>
-                                    <p class="tarifs-option-desc"><?= e($opt['description']) ?></p>
-                                </div>
-                                <span class="tarifs-option-prix">
-                                    <?php if ($opt['majoration'] > 0): ?>
-                                    + <?= intval($opt['majoration'] * 100) ?> %
-                                    <?php else: ?>
-                                    Inclus
-                                    <?php endif; ?>
-                                </span>
-                            </label>
-                            <?php endforeach; ?>
-                        </div>
-                    </section>
-
-                </div>
-
-                <!-- Récapitulatif -->
-                <aside class="tarifs-recap" id="tarifs-recap">
-                    <h2 class="tarifs-recap-titre">Votre estimation</h2>
-
-                    <div class="tarifs-totaux" aria-live="polite" aria-atomic="true">
-                        <div class="tarifs-total-bloc">
-                            <p class="tarifs-total-label">Création du site, une seule fois<br><small>à partir de</small></p>
-                            <p class="tarifs-total-montant" id="total-creation">990 €</p>
-                        </div>
-                        <div class="tarifs-total-bloc">
-                            <p class="tarifs-total-label">Suivi, chaque mois</p>
-                            <p class="tarifs-total-montant" id="total-mensuel">39 €/mois</p>
-                        </div>
-                    </div>
-
-                    <div class="tarifs-detail">
-                        <ul class="tarifs-detail-liste" id="detail-creation">
-                            <li class="tarifs-detail-ligne">
-                                <span class="tarifs-detail-ligne-nom">Site vitrine, 5 pages</span>
-                                <span class="tarifs-detail-ligne-prix">990 €</span>
-                            </li>
-                        </ul>
-                        <ul class="tarifs-detail-liste" id="detail-mensuel" style="margin-top: 12px;">
-                            <li class="tarifs-detail-ligne">
-                                <span class="tarifs-detail-ligne-nom">Hébergement, maintenance, modifications</span>
-                                <span class="tarifs-detail-ligne-prix">39 €</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <form id="tarifs-form" class="tarifs-form" action="envoi-estimation.php" method="POST">
-                        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
-                        <input type="hidden" name="timestamp" id="tarifs-timestamp" value="<?= time() ?>">
-                        <input type="hidden" name="choix" id="tarifs-choix" value="">
-
-                        <!-- Honeypot -->
-                        <div class="tarifs-hp" aria-hidden="true">
-                            <input type="text" name="website" tabindex="-1" autocomplete="off">
-                        </div>
-
-                        <div class="tarifs-form-groupe">
-                            <input type="email" name="email" class="tarifs-form-input" placeholder="vous@entreprise.fr" required aria-label="Adresse e-mail">
-                        </div>
-                        <div class="tarifs-form-groupe">
-                            <input type="tel" name="telephone" class="tarifs-form-input" placeholder="06 00 00 00 00 (facultatif)" aria-label="Téléphone">
-                        </div>
-                        <?php if ($turnstileSiteKey): ?>
-                        <div class="tarifs-form-groupe" style="display: flex; justify-content: center;">
-                            <div class="cf-turnstile" data-sitekey="<?= e($turnstileSiteKey) ?>" data-theme="dark"></div>
-                        </div>
-                        <?php endif; ?>
-                        <button type="submit" class="tarifs-form-btn">Recevoir mon estimation</button>
-                    </form>
-
-                    <?php if (!empty($config['contact_tel'])): ?>
-                    <a href="tel:<?= e(str_replace(' ', '', $config['contact_tel'])) ?>" class="tarifs-rappel">
-                        Ou être rappelé : <?= e($config['contact_tel']) ?>
-                    </a>
-                    <?php endif; ?>
-
-                    <p class="tarifs-mentions">
-                        Estimation indicative, sans valeur de devis. Le devis définitif est établi après un échange.<br>
-                        <?= e($config['tva_mention'] ?? 'Prix HT / TVA non applicable, art. 293 B du CGI') ?>
-                    </p>
-                    <p class="tarifs-mentions" style="margin-top: 12px;">
-                        Votre e-mail sert uniquement à vous envoyer l'estimation et à vous recontacter.
-                        <a href="/politique-confidentialite">Politique de confidentialité</a>
-                    </p>
-                </aside>
-            </div>
-        </div>
-    </main>
-
-    <!-- Barre mobile fixe -->
-    <div class="tarifs-barre-mobile">
-        <div class="tarifs-barre-mobile-inner">
-            <div class="tarifs-barre-totaux">
-                <div class="tarifs-barre-total">
-                    <span class="tarifs-barre-label">Création</span>
-                    <span class="tarifs-barre-montant" id="barre-montant-creation">990 €</span>
-                </div>
-                <div class="tarifs-barre-total">
-                    <span class="tarifs-barre-label">Mensuel</span>
-                    <span class="tarifs-barre-montant" id="barre-montant-mensuel">39 €/mois</span>
-                </div>
-            </div>
-            <button type="button" class="tarifs-barre-btn" id="barre-btn">Voir mon estimation</button>
-        </div>
+  <section class="page-header">
+    <div class="container">
+      <div class="hero-badge glass" data-animate>
+        <span class="dot"></span>
+        Tarifs transparents
+      </div>
+      <h1 data-animate>Votre site internet <span class="gradient-text">tout compris</span></h1>
+      <p data-animate>Abonnement 24 mois, puis maintenance. Pas de frais cachés, pas de surprise.</p>
     </div>
+  </section>
+
+  <!-- Grille tarifaire -->
+  <section>
+    <div class="container">
+      <div class="pricing-grid">
+        <?php foreach ($tarifs['formule']['options'] as $id => $formule): ?>
+        <div class="pricing-card glass<?= $formule['badge'] ? ' pricing-featured' : '' ?>" data-animate>
+          <?php if ($formule['badge']): ?>
+          <div class="pricing-badge"><?= htmlspecialchars($formule['badge']) ?></div>
+          <?php endif; ?>
+          <h3 class="pricing-title"><?= htmlspecialchars($formule['label']) ?></h3>
+          <p class="pricing-desc"><?= htmlspecialchars($formule['description']) ?></p>
+          <div class="pricing-price">
+            <span class="pricing-amount"><?= $formule['mensuel'] ?></span>
+            <span class="pricing-unit">€/mois</span>
+          </div>
+          <p class="pricing-engagement">Engagement 24 mois</p>
+          <a href="/contact" class="btn <?= $formule['badge'] ? 'btn-primary' : 'btn-secondary' ?>">Demander un devis</a>
+        </div>
+        <?php endforeach; ?>
+      </div>
+
+      <p class="pricing-note" data-animate>
+        Après 24 mois : maintenance à partir de <strong><?= $tarifs['maintenance']['mensuel_base'] ?>€/mois</strong>.
+        Résiliable à tout moment.
+      </p>
+    </div>
+  </section>
+
+  <!-- Ce qui est inclus -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Tout est <span class="gradient-text">inclus</span></h2>
+        <p class="section-subtitle" data-animate>Dans chaque formule, sans supplément.</p>
+      </div>
+
+      <div class="inclus-grid">
+        <?php foreach ($tarifs['inclus'] as $item): ?>
+        <div class="inclus-item glass" data-animate>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--primary)">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span><?= htmlspecialchars($item) ?></span>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- Options -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Options <span class="gradient-text">disponibles</span></h2>
+        <p class="section-subtitle" data-animate>Ajoutez des fonctionnalités selon vos besoins.</p>
+      </div>
+
+      <div class="features-grid">
+        <?php foreach ($tarifs['options']['options'] as $id => $opt): ?>
+        <div class="feature-card glass" data-animate>
+          <h3><?= htmlspecialchars($opt['label']) ?></h3>
+          <p><?= htmlspecialchars($opt['description']) ?></p>
+          <p class="option-price">
+            <?php if (isset($opt['mensuel'])): ?>
+            + <?= $opt['mensuel'] ?> €/mois
+            <?php else: ?>
+            <?= $opt['unique'] ?> € (une fois)
+            <?php endif; ?>
+          </p>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Comment ça <span class="gradient-text">fonctionne</span></h2>
+      </div>
+
+      <div class="zone-card glass-strong" data-animate>
+        <div class="how-it-works">
+          <div class="how-step">
+            <div class="how-number">1</div>
+            <div>
+              <h4>On échange</h4>
+              <p>Vous me décrivez votre projet, je vous envoie un devis personnalisé sous 24h.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-number">2</div>
+            <div>
+              <h4>Je crée votre site</h4>
+              <p>Design, rédaction, développement. Vous validez chaque étape. Mise en ligne sous 3-4 semaines.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-number">3</div>
+            <div>
+              <h4>Vous payez chaque mois</h4>
+              <p>Prélèvement mensuel pendant 24 mois. Hébergement et modifications inclus.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-number">4</div>
+            <div>
+              <h4>Après 24 mois</h4>
+              <p>Vous passez en maintenance (<?= $tarifs['maintenance']['mensuel_base'] ?>€/mois) ou vous récupérez votre site.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Questions <span class="gradient-text">fréquentes</span></h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Pourquoi un abonnement plutôt qu'un paiement unique ?</span>
+            <span>+</span>
+          </button>
+          <div class="faq-answer">
+            <p>L'abonnement rend le site accessible à tous les budgets : 59€/mois au lieu de 1400€ d'un coup. Et tout est inclus : hébergement, maintenance, modifications. Pas de mauvaise surprise.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Que se passe-t-il après 24 mois ?</span>
+            <span>+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Vous passez en maintenance à <?= $tarifs['maintenance']['mensuel_base'] ?>€/mois (hébergement + modifications). Résiliable à tout moment. Vous pouvez aussi récupérer votre site et l'héberger ailleurs.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Puis-je résilier avant 24 mois ?</span>
+            <span>+</span>
+          </button>
+          <div class="faq-answer">
+            <p>L'engagement de 24 mois couvre le coût de création du site. Une résiliation anticipée implique le paiement des mensualités restantes.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Qu'est-ce qui différencie Vitrine et Complet ?</span>
+            <span>+</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Vitrine</strong> : jusqu'à 5 pages (accueil, services, à propos, contact...). <strong>Complet</strong> : jusqu'à 10 pages, formulaires avancés, fonctionnalités sur-mesure (galerie filtrée, carte interactive, etc.).</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Les modifications sont-elles vraiment incluses ?</span>
+            <span>+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Oui, illimitées. Changement de texte, ajout de photos, mise à jour des tarifs... Je m'en occupe sous 48h. Seules les refontes complètes ou ajouts de fonctionnalités majeures sont en supplément.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box glass-strong" data-animate>
+        <h2 class="section-title">Prêt à <span class="gradient-text">démarrer</span> ?</h2>
+        <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit et personnalisé sous 24h.</p>
+        <div class="hero-buttons" style="justify-content: center;">
+          <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
+          <a href="/realisations" class="btn btn-secondary">Voir mes réalisations</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -1,10 +1,9 @@
 <?php
 $pageTitle = 'Création site internet gîte et chambre d\'hôtes | Réservation | Pertec';
-$pageDescription = 'Site internet pour gîte, chambre d\'hôtes ou location saisonnière. Photos, tarifs, réservation en ligne. Dès 990 €. Devis gratuit sous 24h.';
+$pageDescription = 'Site internet pour gîte, chambre d\'hôtes ou location saisonnière. Photos, tarifs, réservation en ligne. À partir de 59€/mois.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
+$formules = $tarifs['formule']['options'];
 
 $canonicalUrl = '/secteurs/gite';
 $activeMenu = '';
@@ -135,17 +134,17 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
       <div class="features-grid home-pricing">
         <div class="feature-card glass" data-animate>
-          <h3><?= htmlspecialchars($offres['vitrine5']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'], 0, ',', ' ') ?> €</p>
+          <h3>Site Vitrine</h3>
+          <p class="home-price"><?= $formules['vitrine']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
           <p>Accueil, chambres, tarifs, environs, contact.</p>
         </div>
         <div class="feature-card glass portfolio-featured" data-animate>
-          <h3>Site + réservation</h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'] + 190, 0, ',', ' ') ?> €</p>
-          <p>+ Calendrier et formulaire de réservation en ligne.</p>
+          <h3>Site Complet</h3>
+          <p class="home-price"><?= $formules['complet']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
+          <p>+ Calendrier disponibilités, réservation en ligne.</p>
         </div>
       </div>
-      <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, mises à jour, modifications sous 48h. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
+      <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
 

@@ -3,8 +3,7 @@ $pageTitle = 'Création de site internet pour église ou paroisse | Pertec';
 $pageDescription = 'Création de site internet pour église, paroisse ou association religieuse. Horaires, événements, dons en ligne. Site clé en main dès 490 €, devis en 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
+$formules = $tarifs['formule']['options'];
 
 $canonicalUrl = '/secteurs/eglise';
 $activeMenu = '';
@@ -164,17 +163,17 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
       <div class="features-grid home-pricing">
         <div class="feature-card glass" data-animate>
-          <h3><?= htmlspecialchars($offres['page_unique']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['page_unique']['creation'], 0, ',', ' ') ?> €</p>
-          <p>Une page complète avec horaires, adresse, contact. L'essentiel pour être trouvé.</p>
+          <h3>Site Vitrine</h3>
+          <p class="home-price"><?= $formules['vitrine']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
+          <p>Accueil, horaires, événements, équipe pastorale, contact.</p>
         </div>
         <div class="feature-card glass portfolio-featured" data-animate>
-          <h3><?= htmlspecialchars($offres['vitrine5']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'], 0, ',', ' ') ?> €</p>
-          <p>Accueil, horaires, événements, équipe pastorale, contact et dons.</p>
+          <h3>Site Complet</h3>
+          <p class="home-price"><?= $formules['complet']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
+          <p>+ Module de dons en ligne, actualités, galerie.</p>
         </div>
       </div>
-      <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, nom de domaine, mises à jour et modifications sous 48 h, sans engagement. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
+      <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
 

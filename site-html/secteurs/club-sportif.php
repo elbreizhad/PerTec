@@ -1,10 +1,9 @@
 <?php
 $pageTitle = 'Création site internet club sportif et association | Inscriptions | Pertec';
-$pageDescription = 'Site internet pour club sportif ou association. Inscriptions en ligne, planning, actualités, résultats. Dès 490 €. Devis gratuit sous 24h.';
+$pageDescription = 'Site internet pour club sportif ou association. Inscriptions en ligne, planning, actualités, résultats. À partir de 59€/mois. Devis gratuit sous 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
+$formules = $tarifs['formule']['options'];
 
 $canonicalUrl = '/secteurs/club-sportif';
 $activeMenu = '';
@@ -135,17 +134,17 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
       <div class="features-grid home-pricing">
         <div class="feature-card glass" data-animate>
-          <h3><?= htmlspecialchars($offres['vitrine5']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'], 0, ',', ' ') ?> €</p>
+          <h3>Site Vitrine</h3>
+          <p class="home-price"><?= $formules['vitrine']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
           <p>Présentation, sections, planning, galerie, contact.</p>
         </div>
         <div class="feature-card glass portfolio-featured" data-animate>
-          <h3>Site + inscriptions</h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'] + 190, 0, ',', ' ') ?> €</p>
+          <h3>Site Complet</h3>
+          <p class="home-price"><?= $formules['complet']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
           <p>+ Formulaire d'inscription en ligne avec paiement.</p>
         </div>
       </div>
-      <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, mises à jour, modifications sous 48h. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
+      <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
 

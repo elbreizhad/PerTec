@@ -1950,6 +1950,147 @@ button:focus-visible {
   }
 }
 
+/* ===== Page Tarifs ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+}
+
+.pricing-card {
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-featured {
+  border: 2px solid var(--primary);
+  transform: scale(1.05);
+}
+
+@media (max-width: 900px) {
+  .pricing-featured {
+    transform: none;
+  }
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pricing-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pricing-desc {
+  color: var(--gray-400);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.pricing-price {
+  margin-bottom: 0.5rem;
+}
+
+.pricing-amount {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.pricing-unit {
+  font-size: 1rem;
+  color: var(--gray-400);
+}
+
+.pricing-engagement {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.pricing-card .btn {
+  width: 100%;
+}
+
+.pricing-note {
+  text-align: center;
+  color: var(--gray-400);
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+
+.option-price {
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* How it works */
+.how-it-works {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .how-it-works {
+    grid-template-columns: 1fr;
+  }
+}
+
+.how-step {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.how-number {
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.how-step h4 {
+  margin-bottom: 0.25rem;
+}
+
+.how-step p {
+  color: var(--gray-400);
+  font-size: 0.9rem;
+}
+
 /* Accueil : tarifs et avis */
 .home-pricing .feature-card { text-align: center; }
 .feature-card .home-price {

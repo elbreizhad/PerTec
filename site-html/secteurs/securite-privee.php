@@ -1,10 +1,9 @@
 <?php
 $pageTitle = 'Création de site pour société de sécurité | Pertec';
-$pageDescription = 'Création de site internet pour société de sécurité, de gardiennage ou centre de formation. Déjà 4 sites réalisés dans le secteur. Dès 990 €, devis en 24h.';
+$pageDescription = 'Création de site internet pour société de sécurité, de gardiennage ou centre de formation. Déjà 4 sites réalisés dans le secteur. À partir de 59€/mois, devis en 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
+$formules = $tarifs['formule']['options'];
 $realisations = [
     ['nom' => 'STS Sécurité', 'url' => 'https://sts-securite.fr', 'image' => 'sts-securite.webp', 'type' => 'Entreprise de sécurité privée', 'texte' => 'Présentation de l\'équipe et des services, demande de devis en ligne.'],
     ['nom' => 'Vigiprestance', 'url' => 'https://vigiprestance.fr', 'image' => 'vigiprestance.webp', 'type' => 'Surveillance et gardiennage', 'texte' => 'Prestations et zone d\'intervention claires, formulaire de contact.'],
@@ -200,17 +199,17 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
       <div class="features-grid home-pricing">
         <div class="feature-card glass" data-animate>
-          <h3><?= htmlspecialchars($offres['vitrine5']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['vitrine5']['creation'], 0, ',', ' ') ?> €</p>
+          <h3>Site Vitrine</h3>
+          <p class="home-price"><?= $formules['vitrine']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
           <p>Accueil, prestations, zone d'intervention, recrutement, contact.</p>
         </div>
         <div class="feature-card glass portfolio-featured" data-animate>
-          <h3><?= htmlspecialchars($offres['vitrine10']['label']) ?></h3>
-          <p class="home-price"><?= number_format($offres['vitrine10']['creation'], 0, ',', ' ') ?> €</p>
+          <h3>Site Complet</h3>
+          <p class="home-price"><?= $formules['complet']['mensuel'] ?> €<span style="font-size: 1rem; font-weight: 400;">/mois</span></p>
           <p>Une page par prestation (gardiennage, rondes, SSIAP, événementiel…) ou par secteur.</p>
         </div>
       </div>
-      <p class="home-pricing-note" data-animate>Puis <?= $mensuel ?> €/mois : hébergement, nom de domaine, mises à jour et modifications sous 48 h, sans engagement. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?>.</p>
+      <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
       <p style="color: var(--gray-400); text-align: center; max-width: 700px; margin: 2rem auto 0;" data-animate>Avant de vous lancer : <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">ce que doit contenir le site d'une entreprise de sécurité</a> (mentions CNAPS, devis, recrutement), et <a href="/conseils/faire-connaitre-entreprise-securite-privee" style="color: var(--primary-light);">comment faire connaître son entreprise de sécurité</a>.</p>
     </div>
   </section>
