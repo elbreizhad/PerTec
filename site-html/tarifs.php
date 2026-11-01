@@ -5,6 +5,7 @@
  */
 
 $tarifs = require __DIR__ . '/config/tarifs.php';
+$formules = $tarifs['formule']['options'];
 
 $pageTitle = 'Tarifs Création Site Internet | À partir de 59€/mois | Pertec.fr';
 $pageDescription = 'Créez votre site internet à partir de 59€/mois sur 24 mois. Site vitrine, site complet ou e-commerce. Tout inclus : design, hébergement, maintenance.';
@@ -29,7 +30,7 @@ require_once __DIR__ . '/includes/header.php';
   <section>
     <div class="container">
       <div class="pricing-grid">
-        <?php foreach ($tarifs['formule']['options'] as $id => $formule): ?>
+        <?php foreach ($formules as $id => $formule): ?>
         <div class="pricing-card glass<?= $formule['badge'] ? ' pricing-featured' : '' ?>" data-animate>
           <?php if ($formule['badge']): ?>
           <div class="pricing-badge"><?= htmlspecialchars($formule['badge']) ?></div>
@@ -47,9 +48,55 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <p class="pricing-note" data-animate>
-        Après 24 mois : maintenance à partir de <strong><?= $tarifs['maintenance']['mensuel_base'] ?>€/mois</strong>.
-        Résiliable à tout moment.
+        Après 24 mois : maintenance à <strong><?= $tarifs['maintenance']['mensuel'] ?>€/mois</strong>, résiliable à tout moment.<br>
+        <small style="color: var(--gray-500);"><?= htmlspecialchars($tarifs['config']['tva_mention']) ?></small>
       </p>
+    </div>
+  </section>
+
+  <!-- Comparateur -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Comparez les <span class="gradient-text">formules</span></h2>
+      </div>
+
+      <div class="comparateur-wrapper" data-animate>
+        <table class="comparateur">
+          <thead>
+            <tr>
+              <th></th>
+              <?php foreach ($formules as $id => $formule): ?>
+              <th class="<?= $formule['badge'] ? 'col-featured' : '' ?>">
+                <?= htmlspecialchars($formule['label']) ?>
+                <span class="comparateur-price"><?= $formule['mensuel'] ?>€/mois</span>
+              </th>
+              <?php endforeach; ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($tarifs['comparatif'] as $feature => $values): ?>
+            <tr>
+              <td class="feature-name"><?= htmlspecialchars($feature) ?></td>
+              <?php foreach (['vitrine', 'complet', 'ecommerce'] as $plan): ?>
+              <td class="<?= $formules[$plan]['badge'] ? 'col-featured' : '' ?>">
+                <?php
+                $val = $values[$plan];
+                if ($val === true) {
+                    echo '<svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="var(--primary)"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>';
+                } elseif ($val === false) {
+                    echo '<span class="no-feature">—</span>';
+                } else {
+                    echo '<span class="feature-text">' . htmlspecialchars($val) . '</span>';
+                }
+                ?>
+              </td>
+              <?php endforeach; ?>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -74,26 +121,41 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- Options -->
+  <!-- Options mensuelles -->
   <section>
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title" data-animate>Options <span class="gradient-text">disponibles</span></h2>
-        <p class="section-subtitle" data-animate>Ajoutez des fonctionnalités selon vos besoins.</p>
+        <h2 class="section-title" data-animate>Options <span class="gradient-text">mensuelles</span></h2>
+        <p class="section-subtitle" data-animate>Ajoutez des services récurrents à votre abonnement.</p>
       </div>
 
       <div class="features-grid">
-        <?php foreach ($tarifs['options']['options'] as $id => $opt): ?>
+        <?php foreach ($tarifs['options_recurrentes']['options'] as $id => $opt): ?>
         <div class="feature-card glass" data-animate>
           <h3><?= htmlspecialchars($opt['label']) ?></h3>
           <p><?= htmlspecialchars($opt['description']) ?></p>
-          <p class="option-price">
-            <?php if (isset($opt['mensuel'])): ?>
-            + <?= $opt['mensuel'] ?> €/mois
-            <?php else: ?>
-            <?= $opt['unique'] ?> € (une fois)
-            <?php endif; ?>
-          </p>
+          <p class="option-pour"><em><?= htmlspecialchars($opt['pour']) ?></em></p>
+          <p class="option-price">+ <?= $opt['mensuel'] ?> €/mois</p>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- Options uniques -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Options <span class="gradient-text">à la carte</span></h2>
+        <p class="section-subtitle" data-animate>Prestations ponctuelles pour compléter votre site.</p>
+      </div>
+
+      <div class="features-grid">
+        <?php foreach ($tarifs['options_uniques']['options'] as $id => $opt): ?>
+        <div class="feature-card glass" data-animate>
+          <h3><?= htmlspecialchars($opt['label']) ?></h3>
+          <p><?= htmlspecialchars($opt['description']) ?></p>
+          <p class="option-price"><?= $opt['prix'] ?> €<?= isset($opt['unite']) ? ' <small>' . htmlspecialchars($opt['unite']) . '</small>' : '' ?></p>
         </div>
         <?php endforeach; ?>
       </div>
@@ -134,7 +196,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="how-number">4</div>
             <div>
               <h4>Après 24 mois</h4>
-              <p>Vous passez en maintenance (<?= $tarifs['maintenance']['mensuel_base'] ?>€/mois) ou vous récupérez votre site.</p>
+              <p>Vous passez en maintenance (<?= $tarifs['maintenance']['mensuel'] ?>€/mois) ou vous récupérez votre site.</p>
             </div>
           </div>
         </div>
@@ -153,7 +215,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
             <span>Pourquoi un abonnement plutôt qu'un paiement unique ?</span>
-            <span>+</span>
+            <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
             <p>L'abonnement rend le site accessible à tous les budgets : 59€/mois au lieu de 1400€ d'un coup. Et tout est inclus : hébergement, maintenance, modifications. Pas de mauvaise surprise.</p>
@@ -163,17 +225,17 @@ require_once __DIR__ . '/includes/header.php';
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
             <span>Que se passe-t-il après 24 mois ?</span>
-            <span>+</span>
+            <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
-            <p>Vous passez en maintenance à <?= $tarifs['maintenance']['mensuel_base'] ?>€/mois (hébergement + modifications). Résiliable à tout moment. Vous pouvez aussi récupérer votre site et l'héberger ailleurs.</p>
+            <p>Vous passez en maintenance à <?= $tarifs['maintenance']['mensuel'] ?>€/mois (hébergement + modifications). Résiliable à tout moment. Vous pouvez aussi récupérer votre site et l'héberger ailleurs.</p>
           </div>
         </div>
 
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
             <span>Puis-je résilier avant 24 mois ?</span>
-            <span>+</span>
+            <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
             <p>L'engagement de 24 mois couvre le coût de création du site. Une résiliation anticipée implique le paiement des mensualités restantes.</p>
@@ -183,20 +245,31 @@ require_once __DIR__ . '/includes/header.php';
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
             <span>Qu'est-ce qui différencie Vitrine et Complet ?</span>
-            <span>+</span>
+            <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
-            <p><strong>Vitrine</strong> : jusqu'à 5 pages (accueil, services, à propos, contact...). <strong>Complet</strong> : jusqu'à 10 pages, formulaires avancés, fonctionnalités sur-mesure (galerie filtrée, carte interactive, etc.).</p>
+            <p><strong>Vitrine</strong> (59€/mois) : jusqu'à 5 pages, idéal pour présenter votre activité.<br>
+            <strong>Complet</strong> (149€/mois) : jusqu'à 10 pages + blog, galerie photos et réservation en ligne inclus.</p>
           </div>
         </div>
 
         <div class="faq-item glass" data-animate>
           <button class="faq-question">
             <span>Les modifications sont-elles vraiment incluses ?</span>
-            <span>+</span>
+            <span class="faq-toggle">+</span>
           </button>
           <div class="faq-answer">
             <p>Oui, illimitées. Changement de texte, ajout de photos, mise à jour des tarifs... Je m'en occupe sous 48h. Seules les refontes complètes ou ajouts de fonctionnalités majeures sont en supplément.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass" data-animate>
+          <button class="faq-question">
+            <span>Le site m'appartient-il ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Oui. Après les 24 mois, vous êtes propriétaire du site. Vous pouvez continuer en maintenance avec moi ou récupérer les fichiers pour les héberger ailleurs.</p>
           </div>
         </div>
       </div>

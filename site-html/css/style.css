@@ -2050,6 +2050,91 @@ button:focus-visible {
   margin-top: 1rem;
 }
 
+.option-pour {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Comparateur */
+.comparateur-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.comparateur {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.comparateur th,
+.comparateur td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #2d2d44;
+}
+
+.comparateur thead th {
+  background: #1a1a2e;
+  font-weight: 600;
+  vertical-align: bottom;
+  padding-bottom: 1.5rem;
+}
+
+.comparateur thead th.col-featured {
+  background: linear-gradient(180deg, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.05) 100%);
+  border-top: 2px solid var(--primary);
+}
+
+.comparateur-price {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 0.5rem;
+}
+
+.comparateur .feature-name {
+  text-align: left;
+  font-weight: 500;
+  color: var(--gray-300);
+}
+
+.comparateur tbody tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.comparateur .col-featured {
+  background: rgba(99,102,241,0.03);
+}
+
+.comparateur .check-icon {
+  display: inline-block;
+}
+
+.comparateur .no-feature {
+  color: var(--gray-600);
+}
+
+.comparateur .feature-text {
+  color: var(--gray-300);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .comparateur {
+    font-size: 0.85rem;
+  }
+  .comparateur th,
+  .comparateur td {
+    padding: 0.75rem 0.5rem;
+  }
+  .comparateur .feature-name {
+    min-width: 140px;
+  }
+}
+
 /* How it works */
 .how-it-works {
   display: grid;
