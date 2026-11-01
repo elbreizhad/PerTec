@@ -83,10 +83,22 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
 
         <nav class="nav">
           <a href="/services" class="nav-link<?= ($activeMenu === 'services') ? ' active' : '' ?>">Services</a>
+          <div class="nav-dropdown">
+            <a href="#" class="nav-link<?= ($activeMenu === 'secteurs') ? ' active' : '' ?>">Secteurs <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor" style="margin-left: 4px;"><path d="M1 1l4 4 4-4"/></svg></a>
+            <div class="nav-dropdown-menu">
+              <a href="/secteurs/artisan">Artisans</a>
+              <a href="/secteurs/restaurant">Restaurants</a>
+              <a href="/secteurs/coiffeur">Coiffeurs</a>
+              <a href="/secteurs/plombier">Plombiers</a>
+              <a href="/secteurs/therapeute">Thérapeutes</a>
+              <a href="/secteurs/gite">Gîtes</a>
+              <a href="/secteurs/auto-ecole">Auto-écoles</a>
+              <a href="/secteurs/commerces">Commerces</a>
+            </div>
+          </div>
           <a href="/tarifs" class="nav-link<?= ($activeMenu === 'tarifs') ? ' active' : '' ?>">Tarifs</a>
           <a href="/realisations" class="nav-link<?= ($activeMenu === 'realisations') ? ' active' : '' ?>">Réalisations</a>
           <a href="/conseils/" class="nav-link<?= ($activeMenu === 'conseils') ? ' active' : '' ?>">Conseils</a>
-          <a href="/a-propos" class="nav-link<?= ($activeMenu === 'apropos') ? ' active' : '' ?>">À propos</a>
           <a href="/contact" class="nav-link<?= ($activeMenu === 'contact') ? ' active' : '' ?>">Contact</a>
         </nav>
 
@@ -104,10 +116,19 @@ $ogImage = $ogData['image'] ?? '/images/og-pertec.jpg';
   <!-- Mobile Menu -->
   <div class="mobile-menu">
     <a href="/services">Services</a>
+    <div class="mobile-menu-section">
+      <span class="mobile-menu-title">Secteurs</span>
+      <a href="/secteurs/artisan">Artisans</a>
+      <a href="/secteurs/restaurant">Restaurants</a>
+      <a href="/secteurs/coiffeur">Coiffeurs</a>
+      <a href="/secteurs/plombier">Plombiers</a>
+      <a href="/secteurs/therapeute">Thérapeutes</a>
+      <a href="/secteurs/gite">Gîtes</a>
+      <a href="/secteurs/auto-ecole">Auto-écoles</a>
+    </div>
     <a href="/tarifs">Tarifs</a>
     <a href="/realisations">Réalisations</a>
     <a href="/conseils/">Conseils</a>
-    <a href="/a-propos">À propos</a>
     <a href="/contact">Contact</a>
     <a href="/contact" class="btn btn-primary">Devis gratuit</a>
   </div>

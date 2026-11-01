@@ -300,6 +300,86 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+/* Navigation Dropdown */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown > .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--gray-800);
+  border-radius: 12px;
+  padding: 0.75rem 0;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+  margin-top: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--gray-800);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 0.6rem 1.25rem;
+  color: var(--gray-300);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+}
+
+.nav-dropdown-menu a:hover {
+  background: var(--gray-800);
+  color: var(--white);
+}
+
+/* Mobile Menu Section */
+.mobile-menu-section {
+  border-top: 1px solid var(--gray-800);
+  border-bottom: 1px solid var(--gray-800);
+  padding: 0.5rem 0;
+  margin: 0.5rem 0;
+}
+
+.mobile-menu-title {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-500);
+  padding: 0.5rem 1.5rem;
+}
+
+.mobile-menu-section a {
+  font-size: 0.9rem;
+  padding: 0.6rem 1.5rem 0.6rem 2rem;
+}
+
 .header-cta {
   padding: 0.75rem 1.5rem;
   font-size: 0.9rem;
@@ -461,6 +541,29 @@ section {
 .feature-card:hover {
   transform: translateY(-5px);
   background: rgba(255, 255, 255, 0.08);
+}
+
+/* Demo Cards */
+.demo-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.demo-card:hover {
+  border-color: var(--primary);
+}
+
+.demo-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.demo-card:hover .demo-link {
+  text-decoration: underline;
 }
 
 .feature-icon {

@@ -198,6 +198,60 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </section>
 
+  <!-- Exemples de sites par secteur -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Exemples de <span class="gradient-text">sites par secteur</span></h2>
+        <p class="section-subtitle" data-animate>Découvrez des démos interactives pour visualiser votre futur site.</p>
+      </div>
+
+      <div class="features-grid">
+        <a href="/demos/restaurant" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">🍽️</div>
+          <h3>Restaurant</h3>
+          <p>Menu, réservation en ligne, horaires. Design chaleureux.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+
+        <a href="/demos/coiffeur" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">✂️</div>
+          <h3>Coiffeur</h3>
+          <p>Prestations, tarifs, équipe. Design élégant.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+
+        <a href="/demos/plombier" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">🔧</div>
+          <h3>Plombier</h3>
+          <p>Services, zone d'intervention, urgences. Design pro.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+
+        <a href="/demos/therapeute" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">🧘</div>
+          <h3>Thérapeute</h3>
+          <p>Approche, prestations, tarifs. Design zen.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+
+        <a href="/demos/gite" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">🏡</div>
+          <h3>Gîte</h3>
+          <p>Galerie, calendrier, tarifs. Design nature.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+
+        <a href="/demos/auto-ecole" class="feature-card glass demo-card" data-animate target="_blank">
+          <div class="feature-icon">🚗</div>
+          <h3>Auto-école</h3>
+          <p>Formations, taux de réussite, équipe. Design moderne.</p>
+          <span class="demo-link">Voir la démo →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Process -->
   <section>
     <div class="container">
