@@ -68,7 +68,19 @@ function schema_service_ville(string $ville, string $slug): string {
         'serviceType' => 'Création de site internet',
         'url' => 'https://pertec.fr/creation-site-internet/' . $slug,
         'areaServed' => ['@type' => 'City', 'name' => $ville],
-        'offers' => ['@type' => 'Offer', 'price' => '490', 'priceCurrency' => 'EUR', 'description' => 'Site clé en main à partir de 490 €'],
+        'offers' => [
+            '@type' => 'Offer',
+            'price' => '59',
+            'priceCurrency' => 'EUR',
+            'description' => 'Site internet à partir de 59€/mois (engagement 24 mois)',
+            'priceSpecification' => [
+                '@type' => 'UnitPriceSpecification',
+                'price' => '59',
+                'priceCurrency' => 'EUR',
+                'unitCode' => 'MON',
+                'billingDuration' => 'P24M'
+            ]
+        ],
         'provider' => schema_entreprise(),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 }
@@ -84,7 +96,19 @@ function schema_service_metier(string $metier, string $chemin): string {
         'serviceType' => 'Création de site internet',
         'url' => 'https://pertec.fr' . $chemin,
         'areaServed' => ['@type' => 'AdministrativeArea', 'name' => 'Normandie'],
-        'offers' => ['@type' => 'Offer', 'price' => '490', 'priceCurrency' => 'EUR', 'description' => 'Site clé en main à partir de 490 €'],
+        'offers' => [
+            '@type' => 'Offer',
+            'price' => '59',
+            'priceCurrency' => 'EUR',
+            'description' => 'Site internet à partir de 59€/mois (engagement 24 mois)',
+            'priceSpecification' => [
+                '@type' => 'UnitPriceSpecification',
+                'price' => '59',
+                'priceCurrency' => 'EUR',
+                'unitCode' => 'MON',
+                'billingDuration' => 'P24M'
+            ]
+        ],
         'provider' => schema_entreprise(),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 }
