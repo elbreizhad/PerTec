@@ -2,7 +2,7 @@
 /**
  * Informations publiques de l'entreprise - Pertec.fr
  */
-define('GOOGLE_BUSINESS_URL', 'https://share.google/t2IrsbJ0cJDq0Du7Y');
+define('GOOGLE_BUSINESS_URL', 'https://share.google/1zmYXb6xcFvamXHV8');
 
 // Code de vérification Google Search Console (méthode « balise HTML »).
 // Inutile si le domaine est vérifié par DNS. Exemple : 'AbC123...'
