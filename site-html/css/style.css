@@ -2239,7 +2239,8 @@ button:focus-visible {
 .article-card-content .btn-link { margin-top: auto; color: var(--primary-light); font-weight: 600; }
 
 .article-header { padding-bottom: 2.5rem; }
-.article-header h1 { max-width: 900px; margin: 0 auto; }
+.article-header h1 { max-width: 900px; margin: 0 auto; opacity: 1 !important; transform: none !important; }
+.article-header .article-meta { opacity: 1 !important; transform: none !important; }
 .article-breadcrumb { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1.5rem; }
 .article-breadcrumb a { color: var(--gray-400); text-decoration: none; }
 .page-header .article-apercu { display: inline-block; max-width: none; margin: 0 auto 1rem; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; line-height: 1.4; font-weight: 600; color: #fcd34d; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); }
