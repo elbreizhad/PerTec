@@ -15,6 +15,7 @@ $pages = [
     ['/a-propos', 'monthly', '0.7'],
     ['/contact', 'monthly', '0.8'],
     ['/zone-intervention', 'monthly', '0.7'],
+    ['/secteurs/', 'weekly', '0.8'],
     ['/creation-site-internet/evreux', 'monthly', '0.8'],
     ['/creation-site-internet/louviers', 'monthly', '0.7'],
     ['/creation-site-internet/vernon', 'monthly', '0.7'],

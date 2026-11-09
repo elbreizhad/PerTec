@@ -20,6 +20,7 @@
             <li><a href="/secteurs/gite">Gîtes</a></li>
             <li><a href="/secteurs/auto-ecole">Auto-écoles</a></li>
             <li><a href="/secteurs/plombier">Plombiers</a></li>
+            <li><a href="/secteurs/" style="color: var(--primary-light);">Tous les secteurs →</a></li>
           </ul>
         </div>
 

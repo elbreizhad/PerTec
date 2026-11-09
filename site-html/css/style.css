@@ -2304,6 +2304,23 @@ button:focus-visible {
 /* Les boutons gardent leur couleur dans le texte des articles */
 .article-prose a.btn { color: var(--white); text-decoration: none; }
 
+/* ===== Index des secteurs ===== */
+.secteurs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
+.secteur-card { display: flex; align-items: center; gap: 1.25rem; padding: 1.5rem; text-decoration: none; color: inherit; transition: transform 0.3s ease; }
+.secteur-card:hover { transform: translateY(-4px); }
+.secteur-card-icon { flex-shrink: 0; width: 64px; height: 64px; }
+.secteur-card-icon img { width: 100%; height: 100%; object-fit: contain; }
+.secteur-card-content { display: flex; flex-direction: column; gap: 0.3rem; }
+.secteur-card-content h2 { font-size: 1.15rem; margin: 0; line-height: 1.3; }
+.secteur-card-content p { color: var(--gray-400); font-size: 0.9rem; margin: 0; }
+.secteur-card-content .btn-link { color: var(--primary-light); font-weight: 600; font-size: 0.9rem; }
+
+@media (max-width: 600px) {
+  .secteur-card { padding: 1.25rem; gap: 1rem; }
+  .secteur-card-icon { width: 48px; height: 48px; }
+  .secteur-card-content h2 { font-size: 1.05rem; }
+}
+
 /* Accueil : photo du poste de travail en fond, assombrie et floutée */
 .hero-photo { overflow: hidden; isolation: isolate; }
 .hero-photo::before {
