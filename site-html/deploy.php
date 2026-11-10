@@ -159,6 +159,47 @@ exec('git log -1 --format="%h · %ad · %s" --date=format:"%d/%m/%Y %H:%M" 2>&1'
 $commit = trim($log[0] ?? '');
 echo "📌 Version déployée : $commit\n\n";
 
+// ============================================
+// PROTECTION DES DONNÉES (stats, messages, etc.)
+// ============================================
+// Le dossier pertec-data est créé À CÔTÉ de public_html, pas dedans.
+// Ainsi il n'est jamais touché par le déploiement.
+
+$data_dir = dirname($public_path) . '/pertec-data';
+if (!is_dir($data_dir)) {
+    echo "📁 Création du dossier de données: $data_dir\n";
+    if (@mkdir($data_dir, 0750, true)) {
+        echo "✅ OK\n\n";
+    } else {
+        echo "⚠️  Impossible de créer $data_dir (les données resteront dans admin/)\n\n";
+    }
+} else {
+    echo "📁 Dossier de données existant: $data_dir\n\n";
+}
+
+// Migration : copier les anciennes données de admin/ vers pertec-data/ si besoin
+$migrations = ['settings.json', 'messages.json', 'estimations.json'];
+foreach ($migrations as $file) {
+    $old = $public_path . '/admin/' . $file;
+    $new = $data_dir . '/' . $file;
+    if (is_file($old) && !file_exists($new) && is_dir($data_dir)) {
+        if (@copy($old, $new)) {
+            echo "📦 Migration: $file → pertec-data/\n";
+        }
+    }
+}
+$old_stats = $public_path . '/admin/stats';
+$new_stats = $data_dir . '/stats';
+if (is_dir($old_stats) && !is_dir($new_stats) && is_dir($data_dir)) {
+    @mkdir($new_stats, 0750);
+    foreach (glob($old_stats . '/*.json') ?: [] as $f) {
+        if (@copy($f, $new_stats . '/' . basename($f))) {
+            echo "📦 Migration: stats/" . basename($f) . " → pertec-data/stats/\n";
+        }
+    }
+}
+echo "\n";
+
 // Synchroniser les fichiers vers public_html
 if ($public_path !== $repo_path . '/' . $source_folder) {
     // Tout ce qui est listé ici n'est ni écrasé ni supprimé dans public_html.
@@ -167,12 +208,14 @@ if ($public_path !== $repo_path . '/' . $source_folder) {
         'deploy.php',
         '.git',
         '.gitignore',
-        // Données enregistrées par le site (désormais dans ../pertec-data, voir includes/data.php ;
-        // les anciennes copies restent protégées le temps de la migration)
+        // Données enregistrées par le site (dans ../pertec-data ou admin/ en fallback)
+        // Tous les fichiers de données sont protégés pour éviter toute perte
         'admin/settings.json',
         'admin/messages.json',
         'admin/estimations.json',
+        'admin/stats',
         'admin/stats/',
+        'admin/stats/**',
         'admin/config.local.php',
         // Dossiers et fichiers de l'hébergement qui ne viennent pas du dépôt
         '/old site/',
