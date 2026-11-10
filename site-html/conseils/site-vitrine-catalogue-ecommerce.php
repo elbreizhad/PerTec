@@ -2,9 +2,8 @@
 require_once dirname(__DIR__) . '/includes/article.php';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
-$euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
+$formules = $tarifs['formule']['options'];
+$maintenance = $tarifs['maintenance']['mensuel'];
 
 $article = article_debut(
     'site-vitrine-catalogue-ecommerce',
@@ -27,7 +26,7 @@ $article = article_debut(
         <ul>
           <li><strong>Pour qui</strong> : plombier, électricien, coiffeur, avocat, société de sécurité, consultant…</li>
           <li><strong>Pages types</strong> : accueil, services, réalisations, à propos, contact.</li>
-          <li><strong>Prix chez Pertec</strong> : <?= $euros($offres['page_unique']['creation']) ?> pour une page unique, <?= $euros($offres['vitrine5']['creation']) ?> pour 5 pages, <?= $euros($offres['vitrine10']['creation']) ?> pour 10 pages.</li>
+          <li><strong>Prix chez Pertec</strong> : <?= $formules['vitrine']['mensuel'] ?> €/mois (engagement 24 mois, hébergement et maintenance inclus).</li>
         </ul>
 
         <h2>Le site catalogue : montrer ses produits sans forcément vendre en ligne</h2>
@@ -43,7 +42,7 @@ $article = article_debut(
         <ul>
           <li><strong>Pour qui</strong> : commerce qui veut vendre au-delà de sa ville, artisan créateur, producteur local…</li>
           <li><strong>À prévoir</strong> : les frais de paiement en ligne, l'emballage et la livraison, les conditions générales de vente, et le temps passé chaque semaine.</li>
-          <li><strong>Prix</strong> : sur devis, selon le nombre de produits et les fonctions nécessaires.</li>
+          <li><strong>Prix chez Pertec</strong> : <?= $formules['ecommerce']['mensuel'] ?> €/mois (engagement 24 mois, hébergement et maintenance inclus).</li>
         </ul>
 
         <h2>Le site institutionnel : présenter une organisation</h2>
@@ -70,7 +69,7 @@ $article = article_debut(
         </div>
 
         <h2>Le point commun : être trouvé</h2>
-        <p>Quel que soit le type de site, il ne sert à rien s'il n'apparaît pas sur Google. Une page par service ou par catégorie de produits, des textes qui répondent aux questions de vos clients, une fiche Google reliée : le référencement se prévoit dès la création, pas après. C'est inclus dans tous les sites que je réalise, avec ensuite <?= $mensuel ?> € par mois pour l'hébergement, le nom de domaine, les mises à jour et vos modifications.</p>
+        <p>Quel que soit le type de site, il ne sert à rien s'il n'apparaît pas sur Google. Une page par service ou par catégorie de produits, des textes qui répondent aux questions de vos clients, une fiche Google reliée : le référencement se prévoit dès la création, pas après. C'est inclus dans tous les sites que je réalise : hébergement, nom de domaine, mises à jour et modifications sont compris dans l'abonnement mensuel (engagement 24 mois). Après cette période, la maintenance continue à <?= $maintenance ?> €/mois, ou vous récupérez votre site.</p>
 
         <h2>Questions fréquentes</h2>
 <?php article_faq([
