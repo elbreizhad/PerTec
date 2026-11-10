@@ -2,9 +2,11 @@
 require_once dirname(__DIR__) . '/includes/article.php';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
-$euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
+$formules = $tarifs['formule']['options'];
+$engagement = $tarifs['formule']['engagement'];
+$maintenance = $tarifs['maintenance']['mensuel'];
+$vitrine = $formules['vitrine']['mensuel'];
+$complet = $formules['complet']['mensuel'];
 
 $article = article_debut(
     'location-site-internet',
@@ -50,34 +52,34 @@ $article = article_debut(
         </ol>
 
         <h2>Le coût sur la durée</h2>
-        <p>Les formules sans frais de départ, autour de 100 à 150 € par mois engagés sur 4 ans, sont courantes. Une autre approche consiste à payer la création une fois, puis un abonnement mensuel bas pour l'hébergement et le suivi. Exemple avec un site de 5 pages :</p>
+        <p>Les formules sans frais de départ, autour de 100 à 150 € par mois engagés sur 4 ans, sont courantes chez les démarcheurs. Une autre approche (la mienne) : un abonnement transparent avec un engagement raisonnable de 24 mois, puis le site vous appartient. Comparons :</p>
 
 <?php article_figure('/images/conseils/location-site-cout-4-ans.webp', 1400, 700,
-    'Graphique du coût cumulé sur 48 mois : location classique à 120 € par mois contre formule Pertec, création de 990 € puis 39 € par mois',
+    'Graphique du coût cumulé sur 48 mois : location classique à 120 € par mois contre formule Pertec à 59 € par mois',
     'Coût cumulé sur 48 mois, exemple : location classique à 120 €/mois contre formule Pertec. Les écarts varient selon les offres.'); ?>
 
-        <p>Au bout de 4 ans, la location classique revient à <strong><?= $euros(120 * 48) ?></strong>, la formule Pertec à <strong><?= $euros($offres['vitrine5']['creation'] + $mensuel * 48) ?></strong>, avec le même service au quotidien. Pour comparer deux offres, faites simplement le calcul : frais de départ + mensualité × nombre de mois d'engagement.</p>
+        <p>Au bout de 4 ans : location classique (120 €/mois × 48) = <strong>5 760 €</strong> et le site ne vous appartient toujours pas. Formule Pertec : <strong><?= number_format($vitrine * 24 + $maintenance * 24, 0, ',', ' ') ?> €</strong> (24 mois à <?= $vitrine ?> € puis 24 mois de maintenance à <?= $maintenance ?> €), et le site est transférable dès la fin de l'engagement.</p>
 
         <h2>La formule Pertec : je m'occupe de tout</h2>
         <p>J'héberge moi-même les sites que je crée. Une fois votre site en ligne, vous n'avez plus à vous en soucier :</p>
         <ul>
-          <li><strong><?= $mensuel ?> € par mois, tout compris</strong> : hébergement, nom de domaine, mises à jour de sécurité, sauvegardes, et vos modifications faites sous 48 h.</li>
-          <li><strong>Sans engagement de durée</strong> : vous restez parce que le service vous convient, pas à cause d'un contrat.</li>
-          <li><strong>Le nom de domaine à votre nom</strong> : votre site vous appartient, vous partez avec si vous le souhaitez.</li>
-          <li><strong>Un prix de création fixé à l'avance</strong> : <?= $euros($offres['page_unique']['creation']) ?> pour une page unique, <?= $euros($offres['vitrine5']['creation']) ?> pour 5 pages, <?= $euros($offres['vitrine10']['creation']) ?> pour 10 pages.</li>
+          <li><strong>À partir de <?= $vitrine ?> €/mois, tout compris</strong> : hébergement, nom de domaine, mises à jour de sécurité, sauvegardes, et vos modifications faites sous 48 h.</li>
+          <li><strong>Engagement de 24 mois</strong> : durée raisonnable, beaucoup plus courte que les 36 ou 48 mois des démarcheurs.</li>
+          <li><strong>Le site vous est transféré en fin d'engagement</strong> : il vous appartient, vous pouvez le confier à un autre prestataire ou continuer avec moi pour <?= $maintenance ?> €/mois.</li>
+          <li><strong>Le nom de domaine à votre nom</strong> : votre adresse internet vous appartient dès le départ.</li>
           <li><strong>Un seul interlocuteur</strong>, basé dans l'Eure, qui connaît votre site et votre activité.</li>
         </ul>
 
         <h2>Questions fréquentes</h2>
 <?php article_faq([
-    ['Que comprend exactement l\'abonnement mensuel ?', 'L\'hébergement, le renouvellement du nom de domaine, les mises à jour de sécurité, les sauvegardes et vos demandes de modification traitées sous 48 h. Sans engagement : vous pouvez arrêter quand vous voulez.'],
+    ['Que comprend exactement l\'abonnement mensuel ?', 'L\'hébergement, le renouvellement du nom de domaine, les mises à jour de sécurité, les sauvegardes et vos demandes de modification traitées sous 48 h. Engagement de 24 mois, puis maintenance optionnelle à ' . $maintenance . ' €/mois ou transfert du site.'],
     ['J\'ai déjà un site en location ailleurs, pouvez-vous le reprendre ?', 'Tout dépend de votre contrat actuel : durée d\'engagement restante et propriétaire du nom de domaine. Envoyez-moi les informations, je vous dis ce qui est possible et je peux organiser la transition pour que votre site ne soit jamais hors ligne.'],
-    ['Pourquoi y a-t-il des frais de création ?', 'Payer la création une fois permet de garder un abonnement mensuel bas et sans engagement long. Sur la durée, c\'est en général plus économique qu\'une formule sans frais de départ engagée sur plusieurs années.'],
+    ['Pourquoi un engagement de 24 mois ?', 'C\'est le temps de créer un site de qualité, de travailler le référencement et de voir les premiers résultats. En contrepartie, pas de frais de création et un prix mensuel raisonnable. Et à la fin, le site vous appartient.'],
 ]); ?>
 
 <?php
 article_fin(
     'Un site dont vous n\'avez plus à vous occuper',
-    'Hébergement, sécurité, modifications : je m\'occupe de tout pour ' . $mensuel . ' € par mois, sans engagement. Devis gratuit sous 24 h.',
+    'Hébergement, sécurité, modifications : je m\'occupe de tout à partir de ' . $vitrine . ' €/mois. Devis gratuit sous 24 h.',
     [['/conseils/prix-site-internet-artisan', 'Prix d\'un site internet pour artisan'], ['/conseils/site-vitrine-catalogue-ecommerce', 'Site vitrine, catalogue ou e-commerce ?']]
 );

@@ -7,10 +7,10 @@ $article = conseil($slug);
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
-$devisGuide = $tarifs['options']['options']['devis_guide']['creation'];
-$euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
+$formules = $tarifs['formule']['options'];
+$maintenance = $tarifs['maintenance']['mensuel'];
+$vitrine = $formules['vitrine']['mensuel'];
+$complet = $formules['complet']['mensuel'];
 
 $realisations = [
     ['nom' => 'STS Sécurité', 'url' => 'https://sts-securite.fr', 'image' => 'sts-securite.webp', 'type' => 'Entreprise de sécurité privée', 'texte' => 'Site vitrine avec présentation de l\'équipe et des services, et demande de devis en ligne.'],
@@ -134,7 +134,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p>Travailler avec plusieurs entreprises du même secteur m'a appris le vocabulaire du métier, les questions que posent vos clients et ce qu'ils vérifient avant de vous contacter. Vous n'avez pas à tout m'expliquer : on va droit à ce qui compte pour votre entreprise.</p>
 
         <h2>Combien coûte un site pour une entreprise de sécurité ?</h2>
-        <p>Une société de sécurité a généralement besoin de plusieurs pages (prestations, zone, recrutement, contact) : comptez <strong><?= $euros($offres['vitrine5']['creation']) ?></strong> pour un site de 5 pages et <strong><?= $euros($offres['vitrine10']['creation']) ?></strong> pour 10 pages, avec une page par prestation ou par secteur. Le formulaire de devis adapté au métier est en option à <?= $euros($devisGuide) ?>. Ensuite, <?= $mensuel ?> € par mois couvrent l'hébergement, le nom de domaine, les mises à jour et vos modifications sous 48 h, sans engagement de durée.</p>
+        <p>Une société de sécurité a généralement besoin de plusieurs pages (prestations, zone, recrutement, contact) : comptez <strong><?= $vitrine ?> €/mois</strong> pour un Site Vitrine (jusqu'à 5 pages) ou <strong><?= $complet ?> €/mois</strong> pour un Site Complet (jusqu'à 10 pages), avec une page par prestation ou par secteur. L'engagement est de 24 mois, tout compris : hébergement, nom de domaine, mises à jour et modifications sous 48 h. Après les 24 mois, le site vous est transféré ou vous continuez avec la maintenance à <?= $maintenance ?> €/mois.</p>
         <p>Pour un centre de formation, le nombre de pages dépend surtout du catalogue. Le plus simple est d'en parler : je vous fais une proposition adaptée sous 24 h. Vous pouvez aussi lire <a href="/conseils/prix-site-internet-artisan">combien coûte un site internet</a> pour comparer avec les autres solutions.</p>
 
         <h2>Questions fréquentes</h2>

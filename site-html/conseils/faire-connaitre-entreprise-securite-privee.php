@@ -7,9 +7,10 @@ $article = conseil($slug);
 
 // Prix lus depuis la grille tarifaire (source unique)
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
-$euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
+$formules = $tarifs['formule']['options'];
+$maintenance = $tarifs['maintenance']['mensuel'];
+$vitrine = $formules['vitrine']['mensuel'];
+$complet = $formules['complet']['mensuel'];
 
 $pageTitle = 'Faire connaître son entreprise de sécurité privée | Pertec';
 $pageDescription = $article['description'];
@@ -133,7 +134,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
         <h2>Ce que je propose aux entreprises de sécurité</h2>
         <p>Je crée des sites pour les entreprises de sécurité privée et les centres de formation, en tenant compte des spécificités du secteur : mentions CNAPS, une page par prestation, pages locales, formulaire de devis adapté, page recrutement, fiche Google reliée. Les textes sont écrits pour être trouvés sur Google et pour rassurer vos clients.</p>
-        <p>Pour une entreprise de sécurité, comptez <strong><?= $euros($offres['vitrine5']['creation']) ?></strong> pour un site de 5 pages et <strong><?= $euros($offres['vitrine10']['creation']) ?></strong> pour 10 pages (une page par prestation ou par secteur), puis <?= $mensuel ?> € par mois pour l'hébergement, le nom de domaine, les mises à jour et vos modifications. Vous pouvez voir <a href="/secteurs/securite-privee">les sites déjà réalisés dans la sécurité</a>.</p>
+        <p>Pour une entreprise de sécurité, comptez <strong><?= $vitrine ?> €/mois</strong> pour un Site Vitrine (jusqu'à 5 pages) ou <strong><?= $complet ?> €/mois</strong> pour un Site Complet (jusqu'à 10 pages, une page par prestation ou par secteur). Engagement de 24 mois, tout compris : hébergement, nom de domaine, mises à jour et modifications. Après cette période, le site vous est transféré ou vous continuez à <?= $maintenance ?> €/mois. Vous pouvez voir <a href="/secteurs/securite-privee">les sites déjà réalisés dans la sécurité</a>.</p>
 
         <h2>Questions fréquentes</h2>
         <div class="faq-list article-faq">

@@ -2,9 +2,10 @@
 require_once dirname(__DIR__) . '/includes/article.php';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
-$offres = $tarifs['type_site']['options'];
-$mensuel = $tarifs['suivi']['inclus']['mensuel'];
-$euros = fn(int $n) => number_format($n, 0, ',', ' ') . ' €';
+$formules = $tarifs['formule']['options'];
+$maintenance = $tarifs['maintenance']['mensuel'];
+$vitrine = $formules['vitrine']['mensuel'];
+$complet = $formules['complet']['mensuel'];
 
 $article = article_debut(
     'site-internet-centre-formation-securite',
@@ -61,7 +62,7 @@ $article = article_debut(
         </ul>
 
         <h2>Combien coûte un site de centre de formation ?</h2>
-        <p>Le nombre de pages dépend surtout du catalogue. Un petit centre avec quelques formations peut démarrer avec un site de 5 pages (<?= $euros($offres['vitrine5']['creation']) ?>), un catalogue plus large avec 10 pages ou plus (<?= $euros($offres['vitrine10']['creation']) ?> pour 10 pages), puis <?= $mensuel ?> € par mois pour l'hébergement, les mises à jour et vos modifications, y compris les sessions. Le plus simple est d'en parler : je vous fais une proposition adaptée à votre catalogue.</p>
+        <p>Le nombre de pages dépend surtout du catalogue. Un petit centre avec quelques formations peut démarrer avec un Site Vitrine à <?= $vitrine ?> €/mois (jusqu'à 5 pages), un catalogue plus large avec un Site Complet à <?= $complet ?> €/mois (jusqu'à 10 pages). Engagement de 24 mois, tout compris : hébergement, mises à jour et modifications, y compris les sessions. Après les 24 mois, le site vous est transféré ou vous continuez à <?= $maintenance ?> €/mois. Le plus simple est d'en parler : je vous fais une proposition adaptée à votre catalogue.</p>
 
         <h2>Questions fréquentes</h2>
 <?php article_faq([
