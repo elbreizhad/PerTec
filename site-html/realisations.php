@@ -42,15 +42,15 @@ require_once __DIR__ . '/includes/header.php';
 
         <div class="portfolio-card glass portfolio-featured" data-animate>
           <div class="portfolio-image" style="background-image: url('/images/portfolio/ilmanque1.webp'); background-size: cover; background-position: top center;">
-            <span class="portfolio-category glass">E-commerce</span>
+            <span class="portfolio-category glass">Application web</span>
           </div>
           <div class="portfolio-content">
             <h3>Il Manque 1</h3>
-            <p>Site e-commerce moderne et dynamique. Interface intuitive avec catalogue produits, panier et système de commande en ligne.</p>
+            <p>Application web gratuite pour organiser une partie de padel, tennis ou badminton : un lien partagé dans le groupe, chacun prend sa place en un geste, sans compte ni appli à installer.</p>
             <div class="portfolio-tags">
-              <span>E-commerce</span>
-              <span>Boutique</span>
-              <span>Responsive</span>
+              <span>Application web</span>
+              <span>Mobile</span>
+              <span>SEO</span>
             </div>
             <a href="https://ilmanque1.fr" target="_blank" rel="noopener" class="btn btn-secondary portfolio-btn">Voir le site →</a>
           </div>
@@ -105,7 +105,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div class="portfolio-card glass" data-animate>
-          <div class="portfolio-image" style="background-image: url('/images/portfolio/manoubolomik.jpg'); background-size: cover; background-position: top center;">
+          <div class="portfolio-image" style="background-image: url('/images/portfolio/manoubolomik.webp'); background-size: cover; background-position: top center;">
             <span class="portfolio-category glass">Artiste</span>
           </div>
           <div class="portfolio-content">

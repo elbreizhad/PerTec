@@ -141,7 +141,7 @@ require_once __DIR__ . '/includes/header.php';
 <?php
 $realisations = [
     ['nom' => 'CFSSIS', 'image' => 'cfssis.webp', 'categorie' => 'Formation', 'url' => 'https://cfssis.fr', 'texte' => 'Site vitrine complet pour un centre de formation en sécurité incendie et sûreté.'],
-    ['nom' => 'Il Manque 1', 'image' => 'ilmanque1.webp', 'categorie' => 'E-commerce', 'url' => 'https://ilmanque1.fr', 'texte' => 'Boutique en ligne avec catalogue produits, panier et commande en ligne.'],
+    ['nom' => 'Il Manque 1', 'image' => 'ilmanque1.webp', 'categorie' => 'Application web', 'url' => 'https://ilmanque1.fr', 'texte' => 'Application gratuite pour organiser une partie de padel ou de tennis : un lien dans le groupe, chacun prend sa place.'],
     ['nom' => 'Solution Sécurité', 'image' => 'solution-securite.webp', 'categorie' => 'Sécurité privée', 'url' => 'https://solution-securite.fr', 'texte' => 'Site professionnel pour une entreprise de gardiennage et de surveillance.'],
 ];
 foreach ($realisations as $r):
