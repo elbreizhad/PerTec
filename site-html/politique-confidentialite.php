@@ -100,11 +100,35 @@ require_once __DIR__ . '/includes/header.php';
         <div class="legal-section glass" data-animate>
           <h2>Mesure d'audience</h2>
           <p>
-            Pour savoir quelles pages sont utiles, le site compte ses visites directement sur notre serveur, sans cookie et sans outil tiers.
+            Pour améliorer le site, nous mesurons comment il est utilisé, directement sur notre serveur, sans cookie de mesure et sans outil tiers : pages consultées dans l'ordre, liens et boutons cliqués, défilement et temps passé sur chaque page, site de provenance (par exemple « Google »), type d'appareil et de navigateur, et le fait qu'un formulaire ait été commencé ou envoyé. Le contenu de ce que vous saisissez n'est jamais enregistré.
           </p>
           <p>
-            Seuls des totaux par jour sont conservés : nombre de pages vues, page consultée, site de provenance (par exemple « Google ») et nombre de demandes envoyées. Aucune adresse IP ni aucun identifiant permettant de vous reconnaître n'est enregistré, et ces totaux ne sont transmis à personne.
+            Votre adresse IP n'est pas enregistrée. Pour regrouper les pages d'une même visite, une empreinte chiffrée est calculée à partir de l'adresse IP et du navigateur avec une clé qui change chaque jour : elle ne permet pas de vous identifier ni de relier vos visites d'un jour à l'autre. Ces données servent uniquement à des statistiques consultées par l'éditeur du site, ne sont transmises à personne et sont effacées au bout de 90 jours. Cette mesure entre dans le cadre de l'exemption de consentement prévue par la CNIL.
           </p>
+          <p>
+            Vous pouvez vous y opposer à tout moment : le réglage « Ne pas me suivre » (Do Not Track ou Global Privacy Control) de votre navigateur est respecté, ou cliquez ci-dessous (un petit cookie retient votre choix pendant 13 mois).
+          </p>
+          <p>
+            <button type="button" class="btn btn-secondary" id="suivi-opposition">Ne plus mesurer ma navigation</button>
+            <span id="suivi-opposition-etat" role="status" style="margin-left: 0.75rem;"></span>
+          </p>
+          <script>
+            (function () {
+              var bouton = document.getElementById('suivi-opposition');
+              var etat = document.getElementById('suivi-opposition-etat');
+              function afficher() {
+                var refuse = /(^|; )pertec_nosuivi=1/.test(document.cookie);
+                bouton.textContent = refuse ? 'Accepter à nouveau la mesure' : 'Ne plus mesurer ma navigation';
+                etat.textContent = refuse ? 'Votre navigation n\'est plus mesurée sur ce navigateur.' : '';
+              }
+              bouton.addEventListener('click', function () {
+                var refuse = /(^|; )pertec_nosuivi=1/.test(document.cookie);
+                document.cookie = 'pertec_nosuivi=' + (refuse ? '; max-age=0' : '1; max-age=' + 13 * 30 * 86400) + '; path=/; SameSite=Lax; Secure';
+                afficher();
+              });
+              afficher();
+            })();
+          </script>
         </div>
 
         <div class="legal-section glass" data-animate>

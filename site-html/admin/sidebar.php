@@ -13,6 +13,10 @@
             <span class="nav-icon">📈</span>
             Statistiques
         </a>
+        <a href="visiteurs.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'visiteurs.php' ? 'active' : '' ?>">
+            <span class="nav-icon">👣</span>
+            Visiteurs
+        </a>
         <a href="articles.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) === 'articles.php' ? 'active' : '' ?>">
             <span class="nav-icon">📝</span>
             Articles

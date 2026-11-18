@@ -67,6 +67,9 @@
 
   <!-- JavaScript -->
   <script src="<?= asset('/js/main.js') ?>"></script>
+<?php if (!empty($GLOBALS['suiviPv'])): ?>
+  <script src="<?= asset('/js/suivi.js') ?>" data-pv="<?= $GLOBALS['suiviPv'] ?>" defer></script>
+<?php endif; ?>
 <?= $extraScripts ?? '' ?>
 </body>
 </html>

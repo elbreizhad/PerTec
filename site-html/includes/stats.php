@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/data.php';
+require_once __DIR__ . '/suivi.php';
 /**
  * Statistiques de fréquentation - Pertec.fr
  *
@@ -93,6 +94,9 @@ function stats_source(): ?string {
  * À appeler en haut de chaque page publique.
  */
 function stats_track_pageview(): void {
+    // Parcours détaillé (robots compris), voir includes/suivi.php
+    $GLOBALS['suiviPv'] = suivi_page(stats_page_path(), stats_source());
+
     if (stats_should_skip()) return;
 
     $page = stats_page_path();
@@ -116,6 +120,7 @@ function stats_track_pageview(): void {
 function stats_track_event(string $event): void {
     if (!empty($_COOKIE[STATS_NOSTATS_COOKIE])) return;
 
+    suivi_conversion($event);
     stats_update(function (array $day) use ($event) {
         $day[$event] = ($day[$event] ?? 0) + 1;
         return $day;

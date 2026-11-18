@@ -121,12 +121,13 @@ if ($v === null) {
     return;
 }
 $tarifsVille = require dirname(__DIR__) . '/config/tarifs.php';
-$offresVille = $tarifsVille['type_site']['options'];
+$formulesVille = $tarifsVille['formule']['options'];
+$engagementVille = $tarifsVille['formule']['engagement'];
 $faqVille = [
     ['Est-ce que vous vous déplacez ' . $v['a'] . ' ?', $v['deplacement']],
     ['Mon site apparaîtra-t-il sur « ' . $v['exemple'] . ' » ?', 'C\'est l\'objectif. Chaque page est rédigée et structurée pour votre métier et votre secteur, et reliée à votre fiche Google. Le référencement prend généralement quelques semaines à se mettre en place, et aucun prestataire sérieux ne peut garantir une première position.'],
-    ['Combien coûte un site pour une entreprise ' . $v['de'] . ' ?', 'À partir de ' . $offresVille['page_unique']['creation'] . ' € pour une page unique complète, ' . $offresVille['vitrine5']['creation'] . ' € pour un site de 5 pages, puis ' . $tarifsVille['suivi']['inclus']['mensuel'] . ' €/mois pour l\'hébergement, le nom de domaine, les mises à jour et vos modifications. Le tarif est le même partout.'],
-    ['Pourquoi un indépendant plutôt qu\'une agence ?', 'Vous avez un seul interlocuteur, du premier échange aux modifications après la mise en ligne. Pas de contrat de location sur plusieurs années : le site et le nom de domaine sont à votre nom.'],
+    ['Combien coûte un site pour une entreprise ' . $v['de'] . ' ?', 'À partir de ' . $formulesVille['vitrine']['mensuel'] . ' €/mois tout compris pour un site vitrine : création, hébergement, nom de domaine, mises à jour et modifications. ' . $formulesVille['complet']['mensuel'] . ' €/mois pour un site complet, ' . $formulesVille['ecommerce']['mensuel'] . ' €/mois pour une boutique en ligne, sur ' . $engagementVille . ' mois, puis ' . $tarifsVille['maintenance']['mensuel'] . ' €/mois de maintenance. Le tarif est le même partout.'],
+    ['Pourquoi un indépendant plutôt qu\'une agence ?', 'Vous avez un seul interlocuteur, du premier échange aux modifications après la mise en ligne. Et au bout des ' . $engagementVille . ' mois, le site vous appartient : vous pouvez rester en maintenance avec moi ou le transférer où vous voulez.'],
 ];
 ?>
 
@@ -149,9 +150,9 @@ $faqVille = [
   <section><div class="container">
     <div class="section-header"><h2 class="section-title" data-animate>Quel site pour votre entreprise <span class="gradient-text"><?= htmlspecialchars($v['a']) ?></span> ?</h2><p class="section-subtitle" data-animate>Création et référencement, tout est inclus. Les prix sont les mêmes partout.</p></div>
     <div class="features-grid features-grid-4">
-      <div class="feature-card glass" data-animate><div class="feature-icon">🏠</div><h3>Site vitrine</h3><p>Présenter votre activité, vos services et vos coordonnées, et recevoir des demandes de devis. Une page unique dès <?= $offresVille['page_unique']['creation'] ?> €, 5 pages pour <?= $offresVille['vitrine5']['creation'] ?> €.</p></div>
-      <div class="feature-card glass" data-animate><div class="feature-icon">🛒</div><h3>Site e-commerce ou catalogue</h3><p>Montrer vos produits, avec ou sans vente en ligne : catalogue consultable, click &amp; collect ou boutique complète. Sur devis.</p></div>
-      <div class="feature-card glass" data-animate><div class="feature-icon">🏛️</div><h3>Site institutionnel</h3><p>Pour une PME, une association ou une structure qui doit présenter son organisation, ses équipes et ses actualités. <?= $offresVille['vitrine10']['label'] ?> : <?= number_format($offresVille['vitrine10']['creation'], 0, ',', ' ') ?> €.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🏠</div><h3>Site vitrine</h3><p>Présenter votre activité, vos services et vos coordonnées, et recevoir des demandes de devis. Jusqu'à 5 pages pour <?= $formulesVille['vitrine']['mensuel'] ?> €/mois, tout compris.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🛒</div><h3>Site e-commerce ou catalogue</h3><p>Montrer vos produits, avec ou sans vente en ligne : catalogue consultable, click &amp; collect ou boutique complète, à partir de <?= $formulesVille['ecommerce']['mensuel'] ?> €/mois pour la boutique.</p></div>
+      <div class="feature-card glass" data-animate><div class="feature-icon">🏛️</div><h3>Site institutionnel</h3><p>Pour une PME, une association ou une structure qui doit présenter son organisation, ses équipes et ses actualités. <?= htmlspecialchars($formulesVille['complet']['label']) ?>, jusqu'à 10 pages : <?= $formulesVille['complet']['mensuel'] ?> €/mois.</p></div>
       <div class="feature-card glass" data-animate><div class="feature-icon">🔍</div><h3>Référencement local</h3><p>Pages pensées pour « votre métier <?= htmlspecialchars($v['a']) ?> », fiche Google reliée au site, suivi des recherches qui vous amènent des visites. Inclus dans chaque site.</p></div>
     </div>
   </div></section>

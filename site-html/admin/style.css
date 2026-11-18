@@ -507,3 +507,49 @@ a:hover { text-decoration: underline; }
 .status-live { color: #4ade80; background: rgba(34,197,94,0.12); }
 .status-scheduled { color: #fcd34d; background: rgba(245,158,11,0.12); }
 .status-sub { display: block; margin-top: 0.3rem; color: var(--gray-400); font-size: 0.78rem; white-space: nowrap; }
+
+/* Visiteurs */
+.stat-link { text-decoration: none; color: inherit; transition: border-color 0.2s; }
+.stat-link:hover { border-color: var(--primary); text-decoration: none; }
+.vue-tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); overflow-x: auto; }
+.vue-tabs a { padding: 0.7rem 1rem; color: var(--gray-400); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; text-decoration: none; }
+.vue-tabs a:hover { color: var(--white); text-decoration: none; }
+.vue-tabs a.active { color: var(--white); border-bottom-color: var(--primary); font-weight: 600; }
+.parcours-liste { display: flex; flex-direction: column; gap: 0.5rem; }
+.parcours { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.02); }
+.parcours[open] { border-color: rgba(99,102,241,0.4); }
+.parcours summary { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; padding: 0.8rem 1rem; cursor: pointer; list-style: none; font-size: 0.9rem; }
+.parcours summary::-webkit-details-marker { display: none; }
+.parcours summary::before { content: "▸"; color: var(--gray-400); transition: transform 0.15s; }
+.parcours[open] summary::before { transform: rotate(90deg); }
+.parcours-heure { font-weight: 600; font-variant-numeric: tabular-nums; min-width: 3.2rem; }
+.parcours-source { color: var(--primary-light); }
+.parcours-entree { color: var(--white); overflow-wrap: anywhere; }
+.parcours-chiffres, .parcours-appareil { color: var(--gray-400); font-size: 0.82rem; }
+.parcours-etapes { list-style: none; margin: 0; padding: 0 1rem 1rem 2.2rem; border-top: 1px solid rgba(255,255,255,0.06); }
+.parcours-etapes li { position: relative; padding: 0.7rem 0 0.2rem 1rem; border-left: 2px solid rgba(124,131,245,0.35); }
+.parcours-etapes li::before { content: ""; position: absolute; left: -6px; top: 1.05rem; width: 10px; height: 10px; border-radius: 50%; background: #7c83f5; }
+.etape-page { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; }
+.etape-page a { overflow-wrap: anywhere; }
+.etape-heure { color: var(--gray-400); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.etape-mesures { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--gray-400); font-size: 0.8rem; }
+.etape-scroll { display: inline-block; width: 60px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.etape-scroll span { display: block; height: 100%; background: #7c83f5; }
+.etape-clic { margin: 0.3rem 0 0 0.5rem; color: #fcd34d; font-size: 0.85rem; overflow-wrap: anywhere; }
+.parcours-ua, .ua-cell { color: var(--gray-400); font-size: 0.75rem; overflow-wrap: anywhere; }
+.parcours-ua { padding: 0 1rem 1rem 2.2rem; }
+.ua-cell { max-width: 360px; }
+.clic-pages { display: block; color: var(--gray-400); font-size: 0.75rem; margin-top: 0.2rem; overflow-wrap: anywhere; }
+.robot-categories { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.robot-categories .badge-info { padding: 0.3rem 0.75rem; font-size: 0.8rem; }
+.data-table code { font-size: 0.8rem; overflow-wrap: anywhere; }
+.data-table .nowrap { white-space: nowrap; }
+.etape-saisie { color: #86efac; }
+.entonnoir-intro { margin-bottom: 0.5rem; }
+.entonnoir-titre { margin-top: 1.5rem; }
+.entonnoir { display: flex; flex-direction: column; gap: 0.9rem; }
+.entonnoir-ligne { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.9rem; margin-bottom: 0.35rem; }
+.entonnoir-ligne strong { font-variant-numeric: tabular-nums; }
+.entonnoir-perte { color: #f87171; font-size: 0.82rem; margin-left: 0.3rem; }
+.entonnoir-barre { height: 10px; border-radius: 5px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.entonnoir-barre span { display: block; height: 100%; min-width: 2px; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 5px; }
