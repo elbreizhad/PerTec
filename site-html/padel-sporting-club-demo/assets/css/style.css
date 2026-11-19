@@ -392,7 +392,7 @@ tr:last-child td { border-bottom: none; }
 .footer .partners__track { flex: none; display: flex; flex-direction: row; align-items: center; gap: 56px; padding-right: 56px; margin: 0; list-style: none; animation: partners-scroll 70s linear infinite; }
 .partners__viewport:hover .partners__track, .partners__viewport:focus-within .partners__track { animation-play-state: paused; }
 .partners__track li { flex: none; height: 64px; display: flex; align-items: center; }
-.partners__track img { height: 100%; width: auto; max-width: 170px; object-fit: contain; filter: grayscale(1) contrast(.9); opacity: .6; mix-blend-mode: multiply; transition: filter .3s, opacity .3s; }
+.partners__track img { height: 100%; width: auto; max-width: 170px; object-fit: contain; filter: grayscale(1) contrast(.9); opacity: .6; transition: filter .3s, opacity .3s; }
 .partners__track img:hover { filter: none; opacity: 1; }
 @keyframes partners-scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 @media (max-width: 700px) {
@@ -406,7 +406,7 @@ tr:last-child td { border-bottom: none; }
   .footer .partners__track { animation: none; flex-wrap: wrap; justify-content: center; flex: 1; padding: 0 20px; gap: 24px 40px; }
   .partners__track[aria-hidden="true"] { display: none; }
 }
-.logo-slot img { max-height: 56px; max-width: 80%; object-fit: contain; filter: grayscale(1); opacity: .7; mix-blend-mode: multiply; transition: filter .3s, opacity .3s; }
+.logo-slot img { max-height: 56px; max-width: 80%; object-fit: contain; filter: grayscale(1); opacity: .7; transition: filter .3s, opacity .3s; }
 .logo-slot:hover img { filter: none; opacity: 1; }
 .logo-slot:has(img) { border-style: solid; border-color: var(--line); }
 .partners__head h2, .footer .partners__head a { white-space: nowrap; }
@@ -759,3 +759,29 @@ th, td { border-bottom-color: var(--line); }
 .home *, .home *::before, .home *::after { animation: none !important; transition: none !important; }
 .home .story__media img.on { transform: none; }
 }
+
+/* Tableau des pistes sur mobile : cartes sur 2 colonnes, tout visible sans glisser */
+@media (max-width: 640px) {
+  .home .board { padding: 14px; }
+  .home .board__head { padding: 0 2px 12px; }
+  .home .board__head h2 { font-size: 20px; }
+  .home .board__clock { font-size: 13px; }
+  .home .board__scroll { overflow: visible; }
+  .home .rows { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .home .row.row--head { display: none; }
+  .home .row { display: flex; flex-direction: column; gap: 2px; background: #151A33; border-radius: 12px; padding: 12px; }
+  .home .cell { background: none; padding: 0; border-radius: 0; font-size: 12px; white-space: normal; }
+  .home .cell::after { display: none; }
+  .home .row .cell:nth-child(1) { font-size: 14px; order: 1; }
+  .home .row .cell:nth-child(2) { font-size: 26px; color: var(--yellow); order: 2; line-height: 1.1; }
+  .home .row .cell:nth-child(3) { color: var(--muted); font-weight: 500; order: 3; }
+  .home .row .cell:nth-child(4) { order: 4; margin-top: 4px; }
+  .home .row .go { order: 5; margin-top: 10px; width: 100%; }
+  .home .board__foot { flex-direction: column; gap: 4px; padding-top: 12px; font-size: 13px; }
+}
+/* Bandeau partenaires : largeur fixée par la hauteur, pour Safari */
+.partners__track img { height: 64px; width: auto; }
+.footer .partners__track { will-change: transform; -webkit-animation: partners-scroll 70s linear infinite; }
+@-webkit-keyframes partners-scroll { from { -webkit-transform: translateX(0); } to { -webkit-transform: translateX(-100%); } }
+@media (max-width: 700px) { .partners__track img { height: 48px; } }
+@media (prefers-reduced-motion: reduce) { .footer .partners__track { -webkit-animation: none; } }
