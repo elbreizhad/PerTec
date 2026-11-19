@@ -123,7 +123,7 @@
     var svg = '<svg viewBox="0 0 ' + Math.round(ox + 80 * 0.866 * SC + 30) + ' ' + Math.round(oy + (78 + 46) * 0.5 * SC + 40) + '" role="group" aria-label="Plan du club à ' + fmt(S.time) + '">';
     svg += '<g transform="translate(' + ox.toFixed(1) + ',' + oy + ')">';
     // Sol du hall
-    svg += '<polygon points="' + pts([iso(-3, -3), iso(80, -3), iso(80, 70), iso(-3, 70)]) + '" fill="#F7F8FC" stroke="#CDD2E6" stroke-width="2"/>';
+    svg += '<polygon points="' + pts([iso(-3, -3), iso(80, -3), iso(80, 70), iso(-3, 70)]) + '" fill="#232C55" stroke="rgba(255,255,255,.12)" stroke-width="2"/>';
     // Club-house
     var cb = [iso(0, 52), iso(58, 52), iso(58, 66), iso(0, 66)];
     svg += '<polygon points="' + pts([iso(58, 52), iso(58, 66), [iso(58, 66)[0], iso(58, 66)[1] + 22], [iso(58, 52)[0], iso(58, 52)[1] + 22]]) + '" fill="#0F1328"/>';
