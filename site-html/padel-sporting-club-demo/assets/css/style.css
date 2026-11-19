@@ -84,7 +84,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------- En-tête ---------- */
 .header { position: sticky; top: 0; z-index: 50; background: var(--navy); color: var(--white); border-bottom: 1px solid rgba(250, 231, 137, .18); }
 .header__inner { display: flex; align-items: center; gap: 28px; min-height: 76px; }
-.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; flex: none; }
 .brand img { width: 52px; height: 52px; }
 .brand__name { display: flex; flex-direction: column; line-height: 1; }
 .brand__name strong { font-size: 18px; letter-spacing: .04em; text-transform: uppercase; }
