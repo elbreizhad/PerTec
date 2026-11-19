@@ -129,7 +129,7 @@
             <tr><th scope="row">Référencement Google</th><td>Un site d’une page qui présente tout le club.</td><td><span class="st st--yes">Amélioré</span>Une page par activité, optimisée pour les recherches locales.</td><td>Les textes et photos fournis par le club, l’accès à la fiche Google.</td></tr>
             <tr><th scope="row">Réservation</th><td>Dans l’application du club.</td><td><span class="st st--yes">Amélioré</span>Depuis le site en 3 clics, sans téléchargement, ou depuis la nouvelle appli.</td><td>Inclus dans la formule.</td></tr>
             <tr><th scope="row">Application</th><td>Application du club sur les stores.</td><td><span class="st st--yes">Nouveau</span>Nouvelle appli aux couleurs du club, sur iPhone, Android et en version web.</td><td>Des comptes développeur Apple et Google au nom du club.</td></tr>
-            <tr><th scope="row">Comptes et crédits des joueurs</th><td>Dans l’application actuelle.</td><td><span class="st st--yes">Repris</span>Comptes et soldes de crédits repris à l’identique, sans perte pour les joueurs.</td><td>L’export des joueurs et des soldes depuis l’outil actuel.</td></tr>
+            <tr class="row-api"><th scope="row">Comptes et crédits des joueurs</th><td>Dans l’application actuelle.</td><td><span class="st st--api">Via l’API</span>Comptes et soldes de crédits repris à l’identique, sans perte pour les joueurs.</td><td>L’accès à l’API LiveXperience.</td></tr>
             <tr><th scope="row">Parties ouvertes</th><td>Recherche de partenaires dans l’application.</td><td><span class="st st--yes">Amélioré</span>Parties visibles sur le site et l’appli, proposées aux joueurs de même niveau.</td><td>Le niveau des joueurs et leur accord pour recevoir les notifications.</td></tr>
             <tr><th scope="row">Partage d’un créneau</th><td>Depuis l’application.</td><td><span class="st st--yes">Nouveau</span>Lien direct vers un créneau, une partie ou un tournoi, à envoyer par SMS ou sur les réseaux.</td><td>Inclus dans la formule.</td></tr>
             <tr><th scope="row">Paiement entre joueurs</th><td>Paiement en ligne dans l’application.</td><td><span class="st st--yes">Amélioré</span>Chacun paie sa part par lien, relance automatique des oublis.</td><td>Un compte de paiement en ligne au nom du club.</td></tr>
@@ -142,8 +142,8 @@
         </table>
       </div>
       <div class="callout" role="note">
-        <strong>Votre caisse reste en place</strong>
-        <p>La caisse du club-house n’est pas modifiée. Les fonctions qui communiquent avec elle (paiement au bar avec les crédits, réservations visibles au comptoir, fiche client commune) dépendent de l’accès à l’API LiveXperience. Sans cet accès, le site, l’application, la réservation, les crédits et les parties ouvertes fonctionnent normalement ; ces fonctions sont simplement activées dès que l’API est disponible.</p>
+        <strong>Ce qui passe par l’API LiveXperience</strong>
+        <p>Deux sujets s’appuient sur l’API LiveXperience : la reprise des comptes joueurs et des soldes de crédits, et les fonctions liées à la caisse du club-house, qui reste en place (paiement au bar avec les crédits, réservations visibles au comptoir, fiche client commune). Le site, le référencement, la réservation en ligne et les parties ouvertes, eux, n’en dépendent pas.</p>
       </div>
     </div>
 
@@ -155,7 +155,7 @@
         <p class="lead">Les joueurs retrouvent leur compte et leurs crédits dans la nouvelle application. La date de bascule est choisie avec le club, en dehors des périodes chargées.</p>
       </div>
       <ul class="checklist card" style="flex:1 1 420px">
-        <li><strong>Comptes et soldes repris</strong><span>Chaque joueur retrouve son solde de crédits à l’euro près.</span></li>
+        <li><strong>Comptes et soldes repris</strong><span>Importés via l’API LiveXperience : chaque joueur retrouve son solde de crédits à l’euro près.</span></li>
         <li><strong>Une seule date de bascule</strong><span>À partir de ce jour, toutes les réservations passent par le nouveau planning : pas de double réservation possible.</span></li>
         <li><strong>Les joueurs prévenus à l’avance</strong><span>Message, affichage au club et lien vers la nouvelle appli.</span></li>
         <li><strong>L’équipe accompagnée</strong><span>Prise en main du planning et présence les premiers jours.</span></li>
@@ -176,7 +176,7 @@
         <ul class="checklist checklist--done">
           <li><strong>Le site du club</strong><span>Toutes les pages, aux couleurs du club, avec vos textes et photos.</span></li>
           <li><strong>La réservation et l’application</strong><span>Réservation en ligne, parties ouvertes, crédits, appli iPhone, Android et web.</span></li>
-          <li><strong>La reprise des joueurs</strong><span>Import des comptes et des soldes de crédits.</span></li>
+          <li><strong>La reprise des joueurs</strong><span>Import des comptes et des soldes de crédits via l’API LiveXperience.</span></li>
           <li><strong>Hébergement</strong><span>Serveur, certificat de sécurité HTTPS et sauvegardes.</span></li>
           <li><strong>Maintenance</strong><span>Mises à jour techniques et de sécurité, correction des anomalies.</span></li>
           <li><strong>Référencement</strong><span>Optimisation des pages et suivi de la fiche Google.</span></li>
@@ -189,9 +189,9 @@
     <div>
       <div class="head" style="margin-bottom:24px"><div class="head__text"><span class="eyebrow">Mise en place</span><h2 class="h2">Les étapes</h2><p class="lead">Les durées seront fixées ensemble.</p></div></div>
       <ol class="steps">
-        <li><b>1</b><div><strong>Cadrage</strong><span>Textes, photos, dates, accès à la fiche Google et au nom de domaine.</span></div></li>
+        <li><b>1</b><div><strong>Cadrage</strong><span>Textes, photos, dates, accès à la fiche Google, au nom de domaine et à l’API LiveXperience.</span></div></li>
         <li><b>2</b><div><strong>Nouveau site</strong><span>Mise en ligne sur padelsportingclub.fr, fiche Google mise à jour.</span></div></li>
-        <li><b>3</b><div><strong>Préparation de l’appli</strong><span>Import des joueurs et des crédits, tests avec l’équipe.</span></div></li>
+        <li><b>3</b><div><strong>Préparation de l’appli</strong><span>Import des joueurs et des crédits via l’API LiveXperience, tests avec l’équipe.</span></div></li>
         <li><b>4</b><div><strong>Bascule</strong><span>À la date choisie, réservations et parties ouvertes sur le site et la nouvelle appli.</span></div></li>
         <li><b>5</b><div><strong>Liaison caisse</strong><span>Fonctions du club-house activées dès l’accès à l’API LiveXperience.</span></div></li>
       </ol>
