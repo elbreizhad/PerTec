@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L’appli du club | Padel Sporting Club Évreux</title>
+<meta name="description" content="Démo de l’application joueur du Padel Sporting Club : réservation, parties ouvertes, crédits et paiement au bar.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#171D36">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700;800;900&display=swap">
+<style>
+/* Prototype d'application joueur — cadre téléphone au centre, visite guidée à côté.
+   Identité unique (marine / jaune du club) dans les deux thèmes du lecteur. */
+:root {
+  --navy: #171D36; --navy-2: #222A4A; --blue: #2B3F72; --court: #2F6FD6;
+  --yellow: #FAE789; --gold: #E3CB2D; --light: #EAECF6; --white: #FFFFFF;
+  --muted: #4A5274; --line: #DCE0EE; --ok: #1F7A4D;
+  --stage: #E3E6F1; --stage-fg: #171D36;
+  --font: "Roboto Condensed", "Arial Narrow", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --stage: #0E1224; --stage-fg: #EAECF6; color-scheme: dark; } }
+:root[data-theme="dark"] { --stage: #0E1224; --stage-fg: #EAECF6; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--font); background: var(--stage); color: var(--stage-fg); }
+button { font: inherit; color: inherit; cursor: pointer; border: none; background: none; padding: 0; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+
+.stage { min-height: 100%; display: flex; flex-wrap: wrap; gap: 48px; align-items: center; justify-content: center; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- Visite guidée ---------- */
+.tour { flex: 0 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+.tour h1 { margin: 0; font-size: 44px; line-height: .95; font-weight: 900; text-transform: uppercase; text-wrap: balance; }
+.tour h1 span { color: var(--gold); }
+.tour p { margin: 0; font-size: 17px; line-height: 1.5; opacity: .85; }
+.tour ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.tour li button { width: 100%; text-align: left; display: flex; gap: 14px; align-items: center; padding: 12px 14px; border-radius: 14px; border: 1.5px solid color-mix(in srgb, var(--stage-fg) 18%, transparent); font-size: 16px; font-weight: 700; min-height: 52px; transition: border-color .15s, background .15s; }
+.tour li button:hover { border-color: var(--gold); }
+.tour li button[aria-current="true"] { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.tour li b { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--yellow); color: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.tour small { font-size: 13px; opacity: .7; }
+
+/* ---------- Téléphone ---------- */
+.phone { flex: none; width: 390px; height: 820px; max-width: 100%; border-radius: 52px; padding: 12px; background: #0B0E1C; box-shadow: 0 30px 80px rgba(11, 14, 28, .35), inset 0 0 0 2px #2A3050; position: relative; }
+.screen { position: relative; width: 100%; height: 100%; border-radius: 41px; overflow: hidden; background: var(--light); color: var(--navy); display: flex; flex-direction: column; }
+.notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background: #0B0E1C; border-radius: 20px; z-index: 30; }
+@media (max-width: 520px) {
+  .stage { padding: 0; gap: 0; display: block; }
+  .tour { display: none; }
+  .phone { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; padding: 0; box-shadow: none; background: var(--light); }
+  .screen { border-radius: 0; }
+  .notch { display: none; }
+}
+
+.view { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.view::-webkit-scrollbar { display: none; }
+.pad { padding: 18px 18px 24px; display: flex; flex-direction: column; gap: 18px; }
+
+/* En-têtes */
+.top { background: var(--navy); color: var(--white); padding: 52px 18px 22px; display: flex; flex-direction: column; gap: 16px; }
+.top--slim { padding-bottom: 16px; }
+.top__row { display: flex; align-items: center; gap: 12px; }
+.top__row img { width: 40px; height: 40px; }
+.hello { display: flex; flex-direction: column; line-height: 1.15; }
+.hello small { font-size: 14px; opacity: .75; }
+.hello strong { font-size: 20px; text-transform: uppercase; font-weight: 800; }
+.icon-btn { margin-left: auto; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, .3); display: flex; align-items: center; justify-content: center; position: relative; }
+.icon-btn svg { width: 20px; height: 20px; }
+.icon-btn i { position: absolute; top: 8px; right: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); border: 2px solid var(--navy); }
+.back { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, .3); display: flex; align-items: center; justify-content: center; flex: none; }
+.back svg { width: 20px; height: 20px; }
+.title { font-size: 26px; font-weight: 900; text-transform: uppercase; line-height: 1; margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--yellow); }
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kpi { background: rgba(255, 255, 255, .08); border-radius: 14px; padding: 12px; text-align: left; }
+.kpi span { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--yellow); }
+.kpi div { font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.kpi small { font-size: 13px; opacity: .75; font-weight: 500; }
+
+/* Blocs */
+.sec-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sec-h h2 { margin: 0; font-size: 17px; font-weight: 800; text-transform: uppercase; }
+.sec-h button { font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.card { background: var(--white); border-radius: 16px; padding: 14px; display: flex; gap: 12px; align-items: center; text-align: left; width: 100%; }
+button.card:hover { box-shadow: 0 0 0 2px var(--navy) inset; }
+.card--navy { background: var(--navy); color: var(--white); }
+.card--yellow { background: var(--yellow); }
+.card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.card__body strong { font-size: 16px; }
+.card__body span { font-size: 14px; color: var(--muted); }
+.card--navy .card__body span { color: rgba(255, 255, 255, .8); }
+.date-box { flex: none; width: 54px; height: 54px; border-radius: 12px; background: var(--navy); color: var(--yellow); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.date-box strong { font-size: 17px; }
+.date-box span { font-size: 11px; color: var(--white); margin-top: 3px; }
+.tag { flex: none; border-radius: 999px; padding: 6px 11px; font-size: 13px; font-weight: 800; background: var(--light); }
+.tag--y { background: var(--yellow); }
+.tag--n { background: var(--navy); color: var(--yellow); }
+.tag--ok { background: #DDF1E6; color: var(--ok); }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; min-height: 40px; padding: 8px 14px; border-radius: 999px; background: var(--white); border: 1.5px solid #CDD2E6; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: .04em; }
+.chip[aria-pressed="true"] { background: var(--navy); color: var(--yellow); border-color: var(--navy); }
+.quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.quick button { background: var(--white); border-radius: 14px; padding: 12px 10px; text-align: left; display: flex; flex-direction: column; gap: 2px; }
+.quick button.hot { background: var(--yellow); }
+.quick strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.quick span { font-size: 13px; color: var(--muted); }
+.quick .hot span { color: var(--navy); }
+
+/* Réservation */
+.days { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.days::-webkit-scrollbar { display: none; }
+.day { flex: none; width: 58px; padding: 8px 0; border-radius: 14px; background: var(--white); border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+.day small { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+.day strong { font-size: 22px; font-weight: 900; }
+.day[aria-pressed="true"] { background: var(--yellow); border-color: var(--navy); }
+.slots { display: flex; flex-direction: column; gap: 8px; }
+.slot { background: var(--white); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; min-height: 56px; }
+.slot:hover { box-shadow: 0 0 0 2px var(--navy) inset; }
+.slot strong { font-size: 20px; width: 64px; font-variant-numeric: tabular-nums; }
+.slot span { flex: 1; font-size: 14px; color: var(--muted); }
+.slot em { font-style: normal; font-weight: 800; }
+.slot[disabled] { opacity: .5; cursor: default; box-shadow: none; }
+.bar { height: 6px; border-radius: 99px; background: var(--light); overflow: hidden; width: 60px; flex: none; }
+.bar i { display: block; height: 100%; background: var(--court); }
+
+/* Feuille du bas */
+.sheet-bg { position: absolute; inset: 0; background: rgba(11, 14, 28, .5); z-index: 40; display: flex; align-items: flex-end; animation: fade .2s; }
+.sheet { width: 100%; max-height: 88%; overflow-y: auto; background: var(--light); border-radius: 26px 26px 0 0; padding: 10px 18px 26px; display: flex; flex-direction: column; gap: 16px; animation: up .25s ease-out; }
+.sheet > * { flex-shrink: 0; }
+.sheet__grip { width: 44px; height: 5px; border-radius: 9px; background: #B7BDD6; margin: 0 auto 4px; }
+@keyframes up { from { transform: translateY(40px); opacity: .5; } to { transform: none; opacity: 1; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.recap { background: var(--navy); color: var(--white); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+.recap strong { font-size: 22px; text-transform: uppercase; }
+.players { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 5px 12px 5px 5px; font-weight: 700; font-size: 14px; min-height: 42px; background: var(--white); }
+.pl i { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 12px; background: var(--blue); color: var(--white); }
+.pl--me { background: var(--yellow); }
+.pl--me i { background: var(--navy); color: var(--yellow); }
+.pl--add { border: 1.5px dashed var(--blue); }
+.pl--add i { background: var(--light); color: var(--navy); font-size: 18px; }
+.sw { display: flex; align-items: center; gap: 12px; background: var(--white); border-radius: 14px; padding: 12px; width: 100%; text-align: left; min-height: 52px; }
+.sw__t { flex: none; width: 46px; height: 28px; border-radius: 99px; background: #B7BDD6; position: relative; transition: background .2s; }
+.sw__t::after { content: ""; position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--white); transition: left .2s, background .2s; }
+.sw[aria-checked="true"] .sw__t { background: var(--navy); }
+.sw[aria-checked="true"] .sw__t::after { left: 22px; background: var(--yellow); }
+.sw strong { display: block; font-size: 15px; }
+.sw small { display: block; font-size: 13px; color: var(--muted); }
+.pay { display: flex; justify-content: space-between; align-items: center; background: var(--white); border: 1.5px solid transparent; border-radius: 12px; padding: 12px 14px; width: 100%; font-size: 15px; min-height: 48px; }
+.pay small { color: var(--muted); font-size: 13px; }
+.pay[aria-pressed="true"] { border-color: var(--navy); font-weight: 700; }
+.total { display: flex; justify-content: space-between; font-size: 20px; font-weight: 900; text-transform: uppercase; }
+.cta { width: 100%; min-height: 56px; border-radius: 999px; background: var(--yellow); color: var(--navy); border: 2px solid var(--navy); font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; }
+.cta:hover { background: var(--gold); }
+.cta--navy { background: var(--navy); color: var(--yellow); }
+.cta--navy:hover { background: var(--blue); }
+.cta--ghost { background: transparent; }
+.cta--ghost:hover { background: var(--white); }
+.note { font-size: 13px; color: var(--muted); text-align: center; }
+.lbl { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* Confirmation */
+.done { display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; padding: 70px 22px 24px; }
+.done__icon { width: 84px; height: 84px; border-radius: 50%; background: var(--yellow); display: flex; align-items: center; justify-content: center; animation: pop .4s ease-out; }
+.done__icon svg { width: 42px; height: 42px; }
+@keyframes pop { 0% { transform: scale(.4); } 70% { transform: scale(1.1); } 100% { transform: none; } }
+.done h2 { margin: 0; font-size: 30px; font-weight: 900; text-transform: uppercase; }
+.done p { margin: 0; font-size: 16px; color: var(--muted); }
+
+/* Parties */
+.match { background: var(--white); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; width: 100%; text-align: left; }
+button.match:hover { box-shadow: 0 0 0 2px var(--navy) inset; }
+.match__top { display: flex; justify-content: space-between; gap: 8px; font-size: 15px; }
+.match__top em { font-style: normal; font-weight: 800; color: var(--blue); }
+.avs { display: flex; gap: 6px; align-items: center; }
+.av { width: 34px; height: 34px; border-radius: 50%; background: var(--blue); color: var(--white); font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.av--me { background: var(--yellow); color: var(--navy); }
+.av--empty { background: transparent; border: 1.5px dashed var(--blue); }
+.avs small { margin-left: auto; font-size: 14px; color: var(--muted); }
+.teams { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.team { background: var(--white); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.who { display: flex; align-items: center; gap: 8px; }
+.who div { display: flex; flex-direction: column; line-height: 1.1; }
+.who strong { font-size: 15px; }
+.who span { font-size: 12px; color: var(--muted); }
+.check { display: flex; gap: 10px; align-items: center; font-size: 15px; }
+.check svg { flex: none; width: 18px; height: 18px; color: var(--ok); }
+
+/* Portefeuille */
+.wallet { background: var(--navy); color: var(--white); border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.wallet__amt { font-size: 52px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.wallet__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.wbtn { min-height: 48px; border-radius: 14px; font-weight: 800; text-transform: uppercase; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.wbtn svg { width: 18px; height: 18px; }
+.wbtn--y { background: var(--yellow); color: var(--navy); }
+.wbtn--o { border: 1.5px solid rgba(255, 255, 255, .45); }
+.tx { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.tx:last-child { border-bottom: none; }
+.tx__ic { flex: none; width: 38px; height: 38px; border-radius: 10px; background: var(--light); display: flex; align-items: center; justify-content: center; }
+.tx__ic svg { width: 18px; height: 18px; }
+.tx div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.tx strong { font-size: 15px; }
+.tx span { font-size: 13px; color: var(--muted); }
+.tx b { font-variant-numeric: tabular-nums; }
+.tx b.plus { color: var(--ok); }
+.box { background: var(--white); border-radius: 16px; padding: 4px 14px; }
+.packs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pack { background: var(--white); border-radius: 16px; padding: 14px; text-align: left; display: flex; flex-direction: column; gap: 4px; border: 2px solid transparent; position: relative; }
+.pack[aria-pressed="true"] { border-color: var(--navy); }
+.pack strong { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.pack b { font-size: 30px; font-weight: 900; line-height: 1; }
+.pack span { font-size: 13px; color: var(--muted); }
+.pack em { align-self: flex-start; font-style: normal; font-size: 12px; font-weight: 800; background: var(--yellow); border-radius: 99px; padding: 3px 9px; margin-top: 4px; }
+.qr-wrap { background: var(--white); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.qr-wrap canvas { width: 220px; height: 220px; image-rendering: pixelated; }
+.ring { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.spark { width: 100%; height: 80px; display: block; }
+
+/* Barre d'onglets */
+.tabs { flex: none; background: var(--white); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 4px 18px; }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 6px 0; min-height: 50px; text-transform: uppercase; letter-spacing: .04em; }
+.tab svg { width: 22px; height: 22px; }
+.tab[aria-current="page"] { color: var(--navy); }
+.tab[aria-current="page"] svg { color: var(--navy); }
+.tab[aria-current="page"]::after { content: ""; width: 18px; height: 3px; border-radius: 3px; background: var(--gold); margin-top: 2px; }
+
+.toast { position: absolute; left: 14px; right: 14px; bottom: 90px; background: var(--navy); color: var(--white); border-radius: 14px; padding: 12px 14px; font-size: 14px; z-index: 50; transform: translateY(20px); opacity: 0; transition: transform .25s, opacity .25s; pointer-events: none; }
+.toast.on { transform: none; opacity: 1; }
+.toast b { color: var(--yellow); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+.backbar { display: none; }
+.back-site { align-self: flex-start; color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.back-site:hover { color: var(--gold); }
+@media (max-width: 520px) {
+  .backbar { display: block; position: relative; z-index: 60; background: var(--gold); color: var(--navy); text-align: center; font-weight: 700; font-size: 14px; padding: 10px 16px; text-decoration: none; }
+  .phone { height: calc(100vh - 40px); height: calc(100dvh - 40px); }
+  .top { padding-top: 22px; }
+}
+</style>
+
+</head>
+<body>
+<a class="backbar" href="index.html">← Retour au site · Démo</a>
+<div class="stage">
+  <section class="tour" aria-label="Visite guidée">
+    <span class="eyebrow" style="color:var(--gold)">Démo · Padel Sporting Club</span>
+    <h1>L’appli du club, <span>en main</span></h1>
+    <p>Un prototype cliquable de l’application joueur : réservation, parties ouvertes, crédits et paiement au bar. Essayez directement dans le téléphone ou suivez les étapes.</p>
+    <ol id="steps"></ol>
+    <small>Joueurs, niveaux, soldes et dates sont des exemples. Les tarifs sont ceux du club.</small>
+    <a class="back-site" href="index.html">← Retour au site du club</a>
+  </section>
+
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="notch" aria-hidden="true"></div>
+      <div class="view" id="view"></div>
+      <nav class="tabs" id="tabs" aria-label="Navigation de l’appli"></nav>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* ---------- Icônes ---------- */
+  var I = {
+    home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M15 20a4 4 0 0 1 6-3.5"/>',
+    trophy: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+    wallet: '<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/>',
+    back: '<path d="M15 6l-6 6 6 6"/>',
+    check: '<path d="M5 12l5 5L20 7"/>',
+    qr: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v7h-7"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    cup: '<path d="M4 8h13v5a6 6 0 0 1-12 0z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/>',
+    ball: '<circle cx="12" cy="12" r="9"/><path d="M5 6c4 2 4 10 0 12M19 6c-4 2-4 10 0 12"/>',
+    share: '<path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/>'
+  };
+  function ic(n, sw) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[n] + '</svg>'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* ---------- Données ---------- */
+  var JOURS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+  var JOURS_L = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var DAYS = [];
+  for (var k = 0; k < 10; k++) { var d = new Date(today); d.setDate(d.getDate() + k); DAYS.push(d); }
+  function dayShort(d, i) { return i === 0 ? 'Auj.' : i === 1 ? 'Dem.' : JOURS[d.getDay()]; }
+  function dayLong(i) { var d = DAYS[i]; return i === 0 ? 'Aujourd’hui' : i === 1 ? 'Demain' : JOURS_L[d.getDay()].replace(/^./, function (c) { return c.toUpperCase(); }) + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()]; }
+  function we(i) { var g = DAYS[i].getDay(); return g === 0 || g === 6; }
+  function fmt(m) { return Math.floor(m / 60) + 'h' + (m % 60 ? '30' : '00'); }
+  function fmtDur(d) { return d === 60 ? '1 h' : d === 90 ? '1 h 30' : '2 h'; }
+  function euro(v) { return (Math.round(v * 100) / 100).toString().replace('.', ',') + ' €'; }
+
+  var SPORTS = {
+    padel: { label: 'Padel', durs: [60, 90, 120], prices: { 60: 9, 90: 13, 120: 16 }, unit: 'joueur', players: 4, courts: ['Piste 1', 'Piste 2', 'Piste 3', 'Piste 4', 'Piste 5', 'Piste 6', 'Piste 7', 'Piste 8', 'Piste 9', 'Piste 10'] },
+    single: { label: 'Single', durs: [90], prices: { 90: 16 }, unit: 'joueur', players: 2, courts: ['Piste single'] },
+    badminton: { label: 'Badminton', durs: [60, 90], prices: { 60: 16, 90: 24 }, unit: 'terrain', players: 4, courts: ['Badminton 1', 'Badminton 2'] }
+  };
+  function freeCourts(sport, day, t, dur) {
+    var sp = SPORTS[sport], close = we(day) ? 1290 : 1410, out = [];
+    if (t + dur > close) return out;
+    var now = new Date(); if (day === 0 && t < now.getHours() * 60 + now.getMinutes()) return out;
+    var busy = t >= 1020 ? 8 : 4;
+    sp.courts.forEach(function (c, ci) { var h = ((ci + 1) * 37 + (t / 30) * 11 + day * 23 + dur) % 13; if (h >= busy) out.push(c); });
+    return out;
+  }
+
+  var MATCHES = [
+    { id: 'm1', day: 0, t: 1170, dur: 90, court: 'Piste 4', lvl: '3 – 4', kind: 'Match mixte', price: 13, players: [['TL', 'Thibault', '3,9'], ['MB', 'Marine', '3,4'], ['SR', 'Samir', '3,6']] },
+    { id: 'm2', day: 0, t: 1260, dur: 60, court: 'Piste 8', lvl: '4 – 5', kind: 'Match compétitif', price: 9, players: [['GR', 'Guillaume', '4,6'], ['HF', 'Hugo', '4,2']] },
+    { id: 'm3', day: 1, t: 750, dur: 60, court: 'Piste 2', lvl: 'Débutants', kind: 'Pause déj’', price: 9, players: [['AK', 'Amandine', '1,5'], ['JD', 'Julien', '1,8']] },
+    { id: 'm4', day: 2, t: 600, dur: 90, court: 'Piste 7', lvl: '5+', kind: 'Match compétitif', price: 13, players: [['PV', 'Pierre', '5,4'], ['LC', 'Louis', '5,1'], ['ND', 'Nadia', '5,3']] }
+  ];
+  function nextDow(dow) { for (var i = 0; i < 10; i++) if (DAYS[i].getDay() === dow) return i; return 3; }
+  var EVENTS = [
+    { id: 'e1', cat: 'Soirée', name: 'Soirée SPOR’NIGHT', desc: 'Montantes-descendantes, tous niveaux.', day: nextDow(5), t: 1230, price: 15 },
+    { id: 'e2', cat: 'Tournoi', name: 'Tournoi P100', desc: 'Homologué · licence requise.', day: nextDow(6), t: 540, price: 25 },
+    { id: 'e3', cat: 'Seniors', name: 'Padel Senior Game', desc: 'Matinée des +55 ans.', day: nextDow(2), t: 570, price: 10 },
+    { id: 'e4', cat: 'Débutants', name: 'Les Rookies du Padel', desc: 'Le tournoi des premiers matchs.', day: nextDow(0), t: 840, price: 12 }
+  ];
+  var COURSES = [
+    { id: 'c1', name: 'Cours collectif · Découverte', who: 'Dimitri', day: nextDow(3), t: 1110, places: 2, price: 15 },
+    { id: 'c2', name: 'Cours collectif · Intermédiaire', who: 'Gautier', day: nextDow(4), t: 1140, places: 1, price: 15 },
+    { id: 'c3', name: 'Cours individuel', who: 'Gautier', day: 1, t: 720, places: 1, price: 50 }
+  ];
+  var PACKS = [
+    { id: 'start', name: 'Start', pay: 130, get: 143, bonus: '+10 %' },
+    { id: 'gold', name: 'Gold', pay: 300, get: 345, bonus: '+15 %' },
+    { id: 'goldlic', name: 'Gold + Licence', pay: 300, get: 330, bonus: '+ licence' },
+    { id: 'plat', name: 'Platinium', pay: 600, get: 720, bonus: '+20 %' }
+  ];
+
+  /* ---------- État ---------- */
+  var S = {
+    tab: 'home', screen: null,
+    credits: 87, level: 3.8,
+    sport: 'padel', day: 0, dur: 90,
+    sheet: null,
+    bookings: [{ day: 3, t: 1140, dur: 90, court: 'Piste 2', sport: 'Padel', paid: 2, of: 4 }],
+    joined: {}, registered: {},
+    tx: [
+      { ic: 'cup', t: 'Club-house · 2 boissons', d: 'Hier · payé au bar', a: -7 },
+      { ic: 'ball', t: 'Piste 5 · 1 h 30', d: 'Lun. · votre part', a: -13 },
+      { ic: 'plus', t: 'Recharge Pack Start', d: 'Il y a 12 jours', a: 143 }
+    ],
+    clubTab: 'events', matchFilter: 'all', notifs: 2, selPack: 'gold'
+  };
+
+  var view = document.getElementById('view');
+  var tabsEl = document.getElementById('tabs');
+  var screenEl = document.getElementById('screen');
+  function toast(h) { var t = document.getElementById('toast'); t.innerHTML = h; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('on'); }, 2800); }
+
+  /* ---------- Écrans ---------- */
+  function header(title, back, extra) {
+    return '<header class="top top--slim"><div class="top__row">' + (back ? '<button class="back" data-go="' + back + '" aria-label="Retour">' + ic('back', 2.4) + '</button>' : '') +
+      '<h1 class="title">' + title + '</h1>' + (extra || '') + '</div></header>';
+  }
+  function bell() { return '<button class="icon-btn" data-screen="notifs" aria-label="Notifications (' + S.notifs + ' nouvelles)">' + ic('bell') + (S.notifs ? '<i></i>' : '') + '</button>'; }
+
+  function home() {
+    var h = new Date().getHours(), greet = h < 18 ? 'Bonjour' : 'Bonsoir';
+    var tonight = [1080, 1170, 1260].map(function (t) { return { t: t, n: freeCourts('padel', 0, t, 90).length }; });
+    var nb = S.bookings[S.bookings.length - 1];
+    var mine = MATCHES.filter(function (m) { return m.lvl !== 'Débutants' && m.lvl !== '5+'; });
+    var o = '<header class="top"><div class="top__row"><img src="assets/img/logo.webp" alt="Padel Sporting Club"><div class="hello"><small>' + greet + ' Thomas</small><strong>On joue quand ?</strong></div>' + bell() + '</div>' +
+      '<div class="kpis"><button class="kpi" data-tab="wallet"><span>Crédits</span><div>' + euro(S.credits) + '</div></button><button class="kpi" data-tab="wallet"><span>Mon niveau</span><div>' + S.level.toFixed(1).replace('.', ',') + ' <small>↗ +0,2</small></div></button></div></header>';
+    o += '<div class="pad">';
+    o += '<div class="sec-h"><h2>Libre aujourd’hui</h2><button data-tab="book">Tout voir</button></div><div class="quick">';
+    tonight.forEach(function (x, i) {
+      o += '<button class="' + (x.n === 1 ? 'hot' : '') + '" data-quick="' + x.t + '"' + (x.n ? '' : ' disabled') + '><strong>' + fmt(x.t) + '</strong><span>' + (x.n === 0 ? 'Complet' : x.n === 1 ? 'Dernière piste' : x.n + ' pistes · 1 h 30') + '</span></button>';
+    });
+    o += '</div>';
+    if (nb) {
+      o += '<button class="card card--navy" data-screen="booking"><div class="date-box"><strong>' + fmt(nb.t) + '</strong><span>' + dayShort(DAYS[nb.day], nb.day) + '</span></div><div class="card__body"><span style="color:var(--yellow);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700">Prochaine réservation</span><strong>' + nb.sport + ' · ' + nb.court + '</strong><span>' + nb.paid + '/' + nb.of + ' parts payées' + (nb.paid < nb.of ? ' · relance auto' : '') + '</span></div></button>';
+    }
+    o += '<div class="sec-h"><h2>Parties à votre niveau</h2><button data-tab="matches">Tout voir</button></div>';
+    mine.forEach(function (m) { o += matchRow(m); });
+    o += '<div class="sec-h"><h2>Au club</h2></div>';
+    o += '<div class="card card--yellow">' + '<div class="date-box">' + ic('cup') + '</div><div class="card__body"><strong>Café offert jeudi matin</strong><span style="color:var(--navy)">Petit-déj sportif au club-house, chaque semaine.</span></div></div>';
+    var ev = EVENTS[0];
+    o += '<button class="card" data-go-event="' + ev.id + '"><div class="date-box"><strong>' + DAYS[ev.day].getDate() + '</strong><span>' + MOIS[DAYS[ev.day].getMonth()] + '</span></div><div class="card__body"><strong>' + ev.name + '</strong><span>' + dayLong(ev.day) + ' · ' + fmt(ev.t) + '</span></div><span class="tag tag--y">' + (S.registered[ev.id] ? 'Inscrit' : ev.price + ' €') + '</span></button>';
+    o += '</div>';
+    return o;
+  }
+
+  function matchRow(m) {
+    var joined = !!S.joined[m.id], n = m.players.length + (joined ? 1 : 0), left = 4 - n;
+    var av = m.players.map(function (p) { return '<span class="av">' + p[0] + '</span>'; }).join('') + (joined ? '<span class="av av--me">VS</span>' : '');
+    for (var i = 0; i < left; i++) av += '<span class="av av--empty"></span>';
+    return '<button class="match" data-match="' + m.id + '"><div class="match__top"><strong>' + dayLong(m.day) + ' · ' + fmt(m.t) + '</strong><em>Niv. ' + m.lvl + '</em></div><div class="avs">' + av + '<small>' + (joined ? 'Vous y êtes' : left + ' place' + (left > 1 ? 's' : '') + ' · ' + m.price + ' €') + '</small></div></button>';
+  }
+
+  function book() {
+    var sp = SPORTS[S.sport];
+    if (sp.durs.indexOf(S.dur) < 0) S.dur = sp.durs.indexOf(90) >= 0 ? 90 : sp.durs[0];
+    var o = header('Réserver', null, bell());
+    o += '<div class="pad"><div class="chips" role="group" aria-label="Sport">';
+    Object.keys(SPORTS).forEach(function (k) { o += '<button class="chip" data-sport="' + k + '" aria-pressed="' + (S.sport === k) + '">' + SPORTS[k].label + '</button>'; });
+    o += '</div><div class="days" role="group" aria-label="Jour">';
+    DAYS.forEach(function (d, i) { o += '<button class="day" data-day="' + i + '" aria-pressed="' + (S.day === i) + '"><small>' + dayShort(d, i) + '</small><strong>' + d.getDate() + '</strong></button>'; });
+    o += '</div><div class="chips" role="group" aria-label="Durée">';
+    sp.durs.forEach(function (d) { o += '<button class="chip" data-dur="' + d + '" aria-pressed="' + (S.dur === d) + '">' + fmtDur(d) + '</button>'; });
+    o += '</div><div class="sec-h"><h2>' + dayLong(S.day) + '</h2><span class="lbl">' + sp.prices[S.dur] + ' € / ' + sp.unit + '</span></div><div class="slots">';
+    var any = false;
+    for (var t = 540; t <= 1350; t += 30) {
+      var fc = freeCourts(S.sport, S.day, t, S.dur);
+      if (t + S.dur > (we(S.day) ? 1290 : 1410)) continue;
+      if (S.day === 0 && t < new Date().getHours() * 60 + new Date().getMinutes()) continue;
+      any = true;
+      var pct = Math.round(fc.length / sp.courts.length * 100);
+      o += '<button class="slot" data-slot="' + t + '"' + (fc.length ? '' : ' disabled') + '><strong>' + fmt(t) + '</strong><span>' + (fc.length ? '<em>' + fc.length + '</em> ' + (fc.length > 1 ? 'terrains libres' : 'terrain libre') : 'Complet') + '</span><span class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span></button>';
+    }
+    if (!any) o += '<p class="note">Plus de créneau aujourd’hui. Choisissez un autre jour.</p>';
+    o += '</div></div>';
+    return o;
+  }
+
+  function matches() {
+    var o = header('Parties ouvertes', null, bell());
+    o += '<div class="pad"><p style="margin:0;font-size:15px;color:var(--muted)">Il manque un joueur ? Rejoignez une partie à votre niveau, votre part est payée en ligne.</p><div class="chips" role="group" aria-label="Filtre">';
+    [['all', 'Toutes'], ['me', 'Mon niveau'], ['today', 'Aujourd’hui']].forEach(function (f) { o += '<button class="chip" data-mfilter="' + f[0] + '" aria-pressed="' + (S.matchFilter === f[0]) + '">' + f[1] + '</button>'; });
+    o += '</div>';
+    MATCHES.filter(function (m) { return S.matchFilter === 'all' || (S.matchFilter === 'today' ? m.day === 0 : (m.lvl === '3 – 4' || m.lvl === '4 – 5')); }).forEach(function (m) { o += matchRow(m); });
+    o += '<button class="cta cta--navy" data-open-match>Créer une partie ouverte</button></div>';
+    return o;
+  }
+
+  function matchDetail(id) {
+    var m = MATCHES.filter(function (x) { return x.id === id; })[0], joined = !!S.joined[m.id];
+    var all = m.players.map(function (p) { return { i: p[0], n: p[1], l: p[2] }; });
+    if (joined) all.push({ i: 'VS', n: 'Vous', l: S.level.toFixed(1).replace('.', ','), me: true });
+    function who(p) { return p ? '<div class="who"><span class="av' + (p.me ? ' av--me' : '') + '">' + p.i + '</span><div><strong>' + p.n + '</strong><span>niv. ' + p.l + '</span></div></div>' : '<div class="who"><span class="av av--empty"></span><div><strong>Place libre</strong><span>niv. ' + m.lvl + '</span></div></div>'; }
+    var o = '<header class="top"><div class="top__row"><button class="back" data-go="matches" aria-label="Retour">' + ic('back', 2.4) + '</button><span class="eyebrow">Partie ouverte</span></div><h1 class="title" style="font-size:32px">' + dayLong(m.day) + ' · ' + fmt(m.t) + '</h1><div class="chips"><span class="tag" style="background:rgba(255,255,255,.12)">' + m.court + '</span><span class="tag" style="background:rgba(255,255,255,.12)">' + fmtDur(m.dur) + '</span><span class="tag tag--y">Niv. ' + m.lvl + '</span></div></header>';
+    o += '<div class="pad"><div class="sec-h"><h2>Équipes</h2><span class="lbl">' + all.length + ' / 4</span></div><div class="teams"><div class="team"><span class="lbl">Équipe A</span>' + who(all[0]) + who(all[1]) + '</div><div class="team"><span class="lbl">Équipe B</span>' + who(all[2]) + who(all[3]) + '</div></div>';
+    o += '<div class="box" style="padding:14px;display:flex;flex-direction:column;gap:10px"><div class="check">' + ic('check', 2.6) + 'Discussion de groupe avec les joueurs</div><div class="check">' + ic('check', 2.6) + 'Niveau mis à jour après le résultat</div><div class="check">' + ic('check', 2.6) + 'Remboursé si la partie n’est pas complète</div></div>';
+    if (joined) o += '<div class="card"><div class="card__body"><strong>Vous êtes inscrit</strong><span>' + m.price + ' € débités de vos crédits.</span></div><span class="tag tag--ok">Confirmé</span></div><button class="cta cta--ghost" data-leave="' + m.id + '">Me désinscrire</button>';
+    else o += '<div class="card"><div class="card__body"><strong>Votre part · ' + fmtDur(m.dur) + '</strong><span>Payée avec vos crédits · solde après ' + euro(S.credits - m.price) + '</span></div><strong style="font-size:20px">' + m.price + ' €</strong></div><button class="cta" data-join="' + m.id + '">Rejoindre · ' + m.price + ' €</button>';
+    o += '</div>';
+    return o;
+  }
+
+  function club() {
+    var o = header('Le club', null, bell());
+    o += '<div class="pad"><div class="chips" role="group" aria-label="Rubrique">';
+    [['events', 'Tournois & soirées'], ['courses', 'Cours'], ['bar', 'Club-house']].forEach(function (c) { o += '<button class="chip" data-club="' + c[0] + '" aria-pressed="' + (S.clubTab === c[0]) + '">' + c[1] + '</button>'; });
+    o += '</div>';
+    if (S.clubTab === 'events') {
+      EVENTS.forEach(function (e) {
+        var r = !!S.registered[e.id];
+        o += '<div class="card"><div class="date-box"><strong>' + DAYS[e.day].getDate() + '</strong><span>' + MOIS[DAYS[e.day].getMonth()] + '</span></div><div class="card__body"><span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)">' + e.cat + '</span><strong>' + e.name + '</strong><span>' + fmt(e.t) + ' · ' + e.desc + '</span></div>' +
+          (r ? '<span class="tag tag--ok">Inscrit</span>' : '<button class="tag tag--y" data-register="' + e.id + '" style="min-height:40px">' + e.price + ' €</button>') + '</div>';
+      });
+    } else if (S.clubTab === 'courses') {
+      COURSES.forEach(function (c) {
+        var r = !!S.registered[c.id];
+        o += '<div class="card"><div class="date-box"><strong>' + fmt(c.t) + '</strong><span>' + dayShort(DAYS[c.day], c.day) + '</span></div><div class="card__body"><strong>' + c.name + '</strong><span>Avec ' + c.who + ' · ' + c.places + ' place' + (c.places > 1 ? 's' : '') + '</span></div>' +
+          (r ? '<span class="tag tag--ok">Inscrit</span>' : '<button class="tag tag--y" data-register="' + c.id + '" style="min-height:40px">' + c.price + ' €</button>') + '</div>';
+      });
+    } else {
+      o += '<div class="card card--navy"><div class="card__body"><strong>Payez au bar avec vos crédits</strong><span>Montrez votre QR code au comptoir : la caisse débite vos crédits.</span></div></div><button class="cta" data-tab="wallet" data-qr>Afficher mon QR code</button>';
+      [['Pizza du Sporting', '[prix]'], ['Croque du Sporting', '[prix]'], ['Planche à partager', '[prix]'], ['Boissons fraîches', '[prix]']].forEach(function (p) { o += '<div class="card"><div class="card__body"><strong>' + p[0] + '</strong></div><span class="tag">' + p[1] + '</span></div>'; });
+      o += '<p class="note">Carte et prix à compléter par le club.</p>';
+    }
+    o += '</div>';
+    return o;
+  }
+
+  function wallet() {
+    var o = header('Mon compte', null, bell());
+    o += '<div class="pad"><div class="wallet"><span class="eyebrow">Solde de crédits</span><div class="wallet__amt">' + euro(S.credits) + '</div><span style="font-size:14px;opacity:.8">1 crédit = 1 €, valables pour les pistes, les cours et le club-house.</span><div class="wallet__row"><button class="wbtn wbtn--y" data-screen="qr">' + ic('qr') + 'Payer au bar</button><button class="wbtn wbtn--o" data-screen="packs">' + ic('plus') + 'Recharger</button></div></div>';
+    o += '<div class="sec-h"><h2>Mon niveau</h2><span class="lbl">' + S.level.toFixed(1).replace('.', ',') + ' / 7</span></div><div class="box" style="padding:12px 14px">' + spark() + '<p class="note" style="text-align:left;margin:4px 0 0">Calculé à partir des résultats saisis après chaque match.</p></div>';
+    o += '<div class="sec-h"><h2>Historique</h2></div><div class="box">';
+    S.tx.forEach(function (x) { o += '<div class="tx"><span class="tx__ic">' + ic(x.ic) + '</span><div><strong>' + esc(x.t) + '</strong><span>' + esc(x.d) + '</span></div><b class="' + (x.a > 0 ? 'plus' : '') + '">' + (x.a > 0 ? '+' : '−') + euro(Math.abs(x.a)) + '</b></div>'; });
+    o += '</div></div>';
+    return o;
+  }
+  function spark() {
+    var pts = [3.1, 3.2, 3.2, 3.4, 3.3, 3.5, 3.6, 3.6, S.level];
+    var w = 320, h = 80, min = 2.8, max = 4.2;
+    var xy = pts.map(function (v, i) { return [i * (w - 12) / (pts.length - 1) + 6, h - 8 - (v - min) / (max - min) * (h - 16)]; });
+    var line = xy.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    var last = xy[xy.length - 1];
+    return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Niveau passé de 3,1 à ' + S.level.toFixed(1).replace('.', ',') + ' sur les derniers matchs">' +
+      '<polygon points="6,' + h + ' ' + line + ' ' + last[0].toFixed(1) + ',' + h + '" fill="#FAE789" opacity=".55"/><polyline points="' + line + '" fill="none" stroke="#171D36" stroke-width="2.5" stroke-linejoin="round"/><circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="5" fill="#171D36" stroke="#FAE789" stroke-width="2"/></svg>';
+  }
+
+  function qr() {
+    var o = header('Payer au bar', 'wallet');
+    o += '<div class="pad" style="align-items:center;text-align:center"><p style="margin:0;font-size:16px">Présentez ce code au comptoir. Le montant est débité de vos crédits.</p><div class="qr-wrap"><canvas id="qr" width="29" height="29" aria-label="QR code de paiement (démonstration)" role="img"></canvas><span class="ring" id="qr-timer">Code valable 60 s</span></div>' +
+      '<div class="card" style="width:100%"><div class="card__body"><strong>Solde disponible</strong><span>Mis à jour en direct par la caisse du club</span></div><strong style="font-size:22px">' + euro(S.credits) + '</strong></div>' +
+      '<button class="cta cta--navy" data-simulate-bar>Simuler un paiement de 7 €</button><p class="note">Démo : en vrai, c’est la caisse du club-house qui scanne le code.</p></div>';
+    return o;
+  }
+  function drawQr() {
+    var c = document.getElementById('qr'); if (!c) return;
+    var g = c.getContext('2d'), n = 29, seed = Date.now() % 100000;
+    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, n, n); g.fillStyle = '#171D36';
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) if (rnd() > .52) g.fillRect(x, y, 1, 1);
+    [[0, 0], [n - 7, 0], [0, n - 7]].forEach(function (p) {
+      g.fillStyle = '#FFFFFF'; g.fillRect(p[0] - (p[0] ? 1 : 0), p[1] - (p[1] ? 1 : 0), 8, 8);
+      g.fillStyle = '#171D36'; g.fillRect(p[0], p[1], 7, 7); g.fillStyle = '#FFFFFF'; g.fillRect(p[0] + 1, p[1] + 1, 5, 5); g.fillStyle = '#171D36'; g.fillRect(p[0] + 2, p[1] + 2, 3, 3);
+    });
+  }
+  var qrTimer = null;
+  function startQrTimer() {
+    clearInterval(qrTimer); var s = 60;
+    qrTimer = setInterval(function () {
+      var el = document.getElementById('qr-timer'); if (!el) { clearInterval(qrTimer); return; }
+      s--; if (s <= 0) { s = 60; drawQr(); }
+      el.textContent = 'Code valable ' + s + ' s';
+    }, 1000);
+  }
+
+  function packs() {
+    var o = header('Recharger', 'wallet');
+    o += '<div class="pad"><p style="margin:0;font-size:15px;color:var(--muted)">Plus le pack est gros, plus le bonus est important. Crédits valables sur les pistes, les cours et au bar.</p><div class="packs">';
+    PACKS.forEach(function (p) { o += '<button class="pack" data-pack="' + p.id + '" aria-pressed="' + (S.selPack === p.id) + '"><strong>' + p.name + '</strong><b>' + p.get + ' €</b><span>pour ' + p.pay + ' € payés</span><em>' + p.bonus + '</em></button>'; });
+    var sel = PACKS.filter(function (p) { return p.id === S.selPack; })[0];
+    o += '</div><div class="pay" aria-pressed="true"><span>Carte bancaire</span><small>Visa •••• 4021</small></div><button class="cta" data-buy>Payer ' + sel.pay + ' €</button><p class="note">Démo : aucun paiement réel.</p></div>';
+    return o;
+  }
+
+  function notifs() {
+    var o = header('Notifications', S.tab);
+    o += '<div class="pad">';
+    [['users', 'Une place s’est libérée', 'Partie de ce soir 19h30 à votre niveau.', 'Il y a 10 min'], ['wallet', 'Marine a payé sa part', 'Réservation Piste 2 · 2/4 parts réglées.', 'Il y a 1 h'], ['trophy', 'Inscriptions ouvertes', 'Tournoi P100 : il reste 6 équipes.', 'Hier']].forEach(function (n) {
+      o += '<div class="card"><span class="tx__ic">' + ic(n[0]) + '</span><div class="card__body"><strong>' + n[1] + '</strong><span>' + n[2] + '</span><span style="font-size:12px">' + n[3] + '</span></div></div>';
+    });
+    o += '</div>';
+    S.notifs = 0;
+    return o;
+  }
+
+  function bookingDetail() {
+    var b = S.bookings[S.bookings.length - 1];
+    var o = header('Ma réservation', 'home');
+    o += '<div class="pad"><div class="recap"><span class="eyebrow">' + b.sport + ' · ' + fmtDur(b.dur) + '</span><strong>' + b.court + '</strong><span>' + dayLong(b.day) + ' · ' + fmt(b.t) + ' – ' + fmt(b.t + b.dur) + '</span></div>';
+    o += '<div class="sec-h"><h2>Parts payées</h2><span class="lbl">' + b.paid + ' / ' + b.of + '</span></div><div class="players"><span class="pl pl--me"><i>V</i>Vous · payé</span>';
+    var names = [['MB', 'Marine'], ['SR', 'Samir'], ['JD', 'Julien']];
+    for (var i = 1; i < b.of; i++) o += '<span class="pl"><i>' + names[i - 1][0] + '</i>' + names[i - 1][1] + (i < b.paid ? ' · payé' : ' · en attente') + '</span>';
+    o += '</div><button class="cta cta--navy" data-remind>Relancer les retardataires</button><button class="cta cta--ghost" data-cancel>Annuler (gratuit jusqu’à 24 h avant)</button></div>';
+    return o;
+  }
+
+  function confirm() {
+    var b = S.bookings[S.bookings.length - 1];
+    return '<div class="done"><div class="done__icon">' + ic('check', 2.8) + '</div><h2>C’est réservé !</h2><p><strong style="color:var(--navy)">' + b.court + '</strong><br>' + dayLong(b.day) + ' · ' + fmt(b.t) + ' – ' + fmt(b.t + b.dur) + '</p><p>' + (b.paid < b.of ? 'Vos partenaires reçoivent un lien pour payer leur part.' : 'Tout est réglé.') + '</p></div>' +
+      '<div class="pad"><button class="cta cta--navy" data-share>' + 'Inviter mes partenaires</button><button class="cta cta--ghost" data-go="home">Retour à l’accueil</button></div>';
+  }
+
+  /* ---------- Feuille de réservation ---------- */
+  function sheet() {
+    var x = S.sheet, sp = SPORTS[x.sport];
+    var price = sp.prices[x.dur], n = sp.players;
+    var total = sp.unit === 'joueur' ? price * n : price;
+    var share = sp.unit === 'joueur' ? price : price / n;
+    var now = x.split ? share : total;
+    var o = '<div class="sheet-bg" data-close-sheet><div class="sheet" role="dialog" aria-modal="true" aria-label="Confirmer la réservation"><div class="sheet__grip"></div>';
+    o += '<div class="recap"><span class="eyebrow">' + sp.label + ' · ' + fmtDur(x.dur) + '</span><strong>' + x.court + '</strong><span>' + dayLong(x.day) + ' · ' + fmt(x.t) + ' – ' + fmt(x.t + x.dur) + '</span></div>';
+    if (x.courts.length > 1) {
+      o += '<div class="chips" role="group" aria-label="Terrain">'; x.courts.forEach(function (c) { o += '<button class="chip" data-court="' + c + '" aria-pressed="' + (x.court === c) + '">' + c.replace('Badminton', 'Bad.') + '</button>'; }); o += '</div>';
+    }
+    o += '<div class="players"><span class="pl pl--me"><i>V</i>Vous</span>';
+    for (var i = 1; i < n; i++) o += i <= x.friends ? '<span class="pl"><i>A' + i + '</i>Ami ' + i + '</span>' : '<button class="pl pl--add" data-invite><i>+</i>Inviter</button>';
+    o += '</div>';
+    if (sp.unit === 'joueur') o += '<button class="sw" role="switch" aria-checked="' + x.open + '" data-toggle="open"><span class="sw__t"></span><span><strong>Ouvrir aux joueurs du club</strong><small>Les places libres sont proposées à votre niveau</small></span></button>';
+    o += '<button class="sw" role="switch" aria-checked="' + x.split + '" data-toggle="split"><span class="sw__t"></span><span><strong>Chacun paie sa part</strong><small>Sinon vous réglez la totalité</small></span></button>';
+    o += '<div style="display:flex;flex-direction:column;gap:8px">';
+    [['credits', 'Mes crédits', 'Solde ' + euro(S.credits)], ['card', 'Carte bancaire', 'Visa •••• 4021'], ['apple', 'Apple Pay', '']].forEach(function (p) {
+      var dis = p[0] === 'credits' && S.credits < now;
+      o += '<button class="pay" data-pay="' + p[0] + '" aria-pressed="' + (x.pay === p[0]) + '"' + (dis ? ' disabled' : '') + '><span>' + p[1] + '</span><small>' + (dis ? 'Solde insuffisant' : p[2]) + '</small></button>';
+    });
+    o += '</div><div class="total"><span>À payer</span><span>' + euro(now) + '</span></div><button class="cta" data-confirm>Payer ' + euro(now) + '</button></div></div>';
+    return o;
+  }
+  function openSheet(t, day) {
+    var fc = freeCourts(S.sport, day, t, S.dur); if (!fc.length) return;
+    S.sheet = { sport: S.sport, day: day, t: t, dur: S.dur, courts: fc, court: fc[0], friends: 0, open: false, split: true, pay: S.credits >= SPORTS[S.sport].prices[S.dur] ? 'credits' : 'card' };
+    render();
+  }
+
+  /* ---------- Rendu ---------- */
+  var TABS = [['home', 'Accueil', 'home'], ['book', 'Réserver', 'cal'], ['matches', 'Parties', 'users'], ['club', 'Club', 'trophy'], ['wallet', 'Compte', 'wallet']];
+  function render(keepScroll) {
+    var y = view.scrollTop, h;
+    var sc = S.screen;
+    if (sc === 'confirm') h = confirm();
+    else if (sc === 'qr') h = qr();
+    else if (sc === 'packs') h = packs();
+    else if (sc === 'notifs') h = notifs();
+    else if (sc === 'booking') h = bookingDetail();
+    else if (sc && sc.indexOf('match:') === 0) h = matchDetail(sc.slice(6));
+    else h = { home: home, book: book, matches: matches, club: club, wallet: wallet }[S.tab]();
+    view.innerHTML = h;
+    view.scrollTop = keepScroll ? y : 0;
+    tabsEl.innerHTML = TABS.map(function (t) { return '<button class="tab" data-tab="' + t[0] + '"' + (S.tab === t[0] && !S.screen ? ' aria-current="page"' : '') + '>' + ic(t[2]) + t[1] + '</button>'; }).join('');
+    var old = screenEl.querySelector('.sheet-bg'); if (old) old.remove();
+    if (S.sheet) screenEl.insertAdjacentHTML('beforeend', sheet());
+    if (sc === 'qr') { drawQr(); startQrTimer(); }
+    renderSteps();
+  }
+
+  /* ---------- Visite guidée ---------- */
+  var STEPS = [
+    ['Réserver un créneau en 3 touches', function () { S.sheet = null; S.screen = null; S.tab = 'book'; }],
+    ['Rejoindre une partie ouverte', function () { S.sheet = null; S.tab = 'matches'; S.screen = 'match:m1'; }],
+    ['Payer au bar avec ses crédits', function () { S.sheet = null; S.tab = 'wallet'; S.screen = 'qr'; }],
+    ['Recharger un pack de crédits', function () { S.sheet = null; S.tab = 'wallet'; S.screen = 'packs'; }],
+    ['S’inscrire à un tournoi', function () { S.sheet = null; S.tab = 'club'; S.clubTab = 'events'; S.screen = null; }],
+    ['Suivre les parts de ses partenaires', function () { S.sheet = null; S.tab = 'home'; S.screen = 'booking'; }]
+  ];
+  function curStep() {
+    if (S.screen === 'match:m1') return 1; if (S.screen === 'qr') return 2; if (S.screen === 'packs') return 3; if (S.screen === 'booking') return 5;
+    if (!S.screen && S.tab === 'book') return 0; if (!S.screen && S.tab === 'club') return 4; return -1;
+  }
+  function renderSteps() {
+    var c = curStep();
+    document.getElementById('steps').innerHTML = STEPS.map(function (s, i) { return '<li><button data-step="' + i + '" aria-current="' + (c === i) + '"><b>' + (i + 1) + '</b>' + s[0] + '</button></li>'; }).join('');
+  }
+  document.getElementById('steps').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-step]'); if (!b) return; STEPS[+b.dataset.step][1](); render();
+  });
+
+  /* ---------- Interactions ---------- */
+  screenEl.addEventListener('click', function (e) {
+    if (e.target.classList && e.target.classList.contains('sheet-bg')) { S.sheet = null; render(true); return; }
+    var b = e.target.closest('button'); if (!b || b.disabled) return;
+    var d = b.dataset;
+    if (d.tab) { S.tab = d.tab; S.screen = d.qr !== undefined ? 'qr' : null; S.sheet = null; render(); }
+    else if (d.go) { S.screen = null; S.tab = d.go; render(); }
+    else if (d.screen) { S.screen = d.screen; render(); }
+    else if (d.quick) { S.tab = 'book'; S.screen = null; S.sport = 'padel'; S.day = 0; S.dur = 90; render(); openSheet(+d.quick, 0); }
+    else if (d.sport) { S.sport = d.sport; render(true); }
+    else if (d.day) { S.day = +d.day; render(true); }
+    else if (d.dur) { S.dur = +d.dur; render(true); }
+    else if (d.slot) { openSheet(+d.slot, S.day); }
+    else if (d.court) { S.sheet.court = d.court; render(true); }
+    else if (d.invite !== undefined) { S.sheet.friends++; render(true); toast('<b>Lien copié.</b> Envoyez-le par SMS ou WhatsApp.'); }
+    else if (d.toggle) { S.sheet[d.toggle] = !S.sheet[d.toggle]; render(true); }
+    else if (d.pay) { S.sheet.pay = d.pay; render(true); }
+    else if (d.confirm !== undefined) {
+      var x = S.sheet, sp = SPORTS[x.sport], price = sp.prices[x.dur];
+      var amt = x.split ? (sp.unit === 'joueur' ? price : price / sp.players) : (sp.unit === 'joueur' ? price * sp.players : price);
+      if (x.pay === 'credits') { S.credits = Math.round((S.credits - amt) * 100) / 100; S.tx.unshift({ ic: 'ball', t: x.court + ' · ' + fmtDur(x.dur), d: 'À l’instant · ' + (x.split ? 'votre part' : 'totalité'), a: -amt }); }
+      S.bookings.push({ day: x.day, t: x.t, dur: x.dur, court: x.court, sport: sp.label, paid: x.split ? 1 : sp.players, of: sp.players });
+      S.sheet = null; S.screen = 'confirm'; render();
+    }
+    else if (d.share !== undefined) { toast('<b>Lien d’invitation copié.</b>'); }
+    else if (d.match) { S.screen = 'match:' + d.match; render(); }
+    else if (d.join) { var m = MATCHES.filter(function (q) { return q.id === d.join; })[0]; S.joined[m.id] = true; S.credits -= m.price; S.tx.unshift({ ic: 'users', t: 'Partie ouverte · ' + m.court, d: 'À l’instant · votre part', a: -m.price }); render(true); toast('<b>Place réservée.</b> Les 3 autres joueurs sont prévenus.'); }
+    else if (d.leave) { var m2 = MATCHES.filter(function (q) { return q.id === d.leave; })[0]; delete S.joined[m2.id]; S.credits += m2.price; S.tx.unshift({ ic: 'users', t: 'Remboursement partie', d: 'À l’instant', a: m2.price }); render(true); toast('Désinscription faite, <b>' + m2.price + ' € recrédités</b>.'); }
+    else if (d.mfilter) { S.matchFilter = d.mfilter; render(true); }
+    else if (d.openMatch !== undefined) { S.tab = 'book'; S.screen = null; render(); toast('Choisissez un créneau puis activez <b>Ouvrir aux joueurs du club</b>.'); }
+    else if (d.club) { S.clubTab = d.club; render(true); }
+    else if (d.register) {
+      var it = EVENTS.concat(COURSES).filter(function (q) { return q.id === d.register; })[0];
+      if (S.credits >= it.price) { S.credits -= it.price; S.tx.unshift({ ic: 'trophy', t: it.name, d: 'À l’instant · inscription', a: -it.price }); S.registered[it.id] = true; render(true); toast('<b>Inscription confirmée</b> · ' + it.price + ' € débités.'); }
+      else toast('Solde insuffisant : <b>rechargez vos crédits</b>.');
+    }
+    else if (d.goEvent) { S.tab = 'club'; S.clubTab = 'events'; S.screen = null; render(); }
+    else if (d.simulateBar !== undefined) { S.credits -= 7; S.tx.unshift({ ic: 'cup', t: 'Club-house · 2 boissons', d: 'À l’instant · payé au bar', a: -7 }); render(true); toast('<b>Paiement accepté</b> · 7 € débités.'); }
+    else if (d.pack) { S.selPack = d.pack; render(true); }
+    else if (d.buy !== undefined) { var p = PACKS.filter(function (q) { return q.id === S.selPack; })[0]; S.credits += p.get; S.tx.unshift({ ic: 'plus', t: 'Recharge Pack ' + p.name, d: 'À l’instant', a: p.get }); S.screen = null; S.tab = 'wallet'; render(); toast('<b>+' + p.get + ' €</b> ajoutés à vos crédits.'); }
+    else if (d.remind !== undefined) { toast('<b>Relance envoyée</b> par SMS.'); }
+    else if (d.cancel !== undefined) { S.bookings.pop(); S.screen = null; S.tab = 'home'; render(); toast('Réservation annulée, <b>remboursement en cours</b>.'); }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.sheet) { S.sheet = null; render(true); } });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
