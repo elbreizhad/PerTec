@@ -785,3 +785,32 @@ th, td { border-bottom-color: var(--line); }
 @-webkit-keyframes partners-scroll { from { -webkit-transform: translateX(0); } to { -webkit-transform: translateX(-100%); } }
 @media (max-width: 700px) { .partners__track img { height: 48px; } }
 @media (prefers-reduced-motion: reduce) { .footer .partners__track { -webkit-animation: none; } }
+
+/* Accueil · « Envie de jouer ? » : pastilles horaires */
+.home .avail { container-type: inline-size; background: var(--deep); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
+.home .avail__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.home .avail__chip { border: 1.5px solid rgba(255, 255, 255, .25); background: transparent; border-radius: 999px; padding: 10px 18px; min-height: 44px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: 14px; color: var(--white); }
+.home .avail__chip:hover { border-color: var(--yellow); }
+.home .avail__chip[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: var(--navy); }
+.home .avail__pills { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+@container (max-width: 760px) { .home .avail__pills { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@container (max-width: 480px) { .home .avail__pills { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } }
+.home .avail__pill { background: var(--surface); border: 1.5px solid transparent; border-radius: 14px; padding: 12px 10px; text-align: left; display: flex; flex-direction: column; gap: 4px; min-height: 86px; color: var(--white); transition: border-color .15s, background .15s; }
+.home .avail__pill:hover { border-color: rgba(250, 231, 137, .5); }
+.home .avail__pill b { font-family: var(--mono); font-size: 20px; }
+.home .avail__pill span { font-size: 13px; color: var(--muted); }
+.home .avail__pill.is-last span { color: var(--yellow); }
+.home .avail__pill i { display: block; height: 4px; border-radius: 4px; background: var(--deep); overflow: hidden; margin-top: auto; }
+.home .avail__pill i::after { content: ""; display: block; height: 100%; width: var(--p); background: #3BD67F; }
+.home .avail__pill[aria-pressed="true"] { border-color: var(--yellow); background: #222B57; }
+.home .avail__pill[disabled] { opacity: .4; cursor: default; }
+.home .avail__detail { margin-top: 14px; background: var(--surface); border-radius: 16px; padding: 16px 18px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.home .avail__detail strong { font-size: 18px; text-transform: uppercase; font-style: italic; }
+.home .avail__courts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.home .avail__courts span { background: var(--deep); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 13px; }
+@container (max-width: 480px) { .home .avail__detail .pill-cta { width: 100%; justify-content: center; } }
+.home .avail__hint { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+.home .avail__note { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) { .home .avail { padding: 14px; } }
+.home .pill-cta { background: var(--yellow); color: var(--navy); text-decoration: none; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 12px 22px; border-radius: 999px; font-size: 14px; display: inline-flex; gap: 8px; align-items: center; min-height: 46px; }
+.home .pill-cta:hover { background: var(--gold); }

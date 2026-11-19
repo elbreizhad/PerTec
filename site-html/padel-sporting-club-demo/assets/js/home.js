@@ -3,61 +3,40 @@
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- Moment choisi ---------- */
-  var WHEN = {
-    soir: { label: 'ce soir', start: 18 * 60 },
-    midi: { label: 'demain midi', start: 12 * 60 },
-    we: { label: 'ce week-end', start: 10 * 60 }
-  };
-  var cur = 'soir';
-  document.querySelectorAll('[data-when]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      cur = b.dataset.when;
-      document.querySelectorAll('[data-when]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      buildBoard(true);
-    });
+  /* ---------- Envie de jouer ? : pastilles horaires ---------- */
+  var MOMENTS = { soir: { label: 'Ce soir', start: 1020, end: 1350, day: 0 }, midi: { label: 'Demain midi', start: 660, end: 810, day: 1 }, we: { label: 'Ce week-end', start: 540, end: 870, day: 2 } };
+  var COURTS = 10;
+  function fmt(m) { return Math.floor(m / 60) + 'h' + (m % 60 ? '30' : '00'); }
+  function freeAt(day, t) {
+    var n = new Date(); if (day === 0 && t < n.getHours() * 60 + n.getMinutes()) return -1;
+    var h = (t / 30 * 11 + day * 23 + 7) % 13, base = t >= 1050 && t <= 1260 ? 2 : t <= 690 ? 7 : 5;
+    return Math.max(0, Math.min(COURTS, Math.round(base + (h - 6) / 2)));
+  }
+  var av = document.getElementById('avail'), ast = { m: 'soir', t: null };
+  function renderAvail() {
+    var M = MOMENTS[ast.m], h = '<div class="avail__chips" role="group" aria-label="Quand voulez-vous jouer ?">';
+    Object.keys(MOMENTS).forEach(function (k) { h += '<button type="button" class="avail__chip" data-am="' + k + '" aria-pressed="' + (k === ast.m) + '">' + MOMENTS[k].label + '</button>'; });
+    h += '</div><div class="avail__pills" role="group" aria-label="Heures de début">';
+    var any = false;
+    for (var t = M.start; t <= M.end; t += 30) {
+      var f = freeAt(M.day, t); if (f < 0) continue; any = true;
+      h += '<button type="button" class="avail__pill' + (f === 1 ? ' is-last' : '') + '" data-at="' + t + '" aria-pressed="' + (ast.t === t) + '"' + (f ? '' : ' disabled') + ' aria-label="' + fmt(t) + ', ' + (f ? f + ' piste' + (f > 1 ? 's' : '') + ' libre' + (f > 1 ? 's' : '') : 'complet') + '"><b>' + fmt(t) + '</b><span>' + (f === 0 ? 'Complet' : f === 1 ? 'Dernière piste' : f + ' pistes') + '</span><i style="--p:' + (f * 10) + '%"></i></button>';
+    }
+    h += '</div>';
+    if (!any) h += '<p class="avail__hint">Plus de créneau ce soir : essayez demain midi ou ce week-end.</p>';
+    else if (ast.t !== null) {
+      var n = freeAt(M.day, ast.t), cs = []; for (var i = 1; cs.length < n; i++) cs.push('Piste ' + i);
+      h += '<div class="avail__detail"><div><strong>' + M.label + ' · ' + fmt(ast.t) + '</strong><div class="avail__courts">' + cs.map(function (c) { return '<span>' + c + '</span>'; }).join('') + '</div></div><a class="pill-cta" href="reserver.html">Réserver ' + fmt(ast.t) + '</a></div>';
+    } else h += '<p class="avail__hint">Touchez une heure pour voir les pistes libres.</p>';
+    av.innerHTML = h;
+  }
+  av.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.disabled) return;
+    if (b.dataset.am) { ast.m = b.dataset.am; ast.t = null; }
+    else if (b.dataset.at) { ast.t = +b.dataset.at === ast.t ? null : +b.dataset.at; }
+    renderAvail();
   });
-
-  /* ---------- Tableau des pistes ---------- */
-  var COURTS = ['PISTE 01', 'PISTE 02', 'PISTE 03', 'PISTE 04', 'PISTE 05', 'PISTE 06', 'PISTE 07', 'PISTE 08', 'SINGLE', 'BAD. 01'];
-  var rowsEl = document.getElementById('rows');
-  var seed = 7;
-  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-  function hhmm(m) { var h = Math.floor(m / 60), mm = m % 60; return (h < 10 ? '0' : '') + h + 'H' + (mm < 10 ? '0' : '') + mm; }
-  var state = [];
-  function makeRow(i) {
-    var base = WHEN[cur].start, t = base + Math.floor(rnd() * 8) * 30, r = rnd();
-    var st = r < .45 ? 'free' : r < .7 ? 'open' : 'full';
-    var sport = i === 8 ? 'SINGLE 1C1' : i === 9 ? 'BADMINTON' : 'PADEL 2C2';
-    return { court: COURTS[i], time: hhmm(t), sport: sport, st: st };
-  }
-  function statusTxt(s) { return s === 'free' ? 'LIBRE' : s === 'open' ? '1 PLACE' : 'COMPLET'; }
-  function renderRows(changed) {
-    var h = '<div class="row row--head" role="row"><span role="columnheader">Piste</span><span role="columnheader">Début</span><span role="columnheader">Activité</span><span role="columnheader">Statut</span><span role="columnheader"><span class="sr-only">Action</span></span></div>';
-    state.forEach(function (r, i) {
-      var f = changed && changed.indexOf(i) >= 0 ? ' flip' : '';
-      h += '<div class="row" role="row"><span class="cell' + f + '" role="cell">' + r.court + '</span><span class="cell' + f + '" role="cell">' + r.time + '</span><span class="cell' + f + '" role="cell">' + r.sport + '</span><span class="cell st-' + r.st + f + '" role="cell">' + statusTxt(r.st) + '</span>' +
-        '<button class="go" type="button"' + (r.st === 'full' ? ' disabled' : '') + ' aria-label="' + (r.st === 'open' ? 'Rejoindre' : 'Réserver') + ' ' + r.court + ' à ' + r.time + '">' + (r.st === 'open' ? 'Rejoindre' : r.st === 'free' ? 'Réserver' : '—') + '</button></div>';
-    });
-    rowsEl.innerHTML = h;
-  }
-  function buildBoard(all) {
-    seed = cur === 'soir' ? 7 : cur === 'midi' ? 19 : 41;
-    state = COURTS.map(function (_, i) { return makeRow(i); });
-    renderRows(all ? state.map(function (_, i) { return i; }) : null);
-  }
-  buildBoard(false);
-  if (!reduce) setInterval(function () {
-    var i = Math.floor(Math.random() * state.length), s = state[i];
-    s.st = s.st === 'free' ? (Math.random() < .5 ? 'open' : 'full') : s.st === 'open' ? 'full' : 'free';
-    renderRows([i]);
-  }, 2600);
-  rowsEl.addEventListener('click', function (e) {
-    var b = e.target.closest('.go'); if (!b || b.disabled) return;
-    b.textContent = 'Choisi ✓'; b.style.background = '#3BD67F';
-  });
-  function tickClock() { var d = new Date(); document.getElementById('clock').textContent = 'ÉVREUX ' + (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(); }
-  tickClock(); setInterval(tickClock, 15000);
+  renderAvail();
 
   /* ---------- Bande défilante ---------- */
   var words = ['10 pistes couvertes', '1 piste single', '2 terrains de badminton', '180 m² de club-house', 'Ouvert 7j/7 dès 9h', 'Tournois P25 à P500', 'Café offert le jeudi'];
