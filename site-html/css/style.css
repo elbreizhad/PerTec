@@ -2357,3 +2357,15 @@ button:focus-visible {
 .article-ref-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: top center; }
 .article-refs-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); max-width: 960px; margin-left: auto; margin-right: auto; gap: 1.5rem; }
 .features-grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+
+/* Mobile : ces règles existaient plus haut (bloc « max-width: 768px ») mais
+   étaient écrasées par les règles générales déclarées après elles. */
+@media (max-width: 768px) {
+  section { padding: 3rem 0; }
+  .zone-card { padding: 1.5rem; }
+  .cta-box { padding: 2rem 1.25rem; }
+  .faq-item.active .faq-answer { max-height: 600px; }
+  .form-group { min-width: 0; }
+  /* Halo décoratif de 600 px : élargissait la page sur téléphone */
+  .cta-section::before { width: 100%; }
+}

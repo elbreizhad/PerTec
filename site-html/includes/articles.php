@@ -82,7 +82,7 @@ return [
         'resume' => 'Créateur de site, location, indépendant ou agence : les vrais prix, ce qui les fait varier et les pièges à éviter avant de signer.',
         'categorie' => 'Prix',
         'date' => '2026-09-15',
-        'modifie' => '2026-10-27',
+        'modifie' => '2026-11-24',
         'image' => '/images/conseils/prix-site-artisan.webp',
     ],
 ];

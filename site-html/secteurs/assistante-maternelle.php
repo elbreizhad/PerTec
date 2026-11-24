@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création site internet assistante maternelle | Présentation et contact | Pertec';
+$pageTitle = 'Site internet assistante maternelle | Pertec';
 $pageDescription = 'Site internet pour assistante maternelle ou micro-crèche. Présentation, agrément, disponibilités, contact parents. À partir de 59€/mois. Devis gratuit 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -147,6 +147,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

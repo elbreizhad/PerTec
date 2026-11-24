@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Les Andelys (27) | Château Gaillard | Pertec';
+$pageTitle = 'Création site internet Les Andelys (27) | Pertec';
 $pageDescription = 'Création de site internet aux Andelys, cité du Château Gaillard. Site clé en main pour artisans, commerces et restaurants. Devis gratuit 24h.';
 $canonicalUrl = '/creation-site-internet/les-andelys';
 $activeMenu = '';

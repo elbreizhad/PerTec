@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création site internet gîte et chambre d\'hôtes | Réservation | Pertec';
+$pageTitle = 'Site internet gîte et chambre d\'hôtes | Pertec';
 $pageDescription = 'Site internet pour gîte, chambre d\'hôtes ou location saisonnière. Photos, tarifs, réservation en ligne. À partir de 59€/mois.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -188,6 +188,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

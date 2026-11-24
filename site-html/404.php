@@ -30,7 +30,7 @@ require_once __DIR__ . '/includes/header.php';
         <a href="/tarifs" class="feature-card glass" style="text-decoration: none; color: inherit;" data-animate>
           <div class="feature-icon">💶</div>
           <h3>Tarifs</h3>
-          <p>Estimez le prix de votre site en une minute.</p>
+          <p>Trois formules tout compris, dès 59 €/mois.</p>
         </a>
         <a href="/realisations" class="feature-card glass" style="text-decoration: none; color: inherit;" data-animate>
           <div class="feature-icon">🖥️</div>

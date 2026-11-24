@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Gisors (27) | Devis Gratuit | Pertec';
+$pageTitle = 'Création site internet Gisors (27) | Dès 59 €/mois | Pertec';
 $pageDescription = 'Création de site internet à Gisors pour artisans, commerces et PME du Vexin Normand. Site clé en main avec SEO local. Devis gratuit 24h.';
 $canonicalUrl = '/creation-site-internet/gisors';
 $activeMenu = '';

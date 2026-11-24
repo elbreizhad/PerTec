@@ -1,6 +1,6 @@
 <?php
-$pageTitle = 'Site Internet Profession Libérale | Avocat, Kiné, Comptable | Pertec.fr';
-$pageDescription = 'Site internet pour professions libérales à Évreux et dans l\'Eure : avocats, kinés, comptables, thérapeutes. Prise de rendez-vous en ligne, à partir de 490 €.';
+$pageTitle = 'Site internet profession libérale et cabinet | Pertec';
+$pageDescription = 'Site internet pour professions libérales à Évreux et dans l\'Eure : avocats, kinés, comptables, thérapeutes. Prise de rendez-vous en ligne, dès 59 €/mois.';
 $canonicalUrl = '/secteurs/professions-liberales';
 $activeMenu = '';
 
@@ -25,7 +25,7 @@ $metiers = [
 $faq = [
     ['Ma profession encadre la communication. Est-ce compatible ?', 'Oui. Un site de profession libérale reste informatif : présentation, domaines d\'intervention, informations pratiques. J\'écris des textes sobres, sans superlatifs ni promesses de résultat, et vous validez chaque page avant la mise en ligne. Pour les règles propres à votre ordre, c\'est vous qui avez le dernier mot.'],
     ['J\'utilise déjà Doctolib ou un agenda en ligne. Faut-il changer ?', 'Non. Le site renvoie vers votre outil de réservation actuel (bouton ou intégration). Le site vous donne en plus une présence à votre nom sur Google, que vous maîtrisez.'],
-    ['Combien coûte un site pour un cabinet ?', 'Une page unique complète commence à 490 €, un site de 5 pages à 990 €. Ensuite 39 €/mois pour l\'hébergement, le nom de domaine, les mises à jour et vos modifications. Le configurateur de tarifs vous donne une estimation en une minute.'],
+    ['Combien coûte un site pour un cabinet ?', 'Un site vitrine de 5 pages est à 59 €/mois tout compris : création, hébergement, nom de domaine, mises à jour et vos modifications. Avec la prise de rendez-vous en ligne et plus de pages, le site complet est à 149 €/mois. Engagement 24 mois, puis 49 €/mois de maintenance.'],
     ['Je n\'ai pas de temps à y consacrer.', 'Un échange de 30 minutes suffit pour que je comprenne votre activité. Je rédige les textes, vous relisez, je mets en ligne. Les modifications ensuite se font par simple e-mail.'],
 ];
 
@@ -137,6 +137,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- CTA -->
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>
@@ -144,7 +146,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h, sans engagement. Rendez-vous possible à Évreux ou en visio.</p>
         <div class="hero-buttons" style="justify-content: center;">
           <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/tarifs" class="btn btn-secondary">Estimer le prix</a>
+          <a href="/tarifs" class="btn btn-secondary">Voir les tarifs</a>
         </div>
       </div>
     </div>

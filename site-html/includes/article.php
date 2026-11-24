@@ -80,7 +80,7 @@ function article_fin(string $ctaTitre, string $ctaTexte, array $liens = []): voi
           <p><?= htmlspecialchars($ctaTexte) ?></p>
           <div class="hero-buttons">
             <a href="/contact" class="btn btn-primary">Demander un devis</a>
-            <a href="/tarifs" class="btn btn-secondary">Estimer le prix</a>
+            <a href="/tarifs" class="btn btn-secondary">Voir les tarifs</a>
           </div>
         </div>
 <?php if ($liensOk): ?>

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création site internet auto-école | Réservation en ligne | Pertec';
+$pageTitle = 'Site internet auto-école, inscriptions en ligne | Pertec';
 $pageDescription = 'Site internet pour auto-école avec réservation de leçons en ligne. Présentez vos formations, tarifs et taux de réussite. À partir de 59€/mois.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -188,6 +188,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

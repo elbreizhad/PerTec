@@ -23,6 +23,9 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
 # Redirections sites-metiers vers secteurs (doublons supprimés)
 RewriteRule ^sites-metiers/restaurant(\.html|\.php)?$ /secteurs/restaurant [R=301,L]
 RewriteRule ^sites-metiers/coiffeur(\.html|\.php)?$ /secteurs/coiffeur [R=301,L]
+RewriteRule ^sites-metiers/plombier(\.html|\.php)?$ /secteurs/plombier [R=301,L]
+RewriteRule ^sites-metiers/electricien(\.html|\.php)?$ /secteurs/artisan [R=301,L]
+RewriteRule ^sites-metiers/?$ /secteurs/ [R=301,L]
 
 # /index, /index.php et /index.html → / (hors admin, visites uniquement)
 RewriteCond %{REQUEST_METHOD} =GET

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création Site Internet Artisan | Plombier, Électricien | Pertec.fr';
+$pageTitle = 'Création site internet artisan | Devis en 24 h | Pertec';
 $pageDescription = 'Créez votre site internet d\'artisan. Site clé en main pour plombiers, électriciens, maçons, menuisiers. Devis gratuit, livraison 3-4 semaines.';
 $canonicalUrl = '/secteurs/artisan';
 $activeMenu = '';
@@ -125,11 +125,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <div class="advantages" data-animate>
         <div class="advantage-item glass">
           <span>🔧</span>
-          <div><strong><a href="/sites-metiers/plombier" style="color: inherit; text-decoration: none;">Plombiers →</a></strong></div>
+          <div><strong><a href="/secteurs/plombier" style="color: inherit; text-decoration: none;">Plombiers →</a></strong></div>
         </div>
         <div class="advantage-item glass">
           <span>⚡</span>
-          <div><strong><a href="/sites-metiers/electricien" style="color: inherit; text-decoration: none;">Électriciens →</a></strong></div>
+          <div><strong><a href="#electricien" style="color: inherit; text-decoration: none;">Électriciens →</a></strong></div>
         </div>
         <div class="advantage-item glass">
           <span>🧱</span>
@@ -235,6 +235,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- Formulaire -->
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>

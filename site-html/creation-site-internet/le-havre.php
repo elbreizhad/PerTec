@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Le Havre (76) | Devis Gratuit | Pertec';
+$pageTitle = 'Création site internet Le Havre (76) | Pertec';
 $pageDescription = 'Création de site internet au Havre pour artisans, commerces et PME. Site clé en main avec référencement local. Devis gratuit sous 24h. Webmaster Normandie.';
 $canonicalUrl = '/creation-site-internet/le-havre';
 $activeMenu = '';

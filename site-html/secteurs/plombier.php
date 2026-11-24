@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création Site Internet Plombier | Devis en ligne | Pertec.fr';
+$pageTitle = 'Site internet plombier, devis et dépannage | Pertec';
 $pageDescription = 'Créez votre site internet de plombier. Formulaire de devis, zone d\'intervention, avis clients. Site clé en main pour plombiers, chauffagistes, artisans.';
 $canonicalUrl = '/secteurs/plombier';
 $activeMenu = '';
@@ -190,6 +190,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- CTA -->
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>

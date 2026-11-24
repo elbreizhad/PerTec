@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Louviers (27) | Devis Gratuit 24h | Pertec';
+$pageTitle = 'Création site internet Louviers (27) | Pertec';
 $pageDescription = 'Création de site internet à Louviers pour artisans, commerces et PME de l\'Eure. Site clé en main avec SEO local. Devis gratuit sous 24h. Webmaster local.';
 $canonicalUrl = '/creation-site-internet/louviers';
 $activeMenu = '';

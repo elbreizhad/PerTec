@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Pont-Audemer (27) | Devis Gratuit | Pertec';
+$pageTitle = 'Création site internet Pont-Audemer (27) | Pertec';
 $pageDescription = 'Création de site internet à Pont-Audemer, la Venise Normande. Site clé en main pour artisans, commerces et restaurants. Devis gratuit 24h.';
 $canonicalUrl = '/creation-site-internet/pont-audemer';
 $activeMenu = '';

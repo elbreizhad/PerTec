@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création site internet pompes funèbres | Discret et professionnel | Pertec';
+$pageTitle = 'Site internet pompes funèbres | Pertec';
 $pageDescription = 'Site internet pour pompes funèbres et services funéraires. Design sobre, disponibilité 24h/24, devis en ligne. À partir de 59€/mois. Devis gratuit sous 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -152,6 +152,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

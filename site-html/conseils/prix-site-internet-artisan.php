@@ -114,6 +114,21 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
         <p>Ces tarifs incluent l'hébergement, le nom de domaine, les mises à jour de sécurité et vos modifications pendant la durée de l'engagement (24 mois). Après cette période, le site vous est transféré ou vous pouvez continuer avec la maintenance à <?= $maintenance ?> €/mois.</p>
 
+        <h3>Prix d'un site internet de plombier ou chauffagiste</h3>
+        <p>Vos clients cherchent souvent dans l'urgence : « fuite d'eau », « chaudière en panne », « plombier » suivi du nom de leur ville. Le site doit afficher le numéro en grand, cliquable sur téléphone, dire clairement dans quelles communes vous intervenez et séparer dépannage et installation (chauffe-eau, salle de bains, pompe à chaleur). Un site vitrine de 5 pages suffit dans la plupart des cas : <strong><?= $vitrine ?> €/mois</strong>. Si vous êtes RGE, une page dédiée aux aides à la rénovation attire des demandes à plus forte valeur.</p>
+
+        <h3>Prix d'un site internet d'électricien</h3>
+        <p>Un électricien a intérêt à présenter chaque type d'intervention sur sa propre page : rénovation électrique, mise aux normes, dépannage, borne de recharge, domotique. Chacune correspond à une recherche différente sur Google. Ajoutez vos qualifications et quelques chantiers en photo. Comptez un site vitrine à <strong><?= $vitrine ?> €/mois</strong>, ou le site complet à <strong><?= $complet ?> €/mois</strong> si vous voulez une page par service et par ville.</p>
+
+        <h3>Prix d'un site internet de menuisier, ébéniste ou charpentier</h3>
+        <p>Pour un menuisier, ce sont les photos qui vendent : cuisines, escaliers, dressings, fenêtres, agencements sur mesure. Le site doit surtout mettre en valeur une galerie de réalisations bien classée et permettre de demander un devis avec une photo ou des dimensions. Un site vitrine avec galerie (<strong><?= $vitrine ?> €/mois</strong>) convient pour démarrer ; le site complet (<strong><?= $complet ?> €/mois</strong>) permet une page par spécialité.</p>
+
+        <h3>Prix d'un site internet de carreleur, maçon ou peintre</h3>
+        <p>Ces métiers se choisissent sur la qualité des finitions : des photos avant et après, le type de chantiers acceptés (neuf, rénovation, extérieur), la zone et les délais. Les clients comparent souvent deux ou trois artisans avant d'appeler : un site clair avec des exemples récents fait la différence. Un site vitrine à <strong><?= $vitrine ?> €/mois</strong> couvre l'essentiel.</p>
+
+        <h3>Prix d'un site internet de couvreur</h3>
+        <p>La toiture est un achat de confiance, souvent déclenché par une urgence (fuite, tempête) ou un projet de rénovation. Mettez en avant le dépannage, l'entretien et le démoussage, la rénovation complète, vos assurances et garanties, et des photos de toits terminés. Là aussi, le site vitrine (<strong><?= $vitrine ?> €/mois</strong>) suffit le plus souvent, avec une page par prestation.</p>
+
         <h2>Ce qui fait varier le prix</h2>
         <p>Deux sites « vitrine » peuvent avoir des prix très différents. Voici ce qui pèse vraiment :</p>
         <ul>
@@ -154,7 +169,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
           <div class="article-price glass"><span><?= htmlspecialchars($formules['ecommerce']['label']) ?></span><strong><?= $ecommerce ?> €/mois</strong><small>boutique en ligne · soit <?= $total3ans($ecommerce) ?> € sur 3 ans</small></div>
         </div>
         <p>L'abonnement inclut l'hébergement, le nom de domaine, les mises à jour, les sauvegardes et vos modifications faites sous 48 h. Après les 24 mois, le site vous est transféré ou vous continuez avec la maintenance à <strong><?= $maintenance ?> €/mois</strong>.</p>
-        <p>Pour connaître le prix exact de votre projet, <a href="/tarifs">le configurateur de tarifs</a> vous donne une estimation en une minute.</p>
+        <p>Pour comparer les trois formules, voyez <a href="/tarifs">la page Tarifs</a> ; pour un prix précis, décrivez-moi votre projet et je vous réponds sous 24 h.</p>
 
         <h2>Questions fréquentes</h2>
         <div class="faq-list article-faq">
@@ -174,9 +189,9 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
         <div class="article-cta glass-strong">
           <h2>Combien coûterait votre site ?</h2>
-          <p>Répondez à 4 questions et obtenez une estimation tout de suite, sans engagement.</p>
+          <p>Trois formules tout compris, à partir de 59 €/mois. Décrivez votre projet : devis gratuit sous 24 h.</p>
           <div class="hero-buttons">
-            <a href="/tarifs" class="btn btn-primary">Estimer mon site</a>
+            <a href="/tarifs" class="btn btn-primary">Voir les formules</a>
             <a href="/contact" class="btn btn-secondary">Demander un devis</a>
           </div>
         </div>

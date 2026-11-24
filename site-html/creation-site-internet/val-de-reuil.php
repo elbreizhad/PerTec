@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Val-de-Reuil (27) | Devis Gratuit | Pertec';
+$pageTitle = 'Création site internet Val-de-Reuil (27) | Pertec';
 $pageDescription = 'Création de site internet à Val-de-Reuil, ville nouvelle de l\'Eure. Site clé en main pour entreprises, commerces et artisans. Devis gratuit 24h.';
 $canonicalUrl = '/creation-site-internet/val-de-reuil';
 $activeMenu = '';

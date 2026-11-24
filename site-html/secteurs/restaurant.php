@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création Site Internet Restaurant | Menu Digital | Pertec.fr';
+$pageTitle = 'Site internet restaurant, menu et réservation | Pertec';
 $pageDescription = 'Créez votre site internet de restaurant. Menu digital, réservation en ligne, photos appétissantes. Site clé en main pour restaurants, bistrots, brasseries.';
 $canonicalUrl = '/secteurs/restaurant';
 $activeMenu = '';
@@ -242,6 +242,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- CTA -->
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>

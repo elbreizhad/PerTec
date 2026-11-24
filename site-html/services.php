@@ -167,21 +167,21 @@ require_once __DIR__ . '/includes/header.php';
           <div class="feature-icon">🏠</div>
           <h3>Site vitrine</h3>
           <p>Présentez votre activité, vos services et vos coordonnées. Idéal pour artisans, professions libérales et PME, ou <a href="/conseils/site-internet-entreprise-securite-privee" style="color: var(--primary-light);">entreprises de sécurité</a>.</p>
-          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 490 €</p>
+          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 59 €/mois</p>
         </div>
 
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">🛒</div>
           <h3>Site e-commerce</h3>
           <p>Vendez vos produits en ligne avec paiement sécurisé, gestion des stocks et suivi des commandes.</p>
-          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">Sur devis</p>
+          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 249 €/mois</p>
         </div>
 
         <div class="feature-card glass" data-animate>
           <div class="feature-icon">📅</div>
           <h3>Site avec réservation</h3>
           <p>Permettez à vos clients de réserver en ligne. Parfait pour restaurants, salons et prestataires de services.</p>
-          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 990 €</p>
+          <p style="color: var(--primary); font-weight: 600; margin-top: 1rem;">À partir de 149 €/mois</p>
         </div>
 
         <div class="feature-card glass" data-animate>
@@ -193,7 +193,7 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
-        <a href="/tarifs" class="btn btn-primary">Estimer mon projet</a>
+        <a href="/tarifs" class="btn btn-primary">Comparer les formules</a>
       </div>
     </div>
   </section>
@@ -333,7 +333,7 @@ require_once __DIR__ . '/includes/header.php';
             <span>+</span>
           </button>
           <div class="faq-answer">
-            <p>Le prix dépend de vos besoins spécifiques. Un site vitrine simple démarre à partir de 490 euros. Je vous envoie un devis personnalisé et détaillé sous 24h après notre échange.</p>
+            <p>Un site vitrine démarre à 59 €/mois tout compris (création, hébergement, nom de domaine, mises à jour et modifications), sur 24 mois puis 49 €/mois de maintenance. Le site complet est à 149 €/mois et la boutique en ligne à 249 €/mois. Je vous envoie un devis personnalisé sous 24 h après notre échange.</p>
           </div>
         </div>
 

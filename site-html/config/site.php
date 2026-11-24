@@ -29,7 +29,7 @@ function schema_entreprise(): array {
         'url' => 'https://pertec.fr',
         'image' => 'https://pertec.fr/images/logo-pertec.svg',
         'email' => 'contact@pertec.fr',
-        'priceRange' => 'À partir de 490 €',
+        'priceRange' => 'À partir de 59 €/mois',
         'openingHours' => 'Mo-Fr 09:00-18:00',
         'address' => [
             '@type' => 'PostalAddress',

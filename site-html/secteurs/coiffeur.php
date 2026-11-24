@@ -1,6 +1,6 @@
 <?php
-$pageTitle = 'Création site internet coiffeur et salon de coiffure | Réservation | Pertec';
-$pageDescription = 'Site internet pour salon de coiffure. Prestations, tarifs, équipe et réservation en ligne. Design élégant. Dès 490 €. Devis gratuit sous 24h.';
+$pageTitle = 'Site internet coiffeur, salon et barbier | Pertec';
+$pageDescription = 'Site internet pour salon de coiffure. Prestations, tarifs, équipe et réservation en ligne. Design élégant. Dès 59 €/mois. Devis gratuit sous 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
 $formules = $tarifs['formule']['options'];
@@ -188,6 +188,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

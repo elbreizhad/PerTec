@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Bernay (27) | Devis Gratuit | Pertec';
+$pageTitle = 'Création site internet Bernay (27) | Dès 59 €/mois | Pertec';
 $pageDescription = 'Création de site internet à Bernay pour artisans, commerces et PME. Site clé en main avec SEO local. Devis gratuit sous 24h. Webmaster Eure.';
 $canonicalUrl = '/creation-site-internet/bernay';
 $activeMenu = '';

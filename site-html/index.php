@@ -124,7 +124,7 @@ require_once __DIR__ . '/includes/header.php';
       <p class="home-pricing-note" data-animate>Engagement 24 mois, puis <?= $tarifs['maintenance']['mensuel'] ?>€/mois maintenance. <?= htmlspecialchars($tarifs['config']['tva_mention']) ?> · <a href="/tarifs" style="color: var(--primary-light);">Voir tous les tarifs →</a></p>
 
       <div style="text-align: center; margin-top: 2rem;" data-animate>
-        <a href="/tarifs" class="btn btn-primary">Estimer mon projet en 1 minute</a>
+        <a href="/tarifs" class="btn btn-primary">Comparer les formules</a>
       </div>
     </div>
   </section>

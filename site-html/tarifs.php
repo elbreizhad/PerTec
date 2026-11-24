@@ -7,7 +7,7 @@
 $tarifs = require __DIR__ . '/config/tarifs.php';
 $formules = $tarifs['formule']['options'];
 
-$pageTitle = 'Tarifs Création Site Internet | À partir de 59€/mois | Pertec.fr';
+$pageTitle = 'Tarifs création site internet | Dès 59 €/mois | Pertec';
 $pageDescription = 'Créez votre site internet à partir de 59€/mois sur 24 mois. Site vitrine, site complet ou e-commerce. Tout inclus : design, hébergement, maintenance.';
 $canonicalUrl = '/tarifs';
 $activeMenu = 'tarifs';

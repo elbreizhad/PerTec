@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Création de site internet pour église ou paroisse | Pertec';
-$pageDescription = 'Création de site internet pour église, paroisse ou association religieuse. Horaires, événements, dons en ligne. Site clé en main dès 490 €, devis en 24h.';
+$pageDescription = 'Création de site internet pour église, paroisse ou association religieuse. Horaires, événements, dons en ligne. Site clé en main dès 59 €/mois, devis en 24h.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
 $formules = $tarifs['formule']['options'];
@@ -176,6 +176,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       <p class="home-pricing-note" data-animate>Engagement 24 mois, tout inclus. <a href="/tarifs" style="color: var(--primary);">Voir tous les tarifs →</a></p>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

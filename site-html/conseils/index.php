@@ -49,7 +49,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Je vous réponds sous 24h, sans engagement.</p>
         <div class="hero-buttons" style="justify-content: center;">
           <a href="/contact" class="btn btn-primary">Poser ma question</a>
-          <a href="/tarifs" class="btn btn-secondary">Estimer le prix</a>
+          <a href="/tarifs" class="btn btn-secondary">Voir les tarifs</a>
         </div>
       </div>
     </div>

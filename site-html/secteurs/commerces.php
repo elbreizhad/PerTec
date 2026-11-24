@@ -1,6 +1,6 @@
 <?php
-$pageTitle = 'Site Internet Commerce | Boutique, Fleuriste, Épicerie | Pertec.fr';
-$pageDescription = 'Site internet pour commerces de proximité à Évreux et dans l\'Eure : boutiques, fleuristes, épiceries, cavistes. Horaires, produits, click & collect. À partir de 490 €.';
+$pageTitle = 'Création site internet commerce et boutique | Pertec';
+$pageDescription = 'Site internet pour commerces de proximité à Évreux et dans l\'Eure : boutiques, fleuristes, épiceries, cavistes. Horaires, produits, click & collect. Dès 59 €/mois.';
 $canonicalUrl = '/secteurs/commerces';
 $activeMenu = '';
 
@@ -25,8 +25,8 @@ $commerces = [
 $faq = [
     ['J\'ai déjà une page Facebook et une fiche Google. Un site sert à quoi ?', 'La fiche Google et Facebook sont utiles, mais ils ne vous appartiennent pas et affichent aussi vos concurrents. Le site est l\'endroit où tout est à jour et à votre nom, et il renforce votre fiche Google : les deux se complètent.'],
     ['Puis-je vendre en ligne ?', 'Oui, du simple click & collect (réservation, paiement en boutique) jusqu\'à la boutique en ligne complète. On peut démarrer avec un site vitrine et ajouter la vente plus tard. La boutique en ligne est sur devis.'],
-    ['Qui met à jour les horaires et les produits ?', 'Vous m\'envoyez un message, je fais la modification sous 48 h : c\'est inclus dans le suivi à 39 €/mois. Si vous préférez, je peux aussi vous montrer comment modifier certaines parties vous-même.'],
-    ['Combien ça coûte ?', 'À partir de 490 € pour une page unique complète, 990 € pour un site de 5 pages, puis 39 €/mois tout compris. Le configurateur de tarifs vous donne une estimation en une minute.'],
+    ['Qui met à jour les horaires et les produits ?', 'Vous m\'envoyez un message, je fais la modification sous 48 h : c\'est inclus dans l\'abonnement. Si vous préférez, je peux aussi vous montrer comment modifier certaines parties vous-même.'],
+    ['Combien ça coûte ?', '59 €/mois tout compris pour un site vitrine de 5 pages, 149 €/mois pour un site complet avec catalogue, 249 €/mois pour une boutique en ligne. Engagement 24 mois, puis 49 €/mois de maintenance.'],
 ];
 
 require_once dirname(__DIR__) . '/config/site.php';
@@ -131,6 +131,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </section>
 
   <!-- CTA -->
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
+
   <section class="cta-section">
     <div class="container">
       <div class="cta-box glass-strong" data-animate>
@@ -138,7 +140,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <p class="section-subtitle" style="margin: 0 auto 2rem;">Devis gratuit sous 24h, sans engagement. Je peux passer vous voir en boutique dans l'Eure.</p>
         <div class="hero-buttons" style="justify-content: center;">
           <a href="/contact" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="/tarifs" class="btn btn-secondary">Estimer le prix</a>
+          <a href="/tarifs" class="btn btn-secondary">Voir les tarifs</a>
         </div>
       </div>
     </div>

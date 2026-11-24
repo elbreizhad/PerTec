@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Zone d'Intervention | Création Site Internet Eure | Pertec.fr";
+$pageTitle = "Zone d'intervention : création de sites dans l'Eure | Pertec";
 $pageDescription = "Création de sites internet à Évreux, Louviers, Vernon, Bernay et dans tout le département de l'Eure. Intervention en Normandie et départements limitrophes.";
 $canonicalUrl = '/zone-intervention';
 $activeMenu = '';

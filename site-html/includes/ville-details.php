@@ -101,6 +101,10 @@ $villesDetails = [
         'activites' => ['Restaurants et salons de thé', 'Commerces', 'Hébergements touristiques', 'Artisans', 'Professions libérales'],
         'deplacement' => 'Oui. Vernon est dans l\'Eure : je peux venir vous rencontrer sur place, ou on échange en visio selon votre préférence.',
         'exemple' => 'restaurant Vernon',
+        'faq' => [
+            ['Mon site peut-il être en anglais pour les visiteurs de Giverny ?', 'Oui. Une version anglaise des pages utiles (présentation, horaires, accès, réservation) est proposée en option à {multilingue} €/mois. C\'est particulièrement intéressant pour les hébergements, restaurants et commerces fréquentés par les touristes.'],
+            ['Pouvez-vous améliorer le référencement d\'un site existant à Vernon ?', 'Oui. Je commence par regarder sur quelles recherches votre site apparaît déjà (Search Console) et ce qui manque : pages par service, titres, fiche Google, vitesse. Si le site est trop ancien, il est parfois plus simple et moins cher de repartir sur une base propre.'],
+        ],
     ],
     'rouen' => [
         'nom' => 'Rouen',
@@ -123,10 +127,12 @@ if ($v === null) {
 $tarifsVille = require dirname(__DIR__) . '/config/tarifs.php';
 $formulesVille = $tarifsVille['formule']['options'];
 $engagementVille = $tarifsVille['formule']['engagement'];
+$optionsVille = $tarifsVille['options_recurrentes']['options'];
 $faqVille = [
     ['Est-ce que vous vous déplacez ' . $v['a'] . ' ?', $v['deplacement']],
     ['Mon site apparaîtra-t-il sur « ' . $v['exemple'] . ' » ?', 'C\'est l\'objectif. Chaque page est rédigée et structurée pour votre métier et votre secteur, et reliée à votre fiche Google. Le référencement prend généralement quelques semaines à se mettre en place, et aucun prestataire sérieux ne peut garantir une première position.'],
     ['Combien coûte un site pour une entreprise ' . $v['de'] . ' ?', 'À partir de ' . $formulesVille['vitrine']['mensuel'] . ' €/mois tout compris pour un site vitrine : création, hébergement, nom de domaine, mises à jour et modifications. ' . $formulesVille['complet']['mensuel'] . ' €/mois pour un site complet, ' . $formulesVille['ecommerce']['mensuel'] . ' €/mois pour une boutique en ligne, sur ' . $engagementVille . ' mois, puis ' . $tarifsVille['maintenance']['mensuel'] . ' €/mois de maintenance. Le tarif est le même partout.'],
+    ...array_map(fn($q) => [$q[0], str_replace('{multilingue}', (string) $optionsVille['multilingue']['mensuel'], $q[1])], $v['faq'] ?? []),
     ['Pourquoi un indépendant plutôt qu\'une agence ?', 'Vous avez un seul interlocuteur, du premier échange aux modifications après la mise en ligne. Et au bout des ' . $engagementVille . ' mois, le site vous appartient : vous pouvez rester en maintenance avec moi ou le transférer où vous voulez.'],
 ];
 ?>

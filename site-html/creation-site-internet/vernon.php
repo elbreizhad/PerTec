@@ -1,13 +1,13 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création de site internet à Vernon (27) | Pertec';
-$pageDescription = 'Création de site internet à Vernon : site vitrine, e-commerce, catalogue ou institutionnel, avec référencement local. Dès 490 €, devis gratuit en 24h.';
+$pageTitle = 'Création site internet Vernon (27) | Dès 59 €/mois | Pertec';
+$pageDescription = 'Création de site internet à Vernon et Giverny : vitrine, e-commerce, catalogue ou institutionnel, référencement local inclus. Dès 59 €/mois, devis en 24 h.';
 $canonicalUrl = '/creation-site-internet/vernon';
 $activeMenu = '';
 
 $ogData = [
-    'title' => 'Création Site Internet Vernon | Pertec.fr',
-    'description' => 'Votre site internet clé en main à Vernon. Artisans, commerces : obtenez un site pro.',
+    'title' => 'Création de site internet à Vernon | Pertec',
+    'description' => 'Site vitrine, e-commerce ou catalogue pour les entreprises de Vernon et Giverny, référencement local inclus. Dès 59 €/mois.',
     'type' => 'website',
     'url' => '/creation-site-internet/vernon'
 ];
@@ -94,6 +94,51 @@ require_once dirname(__DIR__) . '/includes/header.php';
     </div>
   </section>
 
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-animate>Être trouvé sur Google <span class="gradient-text">à Vernon</span></h2>
+        <p class="section-subtitle" data-animate>Vos clients cherchent « votre métier + Vernon ». Votre site doit être la meilleure réponse.</p>
+      </div>
+      <div class="features-grid features-grid-4">
+        <div class="feature-card glass" data-animate>
+          <div class="feature-icon">📍</div>
+          <h3>Une page par service</h3>
+          <p>« Plombier Vernon », « fleuriste Vernon », « restaurant Giverny » : chaque prestation importante a sa page, avec un vrai texte. C'est ce qui permet de ressortir sur plusieurs recherches à la fois, pas seulement sur le nom de l'entreprise.</p>
+        </div>
+        <div class="feature-card glass" data-animate>
+          <div class="feature-icon">🗺️</div>
+          <h3>Votre secteur, pas seulement la ville</h3>
+          <p>Centre-ville, Vernonnet, Saint-Marcel, Pacy-sur-Eure, Gaillon, Bonnières : on cite les communes où vous travaillez vraiment, sans fausses adresses ni pages copiées-collées, que Google repère et ignore.</p>
+        </div>
+        <div class="feature-card glass" data-animate>
+          <div class="feature-icon">⭐</div>
+          <h3>Fiche Google et avis</h3>
+          <p>La carte qui s'affiche au-dessus des résultats dépend surtout de votre fiche Google Business Profile et de vos avis. Je relie la fiche au site et vous explique comment obtenir des avis régulièrement.</p>
+        </div>
+        <div class="feature-card glass" data-animate>
+          <div class="feature-icon">🇬🇧</div>
+          <h3>Les visiteurs de Giverny</h3>
+          <p>Hébergements, restaurants, artisans d'art et commerces touristiques reçoivent beaucoup d'étrangers. Une page en anglais (horaires, accès depuis la gare de Vernon-Giverny, réservation) leur évite de passer par une plateforme.</p>
+        </div>
+      </div>
+      <div class="zone-card glass-strong" style="margin-top: 2rem;" data-animate>
+        <div>
+          <h3 style="margin-bottom: 0.75rem;">Les recherches qui comptent à Vernon</h3>
+          <p style="color: var(--gray-400); margin-bottom: 1rem;">À Vernon, on cherche un professionnel de la même façon qu'ailleurs, mais avec moins de concurrence qu'à Rouen ou à Paris. Un site bien construit peut donc se faire une place plus vite, à condition de répondre précisément à ce que tapent vos clients :</p>
+          <div class="villes-tags">
+            <span class="ville-tag">création site internet Vernon</span>
+            <span class="ville-tag">site vitrine Vernon</span>
+            <span class="ville-tag">site e-commerce Vernon</span>
+            <span class="ville-tag">référencement Vernon</span>
+            <span class="ville-tag">artisan Vernon</span>
+            <span class="ville-tag">restaurant Giverny</span>
+          </div>
+          <p style="color: var(--gray-400); margin-top: 1rem;">Pour aller plus loin : <a href="/conseils/referencement-local-eure-normandie" style="color: var(--primary-light);">le référencement local expliqué simplement</a>, <a href="/conseils/site-vitrine-catalogue-ecommerce" style="color: var(--primary-light);">site vitrine, catalogue ou e-commerce : que choisir ?</a> et <a href="/conseils/prix-site-internet-artisan" style="color: var(--primary-light);">combien coûte un site internet</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 <?php $villeSlug = 'vernon'; require dirname(__DIR__) . '/includes/ville-details.php'; ?>
 
   <section class="cta-section">

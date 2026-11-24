@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Création site internet thérapeute et praticien bien-être | Prise de RDV | Pertec';
+$pageTitle = 'Site internet thérapeute et bien-être | Pertec';
 $pageDescription = 'Site internet pour thérapeute, sophrologue, ostéopathe ou praticien bien-être. Présentation, tarifs, prise de RDV en ligne. À partir de 59€/mois.';
 
 $tarifs = require dirname(__DIR__) . '/config/tarifs.php';
@@ -188,6 +188,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
   </section>
+
+<?php require dirname(__DIR__) . '/includes/secteur-details.php'; ?>
 
   <section class="cta-section">
     <div class="container">

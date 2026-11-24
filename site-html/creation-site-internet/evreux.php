@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/site.php';
-$pageTitle = 'Création Site Internet Evreux (27) | Devis Gratuit 24h | Pertec';
-$pageDescription = 'Création de site internet à Evreux pour artisans, commerces et PME. Site clé en main à partir de 490€. Devis gratuit sous 24h. Webmaster local dans l\'Eure.';
+$pageTitle = 'Création site internet Évreux (27) | Dès 59 €/mois | Pertec';
+$pageDescription = 'Création de site internet à Evreux pour artisans, commerces et PME. Site clé en main dès 59 €/mois. Devis gratuit sous 24h. Webmaster local dans l\'Eure.';
 $canonicalUrl = '/creation-site-internet/evreux';
 $activeMenu = '';
 
@@ -218,7 +218,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
           </button>
           <div class="faq-answer">
-            <p>Le prix dépend de vos besoins. Comptez à partir de 490€ pour un site vitrine professionnel. Je vous établis un devis gratuit et sans engagement sous 24h.</p>
+            <p>Le prix dépend de vos besoins. Comptez à partir de 59 €/mois tout compris pour un site vitrine professionnel. Je vous établis un devis gratuit et sans engagement sous 24h.</p>
           </div>
         </div>
 
